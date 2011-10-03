@@ -145,7 +145,7 @@ margin: 0 auto;
 }
 
 #header {
-background: #FFFFFF url(img/xxx.jpg) no-repeat;
+background: #592F06 no-repeat;
 background-position:right; 
 border-top: 1px solid #7a7a7a;
 border-bottom: 2px solid #008cb3;
@@ -165,7 +165,7 @@ padding: 2px 10px 2px 2px;
 float: left;
 width: 304px;
 height: 64px;
-background: url(img/mapstory-85077871.jpg) no-repeat;
+background: url(img/mapstory.png) no-repeat;
 overflow: hidden;
 text-indent: -9999em;
 }
