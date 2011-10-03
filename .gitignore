@@ -1,0 +1,9 @@
+.project
+local_settings.py
+.pydevproject
+*.log
+*.pid
+*.pyc
+*.db
+.DS_Store
+static
