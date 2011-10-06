@@ -211,6 +211,9 @@ MAP_BASELAYERS = [{
 
 }]
 
+# use new uploader
+USE_UPLOADER=True
+
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
