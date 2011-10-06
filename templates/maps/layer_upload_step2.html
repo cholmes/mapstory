@@ -1,0 +1,31 @@
+{% extends "page_layout.html" %}
+{% load i18n %}
+
+{% block title %} {{ map.title }} - {{ block.super }} {% endblock %}
+
+{% block head %}
+{% include "geonode/ext_header.html" %}
+{{ block.super }}
+{% endblock %}
+{% block main %}
+<div class="twocol">
+  <h2> {% trans "Editing details for " %} {{ map.title }} </h2>
+  <h3>Time Options</h3>
+  <form method="POST">
+    <p>
+    {% csrf_token %}
+    <label for="id_time_attribute">{% trans "Time Attribute" %}  :</label>{{ time_form.time_attribute }}
+    </p>
+    <p>Present time attribute as:<br/>
+    <input type='radio' value='LIST' selected='true' name='presentation_strategy'/><strong>List</strong> of all the distinct time values<br/>
+    <input type='radio' value='DISCRETE_INTERVAL' name='presentation_strategy'/><strong>Intervals</strong> defined by the resolution<br/>
+    <input type='radio' value='CONTINUOUS_INTERVAL' name='presentation_strategy'/><strong>Continuous Intervals</strong> for data that is frequently updated, resolution describes the frequency of updates<br/>
+    </p>
+    <strong>Resolution of time attribute: <input type="text" name="precision_value" size="3"/>
+    {{ time_form.precision_step }}
+    <p>
+        <input type="submit" value="{% trans "Next" %}"/>
+    </p>
+  </form>
+</div>
+{% endblock %}
