@@ -1,7 +1,7 @@
 {% extends "page_layout.html" %}
 {% load i18n %}
 
-{% block title %} {{ map.title }} - {{ block.super }} {% endblock %}
+{% block title %} {% trans "Upload Layer Step 2" %} - {{ block.super }} {% endblock %}
 
 {% block head %}
 {% include "geonode/ext_header.html" %}
@@ -9,13 +9,32 @@
 {% endblock %}
 {% block main %}
 <div class="twocol">
-  <h2> {% trans "Editing details for " %} {{ map.title }} </h2>
+  <h2> {% trans "Editing details for " %} {{ layer_name }} </h2>
   <h3>Time Options</h3>
   <form method="POST">
-    <p>
     {% csrf_token %}
-    <label for="id_time_attribute">{% trans "Time Attribute" %}  :</label>{{ time_form.time_attribute }}
+    
+    <h4>Choose one of:</h4>
+    {% if time_form.time_attribute %}
+    <p>
+        <label for="id_time_attribute">{% trans "Existing Time Attribute" %}  :</label>{{ time_form.time_attribute }}
     </p>
+    {% endif %}
+    {% if time_form.text_attribute %}
+    <p>
+        <label for="id_text_attribute">{% trans "Convert Text Attribute" %}  :</label>{{ time_form.text_attribute }}
+        <br/>
+        <label for="id_text_attribute_format">{% trans "Format" %}  :</label>{{ time_form.text_attribute_format }}
+    </p>
+    {% endif %}
+    {% if time_form.year_attribute %}
+    <p>
+        <label for="id_year_attribute">{% trans "Convert Number (As Year)" %}  :</label>{{ time_form.year_attribute }}
+    </p>
+    {% endif %}
+    
+    <hr/>
+    
     <p>Present time attribute as:<br/>
     <input type='radio' value='LIST' selected='true' name='presentation_strategy'/><strong>List</strong> of all the distinct time values<br/>
     <input type='radio' value='DISCRETE_INTERVAL' name='presentation_strategy'/><strong>Intervals</strong> defined by the resolution<br/>
