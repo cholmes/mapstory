@@ -4,6 +4,43 @@
 {% block title %} {% trans "Upload Layer Step 2" %} - {{ block.super }} {% endblock %}
 
 {% block head %}
+<style>
+    .formSection {
+        background: aliceblue;
+        border-bottom: 1px dashed cadetblue;
+        margin-bottom: 1em;
+    }
+    .right input, .right select {
+        float: right;
+        margin-right: 25%;
+    }
+    .left input {
+        line-height: 2em;
+    }
+    form input, form select {
+        font-size: small;
+    }
+    form label {
+        line-height: 2em;
+    }
+    .clearfix:after {
+      content: ".";
+      display: block;
+      height: 0;
+      clear: both;
+      visibility: hidden;
+    }
+    .clearfix {
+      display: inline-block;
+    }
+    * html .clearfix {
+      height: 1%;
+    } /* Hides from IE-mac \*/
+    .clearfix {
+      display: block;
+    }
+
+</style>
 {% include "geonode/ext_header.html" %}
 {{ block.super }}
 {% endblock %}
@@ -16,35 +53,85 @@
     
     <h4>Choose one of:</h4>
     {% if time_form.time_attribute %}
-    <p>
+    <div class="formSection clearfix right" title="Use an existing timestamp attribute in the data">
         <label for="id_time_attribute">{% trans "Existing Time Attribute" %}  :</label>{{ time_form.time_attribute }}
-    </p>
+    </div>
     {% endif %}
     {% if time_form.text_attribute %}
-    <p>
-        <label for="id_text_attribute">{% trans "Convert Text Attribute" %}  :</label>{{ time_form.text_attribute }}
-        <br/>
-        <label for="id_text_attribute_format">{% trans "Format" %}  :</label>{{ time_form.text_attribute_format }}
-    </p>
+    <div class="formSection clearfix right" title="Convert text in the data to a timestamp using standard date/time representation or a custom format">
+        <div>
+            <label for="id_text_attribute">{% trans "Convert Text Attribute" %}  :</label>{{ time_form.text_attribute }}
+        </div>
+        <div class="clearfix" style="clear:both" title="Use a custom format to convert the data to a timestamp">
+            <label for="format_select">{% trans "Date Format" %}  :
+            <select id="format_select">
+                <option selected="true" value="0">Best Guess</option>
+                <option value="1">Custom</option>
+            </select>
+        </div>
+        <div id="format_input" style="display:none" class="clearfix">
+            <label for="id_text_attribute_format">{% trans "Format" %} <a href="#" id="format_help" style="font-size:smaller">[ What's this ?]</a>  :</label>
+            {{ time_form.text_attribute_format }}
+        </div>
+    </div>
     {% endif %}
     {% if time_form.year_attribute %}
-    <p>
+    <div class="formSection clearfix right" title="Convert a number field into a year">
         <label for="id_year_attribute">{% trans "Convert Number (As Year)" %}  :</label>{{ time_form.year_attribute }}
-    </p>
+    </div>
     {% endif %}
+
+    <h4>Present time attribute as:</h4>
+    <div class="formSection left">
+        <div>
+            <input id="LIST" type='radio' value='LIST' checked='true' name='presentation_strategy'/>
+            <label for="LIST"><strong>List</strong> of all the distinct time values</label>
+        </div>
+        <div>
+            <input id="DISCRETE_INTERVAL" type='radio' value='DISCRETE_INTERVAL' name='presentation_strategy'/>
+            <label for="DISCRETE_INTERVAL"><strong>Intervals</strong> defined by the resolution</label>
+        </div>
+        <div>
+            <input id="CONTINUOUS_INTERVAL" type='radio' value='CONTINUOUS_INTERVAL' name='presentation_strategy'/>
+            <label for="CONTINUOUS_INTERVAL"><strong>Continuous Intervals</strong> for data that is frequently updated, resolution describes the frequency of updates</label>
+        </div>
+        
+        <div id="precision" style="display:none">
+            <p><strong>Resolution of time attribute: <input type="text" name="precision_value" size="3"/>
+            {{ time_form.precision_step }}
+            </p>
+        </div>
+    </div>
     
-    <hr/>
-    
-    <p>Present time attribute as:<br/>
-    <input type='radio' value='LIST' selected='true' name='presentation_strategy'/><strong>List</strong> of all the distinct time values<br/>
-    <input type='radio' value='DISCRETE_INTERVAL' name='presentation_strategy'/><strong>Intervals</strong> defined by the resolution<br/>
-    <input type='radio' value='CONTINUOUS_INTERVAL' name='presentation_strategy'/><strong>Continuous Intervals</strong> for data that is frequently updated, resolution describes the frequency of updates<br/>
-    </p>
-    <strong>Resolution of time attribute: <input type="text" name="precision_value" size="3"/>
-    {{ time_form.precision_step }}
-    <p>
-        <input type="submit" value="{% trans "Next" %}"/>
-    </p>
+    <input type="submit" value="{% trans "Next" %}"/>
   </form>
 </div>
+<script type="text/javascript">
+{% autoescape off %}
+Ext.onReady(function() {
+    Ext.QuickTips.init(); 
+    var precision = Ext.get('precision'), format = Ext.get('format_input');
+    precision.hide();
+    format.hide();
+    Ext.get(Ext.query("input[name=presentation_strategy]")).on('click',function() {
+       if (!Ext.query("input[value=LIST]")[0].checked) {
+           if (!precision.isVisible())
+               precision.fadeIn();
+       } else{
+           precision.hide();
+       }
+    });
+    Ext.get('format_select').on('change',function() {
+        var input = Ext.get("id_text_attribute_format");
+        if (this.getAttribute('value') == '0') {
+            format.hide();
+            input.dom.value = '';
+        } else {
+            format.fadeIn();
+            input.focus();
+        }
+    });
+});
+{% endautoescape %}
+</script>
 {% endblock %}
