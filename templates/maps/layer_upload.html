@@ -28,7 +28,11 @@
 <script type="text/javascript" src="{{ STATIC_URL }}script/layer_upload.js"></script>
 <script type="text/javascript">
 {% autoescape off %}
-setup("{{ csrf_token }}","{% url geonode.maps.views.upload_layer %}","{% url geonode.views.ajax_lookup %}");
+setup({
+    csrf_token : "{{ csrf_token }}",
+    form_target : "{% url geonode.maps.views.upload_layer %}",
+    userLookup : "{% url geonode.views.ajax_lookup %}"
+});
 {% endautoescape %}
 </script>
 

@@ -1,17 +1,33 @@
-function setup(csrf_token,form_target,userLookup) {
+function setup(options) {
     Ext.onReady(function() {
-        init(csrf_token,form_target,userLookup);
+        init(options);
     });
 }
-function init(csrf_token,form_target,userLookup) {
+function init(options) {
     Ext.QuickTips.init();
+    options = Ext.apply({
+        is_featuretype : true,
+        layer_name : null
+    },options);
 
     var xml_unsafe = /(^[^a-zA-Z\._]+)|([^a-zA-Z0-9\._])/g;
-    var layer_title = new Ext.form.TextField({
-      id: 'layer_title',
-      fieldLabel: gettext('Title'),
-      name: 'layer_title'
-    });
+    var layer_title;
+    if (options.layer_name) {
+        layer_title = new Ext.form.TextField({
+            id: 'layer_name',
+            name: 'layer_name',
+            emptyText: options.layer_name,
+            fieldLabel: gettext('Name'),
+            allowBlank: true,
+            disabled: true
+        });
+    } else {
+        layer_title =  new Ext.form.TextField({
+            id: 'layer_title',
+            fieldLabel: gettext('Title'),
+            name: 'layer_title'
+        });
+    }
 
     var listeners = {
         "fileselected": function(cmp, value) {
@@ -19,6 +35,11 @@ function init(csrf_token,form_target,userLookup) {
             cmp.setValue(value.split(/[/\\]/).pop());
         }
     };
+    var form_fields = [layer_title,{
+            xtype: "hidden",
+            name: "csrfmiddlewaretoken",
+            value: options.csrf_token
+        }];
 
     var base_file = new Ext.ux.form.FileUploadField({
         id: 'base_file',
@@ -97,6 +118,16 @@ function init(csrf_token,form_target,userLookup) {
         name: "permissions"
     });
 
+    form_fields.push(base_file);
+
+    if (options.is_featuretype) {
+        form_fields = form_fields.concat(dbf_file, shx_file, prj_file);
+    }
+
+    if (!options.layer_name) {
+        form_fields = form_fields.concat(sld_file,abstractField,permissionsField);
+    }
+
     var fp = new Ext.FormPanel({
         renderTo: 'upload_form',
         fileUpload: true,
@@ -105,21 +136,18 @@ function init(csrf_token,form_target,userLookup) {
         autoHeight: true,
         unstyled: true,
         labelWidth: 50,
+        bodyStyle: 'padding: 10px 10px 0 10px;',
         defaults: {
             anchor: '95%',
             msgTarget: 'side'
         },
-        items: [layer_title, base_file, dbf_file, shx_file, prj_file, sld_file, abstractField, permissionsField, {
-            xtype: "hidden",
-            name: "csrfmiddlewaretoken",
-            value: csrf_token
-        }],
+        items: form_fields,
         buttons: [{
             text: gettext('Upload'),
             handler: function(){
                 if (fp.getForm().isValid()) {
                     fp.getForm().submit({
-                        url: form_target,
+                        url: options.form_target,
                         waitMsg: gettext('Uploading your data...'),
                         success: function(fp, o) {
                             document.location = o.result.redirect_to;
@@ -169,23 +197,30 @@ function init(csrf_token,form_target,userLookup) {
     base_file.addListener('fileselected', function(cmp, value) {
         check_shapefile();
     });
-    disable_shapefile_inputs();
+    
+    if (options.layer_name) {
+        enable_shapefile_inputs();
+    } else {
+        disable_shapefile_inputs();
+    }
 
-    var permissionsEditor = new GeoNode.PermissionsEditor({
-        renderTo: "permissions_form",
-        userLookup: userLookup,
-        listeners: {
-            updated: function(pe) {
-                permissionsField.setValue(Ext.util.JSON.encode(pe.writePermissions()));
+    if (! options.layer_name) {
+        var permissionsEditor = new GeoNode.PermissionsEditor({
+            renderTo: "permissions_form",
+            userLookup: options.userLookup,
+            listeners: {
+                updated: function(pe) {
+                    permissionsField.setValue(Ext.util.JSON.encode(pe.writePermissions()));
+                }
+            },
+            permissions: {
+                anonymous: 'layer_readonly',
+                authenticated: 'layer_readonly',
+                users:[]
             }
-        },
-        permissions: {
-            anonymous: 'layer_readonly',
-            authenticated: 'layer_readonly',
-            users:[]
-        }
-    });
-    permissionsEditor.fireEvent("updated", permissionsEditor);
+        });
+        permissionsEditor.fireEvent("updated", permissionsEditor);
+    }
 
     function test_file_api() {
         var fi = document.createElement('INPUT');
@@ -225,12 +260,14 @@ function init(csrf_token,form_target,userLookup) {
         };
 
         // drop target w/ drag over/exit effects
-        var dropPanel = new Ext.Panel({
+        var dropPanel = new Ext.Container({
             html: "Drop Files Here",
+            cls: 'x-panel-body',
+            style: { borderWidth: '1px', borderStyle: 'solid', textAlign: 'center'},
             listeners: {
                 render: function(p) {
                     var el = p.getEl().dom;
-                    function t() { console.log('t'); p.body.toggleClass('x-grid3-cell-selected')};
+                    function t() {p.body.toggleClass('x-grid3-cell-selected')};
                     el.addEventListener("dragover", function(ev) {
                         ev.stopPropagation();
                         ev.preventDefault();
@@ -313,7 +350,7 @@ function init(csrf_token,form_target,userLookup) {
             }, false);
             xhr.addEventListener('error', error, false);
 
-            xhr.open("POST",form_target, true);
+            xhr.open("POST",options.form_target, true);
             xhr.send(formData);
         }
 
@@ -321,6 +358,5 @@ function init(csrf_token,form_target,userLookup) {
             if (!fp.getForm().isValid()) return;
             upload(createDragFormData());
         }
- 
     }
 }

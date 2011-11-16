@@ -6,13 +6,9 @@
 {% block head %}
 <style>
     .formSection {
-        background: aliceblue;
-        border-bottom: 1px dashed cadetblue;
         margin-bottom: 1em;
     }
     .right input, .right select {
-        float: right;
-        margin-right: 25%;
     }
     .left input {
         line-height: 2em;
@@ -39,6 +35,9 @@
     .clearfix {
       display: block;
     }
+    #format_input input {
+        width:8em;
+    }
 
 </style>
 {% include "geonode/ext_header.html" %}
@@ -48,43 +47,45 @@
 <div class="twocol">
   <h2> {% trans "Editing details for " %} {{ layer_name }} </h2>
   <h3>Time Options</h3>
-  <form method="POST">
+  <form method="POST" id="timeForm">
     {% csrf_token %}
     
-    <h4>Choose one of:</h4>
+    <h4>Choose time attribute:</h4>
+    <div class="formSection clearfix" title="Map animations will not be enabled">
+        <input type="radio" name="timetype" checked="checked" id="notime">
+        <label for="notime">{% trans "This data does not have a time attribute" %}</label>
+    </div>
     {% if time_form.time_attribute %}
     <div class="formSection clearfix right" title="Use an existing timestamp attribute in the data">
-        <label for="id_time_attribute">{% trans "Existing Time Attribute" %}  :</label>{{ time_form.time_attribute }}
+        <input type="radio" name="timetype" id="existing">
+        <label for="existing">{% trans "Existing Time Attribute" %}  :</label>{{ time_form.time_attribute }}
     </div>
     {% endif %}
     {% if time_form.text_attribute %}
     <div class="formSection clearfix right" title="Convert text in the data to a timestamp using standard date/time representation or a custom format">
-        <div>
-            <label for="id_text_attribute">{% trans "Convert Text Attribute" %}  :</label>{{ time_form.text_attribute }}
-        </div>
-        <div class="clearfix" style="clear:both" title="Use a custom format to convert the data to a timestamp">
-            <label for="format_select">{% trans "Date Format" %}  :
-            <select id="format_select">
-                <option selected="true" value="0">Best Guess</option>
-                <option value="1">Custom</option>
-            </select>
-        </div>
-        <div id="format_input" style="display:none" class="clearfix">
-            <label for="id_text_attribute_format">{% trans "Format" %} <a href="#" id="format_help" style="font-size:smaller">[ What's this ?]</a>  :</label>
+        <input type="radio" name="timetype" id="textattribute">
+        <label for="textattribute">{% trans "Convert Text Attribute" %}  :</label>{{ time_form.text_attribute }}
+        <label for="format_select">{% trans "Date Format" %}  :
+        <select id="format_select">
+            <option selected="true" value="0">Best Guess</option>
+            <option value="1">Custom</option>
+        </select>
+        <div id="format_input" style="display: inline; visibility: hidden;" class="clearfix">
             {{ time_form.text_attribute_format }}
         </div>
     </div>
     {% endif %}
     {% if time_form.year_attribute %}
     <div class="formSection clearfix right" title="Convert a number field into a year">
-        <label for="id_year_attribute">{% trans "Convert Number (As Year)" %}  :</label>{{ time_form.year_attribute }}
+        <input type="radio" name="timetype" id="convertnumber">
+        <label for="convertnumber">{% trans "Convert Number (As Year)" %}  :</label>{{ time_form.year_attribute }}
     </div>
     {% endif %}
 
-    <h4>Present time attribute as:</h4>
-    <div class="formSection left">
+    <div id="presentation" class="formSection left">
+        <h4>Present time attribute as:</h4>
         <div>
-            <input id="LIST" type='radio' value='LIST' checked='true' name='presentation_strategy'/>
+            <input id="LIST" type='radio' value='LIST' checked='checked' name='presentation_strategy'/>
             <label for="LIST"><strong>List</strong> of all the distinct time values</label>
         </div>
         <div>
@@ -110,17 +111,57 @@
 {% autoescape off %}
 Ext.onReady(function() {
     Ext.QuickTips.init(); 
-    var precision = Ext.get('precision'), format = Ext.get('format_input');
+    var precision = Ext.get('precision'), 
+        format = Ext.get('format_input'),
+        presentation = Ext.get('presentation');
+    presentation.hide();
     precision.hide();
     format.hide();
-    Ext.get(Ext.query("input[name=presentation_strategy]")).on('click',function() {
-       if (!Ext.query("input[value=LIST]")[0].checked) {
-           if (!precision.isVisible())
-               precision.fadeIn();
-       } else{
-           precision.hide();
-       }
+
+    function resetSelects(exclude) {
+        Ext.select("#timeForm select").each(function(e,i) {
+            if (e.dom != exclude) {
+                e.dom.value = "";
+            }
+        });
+    }
+
+    // show presentation section if needed and select first attribute
+    Ext.get(Ext.query("input[name=timetype]")).on('click',function() {
+        if (!Ext.get("notime").dom.checked) {
+            if (! presentation.isVisible()) {
+                presentation.fadeIn();
+            }
+        } else {
+            presentation.hide();
+        }
+        var select = Ext.get(this).parent().first("select");
+        resetSelects();
+        if (select) {
+            select.dom.value = select.dom.options[1].value;
+        }
     });
+    // only show the precision section if needed
+    Ext.get(Ext.query("input[name=presentation_strategy]")).on('click',function() {
+        if (!Ext.query("input[value=LIST]")[0].checked) {
+            if (!precision.isVisible()) {
+                precision.fadeIn();
+            }
+        } else{
+            precision.hide();
+        }
+    });
+    // sync radio button selection with attribute selectors
+    Ext.select("#timeForm select").on('change',function() {
+        if (this.id == 'format_select') return;
+        if (this.value != "") {
+            Ext.get(this).parent(".formSection").first().dom.click();
+            resetSelects(this);
+        } else {
+            Ext.get("notime").dom.click();
+        }
+    });
+    // show custom format field if needed
     Ext.get('format_select').on('change',function() {
         var input = Ext.get("id_text_attribute_format");
         if (this.getAttribute('value') == '0') {
