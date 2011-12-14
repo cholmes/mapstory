@@ -235,11 +235,11 @@ function init(options) {
         var drop = function(ev) {
             ev.preventDefault();
             dt = ev.dataTransfer, files = dt.files, i = 0;
-            // this is the single file drop - it may be a tiff or a .shp file
+            // this is the single file drop - it may be a tiff or a shp file or a zip
             if (files.length == 1 && !dbf_file.isVisible()) {
                 base_file.setValue(files[i].name);
                 check_shapefile();
-                dropped_files.base = files[i];
+                dropped_files.base_file = files[i];
             } else {
                 // multiple file drop
                 for (; i < files.length; i++) {
@@ -267,7 +267,7 @@ function init(options) {
             listeners: {
                 render: function(p) {
                     var el = p.getEl().dom;
-                    function t() {p.body.toggleClass('x-grid3-cell-selected')};
+                    function t() {p.getEl().toggleClass('x-grid3-cell-selected')};
                     el.addEventListener("dragover", function(ev) {
                         ev.stopPropagation();
                         ev.preventDefault();
