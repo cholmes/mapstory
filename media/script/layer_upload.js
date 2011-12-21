@@ -267,12 +267,13 @@ function init(options) {
             listeners: {
                 render: function(p) {
                     var el = p.getEl().dom;
-                    function t() {p.getEl().toggleClass('x-grid3-cell-selected')};
+                    function t() {p.getEl().toggleClass('x-grid3-cell-selected');}
                     el.addEventListener("dragover", function(ev) {
                         ev.stopPropagation();
                         ev.preventDefault();
                     }, true);
                     el.addEventListener("drop", function(ev) {
+                        p.getEl().removeClass('x-grid3-cell-selected');
                         drop(ev);
                     },false);
                     el.addEventListener("dragexit",t);
@@ -354,9 +355,14 @@ function init(options) {
             xhr.send(formData);
         }
 
+        var originalHandler = fp.buttons[0].handler;
         fp.buttons[0].handler = function() {
             if (!fp.getForm().isValid()) return;
-            upload(createDragFormData());
+            if ('base_file' in dropped_files) {
+                upload(createDragFormData());
+            } else {
+                originalHandler();
+            }
         }
     }
 }
