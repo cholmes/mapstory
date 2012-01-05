@@ -217,7 +217,7 @@ MAP_BASELAYERS = [{
     "visibility": False,
     "fixed": True,
     "args":[
-      "bluemarble",
+      "Wayne",
       "http://maps.opengeo.org/geowebcache/service/wms",
       {
         "layers":["Wayne"],
