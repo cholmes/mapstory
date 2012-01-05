@@ -132,16 +132,8 @@ Ext.onReady(function() {
     precision.hide();
     format.hide();
 
-    function resetSelects(exclude) {
-        Ext.select("#timeForm select").each(function(e,i) {
-            if (e.dom != exclude) {
-                e.dom.value = "";
-            }
-        });
-    }
-
-    // show presentation section if needed and select first attribute
-    Ext.get(Ext.query("input[name=timetype]")).on('click',function() {
+    // time type selected - either by radio click or select
+    function timeTypeSelected(select) {
         if (!Ext.get("notime").dom.checked) {
             if (! presentation.isVisible()) {
                 presentation.fadeIn();
@@ -149,12 +141,21 @@ Ext.onReady(function() {
         } else {
             presentation.hide();
         }
-        var select = Ext.get(this).parent().first("select");
-        resetSelects();
-        if (select) {
-            select.dom.value = select.dom.options[1].value;
+        Ext.select("#timeForm select").each(function(e,i) {
+            if (e.dom != exclude) {
+                e.dom.value = "";
+            }
+        });
+        if (select && !select.value) {
+            select.value = select.options[1].value;
         }
+    }
+
+    // show presentation section if needed and select first attribute
+    Ext.get(Ext.query("input[name=timetype]")).on('click',function() {
+        timeTypeSelected(null);
     });
+
     // only show the precision section if needed
     Ext.get(Ext.query("input[name=presentation_strategy]")).on('click',function() {
         if (!Ext.query("input[value=LIST]")[0].checked) {
@@ -165,12 +166,13 @@ Ext.onReady(function() {
             precision.hide();
         }
     });
+
     // sync radio button selection with attribute selectors
     Ext.select("#timeForm select").on('change',function() {
         if (this.id == 'format_select') return;
         if (this.value != "") {
-            Ext.get(this).parent(".formSection").first().dom.click();
-            resetSelects(this);
+            Ext.get(this).parent(".formSection").first().dom.checked = true;
+            timeTypeSelected(this);
         } else {
             Ext.get("notime").dom.click();
         }
