@@ -142,7 +142,7 @@ Ext.onReady(function() {
             presentation.hide();
         }
         Ext.select("#timeForm select").each(function(e,i) {
-            if (e.dom != exclude) {
+            if (e.dom != select) {
                 e.dom.value = "";
             }
         });
@@ -153,7 +153,7 @@ Ext.onReady(function() {
 
     // show presentation section if needed and select first attribute
     Ext.get(Ext.query("input[name=timetype]")).on('click',function() {
-        timeTypeSelected(null);
+        timeTypeSelected(Ext.fly(this).next('select').dom);
     });
 
     // only show the precision section if needed
@@ -177,6 +177,7 @@ Ext.onReady(function() {
             Ext.get("notime").dom.click();
         }
     });
+
     // show custom format field if needed
     Ext.get('format_select').on('change',function() {
         var input = Ext.get("id_text_attribute_format");
@@ -188,6 +189,65 @@ Ext.onReady(function() {
             input.focus();
         }
     });
+    
+    var progress;
+    var progressEndpoint = "{{ progress_endpoint }}";
+    function pollProgress(redirectTo) {
+        if (progress == null) {
+            progress = Ext.MessageBox.progress("Please wait","Ingesting data");
+        }
+        function poll() {
+            Ext.Ajax.request({
+                url : progressEndpoint,
+                success: function(response) {
+                    var state, msg;
+                    response = Ext.decode(response.responseText);
+                    // response will contain state, one of :
+                    // PENDING, READY, RUNNING, NO_CRS, NO_BOUNDS, ERROR, COMPLETE
+                    // though RUNNING, ERROR or COMPLETE are what we expect
+                    // and possibly progress and total
+                    if (response.state == 'COMPLETE') {
+                        // don't just open a GET on the location, ensure a POST occurs
+                        var form = Ext.get('timeForm').dom;
+                        form.action = redirectTo;
+                        form.submit();
+                        return;
+                    } else if ('progress' in response) {
+                        msg = 'Ingested ' + response.progress + " of " + response.total;
+                        progress.updateProgress( response.progress/response.total, msg );
+                    } else {
+                        switch (response.state) {
+                            // give it a chance to start running or return complete
+                            case 'PENDING': case 'RUNNING':
+                                break;
+                            default:
+                                Ext.MessageBox.show({
+                                    icon : Ext.MessageBox.ERROR,
+                                    msg : 'Expected a status other than ' + response.state
+                                });
+                                return;
+                        }
+                    }
+                    setTimeout(poll,1000);
+                }
+            });
+        }
+        poll();
+    }
+
+    if (progressEndpoint) {
+        // AJAX submit form
+        var form = Ext.get('timeForm');
+        form.on('submit',function(ev) {
+            ev.preventDefault();
+            form = new Ext.form.BasicForm(form);
+            form.on('actioncomplete',function(form,xhrlike) {
+                var resp = Ext.decode(xhrlike.response.responseText);
+                pollProgress(resp.redirect_to);
+            });
+            form.submit();
+        });
+    }
 });
 {% endautoescape %}
 </script>
