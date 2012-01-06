@@ -210,7 +210,23 @@ MAP_BASELAYERS = [{
       },
       {"buffer":0}
     ]
-
+  },{
+    "source": {"ptype":"gx_olsource"},
+    "type":"OpenLayers.Layer.WMS",
+    "group":"background",
+    "visibility": False,
+    "fixed": True,
+    "args":[
+      "Wayne",
+      "http://maps.opengeo.org/geowebcache/service/wms",
+      {
+        "layers":["Wayne"],
+        "format":"image/png",
+        "tiled": True,
+        "tilesOrigin":[-20037508.34,-20037508.34]
+      },
+      {"buffer":0}
+    ]
 }]
 
 # use new uploader
