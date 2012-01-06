@@ -234,7 +234,7 @@ function init(options) {
         // drop handler
         var drop = function(ev) {
             ev.preventDefault();
-            dt = ev.dataTransfer, files = dt.files, i = 0;
+            var dt = ev.dataTransfer, files = dt.files, i = 0, ext, key, w;
             // this is the single file drop - it may be a tiff or a shp file or a zip
             if (files.length == 1 && !dbf_file.isVisible()) {
                 base_file.setValue(files[i].name);
@@ -243,14 +243,16 @@ function init(options) {
             } else {
                 // multiple file drop
                 for (; i < files.length; i++) {
-                    var ext = files[i].name.split('.')[1];
+                    ext = files[i].name.split('.');
+                    // grab the last part to avoid .shp.xml getting sucked in
+                    ext = ext[ext.length - 1];
                     if (ext == 'shp') {
                         base_file.setValue(files[i].name);
                         enable_shapefile_inputs();
                         dropped_files.base_file = files[i];
                     } else {
                         try {
-                            var key = ext + '_file', w = eval(key);
+                            key = ext + '_file', w = eval(key);
                             w.setValue(files[i].name);
                             dropped_files[key] = files[i];
                         } catch (ReferenceError) {}
@@ -308,7 +310,8 @@ function init(options) {
             xhr.upload.addEventListener('progress', function(ev) {
                 if (ev.lengthComputable) {
                     // assume that 25% of the time will be actual server work, not just upload time
-                    progress.updateProgress( (ev.loaded/ev.total)* .75);
+                    var msg = parseInt(ev.loaded / 1024) + " of " + parseInt(ev.total / 1024);
+                    progress.updateProgress( (ev.loaded/ev.total)* .75, msg);
                     if (ev.loaded == ev.total) {
                         progress.updateProgress(.75,"Awaiting response");
                     }
