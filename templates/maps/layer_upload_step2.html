@@ -1,4 +1,4 @@
-{% extends "page_layout.html" %}
+{% extends "page_laymut.html" %}
 {% load i18n %}
 
 {% block title %} {% trans "Upload Layer Step 2" %} - {{ block.super }} {% endblock %}
@@ -190,12 +190,9 @@ Ext.onReady(function() {
         }
     });
     
-    var progress;
     var progressEndpoint = "{{ progress_endpoint }}";
     function pollProgress(redirectTo) {
-        if (progress == null) {
-            progress = Ext.MessageBox.progress("Please wait","Ingesting data");
-        }
+        var progress = Ext.MessageBox.progress("Please wait","Ingesting data");
         function poll() {
             Ext.Ajax.request({
                 url : progressEndpoint,
@@ -207,6 +204,7 @@ Ext.onReady(function() {
                     // though RUNNING, ERROR or COMPLETE are what we expect
                     // and possibly progress and total
                     if (response.state == 'COMPLETE') {
+                        Ext.MessageBox.wait("Finishing Ingest...");
                         // don't just open a GET on the location, ensure a POST occurs
                         var form = Ext.get('timeForm').dom;
                         form.action = redirectTo;
@@ -228,7 +226,7 @@ Ext.onReady(function() {
                                 return;
                         }
                     }
-                    setTimeout(poll,1000);
+                    setTimeout(poll,500);
                 }
             });
         }
@@ -244,6 +242,12 @@ Ext.onReady(function() {
             form.on('actioncomplete',function(form,xhrlike) {
                 var resp = Ext.decode(xhrlike.response.responseText);
                 pollProgress(resp.redirect_to);
+            });
+            form.on('actionfailed',function(form,xhrlike) {
+                Ext.MessageBox.show({
+                    icon : Ext.MessageBox.ERROR,
+                    msg : 'Upload failed: ' + xhrlike.response.responseText
+                });
             });
             form.submit();
         });
