@@ -130,7 +130,7 @@ Ext.onReady(function() {
         presentation = Ext.get('presentation');
     presentation.hide();
     precision.hide();
-    format.hide();
+    if (format) format.hide();
 
     // time type selected - either by radio click or select
     function timeTypeSelected(select) {
@@ -153,7 +153,8 @@ Ext.onReady(function() {
 
     // show presentation section if needed and select first attribute
     Ext.get(Ext.query("input[name=timetype]")).on('click',function() {
-        timeTypeSelected(Ext.fly(this).next('select').dom);
+        var select = Ext.fly(this).next('select');
+        if (select) timeTypeSelected(select.dom);
     });
 
     // only show the precision section if needed
@@ -168,7 +169,7 @@ Ext.onReady(function() {
     });
 
     // sync radio button selection with attribute selectors
-    Ext.select("#timeForm select").on('change',function() {
+    Ext.select("#id_text_attribute, #id_time_attribute, #id_year_attribute").on('change',function() {
         if (this.id == 'format_select') return;
         if (this.value != "") {
             Ext.get(this).parent(".formSection").first().dom.checked = true;
@@ -179,16 +180,18 @@ Ext.onReady(function() {
     });
 
     // show custom format field if needed
-    Ext.get('format_select').on('change',function() {
-        var input = Ext.get("id_text_attribute_format");
-        if (this.getAttribute('value') == '0') {
-            format.hide();
-            input.dom.value = '';
-        } else {
-            format.fadeIn();
-            input.focus();
-        }
-    });
+    if (format) {
+        Ext.get('format_select').on('change',function() {
+            var input = Ext.get("id_text_attribute_format");
+            if (this.getAttribute('value') == '0') {
+                format.hide();
+                input.dom.value = '';
+            } else {
+                format.fadeIn();
+                input.focus();
+            }
+        });
+    }
     
     var progressEndpoint = "{{ progress_endpoint }}";
     function pollProgress(redirectTo) {
