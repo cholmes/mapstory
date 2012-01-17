@@ -16,7 +16,7 @@ user = settings.DB_DATASTORE_USER
 drop_tables = False 
 dump = False
 
-if not any(dump,drop_tables):
+if not any([dump,drop_tables]):
     import sys
     print 'manually set one of dump or drop_tables'
     sys.exit(1)
