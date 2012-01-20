@@ -58,7 +58,7 @@
   <pre>
   {{ native_crs }}
   </pre>
-  <label for="srs">EPSG Code  :</label><input type="text" name="srs">
+  <label for="srs">EPSG Code (SRS)  :</label><input type="text" name="srs">
   {% endif %}
 
   <h3>Time Options</h3>
@@ -238,21 +238,24 @@ Ext.onReady(function() {
 
     if (progressEndpoint) {
         // AJAX submit form
-        var form = Ext.get('timeForm');
+        var form = Ext.get('timeForm'), extForm = new Ext.form.BasicForm(form);
         form.on('submit',function(ev) {
+            console.log('submit');
             ev.preventDefault();
-            form = new Ext.form.BasicForm(form);
-            form.on('actioncomplete',function(form,xhrlike) {
+            extForm.on('actioncomplete',function(form,xhrlike) {
                 var resp = Ext.decode(xhrlike.response.responseText);
                 pollProgress(resp.redirect_to);
             });
-            form.on('actionfailed',function(form,xhrlike) {
+            extForm.on('actionfailed',function(form,xhrlike) {
+                var msg = "result" in xhrlike ? 
+                    xhrlike.result.errors.join("\n") : 
+                    xhrlike.response.responseText;
                 Ext.MessageBox.show({
                     icon : Ext.MessageBox.ERROR,
-                    msg : 'Upload failed: ' + xhrlike.response.responseText
+                    msg : msg
                 });
             });
-            form.submit();
+            extForm.submit();
         });
     }
 });
