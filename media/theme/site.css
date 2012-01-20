@@ -1,0 +1,123 @@
+@import "geonode.css";
+
+.darkgraybg,
+#header,
+#footer, #footer .onecol {
+    background: #454238;
+}
+
+.orangebg,
+#crossbar,
+#sitenav,
+#topPanel, /* from viewer app */
+#map-bbar .x-slider-thumb {
+    background: #F46817;
+}
+
+.palebg,
+body,
+#main,
+#map-bbar .x-slider-inner {
+    background: #F3F2F2;
+}
+
+.orange,
+a {
+    color: #F46817;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.fancyfont,
+#sitenav {
+    font-family: 'Homenaje', sans-serif;
+}
+
+#sitenav {
+    font-size: larger;
+}
+
+.twocol, .threecol {
+    background: white;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: #111;
+}
+
+h1, h2, h3, h4 {
+    font-family: 'Homenaje', sans-serif;
+}
+
+#topPanel {
+    font-size: 12px !important;
+    font-weight: normal !important;
+    font-family: sans-serif !important;
+}
+
+.text {
+    color: #717274;
+}
+
+#header {
+    border-bottom: 0;
+}
+
+#logo {
+    float: left;
+    width: 262px;
+    height: 50px;
+    background: url(img/mapstory.png) no-repeat;
+    overflow: hidden;
+    text-indent: -9999em;
+}
+
+#crossbar {
+    border-bottom: 0;
+    color: white;
+}
+
+#footer, #footer * {
+    color: white;
+    font-weight: normal;
+    text-decoration: none;
+    border: 0;
+}
+
+/** ext overrides */
+.xpanel, .x-panel *, .x-toolbar {
+    border-width: 0;
+    border-color: transparent;
+}
+#map-bbar .x-slider-end {
+    background: none
+}
+#map-bbar .x-slider {
+    border: 1px solid white !important;
+    margin: 0 2px;
+    height: 18px;
+}
+#map-bbar .x-slider-inner {
+    margin: 2px 0;
+    height: 14px;
+}
+.x-toolbar .x-btn {
+    border: 1px solid #454238 !important;
+    color: white;
+}
+#map-bbar .x-btn-over {
+    border-color: white !important;
+}
+#map-bbar .x-btn-over td {
+    background: none !important;
+}
+#map-bbar .x-slider-thumb {
+    width: 4px;
+    height: 16px;
+    top: -1px;
+}
+#map-bbar,
+.x-toolbar,
+#map-bbar .x-slider {
+    background: #454238;
+}
