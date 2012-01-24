@@ -85,9 +85,9 @@ h1, h2, h3, h4 {
 }
 
 /** ext overrides */
-.xpanel, .x-panel *, .x-toolbar {
-    border-width: 0;
-    border-color: transparent;
+.x-panel, .x-toolbar, .x-panel-body {
+    border-width: 0 !important;
+    border-color: transparent !important;
 }
 #map-bbar .x-slider-end {
     background: none
