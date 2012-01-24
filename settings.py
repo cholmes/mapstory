@@ -84,6 +84,8 @@ STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
 STATIC_URL = '/static/'
 GEONODE_UPLOAD_PATH = MEDIA_ROOT + 'geonode'
 GEONODE_CLIENT_LOCATION = STATIC_URL + 'static/'
+THUMBNAIL_STORAGE = os.path.join(PROJECT_ROOT, 'thumbs')
+THUMBNAIL_URL = '/thumbs/'
 ADMIN_MEDIA_PREFIX = STATIC_URL + 'admin/'
 
 STATICFILES_STORAGE = 'staticfiles.storage.StaticFilesStorage'
@@ -92,6 +94,7 @@ STATICFILES_STORAGE = 'staticfiles.storage.StaticFilesStorage'
 STATICFILES_DIRS = [
     os.path.join(PROJECT_ROOT, 'media'),
     os.path.join(GEONODE_ROOT, "media"),
+    THUMBNAIL_STORAGE
 ]
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
