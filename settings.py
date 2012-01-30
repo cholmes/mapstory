@@ -144,6 +144,7 @@ ROOT_URLCONF = 'mapstory.urls'
 TEMPLATE_DIRS = (
     os.path.join(PROJECT_ROOT,"templates"),
     os.path.join(GEONODE_ROOT,"templates"),
+    os.path.join(GEONODE_ROOT,'..'), # this allows the extend and override pattern
 )
 
 # The FULLY QUALIFIED url to the GeoServer instance for this GeoNode.
@@ -250,7 +251,8 @@ INSTALLED_APPS = (
     'geonode.core',
     'geonode.maps',
     'geonode.proxy',
-    'geonode'
+    'geonode',
+    'mapstory'
 )
 
 def get_user_url(u):
