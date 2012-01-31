@@ -21,14 +21,14 @@ def create_annotations_layer(req, mapid):
     
     atts = [
         #name, type, nillable
+        ('title','java.lang.String',False)
+        ('description','java.lang.String',False)
         ('the_geom','com.vividsolutions.jts.geom.Geometry',True),
         ('start_time','java.lang.Long',True),
         ('end_time','java.lang.Long',True),
-        ('position','java.lang.String',True),
         ('in_timeline','java.lang.Boolean',True),
         ('in_map','java.lang.Boolean',True),
         ('appearance','java.lang.String',True),
-        ('text','java.lang.String',False)
     ]
     
     # @todo remove this when hack is resolved. build our spec string
