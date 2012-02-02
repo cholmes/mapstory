@@ -21,8 +21,8 @@ def create_annotations_layer(req, mapid):
     
     atts = [
         #name, type, nillable
-        ('title','java.lang.String',False)
-        ('description','java.lang.String',False)
+        ('title','java.lang.String',False),
+        ('description','java.lang.String',False),
         ('the_geom','com.vividsolutions.jts.geom.Geometry',True),
         ('start_time','java.lang.Long',True),
         ('end_time','java.lang.Long',True),
@@ -36,7 +36,7 @@ def create_annotations_layer(req, mapid):
     
     return _create_layer(
         name = "_map_%s_annotations" % mapid,
-        srs = 'EPSG:900913', # @todo how to obtain this in a nicer way...
+        srs = 'EPSG:4326', # @todo how to obtain this in a nicer way...
         attributes = atts
     )
     
