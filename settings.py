@@ -281,6 +281,11 @@ DB_DATASTORE_HOST = ''
 DB_DATASTORE_PORT = ''
 DB_DATASTORE_TYPE=''
 
+SIMPLE_SEARCH_EXCLUSIONS = [
+    'annotations_\d+',
+    '_map_\d+_annotations'
+]
+
 try:
     from local_settings import *
 except ImportError:

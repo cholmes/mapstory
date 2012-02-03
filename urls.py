@@ -3,7 +3,6 @@ from django.conf import settings
 from staticfiles.urls import staticfiles_urlpatterns
 from geonode.sitemap import LayerSitemap, MapSitemap
 from geonode.proxy.urls import urlpatterns as proxy_urlpatterns
-from geonode.maps.views import new_search_page
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
@@ -20,9 +19,7 @@ sitemaps = {
 }
 
 urlpatterns = patterns('mapstory.views',
-    #override search urls with specific views
-    url(r'^data/search$',new_search_page,kwargs={'bytype':'layer'}),
-    url(r'^maps/search$',new_search_page,kwargs={'bytype':'map'}),
+    (r'', include('geonode.simplesearch.urls')), # put this first to ensure search urls priority
     (r'', include('geonode.urls')),
     (r'^data/create_annotations_layer/(?P<mapid>\d+)$','create_annotations_layer'),
 )
