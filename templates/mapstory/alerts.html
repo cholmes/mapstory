@@ -1,0 +1,26 @@
+{% extends "page_layout.html" %}
+{% load i18n %}
+
+{% block title %} {% trans "Alerts" %} - {{ block.super }} {% endblock %}
+{% block indexclass %} class="here" {% endblock %}
+
+{% block head %} 
+{% include "geonode/ext_header.html" %}
+{{ block.super }}
+<script type="text/javascript">
+</script>
+{% endblock %}
+
+{% block main %} 
+<div class="onecol">
+    <div class="block">
+        <h4>Subscribe to MapStory alerts</h4>
+        
+        <p>Tell me how?</p>
+    </div>
+</div>
+<!-- TODO: i18n on the text here -->
+    
+{% endblock %}
+{% block sidebar %}
+{% endblock %}

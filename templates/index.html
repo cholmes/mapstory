@@ -1,4 +1,5 @@
 {% extends "page_layout.html" %}
+{% load webdesign %}
 {% load i18n %}
 
 {% block title %} {% trans "Welcome!" %} - {{ block.super }} {% endblock %}
@@ -8,89 +9,170 @@
 {% include "geonode/ext_header.html" %}
 {{ block.super }}
 <script type="text/javascript">
+function runCarousel(tiles) {
+    tiles.setVisibilityMode(Ext.Element.DISPLAY);
+    tiles.hide();
+    var idx = 0;
+    var last = null;
+    function go() {
+        if (last) last.ghost();
+        idx = idx++ % tiles.getCount();
+        last = tiles.item(idx++);
+        last.fadeIn({
+            callback: function() {
+                window.setTimeout(go,5000);
+            }
+        });
+    };
+    go();
+    window.tiles = tiles;
+}    
+ 
 Ext.onReady(function(){
 {% autoescape off %}
-
-  var exploreMapButton = new Ext.Button({
-     renderTo: 'explore_map', 
-     text: '{% trans "Explore Maps" %}',
-     handler: function(){ window.location = "{% url geonode.maps.views.maps_search_page %}"; }
-  });
-
-  var createMapButton = new Ext.Button({
-     renderTo: 'create_map', 
-     text: '{% trans "Create Map" %}',
-     handler: function(){ window.location = "{% url geonode.maps.views.newmap %}"; }
-  });
-
-  var submitForm = function() {
-      Ext.query('#data_block form')[0].submit();
-  };
-
-  var searchButton = new Ext.Button({renderTo: 'submit_search', text: '{% trans "Search" %}',
-                                     handler: submitForm});
-
-  var searchInput = new Ext.form.TextField({applyTo: 'search_query', width: 350});
+Ext.Ajax.request({
+   url: "{% url map_tiles %}",
+   success: function(xhrLike) {
+       var carousel = Ext.get('carousel');
+       carousel.dom.innerHTML = xhrLike.responseText;
+       runCarousel(carousel.select('.tile'));
+   }
+});
 
 {% endautoescape %}
 });
 </script>
+<style type="text/css">
+    #activities {
+        margin-bottom: 1em;
+    }
+    #activities ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    #activities ul li {
+        float: left;
+        width: 325px;
+        padding: 1em 0;
+        margin: 0;
+    }
+    #activities div {
+        font-size:28px;
+        color: #9E2F1E;
+        padding-bottom: .5em;
+    }
+    #activities div img {
+        vertical-align: middle;
+        padding-right: 1em;
+    }
+    #activities .search {
+        background: #9E2F1E;
+    }
+    #activities .action {
+        background: #5B2D14;        
+        margin-left: 1em;
+    }
+    #activities a {
+        color: white;
+        font-size: 16px;
+        padding: .5em;
+        -moz-border-radius: 5px;
+        -webkit-border-radius: 5px;
+    }
+    .storyteller img {
+        float:left;
+        margin-right: 1em;
+    }
+    .storyteller {
+        padding: 1em;
+        border-bottom: 1px solid #999;
+    }
+    .storyteller h4 {
+        color: #F46817;
+        margin-top: .5em;
+        margin-bottom: 0;
+    }
+</style>
 {% endblock %}
 
 {% block main %} 
-<div class="twocol">
-<!-- TODO: i18n on the text here -->
-  <div class="block">
-    <h2> {% trans "Welcome" %} </h2>
-    <p>
-    {% blocktrans %}
-MapStory is ...
-    {% endblocktrans %} 
-  </p>
-  </div>
-  <div class="block">
-    <h2> {% trans "Maps" %} </h2>
-    <p>
-    {% blocktrans %} 
-Create and Explore Maps and Map Stories 
-    {% endblocktrans %} 
-  </p>
-    <div class="selfclear">
-      <div id="explore_map" class="content-button"></div>
-      <div id="create_map" class="content-button"></div>
+    <div id="alerts" class="medgraybg selfclear fancyfont" style="color:white;">
+        <div class="hvygrabg" style="float:right;padding: 1em;font-size:larger"><a style="color:white" href="{% url alerts %}">GET ALERTS &gt;</a></div>
+        <div style="float:left; padding: 1em;">
+            <span style="font-size: larger">ALERT :</span>
+            <span style="font-family: sans">Disaster in Japan - {% lorem 15 w %}</span>
+        </div>
     </div>
-  </div>
-  <div id="data_block" class="block">
-    <h2> {% trans "Data" %} </h2>
-    <p>
-    {% blocktrans %} 
-
-Search for or Upload Data
-
-    {% endblocktrans %} 
-    </p>
-
-    <!-- Data search text box and button -->
-
-    <form action="{% url search %}" method="POST">
-      {% csrf_token %}
-        <table>
-          <tr>
-            <td>
-              <input type="text" id="search_query" name="q" />
-            </td>
-            <td>
-              <div id="submit_search"></div>
-            </td>
-          </tr>
-        </table>
-        <a href="{% url search %}">{% trans "Advanced Search" %}</a>
-    </form>
-  
-    <!-- Links to specialized views of data -->
-    <!-- Upload data button (link?) -->
-    <a class="layer-upload-link" href="{% url geonode.maps.views.upload_layer%}">{% trans "Upload data"  %}</a>
-  </div>
+    <div id="carousel" class="lightgraybg">
+        <div class="wrap">
+            
+        </div>
+    </div>
+    <div id="activities">
+        <ul class="selfclear">
+            <li>
+                <div>
+                    <img src="{{ STATIC_URL}}theme/img/storylayers.png"></img>STORYLAYERS
+                </div>
+                <a class="search" href="">SEARCH LAYERS</a>
+                <a class="action" href="">UPLOAD LAYERS</a>
+            </li>
+            <li>
+                <div>
+                    <img src="{{ STATIC_URL}}theme/img/mapstories.png"></img>MAPSTORIES
+                </div>
+                <a class="search" href="">SEARCH STORIES</a>
+                <a class="action" href="">CREATE A MAPSTORY</a>
+            </li>
+            <li>
+                <div>
+                    <img src="{{ STATIC_URL}}theme/img/storyteller.png"></img>MAPSTORYTELLERS
+                </div>
+                <a class="search" href="">SEARCH STORYTELLERS</a>
+                <a class="action" href="">SIGN UP</a>
+            </li>
+        </ul>
+    </div>
+<div class="twocol">
+    <div id="featuredvideo" class="selfclear">
+        <h2>{{ video_title }}</h2>
+        <div style="float:left;margin-right: 1em">
+            <iframe class="youtube-player" type="text/html" width="217" height="128" src="http://www.youtube.com/embed/{{video_id}}" frameborder="0"></iframe>
+        </div>
+        <div>
+            <h3>{% lorem 10 w %}</h3>
+            <p>{% lorem 35 w %}</p>
+        </div>
+    </div>
+    <hr/>
+    <div id="sections">
+        <h2>SECTIONS</h2>
+    </div>
+</div>
+<div class="threecol">
+    <h2>THINKERS AND THOUGHTS ON
+MAPSTORYTELLING</h2>
+    <div class="storyteller">
+        <img src="http://www.gravatar.com/avatar/b59a1fea77f9350c8225395f55204abe?r=pg&s=50">
+        <h4>Ian Schneider</h4>
+        <p>Af/Pak Tribal Dynamics,
+1805-2010
+</p>
+    </div>
+    <div class="storyteller">
+        <img src="http://www.gravatar.com/avatar/a6a965150162eef63f1d2f8aae15c57c?r=pg&s=50">
+        <h4>Bart van den Eijnden</h4>
+        <p>Sources of State Failure in Horn
+of Africa, 1965-2010
+</p>
+    </div>
+    <div class="storyteller">
+        <img src="http://www.gravatar.com/avatar/c0c61fb94a5785be367b0fceea6985f1?r=pg&s=50">
+        <h4>Matt Priour</h4>
+        <p>Rise and Fall of Meso-American
+ Civilizations</p>
+    </div>
 </div>
 {% endblock %}
 {% block sidebar %}

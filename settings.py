@@ -243,6 +243,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.admin',
     'django.contrib.sitemaps',
+    'django.contrib.webdesign',
     'staticfiles',
     'django_extensions',
     'registration',

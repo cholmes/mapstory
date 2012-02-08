@@ -19,9 +19,15 @@ sitemaps = {
 }
 
 urlpatterns = patterns('mapstory.views',
+    (r'^(?:index/?)?$', 'index'),
+
     (r'', include('geonode.simplesearch.urls')), # put this first to ensure search urls priority
     (r'', include('geonode.urls')),
     (r'^data/create_annotations_layer/(?P<mapid>\d+)$','create_annotations_layer'),
+    url(r'^mapstory/donate$','donate',name='donate'),
+    url(r'^mapstory/alerts$','alerts',name='alerts'),
+    url(r'^mapstory/tile/(?P<mapid>\d+)$','map_tile',name='map_tile'),
+    url(r'^mapstory/tiles$','map_tiles',name='map_tiles'),
 )
 
 urlpatterns += proxy_urlpatterns

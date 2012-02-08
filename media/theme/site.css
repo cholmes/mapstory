@@ -1,7 +1,120 @@
 @import "geonode.css";
 
+#header .wrap {
+    padding-left: 30px;
+}
+
+#logo {
+    margin: 1em 0em;
+}
+
+#login-area {
+    top: 0;
+    width: 15em;
+}
+
+#login-link {
+    -moz-border-radius: .5em;
+    -webkit-border-radius: .5em;
+    color: black !important;
+    background: white;
+    font-weight: normal !important;
+    padding: .2em .5em;
+    font-family: sans-serif;
+    position: relative;
+    top: 1em;
+}
+
+#donate {
+    position: absolute;
+    left: 0;
+    font-size: larger;
+    color: white;
+    padding: .5em;
+    -moz-border-radius: 0 0 .5em .5em;
+    -webkit-border-radius: 0 0 .5em .5em;
+}
+
+#quicksearch {
+    float: right;
+    margin-bottom: .5em;
+}
+
+#quicksearch label {
+    opacity: 1;
+    position: absolute;
+    padding-left: .5em;
+}
+
+#top-crossbar ul {
+    line-height: 1;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+#top-crossbar ul li {
+    float: left;
+    margin: 0;
+    padding: 0;    
+    font-size: larger;
+    color: white;
+}
+#top-crossbar ul li a {
+    padding: .5em;
+    font-weight: bold;
+}
+.langbar {
+    display: none;
+}
+
+#carousel {
+    height: 130px;
+    overflow: hidden;
+}
+
+#carousel .tile {
+    position: relative;
+    border: 1px solid #999;
+    margin-left: 352px;
+}
+
+#carousel .tile .info {
+    position: absolute;
+    bottom: 0;
+    text-shadow: 1px 1px 3px white;
+    background: white;
+    opacity: .5;
+    width: 100%;
+    text-align: center;
+}
+
+#carousel .wrap,
+#main .wrap {
+    padding: 0;
+}
+
+#carousel .tile {
+    display: inline-block;
+}
+
+.hvygrabg
+{
+    background: #6A6C5D;
+}
+
+.medgraybg
+{
+    background: #8B8F7F;
+}
+
+.lightgraybg
+{
+    background: #B9C2AD;
+}
+
 .darkgraybg,
 #header,
+#top-crossbar,
 #footer, #footer .onecol {
     background: #454238;
 }
@@ -9,7 +122,9 @@
 .orangebg,
 #crossbar,
 #sitenav,
+#top-crossbar .selected,
 #topPanel, /* from viewer app */
+#donate,
 #map-bbar .x-slider-thumb {
     background: #F46817;
 }
@@ -22,6 +137,7 @@ body,
 }
 
 .orange,
+#main h2,
 a {
     color: #F46817;
     text-decoration: none;
@@ -29,7 +145,8 @@ a {
 }
 
 .fancyfont,
-#sitenav {
+#sitenav,
+#activities * {
     font-family: 'Homenaje', sans-serif;
 }
 
@@ -37,8 +154,19 @@ a {
     font-size: larger;
 }
 
-.twocol, .threecol {
+.onecol, .twocol, .threecol {
     background: white;
+}
+
+#main p,
+hr {
+    color: #999999;
+}
+
+#main hr {
+    width: 80%;
+    border: 0;
+    height: 2px;
 }
 
 h1, h2, h3, h4, h5, h6 {
