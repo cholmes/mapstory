@@ -16,6 +16,7 @@
 #login-link {
     -moz-border-radius: .5em;
     -webkit-border-radius: .5em;
+    border-radius: 0 0 .5em .5em;
     color: black !important;
     background: white;
     font-weight: normal !important;
@@ -33,6 +34,7 @@
     padding: .5em;
     -moz-border-radius: 0 0 .5em .5em;
     -webkit-border-radius: 0 0 .5em .5em;
+    border-radius: 0 0 .5em .5em;
 }
 
 #quicksearch {
@@ -142,6 +144,14 @@ a {
     color: #F46817;
     text-decoration: none;
     font-weight: bold;
+}
+
+.note {
+    padding: 1em;
+    border: 2px dotted #F46817;
+    background: #F3F2F2;
+    color: #F46817 !important;
+    font-weight: bold !important;
 }
 
 .fancyfont,

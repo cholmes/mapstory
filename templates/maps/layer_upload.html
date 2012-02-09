@@ -14,8 +14,18 @@
 {% block main %}
 <div class="twocol">
     <h2>{% trans "Add data" %}</h2>
-    <p>Note that time support in MapStory is currently limited to everything from 1AD 
+    <p class="note">Note that time support in MapStory is currently limited to everything from 1AD 
        until the reasonable future (5,874,897 AD).</p>
+    <p class="note">Uploading of zip files is also supported. The zip file must contain the
+       appropriate shapefiles (.shp,.dbf,.prj) in the top-level directory.
+    </p>
+    {% if enough_storage %}
+    <p class="note">There are currently {{ storage_remaining }} of space left on this server.
+    Please ensure that your data is not too much bigger than this. During processing, at least 3 times
+    the storage is required.</p>
+    {% else %}
+    There is not enough space on the server to handle uploads at the moment.
+    {% endif %}
   {% if errors %}
     <div id="errors">
       {% for error in errors %}
@@ -23,6 +33,8 @@
       {% endfor %}
     </div>
   {% endif %}
+
+{% if enough_storage %}
 
   <div id="upload_form">
   </div>
@@ -37,13 +49,18 @@ setup({
 });
 {% endautoescape %}
 </script>
+{% endif %}
 
 {% endblock %}
 
 
+
 {% block sidebar %}
 <div class="threecol">
+    
+{% if enough_storage %}
 <h3>{%trans "Permissions"  %}</h3>
 
 <div id="permissions_form"></div>
+{% endif %}
 {% endblock %}
