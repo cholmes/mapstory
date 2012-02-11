@@ -16,7 +16,7 @@ def alerts(req):
 def index(req): 
     return render_to_response('index.html', RequestContext(req,{
         "video_id" : "pE-1G_476nA",
-        "video_title" : "VIDEO TITLE GOES HERE"
+        "video_title" : "VIDEO TITLE GOES HERE",
     }))
 
 def donate(req):

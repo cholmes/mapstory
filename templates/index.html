@@ -38,7 +38,10 @@ Ext.Ajax.request({
        runCarousel(carousel.select('.tile'));
    }
 });
-
+Ext.select('.noi').on('click',function(ev) {
+    alert('Not Implemented');
+    ev.stopEvent(); 
+});
 {% endautoescape %}
 });
 </script>
@@ -115,22 +118,22 @@ Ext.Ajax.request({
                 <div>
                     <img src="{{ STATIC_URL}}theme/img/storylayers.png"></img>STORYLAYERS
                 </div>
-                <a class="search" href="">SEARCH LAYERS</a>
-                <a class="action" href="">UPLOAD LAYERS</a>
+                <a class="search" href="{% url search %}">SEARCH LAYERS</a>
+                <a class="action" href="{% url data_upload %}">UPLOAD LAYERS</a>
             </li>
             <li>
                 <div>
                     <img src="{{ STATIC_URL}}theme/img/mapstories.png"></img>MAPSTORIES
                 </div>
-                <a class="search" href="">SEARCH STORIES</a>
-                <a class="action" href="">CREATE A MAPSTORY</a>
+                <a class="search" href="{% url search_maps %}">SEARCH STORIES</a>
+                <a class="action" href="{% url map_new %}">CREATE A MAPSTORY</a>
             </li>
             <li>
                 <div>
                     <img src="{{ STATIC_URL}}theme/img/storyteller.png"></img>MAPSTORYTELLERS
                 </div>
-                <a class="search" href="">SEARCH STORYTELLERS</a>
-                <a class="action" href="">SIGN UP</a>
+                <a class="search noi" href="">SEARCH STORYTELLERS</a>
+                <a class="action noi" href="">SIGN UP</a>
             </li>
         </ul>
     </div>
@@ -146,8 +149,15 @@ Ext.Ajax.request({
         </div>
     </div>
     <hr/>
-    <div id="sections">
+    <div id="sections" class="selfclear">
         <h2>SECTIONS</h2>
+        <div style="float:left">
+            <ul>
+                {% for sec in sections %}
+                <li>{{ sec }}</li>
+                {% endfor %}
+            </ul>
+        </div>
     </div>
 </div>
 <div class="threecol">
