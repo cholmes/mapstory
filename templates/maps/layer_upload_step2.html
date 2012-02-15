@@ -92,7 +92,35 @@
     {% if time_form.year_attribute %}
     <div class="formSection clearfix right" title="Convert a number field into a year">
         <input type="radio" name="timetype" id="convertnumber">
-        <label for="convertnumber">{% trans "Convert Number (As Year)" %}  :</label>{{ time_form.year_attribute }}
+        <label for="convertnumber">{% trans "Convert Number (As Year)" %}  :</label>{{ time_form.end_year_attribute }}
+    </div>
+    {% endif %}
+    
+    <h4>Choose optional end time attribute:</h4>
+    {% if time_form.time_attribute %}
+    <div class="formSection clearfix right" title="Use an existing timestamp attribute in the data">
+        <input type="radio" name="end_timetype" id="end_existing">
+        <label for="end_existing">{% trans "Existing Time Attribute" %}  :</label>{{ time_form.end_time_attribute }}
+    </div>
+    {% endif %}
+    {% if time_form.text_attribute %}
+    <div class="formSection clearfix right" title="Convert text in the data to a timestamp using standard date/time representation or a custom format">
+        <input type="radio" name="end_timetype" id="textattribute">
+        <label for="end_textattribute">{% trans "Convert Text Attribute" %}  :</label>{{ time_form.end_text_attribute }}
+        <label for="end_format_select">{% trans "Date Format" %}  :
+        <select id="end_format_select">
+            <option selected="true" value="0">Best Guess</option>
+            <option value="1">Custom</option>
+        </select>
+        <div id="format_input" style="display: inline; visibility: hidden;" class="clearfix">
+            {{ time_form.end_text_attribute_format }}
+        </div>
+    </div>
+    {% endif %}
+    {% if time_form.year_attribute %}
+    <div class="formSection clearfix right" title="Convert a number field into a year">
+        <input type="radio" name="end_timetype" id="end_convertnumber">
+        <label for="end_convertnumber">{% trans "Convert Number (As Year)" %}  :</label>{{ time_form.end_year_attribute }}
     </div>
     {% endif %}
 
