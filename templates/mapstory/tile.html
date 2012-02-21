@@ -1,9 +1,11 @@
 <div class="tile">
-    <img height="128" src="{{ thumb }}">
+    <a href="{{ map_view }}">
+        <img height="128" src="{{ thumb }}">
+    </a>
     <div class="info">
         <div class="title">{{ title }}</div>
         <div class="">
-            <span>{{ author }}</span>
+            <span><a href="{{ author_link}}">{{ author }}</a></span>
             <span> on {{ last_modified }}</span>
         </div>
     </div>

@@ -1,5 +1,7 @@
 from geonode.maps.models import Map
 from geonode.maps.models import Thumbnail
+
+from django.core.urlresolvers import reverse
 from django.conf import settings
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
@@ -8,6 +10,7 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.template import loader
 from django.contrib.contenttypes.models import ContentType
+
 import os
 
 def alerts(req): 
@@ -52,11 +55,15 @@ def _render_map_tile(obj,thumb=None,req=None):
     else:
         author = obj.owner.username
         
+    author_link = reverse('profiles.views.profile_detail', args=(obj.owner.username,))
+        
     ctx = {
         'title' : obj.title,
         'author' : author,
+        'author_link' : author_link,
         'thumb' : thumb,
-        'last_modified' : obj.last_modified
+        'map_view' : reverse( 'geonode.maps.views.map_controller' , args=[obj.id]),
+        'last_modified' : obj.last_modified.strftime('%b %d %Y')
     }
     
     template = 'mapstory/tile.html'
