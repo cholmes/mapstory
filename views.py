@@ -1,8 +1,10 @@
 from geonode.maps.models import Map
+from geonode.maps.models import Layer
 from geonode.maps.models import Thumbnail
 
 from django.core.urlresolvers import reverse
 from django.conf import settings
+from django.db.models import signals
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
@@ -24,7 +26,6 @@ def index(req):
 
 def donate(req):
     return render_to_response('mapstory/donate.html', RequestContext(req))
-
 
 def get_map_carousel_maps():
     '''Get the carousel ids/thumbnail dict either
@@ -112,3 +113,10 @@ def create_annotations_layer(req, mapid):
         attributes = atts
     )
     
+def _remove_annotation_layer(sender, instance, **kw):
+    try:
+        Layer.objects.get(name='_map_%s_annotations' % instance.id)
+    except Layer.DoesNotExist:
+        pass
+
+signals.pre_delete.connect(_remove_annotation_layer, sender=Map)
