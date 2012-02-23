@@ -110,7 +110,8 @@ def create_annotations_layer(req, mapid):
     return _create_layer(
         name = "_map_%s_annotations" % mapid,
         srs = 'EPSG:4326', # @todo how to obtain this in a nicer way...
-        attributes = atts
+        attributes = atts,
+        skip_style = True
     )
     
 def _remove_annotation_layer(sender, instance, **kw):
