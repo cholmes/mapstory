@@ -79,6 +79,7 @@ Ext.select('.noi').on('click',function(ev) {
 <style type="text/css">
     #activities {
         margin-bottom: 1em;
+        padding-left: 20px;
     }
     #activities ul {
         list-style: none;
@@ -87,18 +88,22 @@ Ext.select('.noi').on('click',function(ev) {
     }
     #activities ul li {
         float: left;
-        width: 325px;
+        width: 320px;
         padding: 1em 0;
         margin: 0;
+    }
+    #activities .padtop {
+        padding-top: 6px;
     }
     #activities div {
         font-size:28px;
         color: #9E2F1E;
         padding-bottom: .5em;
+        height: 42px;
     }
     #activities div img {
-        vertical-align: middle;
-        padding-right: 1em;
+        vertical-align: bottom;
+        padding-right: .5em;
     }
     #activities .search {
         background: #9E2F1E;
@@ -110,7 +115,8 @@ Ext.select('.noi').on('click',function(ev) {
     #activities a {
         color: white;
         font-size: 16px;
-        padding: .5em;
+        padding: 8px;        
+        border-radius: 5px;
         -moz-border-radius: 5px;
         -webkit-border-radius: 5px;
     }
@@ -122,7 +128,7 @@ Ext.select('.noi').on('click',function(ev) {
     }
     #carousel .arrow {
         cursor: pointer;
-        font-family: 'Homenaje',sans-serif;
+        font-family: serif;
         color: #8B8F7F;
         top: 30%;
         font-size: 32px;
@@ -161,14 +167,14 @@ Ext.select('.noi').on('click',function(ev) {
         <ul class="selfclear">
             <li>
                 <div>
-                    <img src="{{ STATIC_URL}}theme/img/storylayers.png"></img>STORYLAYERS
+                    <img class="padtop" src="{{ STATIC_URL}}theme/img/storylayers.png"></img>STORYLAYERS
                 </div>
                 <a class="search" href="{% url search %}">SEARCH LAYERS</a>
                 <a class="action" href="{% url data_upload %}">UPLOAD LAYERS</a>
             </li>
             <li>
                 <div>
-                    <img src="{{ STATIC_URL}}theme/img/mapstories.png"></img>MAPSTORIES
+                    <img class="padtop" src="{{ STATIC_URL}}theme/img/mapstories.png"></img>MAPSTORIES
                 </div>
                 <a class="search" href="{% url search_maps %}">SEARCH STORIES</a>
                 <a class="action" href="{% url map_new %}">CREATE A MAPSTORY</a>
@@ -186,9 +192,7 @@ Ext.select('.noi').on('click',function(ev) {
     <div id="featuredvideo" class="selfclear">
         <h2>{{ video_title }}</h2>
         <div style="float:left;margin-right: 1em">
-            <!--
             <iframe class="youtube-player" type="text/html" width="217" height="128" src="http://www.youtube.com/embed/{{video_id}}" frameborder="0"></iframe>
-            -->
         </div>
         <div>
             <h3>{% lorem 10 w %}</h3>

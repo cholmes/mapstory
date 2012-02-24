@@ -53,22 +53,14 @@ html.x-viewport #login-area {
     border-radius: 0 0 .5em .5em;
 }
 
-#quicksearch {
-    float: right;
-    margin-bottom: .5em;
-}
-
-#quicksearch label {
-    opacity: 1;
-    position: absolute;
-    padding-left: .5em;
-}
-
 #top-crossbar ul {
     line-height: 1;
     margin: 0;
     padding: 0;
     list-style: none;
+}
+#top-crossbar ul span {
+    font-family: serif !important;
 }
 #top-crossbar * {
     color: white !important;
@@ -78,6 +70,21 @@ html.x-viewport #login-area {
 #top-crossbar li {
     float: left;
     padding: .5em;
+}
+#quicksearch {
+    float: right;
+    margin-bottom: .5em;
+}
+
+#quicksearch * {
+    color: gray !important;
+    font-weight: normal;
+}
+
+#quicksearch label {
+    opacity: 1;
+    position: absolute;
+    padding-left: .5em;
 }
 
 #crossbar {
@@ -103,6 +110,7 @@ html.x-viewport #login-area {
     text-shadow: 1px 1px 3px white;
     background: white;
     opacity: .5;
+    -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
     width: 100%;
     text-align: center;
     padding-bottom: .3em;
@@ -117,7 +125,7 @@ html.x-viewport #login-area {
     display: inline-block;
 }
 
-.hvygrabg
+.hvygraybg
 {
     background: #6A6C5D;
 }
@@ -135,6 +143,7 @@ html.x-viewport #login-area {
 .darkgraybg,
 #header,
 #top-crossbar,
+.olMapViewport,
 #footer, #footer .onecol {
     background: #454238;
 }
@@ -241,10 +250,22 @@ h1, h2, h3, h4 {
 }
 
 /** ext overrides */
-.x-panel, .x-toolbar, .x-panel-body {
+#map-bbar .x-toolbar,
+#paneltbar,
+#embedded_map .x-toolbar,
+#preview_map .x-toolbar,
+#embedded_map,
+#preview_map,
+#embedded_map .x-panel,
+#preview_map .x-panel,
+#embedded_map .x-panel-body,
+#preview_map .x-panel-body,
+.x-viewport .x-panel,
+.x-viewport .x-panel-body
+{
     border-width: 0 !important;
     border-color: transparent !important;
-}
+} 
 #map-bbar .x-slider-end {
     background: none
 }
@@ -257,14 +278,17 @@ h1, h2, h3, h4 {
     margin: 2px 0;
     height: 14px;
 }
-.x-toolbar .x-btn {
+#embedded_map .x-toolbar .x-btn,
+#preview_map .x-toolbar .x-btn,
+#map-bbar .x-toolbar .x-btn,
+#paneltbar .x-btn,
+#paneltbar button
+{
     border: 1px solid #454238 !important;
     color: white;
 }
-#map-bbar .x-btn-over {
-    border-color: white !important;
-}
-#map-bbar .x-btn-over td {
+.x-btn-over td 
+{
     background: none !important;
 }
 #map-bbar .x-slider-thumb {
@@ -273,7 +297,10 @@ h1, h2, h3, h4 {
     top: -1px;
 }
 #map-bbar,
-.x-toolbar,
+#embedded_map .x-toolbar,
+#preview_map .x-toolbar,
+#map-bbar .x-toolbar,
+#paneltbar,
 #map-bbar .x-slider {
     background: #454238;
 }
