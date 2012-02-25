@@ -197,7 +197,7 @@ a {
 
 #main p,
 hr {
-    color: #999999;
+    color: #4a4a4a;
 }
 
 #main hr {
@@ -212,6 +212,16 @@ h1, h2, h3, h4, h5, h6 {
 
 h1, h2, h3, h4 {
     font-family: 'Marvel', sans-serif;
+}
+
+h3 {
+  font-size: 2em;
+  color:#787878;
+  margin-bottom: .5em;
+}
+
+h4 {
+  font-size: 1.5em;
 }
 
 #topPanel {
@@ -265,7 +275,7 @@ h1, h2, h3, h4 {
 {
     border-width: 0 !important;
     border-color: transparent !important;
-} 
+}
 #map-bbar .x-slider-end {
     background: none
 }
@@ -287,7 +297,7 @@ h1, h2, h3, h4 {
     border: 1px solid #454238 !important;
     color: white;
 }
-.x-btn-over td 
+.x-btn-over td
 {
     background: none !important;
 }
@@ -303,4 +313,112 @@ h1, h2, h3, h4 {
 #paneltbar,
 #map-bbar .x-slider {
     background: #454238;
+}
+
+/*** elements ***/
+img.left {
+  float:left;
+  margin:0 10px 10px 0;
+}
+
+/*** tabs ***/
+.tabs-left {
+  overflow:hidden;
+}
+
+.nav-tabs {
+  *zoom: 1;
+  float:left;
+  width:168px;
+}
+.nav-tabs:before,
+.nav-tabs:after {
+  display: table;
+  content: "";
+}
+.nav-tabs:after {
+  clear: both;
+}
+
+ul.nav-tabs {
+  margin-left:0;
+}
+
+.nav-tabs > li > a {
+  display:block;
+  width:169px;
+  height:32px;
+  line-height:32px;
+  text-indent:12px;
+  font-family: 'Marvel', sans-serif;
+  font-size: 1.6em;
+  color:#787878;
+  margin-bottom:10px;
+}
+.nav-tabs > li {
+  margin-bottom: -1px;
+  list-style-type:none;
+  padding-left:0;
+}
+.nav-tabs > li > a:hover {
+  text-decoration:none;
+  color:#F46817;
+}
+.nav-tabs > .active > a, .nav-tabs > .active > a:hover {
+  color: #fff;
+  cursor: default;
+  background:url(img/tab_active_bg.png) no-repeat 0 0;
+}
+.tabbable {
+  *zoom: 1;
+}
+.tabbable:before, .tabbable:after {
+  display: table;
+  content: "";
+}
+.tabbable:after {
+  clear: both;
+}
+.tab-content {
+  overflow: hidden;
+}
+.tab-content > .tab-pane {
+  display: none;
+}
+.tab-content > .active {
+  display: block;
+}
+
+/*** homepage ***/
+#sections article {
+  overflow:hidden;
+  margin-bottom:20px;
+}
+
+#sections article .article-content {
+  float:left;
+  width:280px;
+}
+
+article h3 {
+  font-size:1.7em;
+}
+
+#sections .summary {
+  margin-bottom:6px;
+}
+
+#sections footer {
+  font-weight:bold;
+  overflow:hidden;
+  line-height:1.2em;
+  color:#4d4d4d;
+}
+
+#sections footer span.views {
+  display:block;
+  float:left;
+  border-right:1px solid #4d4d4d;
+  padding-right:5px;
+  margin-right:5px;
 }
