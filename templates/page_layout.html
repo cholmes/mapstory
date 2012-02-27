@@ -1,147 +1,150 @@
+{% extends "theme_base.html" %}
+
+{% load staticfiles %}
 {% load i18n %}
-<!DOCTYPE html>
-<html lang="en-us">
-<head>
-  <meta charset="utf-8" />
-  <title>{% block title %} {{ SITENAME }} {% endblock %}</title>
-  <link rel="shortcut icon" href="{{ STATIC_URL }}theme/img/favicon.ico"/>
-  <!-- HTML5 shim, for IE6-8 support of HTML elements -->
-  <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-  <![endif]-->
-  {% block head %}
-  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}theme/boilerplate-min.css" media="screen" />
-  <!--[if lte IE 6]><link rel="stylesheet" href="{{ STATIC_URL }}theme/boilerplate-ie-min.css" type="text/css" media="screen" charset="utf-8"><![endif]-->
-  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}theme/site.css" media="screen" />
-  <script type="text/javascript" src="{% url django.views.i18n.javascript_catalog %}"></script>
-  <script type="text/javascript" src="{% url lang %}"></script>
-  <link href='http://fonts.googleapis.com/css?family=Marvel:400,700' rel='stylesheet' type='text/css'>
-  {% endblock %}
-</head>
-<body>
-  <div id="header">
-    <div class="wrap selfclear">
-      <a id="logo" href="{% url geonode.views.index %}">Map Story</a>
-      <div id="login-area" class="fancyfont">
-          <div>
-          <a href="{% url donate %}" id="donate">DONATE NOW</a >
-          
-        {% if user.is_authenticated %}
-          <a id="login-link" href="{% url auth_logout %}">{% trans "Log out" %}</a>
-            <a href="{% if user.get_profile %}{{ user.get_profile.get_absolute_url }}{% else %}{% url profiles_create_profile %}{% endif %}">
-              {{ user.username}}</a> 
-            <a href="{% url auth_password_change %}">{% trans "Change password" %}</a>
-        {% else %}
-          <!-- this should be updated to a url var --><a id="login-link" href="/accounts/login">{% trans "Log in" %}</a>
-          {% if REGISTRATION_OPEN %} or <a href="{% url registration_register %}">{% trans "Register" %}</a>{% endif %}
-      {% endif %}
-      </div>
-      
-      </div>
-    </div><!-- /.wrap -->
-  </div><!-- /#header -->
-  
-  <div id="top-crossbar">
-     <div class="wrap selfclear">        
-      <ul class="fancyfont">
-          <li rel="category">SECTIONS <span>&#9662;</span></li>
-          <li rel="search">SEARCH MAPSTORY <span>&#9662;</span></li>
-          <li><a href="">HOW TO</a></li>
-            {% if user.is_authenticated %}
-                <li class=""><a class="" id="profileLink" href="{% url profiles_profile_detail user.username %}">{% trans "PROFILE" %}</a></li>
-            {% if user.is_staff %}
-                <li class=""><a class="" id="adminLink" href="/admin/">{% trans "ADMIN" %}</a></li>
-            {% endif %}
-            {% endif %}
 
-      </ul>
-      <form id="quicksearch" action="{% url search %}" method="POST">
-          {% csrf_token %}
-          <label for="q">Quick Search</label>
-        <input name="q"></input>
-      </form>
-     </div>
-  </div>
-  <div id="crossbar">
-    <div class="wrap selfclear">             
-      {% block nav %}
-   {% get_current_language as LANGUAGE %}
-    <form class="langbar" id="target" action="/i18n/setlang/" method="post">
-      {% csrf_token %}
-       <div style="display: inline;">
-         <select id="langval" name="language" onchange="javascript:form.submit()">
-           {% for lang in LANGUAGES %}
-            <option value="{{ lang.0 }}"
-                {% ifequal LANGUAGE_CODE lang.0 %} selected="selected"{% endifequal %}>
-                {{ lang.1 }}
-            </option>
-           {% endfor %}
-         </select>
+{% block style_base %}
+    <link href="{% static "pinax/css/theme.css" %}" rel="stylesheet">
+    <link href="{% static "bootstrap/css/bootstrap.css" %}" rel="stylesheet">
+    {% block extra_style %}{% endblock %}
+{% endblock %}
+
+{% block extra_head_base %}
+    <link rel="shortcut icon" href="{{ STATIC_URL }}theme/img/favicon.ico"/>
+    <script type="text/javascript" src="{% url django.views.i18n.javascript_catalog %}"></script>
+    <script type="text/javascript" src="{% url lang %}"></script>
+    <link href='http://fonts.googleapis.com/css?family=Marvel:400,700' rel='stylesheet' type='text/css'>
+    {% block extra_head %}{% endblock %}
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}theme/site.css" media="screen" />
+{% endblock %}
+
+{% block topbar_base %}
+    <div id="header">
+      <div class="wrap selfclear">
+        <a id="logo" href="{% url geonode.views.index %}">Map Story</a>
+        <div id="login-area" class="fancyfont">
+            <div>
+            <a href="{% url donate %}" id="donate">DONATE NOW</a >
+
+          {% if user.is_authenticated %}
+            <a id="login-link" href="{% url auth_logout %}">{% trans "Log out" %}</a>
+              <a href="{% if user.get_profile %}{{ user.get_profile.get_absolute_url }}{% else %}{% url profiles_create_profile %}{% endif %}">
+                {{ user.username}}</a>
+              <a href="{% url auth_password_change %}">{% trans "Change password" %}</a>
+          {% else %}
+            <!-- this should be updated to a url var --><a id="login-link" href="/accounts/login">{% trans "Log in" %}</a>
+            {% if REGISTRATION_OPEN %} or <a href="{% url registration_register %}">{% trans "Register" %}</a>{% endif %}
+        {% endif %}
+        </div>
+
+        </div>
+      </div><!-- /.wrap -->
+    </div><!-- /#header -->
+    <div id="top-crossbar">
+       <div class="wrap selfclear">
+        <ul class="fancyfont">
+            <li rel="category">SECTIONS <span>&#9662;</span></li>
+            <li rel="search">SEARCH MAPSTORY <span>&#9662;</span></li>
+            <li><a href="">HOW TO</a></li>
+              {% if user.is_authenticated %}
+                  <li class=""><a class="" id="profileLink" href="{% url profiles_profile_detail user.username %}">{% trans "PROFILE" %}</a></li>
+              {% if user.is_staff %}
+                  <li class=""><a class="" id="adminLink" href="/admin/">{% trans "ADMIN" %}</a></li>
+              {% endif %}
+              {% endif %}
+
+        </ul>
+        <form id="quicksearch" action="{% url search %}" method="POST">
+            {% csrf_token %}
+            <label for="q">Quick Search</label>
+          <input name="q"></input>
+        </form>
        </div>
-     </form>
+    </div>
+    <div id="crossbar">
+      <div class="wrap selfclear">
+        {% block nav %}
+     {% get_current_language as LANGUAGE %}
+      <form class="langbar" id="target" action="/i18n/setlang/" method="post">
+        {% csrf_token %}
+         <div style="display: inline;">
+           <select id="langval" name="language" onchange="javascript:form.submit()">
+             {% for lang in LANGUAGES %}
+              <option value="{{ lang.0 }}"
+                  {% ifequal LANGUAGE_CODE lang.0 %} selected="selected"{% endifequal %}>
+                  {{ lang.1 }}
+              </option>
+             {% endfor %}
+           </select>
+         </div>
+       </form>
 
-    <ul id="sitenav" class="selfclear">
-        <li><a rel="category" href=""></a></li>
-        <li><a rel="category" href=""></a></li>
-        <li><a rel="search" href="{% url search %}">Search StoryLayers</a></li>
-        <li><a rel="search" href="{% url search_maps %}">Search Stories</a></li>
-        <li><a rel="search" href="">Search StoryTellers</a></li>
-    </ul>
-      {% endblock %}
+      <ul id="sitenav" class="selfclear">
+          <li><a rel="category" href=""></a></li>
+          <li><a rel="category" href=""></a></li>
+          <li><a rel="search" href="{% url search %}">Search StoryLayers</a></li>
+          <li><a rel="search" href="{% url search_maps %}">Search Stories</a></li>
+          <li><a rel="search" href="">Search StoryTellers</a></li>
+      </ul>
+        {% endblock %}
 
-    </div><!-- /.wrap -->
-  </div><!-- /#crossbar -->
-  <div id="main">
-    <div class="wrap selfclear">       
-      {% block main %}{% endblock %}
-      {% block content %}{% endblock %}
-      {% block sidebar %}{% endblock %}
-    </div><!-- /.wrap -->
-  </div><!-- /#main -->
-  <div id="footer">
-    <div class="wrap selfclear">             
-      {% block footer %}
-      <div class="onecol">
-        Powered by <a href="http://geonode.org">{% trans "GeoNode" %}</a>
-        | <strong>{% trans "Need Help?" %}</strong>
-        <a href="{% url geonode.views.static "help" %}">{% trans "Help" %}</a> 
-        | <a href="{% url geonode.views.developer %}">{% trans "For Developers" %}</a>
-      </div>
-      {% endblock %}
-    </div><!-- /.wrap -->
-  </div><!-- /#footer -->
-  <script type="text/javascript">
-{% autoescape off %}
-var quicksearch;
-var menus;
-function nixSearchLabel() {
+      </div><!-- /.wrap -->
+    </div><!-- /#crossbar -->
+{% endblock %}
+
+{% block body_base %}
+    <div id="main">
+      <div class="wrap selfclear">
+        {% block main %}{% endblock %}
+        {% block content %}{% endblock %}
+        {% block sidebar %}{% endblock %}
+      </div><!-- /.wrap -->
+    </div><!-- /#main -->
+{% endblock %}
+
+{% block footer %}
+    <div id="footer">
+      <div class="wrap selfclear">
+        <div class="onecol">
+          Powered by <a href="http://geonode.org">{% trans "GeoNode" %}</a>
+          | <strong>{% trans "Need Help?" %}</strong>
+          <a href="{% url geonode.views.static "help" %}">{% trans "Help" %}</a>
+          | <a href="{% url geonode.views.developer %}">{% trans "For Developers" %}</a>
+        </div>
+      </div><!-- /.wrap -->
+    </div><!-- /#footer -->
+{% endblock %}
+
+{% block extra_body_base %}
+    <script type="text/javascript">
+    {% autoescape off %}
+    var quicksearch;
+    var menus;
+    function nixSearchLabel() {
     quicksearch.select('label').remove();
     quicksearch.select('input').focus();
     quicksearch.un('keypress',nixSearchLabel);
-}
-function menu(rel) {
+    }
+    function menu(rel) {
     Ext.select('#top-crossbar li[rel=' + rel + ']').on('mouseover',function() {
         menus.setVisible(false);
         menus.item(0).parent('ul').select('[rel=' + rel + ']').show();
     });
-}
-//@todo make login pages not produce error
-if ('Ext' in window) {
-Ext.onReady(function() {
+    }
+    //@todo make login pages not produce error
+    if ('Ext' in window) {
+    Ext.onReady(function() {
     quicksearch = Ext.get('quicksearch');
     quicksearch.on('keypress',nixSearchLabel);
     quicksearch.on('click',nixSearchLabel);
     menus = Ext.select('#sitenav li a').setVisibilityMode(Ext.Element.DISPLAY).setVisible(false,false);
     menu('category');
     menu('search');
-});
-}
-{% endautoescape %}
+    });
+    }
+    {% endautoescape %}
 
-  </script>
-  <script src="{{ STATIC_URL }}script/jquery-1.7.1.min.js" type="text/javascript"></script>
-  {% block extra_body_base %}
-      {% block extra_body %}{% endblock %}
-  {% endblock %}
-</body>
-</html>
+    </script>
+    <script src="{{ STATIC_URL }}script/jquery-1.7.1.min.js" type="text/javascript"></script>
+    {% block extra_body %}{% endblock %}
+{% endblock %}
