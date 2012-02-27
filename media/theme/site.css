@@ -452,6 +452,18 @@ img.left {
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
 }
+#alerts span {
+  font-size:15px;
+}
+#alerts span.content {
+  font-size:12px;
+  font-family:Helvetica,Arial,sans-serif;
+}
+.get-alerts {
+  float:right;
+  padding: 0.8em 3em 0.8em 1em;
+  font-size:larger;
+}
 #carousel {
   position: relative;
 }
@@ -460,12 +472,21 @@ img.left {
 }
 #carousel .arrow {
   cursor: pointer;
-  font-family: serif;
-  color: #8B8F7F;
   top: 30%;
-  font-size: 32px;
-  font-weight: bold;
   position: absolute;
+  width:18px;
+  height:34px;
+  text-indent:-9999px;
+  background: url(img/arrows.png) 0 0;
+}
+#carousel .arrow.arrow-right {
+  background-position: -28px 0;
+}
+#carousel .arrow.arrow-left:hover {
+  background-position: 0 -40px;
+}
+#carousel .arrow.arrow-right:hover {
+  background-position: -28px -40px;
 }
 .storyteller img {
   float:left;
