@@ -123,9 +123,9 @@ Ext.select('.noi').on('click',function(ev) {
         <div style="float:left;margin-right: 1em">
             <iframe class="youtube-player" type="text/html" width="217" height="128" src="http://www.youtube.com/embed/{{video_id}}" frameborder="0"></iframe>
         </div>
-        <div>
+        <div class="description">
             <h3>{% lorem 10 w %}</h3>
-            <p>{% lorem 35 w %}</p>
+            <p>{% lorem 35 w %} <a href="#"><img src="{{ STATIC_URL }}theme/img/arrow.png" width="6" height="11" alt="" /></a></p>
         </div>
     </div>
     <hr/>
@@ -221,21 +221,21 @@ Ext.select('.noi').on('click',function(ev) {
     <h2>THINKERS AND THOUGHTS ON
 MAPSTORYTELLING</h2>
     <div class="storyteller">
-        <img src="http://www.gravatar.com/avatar/b59a1fea77f9350c8225395f55204abe?r=pg&s=50">
+        <img src="http://www.gravatar.com/avatar/b59a1fea77f9350c8225395f55204abe?r=pg&s=70">
         <h4>Ian Schneider</h4>
         <p>Af/Pak Tribal Dynamics,
 1805-2010
 </p>
     </div>
     <div class="storyteller">
-        <img src="http://www.gravatar.com/avatar/a6a965150162eef63f1d2f8aae15c57c?r=pg&s=50">
+        <img src="http://www.gravatar.com/avatar/a6a965150162eef63f1d2f8aae15c57c?r=pg&s=70">
         <h4>Bart van den Eijnden</h4>
         <p>Sources of State Failure in Horn
 of Africa, 1965-2010
 </p>
     </div>
-    <div class="storyteller">
-        <img src="http://www.gravatar.com/avatar/c0c61fb94a5785be367b0fceea6985f1?r=pg&s=50">
+    <div class="storyteller last">
+        <img src="http://www.gravatar.com/avatar/c0c61fb94a5785be367b0fceea6985f1?r=pg&s=70">
         <h4>Matt Priour</h4>
         <p>Rise and Fall of Meso-American
  Civilizations</p>
