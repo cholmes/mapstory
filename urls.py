@@ -1,5 +1,6 @@
 from django.conf.urls.defaults import *
 from django.conf import settings
+from django.views.generic.simple import direct_to_template
 from staticfiles.urls import staticfiles_urlpatterns
 from geonode.sitemap import LayerSitemap, MapSitemap
 from geonode.proxy.urls import urlpatterns as proxy_urlpatterns
@@ -28,6 +29,10 @@ urlpatterns = patterns('mapstory.views',
     url(r'^mapstory/alerts$','alerts',name='alerts'),
     url(r'^mapstory/tile/(?P<mapid>\d+)$','map_tile',name='map_tile'),
     url(r'^mapstory/tiles$','map_tiles',name='map_tiles'),
+    
+    # temp urls
+    url(r"^mapstory/story-detail/", direct_to_template, {"template": "mapstory/story_detail.html"}, name="story_detail"),
+    
 )
 
 urlpatterns += proxy_urlpatterns
