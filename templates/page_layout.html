@@ -4,8 +4,8 @@
 {% load i18n %}
 
 {% block style_base %}
-    <link href="{% static "pinax/css/theme.css" %}" rel="stylesheet">
-    <link href="{% static "bootstrap/css/bootstrap.css" %}" rel="stylesheet">
+    <link href="{% static "pinax/css/theme.css" %}" rel="stylesheet" />
+    <link href="{{ STATIC_URL }}theme/bootstrap_custom.css" rel="stylesheet" />
     {% block extra_style %}{% endblock %}
 {% endblock %}
 
@@ -94,11 +94,11 @@
 
 {% block body_base %}
     <div id="main">
-      <div class="wrap selfclear">
+      <div class="container">
         {% block main %}{% endblock %}
         {% block content %}{% endblock %}
         {% block sidebar %}{% endblock %}
-      </div><!-- /.wrap -->
+      </div><!-- /.container -->
     </div><!-- /#main -->
 {% endblock %}
 

@@ -233,6 +233,11 @@ a {
   width: 290px;
 }
 
+.box {
+  padding: 10px 20px;
+  background:#fff;
+}
+
 #main p,
 hr {
     color: #4a4a4a;
