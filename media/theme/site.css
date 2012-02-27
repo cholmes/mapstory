@@ -217,6 +217,12 @@ a {
     background: white;
 }
 
+.onecol.full-width {
+  width: 940px;
+  margin-left: 0;
+  margin-right: 0;
+}
+
 .twocol.first {
   margin-left:0;
   width: 590px;
@@ -614,3 +620,28 @@ article h3 {
 .social-icons a.last {
   margin-right:0;
 }
+
+.mini-slider {
+  font-size:18px;
+  color:#787878;
+  margin-bottom:15px;
+}
+
+.mini-slider span {
+  padding:0 10px;
+}
+
+/** ads box **/
+.ads-box .ad {
+  float:left;
+  width:300px;
+  margin:0 13px;
+}
+
+.ads-box .ad p {
+  text-align:right;
+  font-size:10px;
+  color:#ccc;
+  margin-top:0;
+}
+
