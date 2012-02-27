@@ -139,6 +139,10 @@ a#donate:hover {
     padding: 0;
 }
 
+#main {
+  border-bottom: 0;
+}
+
 #carousel .tile {
     display: inline-block;
 }
@@ -213,6 +217,16 @@ a {
     background: white;
 }
 
+.twocol.first {
+  margin-left:0;
+  width: 590px;
+}
+
+.threecol.last {
+  margin-right:0;
+  width: 290px;
+}
+
 #main p,
 hr {
     color: #4a4a4a;
@@ -248,6 +262,10 @@ h3 {
 
 h4 {
   font-size: 1.5em;
+}
+
+.mrg-btm {
+  margin-bottom:20px;
 }
 
 #topPanel {
@@ -354,6 +372,29 @@ body {
 img.left {
   float:left;
   margin:0 10px 10px 0;
+}
+
+a.button.orange {
+  display:inline-block;
+  background:#f47a20;
+  padding: .5em 1em;
+  color:#fff;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  font-family: 'Marvel', sans-serif;
+  font-size: 18px;
+  line-height: 18px;
+  margin:12px 0;
+}
+
+a.button.orange:hover {
+  background:#F46817;
+  text-decoration:none;
+}
+
+p.center {
+  text-align:center;
 }
 
 /*** tabs ***/
@@ -526,7 +567,7 @@ article h3 {
 
 #featuredvideo .description {
   float:left;
-  width:370px;
+  width:360px;
   margin-top:-3px;
 }
 
@@ -551,4 +592,25 @@ article h3 {
   border-right:1px solid #4d4d4d;
   padding-right:5px;
   margin-right:5px;
+}
+
+/** sidebar **/
+.social-icons {
+  width:293px;
+  height:44px;
+  background: url(img/social_icons.png) no-repeat 0 0;
+  margin-bottom:12px;
+}
+
+.social-icons a {
+  display:block;
+  width:47px;
+  height:44px;
+  float:left;
+  margin-right:14px;
+  text-indent:-9999px;
+}
+
+.social-icons a.last {
+  margin-right:0;
 }
