@@ -6,10 +6,10 @@
         <div class="span12">
             <ul class="breadcrumb">
                 <li>
-                    <a href="#">Home</a> <span class="divider">/</span>
+                    <a href="#">Home</a> <span class="divider">&gt;</span>
                 </li>
                 <li>
-                <a href="#">Search MapStories</a> <span class="divider">/</span>
+                <a href="#">Search MapStories</a> <span class="divider">&gt;</span>
                 </li>
                 <li class="active">
                     <a href="#">Map Page</a>
@@ -20,39 +20,49 @@
             <h2>ELLICOTT PLAN FOR WASHINGTON DC</h2>
         </div>
         <div class="span4">
-            <a href="#">Back to MapStory Search</a>
+            <a href="#" class="back">Back to MapStory Search</a>
         </div>
         <div class="span8">
             <div class="box">
-                <div class="player">
-                    <img src="{{ STATIC_URL }}theme/img/temp/player.png" width="656" height="392" alt="Player" />
-                </div>
-                <div class="video-actions">
-                    <div class="actions-links">
-                        <a href="#">Info</a>
-                        <a href="#">Layers</a>
-                        <a href="#">Add to Favorites</a>
-                        <a href="#">Share</a>
-                        <a href="#">Flag</a>
-                        <a href="#">Add</a>
+                <div class="story-detail">
+                    <div class="player">
+                        <img src="{{ STATIC_URL }}theme/img/temp/player.png" width="656" height="392" alt="Player" />
                     </div>
-                    <div class="views">
-                        <span class="views">1,205 Views</span>
-                        <span class="rating">3 stars</span>
+                    <div class="video-actions">
+                        <div class="actions-links fancyfont">
+                            <a href="#" class="icn info">Info</a>
+                            <a href="#" class="icn layers">Layers</a>
+                            <a href="#" class="icn favorites">Add to Favorites</a>
+                            <a href="#" class="icn share">Share</a>
+                            <a href="#" class="icn flag">Flag</a>
+                            <a href="#" class="icn add">Add</a>
+                        </div>
+                        <div class="metrics">
+                            <span class="views"><i>1,205</i> Views</span>
+                            <span class="rating">3 stars</span>
+                        </div>
                     </div>
+                    <article class="abstract">
+                        Abstract: This map shows a scanned map from DCGIS, that displays an old plan for the District of Columbia.
+                        It is overlaid on a Google Satellite image, and made a bit transparent. Apologies for slow loading, as the image is 50 megs, and we have not integrated caching yet. <a href="#" class="read-more" data-toggle="collapse" data-target="#abstract-full">Read more</a>
+                        <div id="abstract-full" class="collapse">More content goes here and is displayed when read more is clicked.</div>
+                    </article>
+                    <cite>Uploaded by John Smith on Sep 27, 2011</cite>
                 </div>
-                <article class="abstract">
-                    Abstract: This map shows a scanned map from DCGIS, that displays an old plan for the District of Columbia. 
-                    It is overlaid on a Google Satellite image, and made a bit transparent. Apologies for slow loading, as the image is 50 megs, and we have not integrated caching yet. <a href="#" class="read-more">Read more</a>
-                </article>
-                <cite>Uploaded by John Smith on Sep 27, 2011</cite>
-                
                 <div class="comments">
                     <header>
                         <h4>Comments: (143 total)</h4>
-                        <div class="pagination">
-                            results 1-5 of 5
-                            page 1 of 1
+                        <div class="pages">
+                            <span>results 1-5 of 5</span>
+                            <ul class="pager">
+                              <li>
+                                <a href="#" class="prev">Previous</a>
+                              </li>
+                              <li>page 1 of 1</li>
+                              <li>
+                                <a href="#" class="next">Next</a>
+                              </li>
+                            </ul>
                         </div>
                     </header>
                     <article>
@@ -67,24 +77,33 @@
                         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore.</p>
                         <footer><a href="#" rel="author">John Smith</a> on <time>Sep 27, 2011</time></footer>
                     </article>
-                    <div class="pagination">
-                        results 1-5 of 5
-                        page 1 of 1
+                    <div class="pages">
+                        <span>results 1-5 of 5</span>
+                        <ul class="pager">
+                          <li>
+                            <a href="#" class="prev">Previous</a>
+                          </li>
+                          <li>page 1 of 1</li>
+                          <li>
+                            <a href="#" class="next">Next</a>
+                          </li>
+                        </ul>
                     </div>
                 </div>
             </div>
         </div>
         <div class="span4">
-            <section class="box">
+            <section class="box mrg-btm">
                 <h2>ABOUT THE STORYTELLER</h2>
                 <img src="" alt="" />
                 <h3>Prof. Susan Smith, UC San Diego</h3>
-                <p>Lorem ipsum dolor sit amet, consectetur 
-                adipisicing elit, sed do eiusmod tempor 
+                <p>Lorem ipsum dolor sit amet, consectetur
+                adipisicing elit, sed do eiusmod tempor
                 incididunt ut labore et dolore magnn.</p>
                 <a href="#">Read more about this Storyteller</a>
             </section>
-            <section class="box">
+
+            <section class="box mrg-btm">
                 <h2>BY THIS STORYTELLER</h2>
                 <div class="tabbable">
                     <ul class="nav nav-tabs">
@@ -93,13 +112,35 @@
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane active" id="1">
-                        <p>I'm in Section 1.</p>
+                            {% include "mapstory/_mapstory_list_side.html" %}
                         </div>
                         <div class="tab-pane" id="2">
-                        <p>Howdy, I'm in Section 2.</p>
+                            {% include "mapstory/_mapstory_list_side.html" %}
+                        </div>
                     </div>
                 </div>
             </section>
+
+            <section class="box mrg-btm">
+                <h2>RELATED MAPSTORIES</h2>
+                <div class="article-list">
+                    {% include "mapstory/_mapstory_list_side.html" %}
+                </div>
+            </section>
+
+            {% include "mapstory/_social_box.html" %}
+
+
         </div>
     </div>
+{% endblock %}
+
+{% block extra_body %}
+    <script type="text/javascript">
+        $(function() {
+            $("article.abstract a.read-more").click(function(event) {
+                event.preventDefault();
+            });
+        });
+    </script>
 {% endblock %}
