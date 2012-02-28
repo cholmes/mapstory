@@ -38,7 +38,12 @@
     #format_input input {
         width:8em;
     }
-
+    #timehelp p {
+        color: black !important;
+    }
+    #timehelp code {
+        background: lightgray;
+    }
 </style>
 {% include "geonode/ext_header.html" %}
 {{ block.super }}
@@ -149,6 +154,51 @@
     <input type="submit" value="{% trans "Next" %}"/>
   </form>
 </div>
+<div id="timehelp" class="threecol">
+    <h3>Need Help?</h3>
+    <h4>Enabling Time</h4>
+    <p>A feature can currently support one or two time attributes. If a single
+    attribute is used, the feature is considered relevant at that single point in time. If two
+    attributes are used, the second attribute represents the end of a valid period for the
+    feature.</p>
+    <h4>Selecting an Attribute</h4>
+    <p>A time attribute can be one of:</p>
+    <ul>
+        <li>An existing date</li>
+        <li>Text that can be converted to a timestamp</li>
+        <li>A number representing a year</li>
+    </ul>
+    <p>
+    For text attributes, one can specify a custom format or use the 'best guess' approach.
+    The most common formatting flags are:
+    </p>
+    <ul>
+        <li><code>y</code> year</li>
+        <li><code>M</code> month</li>
+        <li><code>d</code> day of month</li>
+        <li><code>H</code> hour of day (0-23)</li>
+        <li><code>k</code> hour of day (1-24)</li>
+        <li><code>m</code> minute in hour</li>
+        <li><code>s</code> second in minute</li>
+    </ul>
+    
+    <p class="note">Note that single quotes represent a literal character.</p>
+    <p class="note">To remove ambiguity, repeat a code to represent the maximum number of digits - for example yyyy</p>
+    
+    The 'best guess' will handle date and optional time variants of <a href="http://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>.
+    In terms of the formatting flags noted above, these are:
+    <pre>
+    yyyy-MM-dd'T'HH:mm:ss.SSS'Z'
+    yyyy-MM-dd'T'HH:mm:sss'Z'
+    yyyy-MM-dd'T'HH:mm:ss'Z'
+    yyyy-MM-dd'T'HH:mm'Z'
+    yyyy-MM-dd'T'HH'Z'
+    yyyy-MM-dd
+    yyyy-MM
+    yyyy
+    </pre>
+    </p>
+</div>
 <script type="text/javascript">
 {% autoescape off %}
 Ext.onReady(function() {
@@ -249,6 +299,14 @@ Ext.onReady(function() {
                             // give it a chance to start running or return complete
                             case 'PENDING': case 'RUNNING':
                                 break;
+                            case 'ERROR':
+                                msg = 'message' in response ? response.message :
+                                    "An unknown error occurred during the ingest."
+                                Ext.MessageBox.show({
+                                    icon : Ext.MessageBox.ERROR,
+                                    msg : msg
+                                });
+                                return;
                             default:
                                 Ext.MessageBox.show({
                                     icon : Ext.MessageBox.ERROR,
