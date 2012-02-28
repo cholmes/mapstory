@@ -1,5 +1,9 @@
 @import "geonode.css";
 
+.clear {
+  clear:both;
+}
+
 body {
   color:#4a4a4a;
 }
@@ -285,6 +289,10 @@ h4 {
   margin-bottom:20px;
 }
 
+.pd-btm {
+  padding-bottom:15px;
+}
+
 #topPanel {
     font-size: 12px !important;
     font-weight: normal !important;
@@ -466,6 +474,31 @@ p.center {
 }
 
 /** section tabs **/
+section.box .nav-tabs {
+  border-bottom: 4px solid #f47a20;
+}
+
+section.box .nav-tabs a {
+  font-size:17px;
+  color: #fff;
+  border: 0;
+  border-bottom:1px solid #f47a20;
+  background:#f8d5b9;
+  -moz-border-radius:0;
+  -webkit-border-radius:0;
+  border-radius:0;
+  margin-right:5px;
+}
+
+section.box .nav-tabs > .active > a, section.box .nav-tabs > .active > a:hover {
+  color: #fff;
+  border:0;
+  border-bottom: 1px solid #f47a20;
+  background:#f47a20;
+  -moz-border-radius:0;
+  -webkit-border-radius:0;
+  border-radius:0;
+}
 
 /*** breadcrumbs ***/
 .breadcrumb {
@@ -494,7 +527,7 @@ p.center {
 
 a.back {
   display:block;
-  background:url(img/arrow_sm_orange.png) no-repeat left center;
+  background:url(img/arrow_left.png) no-repeat left center;
   padding-left:12px;
   margin-top:10px;
   float:right;
@@ -615,7 +648,7 @@ a.back {
   width:18px;
   height:34px;
   text-indent:-9999px;
-  background: url(img/arrows.png) 0 0;
+  background: url(img/arrows_gr.png) 0 0;
 }
 #carousel .arrow.arrow-right {
   background-position: -28px 0;
@@ -794,10 +827,10 @@ cite {
   text-indent:-9999px;
 }
 
-.pages a.prev { background:url(img/arrows_sm.png) no-repeat 0 0; }
-.pages a.next { background:url(img/arrows_sm.png) no-repeat -11px 0; }
-.pages a.prev:hover { background:url(img/arrows_sm.png) no-repeat 0 -15px; }
-.pages a.next:hover { background:url(img/arrows_sm.png) no-repeat -11px -15px; }
+.pages a.prev { background:url(img/arrows_gr_sm.png) no-repeat 0 0; }
+.pages a.next { background:url(img/arrows_gr_sm.png) no-repeat -11px 0; }
+.pages a.prev:hover { background:url(img/arrows_gr_sm.png) no-repeat 0 -15px; }
+.pages a.next:hover { background:url(img/arrows_gr_sm.png) no-repeat -11px -15px; }
 
 .comments article p {
   margin-bottom:6px;
@@ -807,4 +840,51 @@ cite {
   font-weight:bold;
   font-size:12px;
   margin-bottom:15px;
+}
+
+section.box a.read-more {
+  background:url(img/arrow_right.png) no-repeat right center;
+  padding-right:10px;
+}
+
+section.box .article-list {
+  overflow:hidden;
+}
+
+section.box .article-list article {
+  overflow:hidden;
+  margin-bottom:10px;
+}
+
+section.box .article-list article h6 {
+  text-transform:none;
+  line-height:1.2em;
+  font-weight:normal;
+  font-size:12px;
+}
+
+section.box .article-list article img.thumb {
+  float:left;
+  margin:0 10px 10px 0;
+}
+
+section.box .article-list article .details {
+  float:left;
+  width:172px;
+}
+
+section.box .article-list article a[rel="name"],
+section.box .article-list article time {
+  display:block;
+  font-size:11px;
+}
+
+section.box .article-list article footer {
+  font-weight:bold;
+  font-size:10px;
+}
+
+section.box .article-list article footer .views {
+  border-right:1px solid #777;
+  padding-right:8px;
 }
