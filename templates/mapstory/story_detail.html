@@ -93,20 +93,20 @@
             </div>
         </div>
         <div class="span4">
-            <section class="box mrg-btm">
+            <section class="box mrg-btm about-storyteller pd-btm">
                 <h2>ABOUT THE STORYTELLER</h2>
-                <img src="" alt="" />
+                <img src="http://www.gravatar.com/avatar/b59a1fea77f9350c8225395f55204abe?r=pg&s=70" class="left" />
                 <h3>Prof. Susan Smith, UC San Diego</h3>
-                <p>Lorem ipsum dolor sit amet, consectetur
+                <p class="clear">Lorem ipsum dolor sit amet, consectetur
                 adipisicing elit, sed do eiusmod tempor
                 incididunt ut labore et dolore magnn.</p>
-                <a href="#">Read more about this Storyteller</a>
+                <a href="#" class="read-more">Read more about this Storyteller</a>
             </section>
 
             <section class="box mrg-btm">
                 <h2>BY THIS STORYTELLER</h2>
                 <div class="tabbable">
-                    <ul class="nav nav-tabs">
+                    <ul class="nav nav-tabs fancyfont">
                       <li class="active"><a href="#1" data-toggle="tab">MAPSTORIES</a></li>
                       <li><a href="#2" data-toggle="tab">STORYLAYERS</a></li>
                     </ul>
@@ -115,6 +115,7 @@
                             {% include "mapstory/_mapstory_list_side.html" %}
                         </div>
                         <div class="tab-pane" id="2">
+                            tab 2
                             {% include "mapstory/_mapstory_list_side.html" %}
                         </div>
                     </div>
@@ -123,9 +124,7 @@
 
             <section class="box mrg-btm">
                 <h2>RELATED MAPSTORIES</h2>
-                <div class="article-list">
-                    {% include "mapstory/_mapstory_list_side.html" %}
-                </div>
+                {% include "mapstory/_mapstory_list_side.html" %}
             </section>
 
             {% include "mapstory/_social_box.html" %}
