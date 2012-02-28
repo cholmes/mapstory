@@ -98,6 +98,46 @@
         {% block main %}{% endblock %}
         {% block content %}{% endblock %}
         {% block sidebar %}{% endblock %}
+        {% block bottom %}
+            {% block resources %}
+                <div class="row">
+                    <div class="span12 mrg-btm">
+                        <div class="box">
+                            <h2>RESOURCES FOR:</h2>
+                            <div class="mini-slider fancyfont">
+                                <div class="slide">
+                                    Students <span>|</span> Educators <span>|</span> Researchers <span>|</span> Policy Makers <span>|</span> Business <span>|</span> Religious Community <span>|</span> National Security Professionals <span>|</span> NGOs
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endblock %}
+            {% block ads %}
+                <div class="row">
+                    <div class="span12 ads-box">
+                        <div class="ad">
+                            <a href="#">
+                                <img src="{{ STATIC_URL }}/theme/img/temp/ad1.png" width="300" height="100" alt="Ad1" />
+                            </a>
+                            <p>Advertisement</p>
+                        </div>
+                        <div class="ad">
+                            <a href="#">
+                                <img src="{{ STATIC_URL }}/theme/img/temp/ad2.png" width="300" height="100" alt="Ad2" />
+                            </a>
+                            <p>Advertisement</p>
+                        </div>
+                        <div class="ad last">
+                            <a href="#">
+                                <img src="{{ STATIC_URL }}/theme/img/temp/ad3.png" width="300" height="100" alt="Ad3" />
+                            </a>
+                            <p>Advertisement</p>
+                        </div>
+                    </div>
+                </div>
+            {% endblock %}
+        {% endblock %}
       </div><!-- /.container -->
     </div><!-- /#main -->
 {% endblock %}
