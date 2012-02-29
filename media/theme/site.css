@@ -8,6 +8,10 @@ body {
   color:#4a4a4a;
 }
 
+section {
+  padding-top:0;
+}
+
 #header .wrap {
     padding-left: 30px;
     width: 950px;
@@ -434,6 +438,7 @@ p.center {
 #sections .nav-tabs {
   float:left;
   width:168px;
+  border-right:0;
 }
 
 #sections .nav-tabs > li > a {
@@ -937,6 +942,10 @@ section.box .article-list article footer .views {
 /** main col **/
 .storyteller-details header {
   position:relative;
+  border-bottom:1px solid #D8D9D9;
+  padding-bottom:14px;
+  margin-bottom:14px;
+  overflow:hidden;
 }
 
 .storyteller-details h1 {
@@ -945,7 +954,7 @@ section.box .article-list article footer .views {
 
 .storyteller-details .connect {
   position:absolute;
-  top:50px;
+  top:64px;
   right:0;
   text-align:right;
 }
@@ -953,6 +962,7 @@ section.box .article-list article footer .views {
 .storyteller-details .connect small {
   font-size:10px;
   display:block;
+  margin-bottom:4px;
 }
 
 .storyteller-details .connect a {
@@ -961,7 +971,10 @@ section.box .article-list article footer .views {
   width:30px;
   height:30px;
   margin-left:8px;
-  text-indent: -9999em;
+}
+
+.storyteller-details .connect a span {
+  display: none;
 }
 
 .storyteller-details .connect a.fb { background:url(img/social/fb.png) no-repeat 0 0; }
@@ -982,3 +995,27 @@ section.box .article-list article footer .views {
 .activity-stream div {
   line-height:1.2em;
 }
+
+.btn-custom {
+  font-size:16px;
+  color:#f15c27;
+  margin-right:15px;
+}
+
+.btn-custom .icn {
+  display:block;
+  width:16px;
+  height:16px;
+  float:left;
+  margin-right:5px;
+}
+
+.btn-custom .icn.favorites { background:url(img/icons/favorites.png) no-repeat left center; }
+.btn-custom .icn.email { background:url(img/icons/email.png) no-repeat left center;width:19px; }
+
+.storyteller-details section {
+  border-bottom:1px solid #D8D9D9;
+  padding-bottom:14px;
+  margin-bottom:14px;
+}
+
