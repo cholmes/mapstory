@@ -207,6 +207,11 @@ a {
     font-weight: bold;
 }
 
+a:hover {
+  color: #F46817;
+  text-decoration: underline;
+}
+
 .note {
     padding: 1em;
     border: 2px dotted #F46817;
@@ -264,7 +269,7 @@ hr {
 }
 
 h1, h2, h3, h4, h5, h6 {
-    color: #111;
+    color: #4a4a4a;
 }
 
 h1, h2, h3, h4 {
@@ -496,6 +501,39 @@ section.box .nav-tabs a {
 }
 
 section.box .nav-tabs > .active > a, section.box .nav-tabs > .active > a:hover {
+  color: #fff;
+  border:0;
+  border-bottom: 1px solid #f47a20;
+  background:#f47a20;
+  -moz-border-radius:0;
+  -webkit-border-radius:0;
+  border-radius:0;
+}
+
+/** main content tabs **/
+.storyteller-details section.hr-tabs {
+  border-bottom:0;
+  padding-bottom:5px;
+}
+
+section.hr-tabs .nav-tabs {
+  border-bottom: 4px solid #f47a20;
+}
+
+section.hr-tabs .nav-tabs a {
+  font-size:13px;
+  color: #fff;
+  border: 0;
+  border-bottom:1px solid #f47a20;
+  background:#f8d5b9;
+  -moz-border-radius:0;
+  -webkit-border-radius:0;
+  border-radius:0;
+  margin-right:5px;
+  text-transform:uppercase;
+}
+
+section.hr-tabs .nav-tabs > .active > a, section.hr-tabs .nav-tabs > .active > a:hover {
   color: #fff;
   border:0;
   border-bottom: 1px solid #f47a20;
@@ -777,6 +815,38 @@ article h3 {
   font-style:normal;
 }
 
+/** video mini **/
+.storyteller-details section.video-mini {
+  border-bottom: 0;
+  padding-bottom: 4px; 
+}
+
+.video-mini .video-actions .actions-links {
+  width:360px;
+  padding-top:20px;
+}
+
+.video-mini .video-actions .actions-links a {
+  padding:0 10px 0 20px;
+  font-size:12px;
+}
+
+.video-mini .video-actions .actions-links a.icn.add {
+  padding-right:0;
+}
+
+.video-mini .video-actions .actions-links a.icn.layers {
+  padding-left:22px;
+}
+
+.video-mini .video-actions .metrics {
+  width:80px;
+}
+
+.video-mini .video-actions .metrics .views i {
+  font-size:15px;
+}
+
 article.abstract {
   border-bottom:1px solid #d8d9d9;
   padding-bottom:12px;
@@ -935,6 +1005,10 @@ section.box .article-list article footer .views {
   margin-bottom:9px;
 }
 
+.storyteller-info .links li {
+  margin-bottom:5px;
+}
+
 .storyteller-info .links a {
   font-weight:normal;
 }
@@ -1019,3 +1093,34 @@ section.box .article-list article footer .views {
   margin-bottom:14px;
 }
 
+.map-box {
+  width:142px;
+  height:162px;
+  float:left;
+  margin:0 6px 20px 0;
+  position:relative;
+}
+
+.map-box.last {
+  margin-right:0;
+}
+
+.map-box .map-details {
+  position:absolute;
+  bottom:0;
+  left:0;
+  background:#fff;
+  background:rgba(255,255,255,0.89);
+  font-size:9px;
+  padding:5px;
+}
+
+.map-box .map-details footer {
+  font-weight:bold;
+  padding-top:4px;
+}
+
+.map-box .map-details footer .metrics {
+  display:block;
+  padding-top:4px;
+}

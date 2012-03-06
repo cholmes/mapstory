@@ -81,12 +81,12 @@
                         </header>
                         <section class="bio">
                             <h4>Biography</h4>
-                            <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium 
-                            doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inven 
-                            tore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo 
-                            enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed 
-                            quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. 
-                            Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consect 
+                            <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium
+                            doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inven
+                            tore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo
+                            enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed
+                            quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.
+                            Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consect
                             etur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut l
                             abore et dolore magnam aliquam quaerat voluptatem.</p>
                         </section>
@@ -95,22 +95,11 @@
                             <div class="player">
                                 <img src="{{ STATIC_URL }}theme/img/temp/player.png" width="100%" alt="Player" />
                             </div>
-                            <div class="video-actions">
-                                <div class="actions-links fancyfont">
-                                    <a href="#" class="icn info">Info</a>
-                                    <a href="#" class="icn layers">Layers</a>
-                                    <a href="#" class="icn favorites">Add to Favorites</a>
-                                    <a href="#" class="icn share">Share</a>
-                                    <a href="#" class="icn flag">Flag</a>
-                                    <a href="#" class="icn add">Add</a>
-                                </div>
-                                <div class="metrics">
-                                    <span class="views"><i>1,205</i> Views</span>
-                                    <span class="rating">3 stars</span>
-                                </div>
-                            </div>
+
+                            {% include "mapstory/_video_actions.html" %}
+
                         </section>
-                        <section>
+                        <section class="hr-tabs">
                             <h4>View MapStories:</h4>
                             <div class="tabbable">
                                 <ul class="nav nav-tabs fancyfont">
@@ -119,7 +108,72 @@
                                 </ul>
                                 <div class="tab-content">
                                     <div class="tab-pane active" id="1">
-                                        tab 1
+                                        <div class="map-box">
+                                            <img src="{{ STATIC_URL }}theme/img/temp/map_thumb_rect.png" width="142" height="162" alt="Map thumb" />
+                                            <div class="map-details">
+                                                <span class="map-title">Khmer Empire &amp; Southeast Asia,
+                                                100CE - 1500 CE</span>
+                                                <footer>
+                                                    <a href="#" rel="author">John Smith</a> <time>on Sep 27, 2011</time>
+                                                    <span class="metrics">1,205 Views | 3 stars</span>
+                                                </footer>
+                                            </div>
+                                        </div>
+                                        <div class="map-box">
+                                            <img src="{{ STATIC_URL }}theme/img/temp/map_thumb_rect.png" width="142" height="162" alt="Map thumb" />
+                                            <div class="map-details">
+                                                <span class="map-title">Khmer Empire &amp; Southeast Asia,
+                                                100CE - 1500 CE</span>
+                                                <footer>
+                                                    <a href="#" rel="author">John Smith</a> <time>on Sep 27, 2011</time>
+                                                    <span class="metrics">1,205 Views | 3 stars</span>
+                                                </footer>
+                                            </div>
+                                        </div>
+                                        <div class="map-box last">
+                                            <img src="{{ STATIC_URL }}theme/img/temp/map_thumb_rect.png" width="142" height="162" alt="Map thumb" />
+                                            <div class="map-details">
+                                                <span class="map-title">Khmer Empire &amp; Southeast Asia,
+                                                100CE - 1500 CE</span>
+                                                <footer>
+                                                    <a href="#" rel="author">John Smith</a> <time>on Sep 27, 2011</time>
+                                                    <span class="metrics">1,205 Views | 3 stars</span>
+                                                </footer>
+                                            </div>
+                                        </div>
+                                        <div class="map-box">
+                                            <img src="{{ STATIC_URL }}theme/img/temp/map_thumb_rect.png" width="142" height="162" alt="Map thumb" />
+                                            <div class="map-details">
+                                                <span class="map-title">Khmer Empire &amp; Southeast Asia,
+                                                100CE - 1500 CE</span>
+                                                <footer>
+                                                    <a href="#" rel="author">John Smith</a> <time>on Sep 27, 2011</time>
+                                                    <span class="metrics">1,205 Views | 3 stars</span>
+                                                </footer>
+                                            </div>
+                                        </div>
+                                        <div class="map-box">
+                                            <img src="{{ STATIC_URL }}theme/img/temp/map_thumb_rect.png" width="142" height="162" alt="Map thumb" />
+                                            <div class="map-details">
+                                                <span class="map-title">Khmer Empire &amp; Southeast Asia,
+                                                100CE - 1500 CE</span>
+                                                <footer>
+                                                    <a href="#" rel="author">John Smith</a> <time>on Sep 27, 2011</time>
+                                                    <span class="metrics">1,205 Views | 3 stars</span>
+                                                </footer>
+                                            </div>
+                                        </div>
+                                        <div class="map-box last">
+                                            <img src="{{ STATIC_URL }}theme/img/temp/map_thumb_rect.png" width="142" height="162" alt="Map thumb" />
+                                            <div class="map-details">
+                                                <span class="map-title">Khmer Empire &amp; Southeast Asia,
+                                                100CE - 1500 CE</span>
+                                                <footer>
+                                                    <a href="#" rel="author">John Smith</a> <time>on Sep 27, 2011</time>
+                                                    <span class="metrics">1,205 Views | 3 stars</span>
+                                                </footer>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="tab-pane" id="2">
                                         tab 2
