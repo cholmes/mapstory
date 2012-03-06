@@ -1,0 +1,230 @@
+{% extends "page_layout.html" %}
+{% load i18n %}
+
+{% block main %}
+    <div class="row">
+        <div class="span12">
+            <ul class="breadcrumb">
+                <li>
+                    <a href="#">Home</a> <span class="divider">&gt;</span>
+                </li>
+                <li class="active">
+                    <a href="#">Search MapStories</a>
+                </li>
+            </ul>
+        </div>
+        <div class="span3 page-title">
+            <h2>SEARCH MAPSTORY</h2>
+        </div>
+        <div class="span9">
+            <div class="results-summary">
+                <header>16 results found for "Khmer Empire"</header>
+                <footer>
+                    <span>Related searches:</span> 
+                    <a href="#">Lorem ipsum des dolor</a>  -  <a href="#">amet sit tolom</a>  -  <a href="#">conseceteur omet</a>
+                </footer>
+            </div>
+        </div>
+    </div>
+        
+    <div class="row">
+        <div class="span3 search-filters">
+            <div class="box">
+                <h4>Narrow by:</h4>
+                <section>
+                    <header>
+                        <h5><a href="#" class="expand-content" data-toggle="collapse" data-target="#filter1">When <span class="icn calendar"></span></a></h5>
+                    </header>                
+                    <div id="filter1">
+                        <p>Limit the search to a specific time period</p>
+                        <form action="">
+                            <label for="">Events begin after:</label>
+                            <input type="date" class="span2" />
+                        
+                            <label for="">Events begin before:</label>
+                            <input type="date" class="span2" />
+                        </form>
+                    </div>
+                </section>
+                
+                <section>
+                    <header>
+                        <h5><a href="#" class="expand-content" data-toggle="collapse" data-target="#filter2">What</a></h5>
+                    </header>                
+                    <div id="filter2">
+                        <form action="">
+                            <input type="search" class="span2" />
+                        </form>
+                        <div class="search-options">
+                            <div class="option">
+                                <h5><a href="#" class="expand-content" data-toggle="collapse" data-target="#option1">Category</a></h5>
+                                <div id="option1">category dropdown?</div>
+                            </div>
+                            <div class="option">
+                                <h5><a href="#" class="expand-content" data-toggle="collapse" data-target="#option2">Keywords</a></h5>
+                                <div id="option2">input type=text?</div>
+                            </div>
+                            <div class="option">
+                                <h5><a href="#" class="expand-content" data-toggle="collapse" data-target="#option3">Date Added</a></h5>
+                                <div id="option3">input type=datetime?</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <section>
+                    <header>
+                        <h5><a href="#" class="expand-content" data-toggle="collapse" data-target="#filter3">Where</a></h5>
+                        <p><a href="#">Select the geographic area</a> that you'd like to explore.</p>
+                    </header>                
+                    <div id="filter3">
+                        content?
+                    </div>
+                </section>
+                
+                <h4>Favorites:</h4>
+                <form action="">
+                    <ul>
+                        <li>
+                            <label class="checkbox">
+                                <input type="checkbox" checked /> Rise and Fall of Meso-American Civilizations
+                            </label>
+                        </li>
+                        <li>
+                            <label class="checkbox">
+                                <input type="checkbox" checked /> Sources of State Failure in Horn of Africa, 1965-2010
+                            </label>
+                        </li>
+                    </ul>
+                </form>
+                
+                <h4>MapStories in Progress:</h4>
+                <form action="">
+                    <ul>
+                        <li>
+                            <label class="checkbox">
+                                <input type="checkbox" checked /> Rise and Fall of Meso-American Civilizations
+                            </label>
+                        </li>
+                        <li>
+                            <label class="checkbox">
+                                <input type="checkbox" checked /> Sources of State Failure in Horn of Africa, 1965-2010
+                            </label>
+                        </li>
+                    </ul>
+                </form>
+            </div>
+        </div>
+        
+        <div class="span9">
+            <div class="box search-results-details">
+                <header>
+                    <form class="form-inline" action="">
+                        <label>search by:</label>
+                        <select name="" class="span2">
+                            <option value="">Newest</option>
+                            <option value="">Newest</option>
+                            <option value="">Newest</option>
+                        </select>
+                    </form>
+                    <div class="pages">
+                        <span>results 1-5 of 5</span>
+                        <ul class="pager">
+                          <li>
+                            <a href="#" class="prev">Previous</a>
+                          </li>
+                          <li>page 1 of 1</li>
+                          <li>
+                            <a href="#" class="next">Next</a>
+                          </li>
+                        </ul>
+                    </div>
+                </header>
+                <div class="wrapper">
+                    <div class="map-box">
+                        <img src="{{ STATIC_URL }}theme/img/temp/map_thumb_rect_lg.png" width="216" height="218" alt="Map thumb" />
+                        <div class="map-details">
+                            <span class="map-title">Khmer Empire &amp; Southeast Asia,
+                            100CE - 1500 CE</span>
+                            <footer>
+                                <a href="#" rel="author">John Smith</a> <time>on Sep 27, 2011</time>
+                                <span class="metrics">1,205 Views | 3 stars</span>
+                            </footer>
+                        </div>
+                    </div>
+                    <div class="map-box">
+                        <img src="{{ STATIC_URL }}theme/img/temp/map_thumb_rect_lg.png" width="216" height="218" alt="Map thumb" />
+                        <div class="map-details">
+                            <span class="map-title">Khmer Empire &amp; Southeast Asia,
+                            100CE - 1500 CE</span>
+                            <footer>
+                                <a href="#" rel="author">John Smith</a> <time>on Sep 27, 2011</time>
+                                <span class="metrics">1,205 Views | 3 stars</span>
+                            </footer>
+                        </div>
+                    </div>
+                    <div class="map-box last">
+                        <img src="{{ STATIC_URL }}theme/img/temp/map_thumb_rect_lg.png" width="216" height="218" alt="Map thumb" />
+                        <div class="map-details">
+                            <span class="map-title">Khmer Empire &amp; Southeast Asia,
+                            100CE - 1500 CE</span>
+                            <footer>
+                                <a href="#" rel="author">John Smith</a> <time>on Sep 27, 2011</time>
+                                <span class="metrics">1,205 Views | 3 stars</span>
+                            </footer>
+                        </div>
+                    </div>
+                    <div class="map-box">
+                        <img src="{{ STATIC_URL }}theme/img/temp/map_thumb_rect_lg.png" width="216" height="218" alt="Map thumb" />
+                        <div class="map-details">
+                            <span class="map-title">Khmer Empire &amp; Southeast Asia,
+                            100CE - 1500 CE</span>
+                            <footer>
+                                <a href="#" rel="author">John Smith</a> <time>on Sep 27, 2011</time>
+                                <span class="metrics">1,205 Views | 3 stars</span>
+                            </footer>
+                        </div>
+                    </div>
+                    <div class="map-box">
+                        <img src="{{ STATIC_URL }}theme/img/temp/map_thumb_rect_lg.png" width="216" height="218" alt="Map thumb" />
+                        <div class="map-details">
+                            <span class="map-title">Khmer Empire &amp; Southeast Asia,
+                            100CE - 1500 CE</span>
+                            <footer>
+                                <a href="#" rel="author">John Smith</a> <time>on Sep 27, 2011</time>
+                                <span class="metrics">1,205 Views | 3 stars</span>
+                            </footer>
+                        </div>
+                    </div>
+                    <div class="map-box last">
+                        <img src="{{ STATIC_URL }}theme/img/temp/map_thumb_rect_lg.png" width="216" height="218" alt="Map thumb" />
+                        <div class="map-details">
+                            <span class="map-title">Khmer Empire &amp; Southeast Asia,
+                            100CE - 1500 CE</span>
+                            <footer>
+                                <a href="#" rel="author">John Smith</a> <time>on Sep 27, 2011</time>
+                                <span class="metrics">1,205 Views | 3 stars</span>
+                            </footer>
+                        </div>
+                    </div>
+                </div>
+                
+                <section class="more-results">
+                    <h4><a href="#" class="read-more">More Results</a></h4>
+                </section>
+                
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block extra_body %}
+    <script type="text/javascript">
+        $(function() {
+            $("article.abstract a.read-more").click(function(event) {
+                event.preventDefault();
+            });
+        });
+    </script>
+{% endblock %}

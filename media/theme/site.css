@@ -1124,3 +1124,128 @@ section.box .article-list article footer .views {
   display:block;
   padding-top:4px;
 }
+
+/*** search results ***/
+.search-filters p, .search-filters form {
+  font-size:12px;
+  line-height:1.2em;
+}
+
+.search-filters section header h5 a {
+  display:block;
+  text-transform:uppercase;
+  font-size:14px;
+  color:#4a4a4a;
+  line-height:26px;
+  background: url(img/arrow.png) no-repeat right 0;
+}
+
+.search-filters section header h5 a.collapsed {
+  background: url(img/arrow.png) no-repeat right -28px;
+}
+
+.search-filters section header h5 a:hover {
+  color: #F46817;
+  text-decoration:none;
+}
+
+.search-filters section {
+  padding:0 0 10px 0;
+  margin-bottom:10px;
+  border-bottom:1px solid #d8d9d9;
+}
+
+.search-filters ul {
+  margin-left:0;
+}
+
+.search-filters li {
+  list-style-type:none;
+}
+
+.results-summary {
+  margin-bottom:8px;
+}
+
+.results-summary header {
+  font-size:19px;
+  font-weight:bold;
+}
+
+.results-summary footer {
+  font-size:11px;
+  font-weight:bold;
+}
+
+.results-summary footer span {
+  font-size:14px;
+  font-weight:bold;
+}
+
+.page-title h2 {
+  line-height:50px;
+}
+
+.wrapper {
+  overflow:hidden;
+  width:100%;
+}
+
+.search-results-details header {
+  padding:0 0 10px 0;
+  margin-bottom:10px;
+  border-bottom:1px solid #d8d9d9;
+}
+
+.search-results-details header form {
+  float:left;
+  width:250px;
+}
+
+.search-results-details header form label {
+  font-weight:bold;
+  text-transform:lowercase;
+  font-size:11px;
+}
+
+.search-results-details header form select {
+  font-size:11px;
+  padding: 1px 3px;
+  height: 20px;
+  line-height: 20px;
+}
+
+.search-results-details .map-box {
+  width:216px;
+  height:218px;
+  margin:0 20px 20px 0;
+}
+
+.search-results-details .map-box.last {
+  margin-right:0;
+}
+
+.search-results-details .map-box .map-details {
+  font-size:13px;
+  padding:10px;
+}
+
+.search-results-details .map-box .map-details footer {
+  font-size:11px;
+}
+
+section.more-results {
+  background:#efefef;
+  padding:8px 10px;
+}
+
+section.more-results h4 {
+  margin-bottom:0;
+  font-size:18px;
+}
+
+section.more-results a {
+  display:inline-block;
+  background:url(img/arrow_down.png) no-repeat right center;
+  padding:0 18px 0 5px;
+}
