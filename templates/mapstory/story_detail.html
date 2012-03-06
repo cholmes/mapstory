@@ -28,20 +28,9 @@
                     <div class="player">
                         <img src="{{ STATIC_URL }}theme/img/temp/player.png" width="656" height="392" alt="Player" />
                     </div>
-                    <div class="video-actions">
-                        <div class="actions-links fancyfont">
-                            <a href="#" class="icn info">Info</a>
-                            <a href="#" class="icn layers">Layers</a>
-                            <a href="#" class="icn favorites">Add to Favorites</a>
-                            <a href="#" class="icn share">Share</a>
-                            <a href="#" class="icn flag">Flag</a>
-                            <a href="#" class="icn add">Add</a>
-                        </div>
-                        <div class="metrics">
-                            <span class="views"><i>1,205</i> Views</span>
-                            <span class="rating">3 stars</span>
-                        </div>
-                    </div>
+
+                    {% include "mapstory/_video_actions.html" %}
+
                     <article class="abstract">
                         Abstract: This map shows a scanned map from DCGIS, that displays an old plan for the District of Columbia.
                         It is overlaid on a Google Satellite image, and made a bit transparent. Apologies for slow loading, as the image is 50 megs, and we have not integrated caching yet. <a href="#" class="read-more" data-toggle="collapse" data-target="#abstract-full">Read more</a>
