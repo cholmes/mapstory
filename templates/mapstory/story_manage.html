@@ -1,0 +1,70 @@
+{% extends "mapstory/story_detail_base.html" %}
+{% load i18n %}
+
+{% block extra_head %}
+    <link rel="stylesheet" href="{{ STATIC_URL }}theme/datepicker.css" type="text/css" media="screen" />
+{% endblock %}
+
+{% block content %}
+    <div class="pointer"></div>
+    <section class="hr-tabs manage-story">
+        <div class="tabbable">
+            <ul class="nav nav-tabs fancyfont">
+              <li class="active"><a href="#1" data-toggle="tab">Manage</a></li>
+              <li><a href="#2" data-toggle="tab">Permissions</a></li>
+            </ul>
+        </div>
+
+        <a href="#" class="btn-custom fancyfont"><span class="icn delete"></span>Delete MapStory</a>
+
+        <form>
+          <label>Title:</label>
+          <input type="text" class="span7" value="Ellicott Plan for Washington DC" />
+
+          <label>Author:</label>
+          <input type="text" class="span7" value="Prof. Susan Smith" />
+
+          <label>Keywords:</label>
+          <textarea name="Name" class="span7">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do incididunt ut labore et dolore magna aliqua. Ut enim ad minim ven exercitation ullamco laboris nisi ut aliquip ex ea commodo conuat
+          </textarea>
+
+          <label>Sections:</label>
+          <textarea name="Name" class="span7"></textarea>
+
+          <label>Topic:</label>
+          <input type="text" class="span7" value="Lorem ipsum" />
+
+          <div class="row">
+            <div class="span4">
+                <div class="box-bdr-r">
+                    <h5 class="icn calendar">Date:</h5>
+                    <p>Limit the search to a specific time period</p>
+                    <label for="">Events begin after:</label>
+                    <input data-datepicker="datepicker" type="text" class="span3 date" placeholder="yyyy-mm-dd" />
+
+                    <label for="">Events begin before:</label>
+                    <input data-datepicker="datepicker" type="text" class="span3 date" placeholder="yyyy-mm-dd" />
+                </div>
+            </div>
+            <div class="span3">
+                <h5>Location:</h5>
+                <p><a href="#" class="i read-more">Edit the geographic extent of
+                your StoryLayer</a></p>
+            </div>
+          </div>
+          <div class="form-actions">
+              <button type="submit" class="btn primary">Save changes</button>
+          </div>
+          <a href="#" class="arrow-up">Collapse</a>
+        </form>
+    </section>
+{% endblock %}
+
+{% block extra_body %}
+    <script src="{{ STATIC_URL }}script/bootstrap-datepicker.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(function() {
+            $(".date").datepicker();
+        });
+    </script>
+{% endblock %}

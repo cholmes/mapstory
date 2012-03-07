@@ -818,7 +818,7 @@ article h3 {
 /** video mini **/
 .storyteller-details section.video-mini {
   border-bottom: 0;
-  padding-bottom: 4px; 
+  padding-bottom: 4px;
 }
 
 .video-mini .video-actions .actions-links {
@@ -917,7 +917,7 @@ cite {
   margin-bottom:15px;
 }
 
-section.box a.read-more {
+section.box a.read-more, a.read-more {
   background:url(img/arrow_right.png) no-repeat right center;
   padding-right:10px;
 }
@@ -1086,6 +1086,7 @@ section.box .article-list article footer .views {
 
 .btn-custom .icn.favorites { background:url(img/icons/favorites.png) no-repeat left center; }
 .btn-custom .icn.email { background:url(img/icons/email.png) no-repeat left center;width:19px; }
+.btn-custom .icn.delete { background:url(img/icons/trash.png) no-repeat left center;height:17px; }
 
 .storyteller-details section {
   border-bottom:1px solid #D8D9D9;
@@ -1262,7 +1263,11 @@ input.span2.date {
   background:url(img/icons/calendar_in.png) no-repeat 129px center;
 }
 
-.search-filters form {
+input.span3.date {
+  background:url(img/icons/calendar_in.png) no-repeat 210px center;
+}
+
+.search-filters .collapse form {
   margin: 0;
 }
 
@@ -1286,3 +1291,67 @@ input.span2.date {
   text-decoration:none;
 }
 
+.narrow {
+  margin-bottom:20px;
+}
+
+/*** manage story ***/
+.pointer {
+  width:17px;
+  height:9px;
+  background: url(img/pointer.png) no-repeat 0 0;
+  margin:-17px 0 30px 24px;
+}
+
+section.hr-tabs.manage-story .nav-tabs a {
+  font-size:18px;
+}
+
+section.manage-story form label, section.manage-story form h5 {
+  font-weight:bold;
+  font-size:14px;
+}
+
+section.manage-story h5.icn.calendar {
+  background: url(img/icons/calendar.png) no-repeat 45px 0;
+}
+
+.box-bdr-r {
+  width:285px;
+  border-right:1px solid #d8d9d9;
+}
+
+section.manage-story {
+  border-bottom:1px solid #d8d9d9;
+}
+
+section.manage-story form {
+  clear:both;
+}
+
+section.manage-story form .row {
+  margin-top:10px;
+}
+
+section.manage-story form .box-bdr-r label {
+  font-weight:normal;
+  font-size:12px;
+}
+
+a.i {
+  font-size:14px;
+}
+
+.manage-story a.btn-custom {
+  display:block;
+  text-align:right;
+  float:right;
+  background-position:left bottom;
+}
+
+a.arrow-up {
+  background: url(img/arrow_up_gr.png) no-repeat left center;
+  text-indent:30px;
+  display:block;
+  color:#4a4a4a;
+}

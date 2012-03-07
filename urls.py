@@ -32,6 +32,7 @@ urlpatterns = patterns('mapstory.views',
     
     # temp urls
     url(r"^mapstory/story/", direct_to_template, {"template": "mapstory/story_detail.html"}, name="story"),
+    url(r"^mapstory/manage/", direct_to_template, {"template": "mapstory/story_manage.html"}, name="story_manage"),
     url(r"^mapstory/storyteller/", direct_to_template, {"template": "mapstory/storyteller_detail.html"}, name="storyteller"),
     url(r"^search/search-mapstories/", direct_to_template, {"template": "search/search_mapstories.html"}, name="search_mapstories"),
     
