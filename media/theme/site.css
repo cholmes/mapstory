@@ -1136,12 +1136,16 @@ section.box .article-list article footer .views {
   text-transform:uppercase;
   font-size:14px;
   color:#4a4a4a;
-  line-height:26px;
-  background: url(img/arrow.png) no-repeat right 0;
+  line-height:34px;
+  background: url(img/arrow.png) no-repeat right -28px;
+}
+
+.search-filters section header h5.icn.calendar {
+  background: url(img/icons/calendar.png) no-repeat 50px 7px;
 }
 
 .search-filters section header h5 a.collapsed {
-  background: url(img/arrow.png) no-repeat right -28px;
+  background-position: right 0;
 }
 
 .search-filters section header h5 a:hover {
@@ -1152,7 +1156,7 @@ section.box .article-list article footer .views {
 .search-filters section {
   padding:0 0 10px 0;
   margin-bottom:10px;
-  border-bottom:1px solid #d8d9d9;
+  border-bottom:1px solid #999998;
 }
 
 .search-filters ul {
@@ -1161,6 +1165,10 @@ section.box .article-list article footer .views {
 
 .search-filters li {
   list-style-type:none;
+}
+
+.search-filters .collapse {
+  position:inherit;
 }
 
 .results-summary {
@@ -1194,7 +1202,7 @@ section.box .article-list article footer .views {
 .search-results-details header {
   padding:0 0 10px 0;
   margin-bottom:10px;
-  border-bottom:1px solid #d8d9d9;
+  border-bottom:1px solid #999998;
 }
 
 .search-results-details header form {
@@ -1249,3 +1257,32 @@ section.more-results a {
   background:url(img/arrow_down.png) no-repeat right center;
   padding:0 18px 0 5px;
 }
+
+input.span2.date {
+  background:url(img/icons/calendar_in.png) no-repeat 129px center;
+}
+
+.search-filters form {
+  margin: 0;
+}
+
+.search-options {
+  border-top:1px solid #999998;
+  margin:0 0 15px 0;
+  padding:6px 0 0 15px;
+}
+
+.search-options h5 a {
+  display:block;
+  font-size:14px;
+  color:#4a4a4a;
+  line-height:34px;
+  background: url(img/arrow.png) no-repeat right 0;
+  border-bottom:1px solid #999998;
+}
+
+.search-options h5 a:hover {
+  color: #F46817;
+  text-decoration:none;
+}
+
