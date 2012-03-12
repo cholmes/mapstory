@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="{{ STATIC_URL }}theme/datepicker.css" type="text/css" media="screen" />
 {% endblock %}
 
-{% block content %}
+{% block main_content %}
     <div class="pointer"></div>
     <section class="hr-tabs manage-story">
         <div class="tabbable">
@@ -55,7 +55,7 @@
           <div class="form-actions">
               <button type="submit" class="btn primary">Save changes</button>
           </div>
-          <a href="#" class="arrow-up">Collapse</a>
+          <a href="{% url story %}" class="arrow-up">Collapse</a>
         </form>
     </section>
 {% endblock %}
