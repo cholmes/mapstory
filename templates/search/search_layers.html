@@ -1,0 +1,127 @@
+{% extends "mapstory/story_detail_base.html" %}
+{% load i18n %}
+
+{% block main %}
+    <div class="row">
+        <div class="span12">
+            <ul class="breadcrumb">
+                <li>
+                    <a href="#">Home</a> <span class="divider">&gt;</span>
+                </li>
+                <li>
+                <a href="#">Search StoryLayers</a> <span class="divider">&gt;</span>
+                </li>
+                <li class="active">
+                    <a href="#">Layers Page</a>
+                </li>
+            </ul>
+        </div>
+        <div class="span8">
+            <h2>ELLICOTT PLAN FOR WASHINGTON DC</h2>
+        </div>
+        <div class="span4">
+            <a href="#" class="back">Back to Search</a>
+        </div>
+        <div class="span8">
+            <div class="box mrg-btm">
+                <div class="story-detail">
+                    <div class="player">
+                        <img src="{{ STATIC_URL }}theme/img/temp/player.png" width="656" height="392" alt="Player" />
+                    </div>
+
+                    {% include "mapstory/_video_actions.html" %}
+
+                    <article class="abstract">
+                        Abstract: This map shows a scanned map from DCGIS, that displays an old plan for the District of Columbia.
+                        It is overlaid on a Google Satellite image, and made a bit transparent. Apologies for slow loading, as the image is 50 megs, and we have not integrated caching yet. <a href="#" class="read-more" data-toggle="collapse" data-target="#abstract-full">Read more</a>
+                        <div id="abstract-full" class="collapse">More content goes here and is displayed when read more is clicked.</div>
+                    </article>
+                    <section class="story-profile">
+                        <h4>Profile</h4>
+                        <form action="">
+                            <h5>Purpose:</h5>
+                            <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem
+                            aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo
+                            enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores
+                            eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet,
+                            consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam
+                            aliquam quaerat voluptatem.</p>
+
+                            <h5 class="icn calendar">Time Period:</h5>
+                            <p>Limit the search to a specific time period</p>
+                            <label for="">Events begin after:</label>
+                            <input data-datepicker="datepicker" type="text" class="span3 date" placeholder="yyyy-mm-dd" />
+
+                            <label for="">Events begin before:</label>
+                            <input data-datepicker="datepicker" type="text" class="span3 date" placeholder="yyyy-mm-dd" />
+
+                            <h5>Economy Statistics:</h5>
+                            <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem
+                            aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo
+                            enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.</p>
+
+                            <h5>Keywords:</h5>
+                            <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae</p>
+
+                            <h5>Source Citation:</h5>
+                            <p><a href="#">www.loremipsum.com</a>, <a href="#">www.loremipsum.com</a>, <a href="#">www.loremipsum.com</a>, <a href="#">www.loremipsum.com</a>, <a href="#">www.loremipsum.com</a></p>
+
+                            <h5>Resolution: <span>1 : 25,000 scale</span></h5>
+
+                            <button type="submit" class="btn-orange">Complete Metadata</button>
+
+                        </form>
+
+                    </section>
+                </div>
+            </div>
+        </div>
+        <div class="span4">
+            {% include "mapstory/_widget_about_storyteller.html" %}
+
+            <section class="box mrg-btm">
+                <h2>USE THIS STORYLAYER</h2>
+                {% include "mapstory/_mapstory_list_side.html" %}
+            </section>
+
+            <section class="box mrg-btm storyteller-layer">
+                <h2>STORYTELLERS USING THIS LAYER:</h2>
+                    <div class="storyteller">
+                        <img src="http://www.gravatar.com/avatar/b59a1fea77f9350c8225395f55204abe?r=pg&s=70">
+                        <h4>Prof. Jim Jones,<br /> Notre Dame</h4>
+                        <h5>Layers Used:</h5>
+                        <p><a href="#">This is link to layer 1</a>, <a href="#">This is link to layer 2</a>,
+                        <a href="#">Link layer 3</a>,  <a href="#">Link to layer 4</a></p>
+                        <p><a href="#" class="read-more">More Layers</a></p>
+                    </div>
+                    <div class="storyteller">
+                        <img src="http://www.gravatar.com/avatar/a6a965150162eef63f1d2f8aae15c57c?r=pg&s=70">
+                        <h4>Gary Lewin,<br /> EU Institute of Humanities</h4>
+                        <h5>Layers Used:</h5>
+                        <p><a href="#">This is link to layer 1</a>, <a href="#">This is link to layer 2</a>,
+                        <a href="#">Link layer 3</a>,  <a href="#">Link to layer 4</a></p>
+                        <p><a href="#" class="read-more">More Layers</a></p>
+                    </div>
+                    <div class="storyteller last">
+                        <img src="http://www.gravatar.com/avatar/c0c61fb94a5785be367b0fceea6985f1?r=pg&s=70">
+                        <h4>Susan Turner,<br /> American Museum of Natural History</h4>
+                        <h5>Layers Used:</h5>
+                        <p><a href="#">This is link to layer 1</a>, <a href="#">This is link to layer 2</a>,
+                        <a href="#">Link layer 3</a>,  <a href="#">Link to layer 4</a></p>
+                        <p><a href="#" class="read-more">More Layers</a></p>
+                    </div>
+            </section>
+            {% include "mapstory/_widget_social.html" %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_body %}
+    <script type="text/javascript">
+        $(function() {
+            $("article.abstract a.read-more").click(function(event) {
+                event.preventDefault();
+            });
+        });
+    </script>
+{% endblock %}

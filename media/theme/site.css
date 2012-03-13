@@ -251,7 +251,7 @@ a:hover {
 }
 
 .box {
-  padding: 10px 20px;
+  padding: 15px 20px;
   background:#fff;
 }
 
@@ -853,7 +853,7 @@ article.abstract {
   margin-bottom:12px;
 }
 
-article.abstract .read-more {
+article.abstract .read-more, section.box.storyteller-layer a.read-more {
   display:inline-block;
   background:url(img/arrow_down.png) no-repeat right center;
   padding:0 18px 0 5px;
@@ -923,7 +923,9 @@ section.box a.read-more, a.read-more {
 }
 
 section.box .article-list {
-  overflow:hidden;
+  overflow-y:auto;
+  max-height:320px;
+  margin-right:-14px;
 }
 
 section.box .article-list article {
@@ -1354,4 +1356,67 @@ a.arrow-up {
   text-indent:30px;
   display:block;
   color:#4a4a4a;
+}
+
+/*** search layers ***/
+.story-profile {
+  margin-top:20px;
+}
+
+.story-profile h5 {
+  font-size:14px;
+  margin-bottom:6px;
+}
+
+.story-profile h5.icn.calendar {
+  background: url(img/icons/calendar.png) no-repeat 94px 0;
+}
+
+.story-profile h5 span {
+  font-weight:normal;
+  font-size:13px;
+  padding-left:25px;
+}
+
+.story-profile form {
+  overflow:hidden;
+  margin-bottom:20px;
+}
+
+.btn-orange {
+  background:#f15b28;
+  color:#fff;
+  font-family: 'Marvel', sans-serif;
+  font-size:20px;
+  border:0;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+  padding:8px 15px;
+  text-transform:uppercase;
+  float:right;
+}
+
+.storyteller-layer .storyteller {
+  border-bottom-color:#d8d9d9;
+}
+.storyteller-layer .storyteller img {
+  margin-bottom:6px;
+}
+
+.storyteller-layer h4 {
+  color:#787878;
+  font-family: 'Marvel', sans-serif;
+  line-height:1.2em;
+}
+
+.storyteller-layer .storyteller h5 {
+  clear:both;
+  font-size:14px;
+}
+
+#main .storyteller-layer .storyteller p {
+  color:#F46817;
+  line-height:1.35em;
+  font-size:12px;
 }

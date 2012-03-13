@@ -35,7 +35,7 @@ urlpatterns = patterns('mapstory.views',
     url(r"^mapstory/manage/", direct_to_template, {"template": "mapstory/story_manage.html"}, name="story_manage"),
     url(r"^mapstory/storyteller/", direct_to_template, {"template": "mapstory/storyteller_detail.html"}, name="storyteller"),
     url(r"^search/search-mapstories/", direct_to_template, {"template": "search/search_mapstories.html"}, name="search_mapstories"),
-    
+    url(r"^search/search-layers/", direct_to_template, {"template": "search/search_layers.html"}, name="search_layers"),
 )
 
 urlpatterns += proxy_urlpatterns
