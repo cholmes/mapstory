@@ -156,9 +156,11 @@
                         </ul>
                     </div>
                 </header>
-                <div class="wrapper">
+                <div class="wrapper" id="wrapper">
                     <div class="map-box">
-                        <img src="{{ STATIC_URL }}theme/img/temp/map_thumb_rect_lg.png" width="216" height="218" alt="Map thumb" />
+                        <a href="#map-box-details1" class="expand-content" data-toggle="collapse" data-target="#map-box-details1" data-parent="#wrapper">
+                            <img src="{{ STATIC_URL }}theme/img/temp/map_thumb_rect_lg.png" width="216" height="218" alt="Map thumb" />
+                        </a>
                         <div class="map-details">
                             <span class="map-title">Khmer Empire &amp; Southeast Asia,
                             100CE - 1500 CE</span>
@@ -169,7 +171,9 @@
                         </div>
                     </div>
                     <div class="map-box">
-                        <img src="{{ STATIC_URL }}theme/img/temp/map_thumb_rect_lg.png" width="216" height="218" alt="Map thumb" />
+                        <a href="#" class="expand-content" data-toggle="collapse" data-target="#map-box-details2" data-parent="#wrapper">
+                            <img src="{{ STATIC_URL }}theme/img/temp/map_thumb_rect_lg.png" width="216" height="218" alt="Map thumb" />
+                        </a>
                         <div class="map-details">
                             <span class="map-title">Khmer Empire &amp; Southeast Asia,
                             100CE - 1500 CE</span>
@@ -180,7 +184,9 @@
                         </div>
                     </div>
                     <div class="map-box last">
-                        <img src="{{ STATIC_URL }}theme/img/temp/map_thumb_rect_lg.png" width="216" height="218" alt="Map thumb" />
+                        <a href="#" class="expand-content" data-toggle="collapse" data-target="#map-box-details3" data-parent="#wrapper">
+                            <img src="{{ STATIC_URL }}theme/img/temp/map_thumb_rect_lg.png" width="216" height="218" alt="Map thumb" />
+                        </a>
                         <div class="map-details">
                             <span class="map-title">Khmer Empire &amp; Southeast Asia,
                             100CE - 1500 CE</span>
@@ -190,6 +196,173 @@
                             </footer>
                         </div>
                     </div>
+
+                    {% comment %} collapsible box 1 with map details {% endcomment %}
+                    <div class="map-box-wrap collapse" id="map-box-details1">
+                        <article class="map-box-details mod first">
+                            <div class="pointer"></div>
+                            <a href="#map-box-details1" class="expand-content close" data-toggle="collapse" data-target="#map-box-details1" data-parent="#wrapper">close</a>
+                            <div class="map">
+                                <img src="{{ STATIC_URL }}theme/img/temp/map227x275.png" width="227" height="275" alt="Map thumb" />
+                            </div>
+                            <div class="map-details">
+                                <h5>Rise and Fall of Meso-American Civilizations Box1</h5>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed dincididunt
+                                ut labore et dolore magna aliqua. Ut enim ad minim ven exercitation
+                                ullamco laboris nisi ut aliquip ex ea commodo conuat.</p>
+                                <div class="foot-notes">
+                                    <footer>
+                                        <div class="views">1,205 Views</div>
+                                        <div class="comments"><a href="#">57 Comments</a></div>
+                                        <div class="rating">3 stars</div>
+                                        <a href="#" class="btn-custom"><i class="icn favorites"></i>Add to Favorites</a>
+                                        <a href="#" class="btn-custom"><i class="icn favorites"></i>Add to MapStories in Progress</a>
+                                    </footer>
+                                    <div class="keymap">
+                                        <h5 class="fancyfont orange">Keymap</h5>
+                                        <div>
+                                            <img src="{{ STATIC_URL }}theme/img/temp/placeholder18x18.png" width="18" height="18" alt="" />
+                                            Dolor sit amet
+                                        </div>
+                                        <div>
+                                            <img src="{{ STATIC_URL }}theme/img/temp/placeholder18x18.png" width="18" height="18" alt="" />
+                                            Dolor sit amet
+                                        </div>
+                                        <div>
+                                            <img src="{{ STATIC_URL }}theme/img/temp/placeholder18x18.png" width="18" height="18" alt="" />
+                                            Dolor sit amet
+                                        </div>
+                                        <div>
+                                            <img src="{{ STATIC_URL }}theme/img/temp/placeholder18x18.png" width="18" height="18" alt="" />
+                                            Dolor sit amet
+                                        </div>
+                                        <div>
+                                            <img src="{{ STATIC_URL }}theme/img/temp/placeholder18x18.png" width="18" height="18" alt="" />
+                                            Dolor sit amet
+                                        </div>
+                                        <div>
+                                            <img src="{{ STATIC_URL }}theme/img/temp/placeholder18x18.png" width="18" height="18" alt="" />
+                                            Dolor sit amet
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <a href="#map-box-details1" class="expand-content arrow-up" data-toggle="collapse" data-target="#map-box-details1" data-parent="#wrapper">Collapse</a>
+
+                        </article>
+                    </div>
+                    {% comment %} end collapsible box 1 with map details {% endcomment %}
+
+                    {% comment %} collapsible box 2 with map details {% endcomment %}
+                    <div class="map-box-wrap collapse" id="map-box-details2">
+                        <article class="map-box-details mod second">
+                            <div class="pointer"></div>
+                            <a href="#map-box-details2" class="expand-content close" data-toggle="collapse" data-target="#map-box-details1" data-parent="#wrapper">close</a>
+                            <div class="map">
+                                <img src="{{ STATIC_URL }}theme/img/temp/map227x275.png" width="227" height="275" alt="Map thumb" />
+                            </div>
+                            <div class="map-details">
+                                <h5>Rise and Fall of Meso-American Civilizations Box2</h5>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed dincididunt
+                                ut labore et dolore magna aliqua. Ut enim ad minim ven exercitation
+                                ullamco laboris nisi ut aliquip ex ea commodo conuat.</p>
+                                <div class="foot-notes">
+                                    <footer>
+                                        <div class="views">1,205 Views</div>
+                                        <div class="comments"><a href="#">57 Comments</a></div>
+                                        <div class="rating">3 stars</div>
+                                        <a href="#" class="btn-custom"><i class="icn favorites"></i>Add to Favorites</a>
+                                        <a href="#" class="btn-custom"><i class="icn favorites"></i>Add to MapStories in Progress</a>
+                                    </footer>
+                                    <div class="keymap">
+                                        <h5 class="fancyfont orange">Keymap</h5>
+                                        <div>
+                                            <img src="{{ STATIC_URL }}theme/img/temp/placeholder18x18.png" width="18" height="18" alt="" />
+                                            Dolor sit amet
+                                        </div>
+                                        <div>
+                                            <img src="{{ STATIC_URL }}theme/img/temp/placeholder18x18.png" width="18" height="18" alt="" />
+                                            Dolor sit amet
+                                        </div>
+                                        <div>
+                                            <img src="{{ STATIC_URL }}theme/img/temp/placeholder18x18.png" width="18" height="18" alt="" />
+                                            Dolor sit amet
+                                        </div>
+                                        <div>
+                                            <img src="{{ STATIC_URL }}theme/img/temp/placeholder18x18.png" width="18" height="18" alt="" />
+                                            Dolor sit amet
+                                        </div>
+                                        <div>
+                                            <img src="{{ STATIC_URL }}theme/img/temp/placeholder18x18.png" width="18" height="18" alt="" />
+                                            Dolor sit amet
+                                        </div>
+                                        <div>
+                                            <img src="{{ STATIC_URL }}theme/img/temp/placeholder18x18.png" width="18" height="18" alt="" />
+                                            Dolor sit amet
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <a href="#map-box-details2" class="expand-content arrow-up" data-toggle="collapse" data-target="#map-box-details1" data-parent="#wrapper">Collapse</a>
+                        </article>
+                    </div>
+                    {% comment %} end collapsible box 2 with map details {% endcomment %}
+
+                    {% comment %} collapsible box 3 with map details {% endcomment %}
+                    <div class="map-box-wrap collapse" id="map-box-details3">
+                        <article class="map-box-details mod third">
+                            <div class="pointer"></div>
+                            <a href="#map-box-details3" class="expand-content close" data-toggle="collapse" data-target="#map-box-details1" data-parent="#wrapper">close</a>
+                            <div class="map">
+                                <img src="{{ STATIC_URL }}theme/img/temp/map227x275.png" width="227" height="275" alt="Map thumb" />
+                            </div>
+                            <div class="map-details">
+                                <h5>Rise and Fall of Meso-American Civilizations Box3</h5>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed dincididunt
+                                ut labore et dolore magna aliqua. Ut enim ad minim ven exercitation
+                                ullamco laboris nisi ut aliquip ex ea commodo conuat.</p>
+                                <div class="foot-notes">
+                                    <footer>
+                                        <div class="views">1,205 Views</div>
+                                        <div class="comments"><a href="#">57 Comments</a></div>
+                                        <div class="rating">3 stars</div>
+                                        <a href="#" class="btn-custom"><i class="icn favorites"></i>Add to Favorites</a>
+                                        <a href="#" class="btn-custom"><i class="icn favorites"></i>Add to MapStories in Progress</a>
+                                    </footer>
+                                    <div class="keymap">
+                                        <h5 class="fancyfont orange">Keymap</h5>
+                                        <div>
+                                            <img src="{{ STATIC_URL }}theme/img/temp/placeholder18x18.png" width="18" height="18" alt="" />
+                                            Dolor sit amet
+                                        </div>
+                                        <div>
+                                            <img src="{{ STATIC_URL }}theme/img/temp/placeholder18x18.png" width="18" height="18" alt="" />
+                                            Dolor sit amet
+                                        </div>
+                                        <div>
+                                            <img src="{{ STATIC_URL }}theme/img/temp/placeholder18x18.png" width="18" height="18" alt="" />
+                                            Dolor sit amet
+                                        </div>
+                                        <div>
+                                            <img src="{{ STATIC_URL }}theme/img/temp/placeholder18x18.png" width="18" height="18" alt="" />
+                                            Dolor sit amet
+                                        </div>
+                                        <div>
+                                            <img src="{{ STATIC_URL }}theme/img/temp/placeholder18x18.png" width="18" height="18" alt="" />
+                                            Dolor sit amet
+                                        </div>
+                                        <div>
+                                            <img src="{{ STATIC_URL }}theme/img/temp/placeholder18x18.png" width="18" height="18" alt="" />
+                                            Dolor sit amet
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <a href="#map-box-details3" class="expand-content arrow-up" data-toggle="collapse" data-target="#map-box-details1" data-parent="#wrapper">Collapse</a>
+                        </article>
+                    </div>
+                    {% comment %} end collapsible box 3 with map details {% endcomment %}
+
                     <div class="map-box">
                         <img src="{{ STATIC_URL }}theme/img/temp/map_thumb_rect_lg.png" width="216" height="218" alt="Map thumb" />
                         <div class="map-details">
@@ -242,6 +415,10 @@
             $(".expand-content").click(function(event) {
                 event.preventDefault();
             });
+            // $(".arrow-up").click(function(event) {
+            //     event.preventDefault();
+            //     $(this).closest(".map-box-wrap").removeClass("in").attr("style","display:block;height:0;");
+            // });
             $(".date").datepicker();
             {% comment %}
                 @@@ when the section is collapsed, show arrow poiting right, class - collapsed.

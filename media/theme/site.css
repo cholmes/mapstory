@@ -30,6 +30,14 @@ section {
     display: block;
 }
 
+.mod:after {
+  content: ".";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+
 /* fix map viewer page */
 html.x-viewport #header .wrap {
     width: 100%;
@@ -1128,7 +1136,7 @@ section.box .article-list article footer .views {
   padding-top:4px;
 }
 
-/*** search results ***/
+/*** search mapstories ***/
 .search-filters p, .search-filters form {
   font-size:12px;
   line-height:1.2em;
@@ -1297,8 +1305,118 @@ input.span3.date {
   margin-bottom:20px;
 }
 
+.map-box-wrap {
+  clear:both;
+}
+
+.map-box-details {
+  border-top:1px solid #b5b5b6;
+  border-bottom:1px solid #b5b5b6;
+  padding:15px 0 5px;
+  margin:10px 0 25px;
+  position:relative;
+}
+
+.map-box-details .pointer {
+  width:17px;
+  height:9px;
+  background: url(img/pointer.png) no-repeat 0 0;
+  position:absolute;
+  top:-9px;
+}
+
+.map-box-details.first .pointer { left:100px; }
+.map-box-details.second .pointer { left:336px; }
+.map-box-details.third .pointer { left:568px; }
+
+.map-box-details .close {
+  width:25px;
+  height:23px;
+  background: url(img/close.png) no-repeat 0 0;
+  float:right;
+  text-indent:-9999px;
+}
+
+.map-box-details .map {
+  float:left;
+  width:227px;
+  margin:0 17px 10px 0;
+}
+
+.map-box-details h5 {
+  font-weight:normal;
+  font-size:16px;
+  margin:25px 0 20px;
+}
+
+.map-box-details .foot-notes {
+  overflow:hidden;
+}
+
+.map-box-details footer {
+  float:left;
+  width:49%;
+  margin-right:2%;
+}
+
+.map-box-details footer .views {
+  float:left;
+  width:50%;
+  font-size:13px;
+  font-weight:bold;
+}
+
+.map-box-details footer .comments {
+  float:right;
+  width:50%;
+  font-size:13px;
+  font-weight:bold;
+  margin-bottom:0;
+}
+.map-box-details footer .rating {
+  clear:both;
+  padding-bottom:12px;
+  border-bottom:1px solid #d8d9d9;
+  margin-bottom:15px;
+}
+
+.map-box-details .btn-custom {
+  display:block;
+  font-size:12px;
+  margin-bottom:10px;
+}
+
+.map-box-details .keymap {
+  float:left;
+  width:49%;
+}
+
+.map-box-details .keymap h5 {
+  font-size:20px;
+  margin:10px 0 10px;
+}
+
+.map-box-details .keymap div {
+  float:left;
+  width:48%;
+  margin:0 2% 6px 0;
+  font-size:11px;
+  line-height:18px;
+  color:#666;
+}
+
+.map-box-details .keymap div img {
+  float:left;
+  margin-right:6px;
+}
+
+.map-box-details .arrow-up {
+  clear:both;
+  text-indent:16px;
+}
+
 /*** manage story ***/
-.pointer {
+body.manage-story .pointer {
   width:17px;
   height:9px;
   background: url(img/pointer.png) no-repeat 0 0;
