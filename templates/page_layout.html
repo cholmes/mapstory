@@ -32,7 +32,7 @@
                 {{ user.username}}</a>
               <a href="{% url auth_password_change %}">{% trans "Change password" %}</a>
           {% else %}
-            <!-- this should be updated to a url var --><a id="login-link" href="/accounts/login">{% trans "Log in" %}</a>
+            <!-- this should be updated to a url var --><a id="login-link" data-toggle="modal" href="#login-form">{% trans "Log in" %}</a>
             {% if REGISTRATION_OPEN %} or <a href="{% url registration_register %}">{% trans "Register" %}</a>{% endif %}
         {% endif %}
         </div>
@@ -140,6 +140,33 @@
         {% endblock %}
       </div><!-- /.container -->
     </div><!-- /#main -->
+
+    {% comment %}
+        login form styles, it will actually use ajax and will be in a different template
+
+        <div class="modal" id="login-form">
+          <div class="modal-header">
+            <a class="close" data-dismiss="modal">×</a>
+            <h3>You must be logged to contribute or edit.</h3>
+          </div>
+          <div class="modal-body">
+            <form action="">
+                <label for="">Username:</label>
+                <input type="text" />
+                <label for="">Password:</label>
+                <input type="password" />
+                <a href="#" class="forgot">Forgot?</a>
+                <button type="submit" class="btn-orange">Log In</button>
+            </form>
+            <div class="or"><span class="fancyfont">or</span></div>
+            <div class="login-links">
+                <a href="#" class="login-fb">Log In with Facebook</a>
+                <a href="#" class="login-ya">Log In with Yahoo!</a>
+            </div>
+            <p>Not registered? <a href="#">Sign Up Now</a></p>
+          </div>
+        </div>
+    {% endcomment %}
 {% endblock %}
 
 {% block footer %}

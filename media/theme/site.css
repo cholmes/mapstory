@@ -1538,3 +1538,112 @@ a.arrow-up {
   line-height:1.35em;
   font-size:12px;
 }
+
+/*** modal ***/
+.modal {
+  -moz-border-radius:0;
+  -webkit-border-radius:0;
+  border-radius:0;
+}
+
+.modal .modal-header {
+  border-bottom:0;
+  padding:9px 30px 0;
+}
+
+.modal .modal-header h3 {
+  font-size:20px;
+  padding-top:15px;
+}
+
+.modal .modal-body {
+  padding:20px 30px;
+}
+
+#login-form form {
+  overflow:hidden;
+}
+
+#login-form label {
+  font-weight:bold;
+}
+
+#login-form input {
+  width: 420px;
+  height: 36px;
+  margin-bottom:20px;
+  font-size:16px;
+}
+
+#login-form a.forgot {
+  padding-left:10px;
+  font-size:14px;
+}
+
+#login-form .btn-orange {
+  clear:both;
+  display:block;
+  margin:15px 71px 0 0;
+  text-transform:none;
+}
+
+#login-form .or {
+  height:20px;
+  border-bottom:1px solid #a2a3a2;
+  width: 430px;
+  clear:both;
+  margin:20px 0 10px;
+}
+
+#login-form .or span {
+  display:block;
+  margin:0 auto;
+  width:50px;
+  height:30px;
+  background:#fff;
+  text-align:center;
+  color:#787878;
+  font-size:24px;
+}
+
+#login-form .login-links {
+  margin-top:30px;
+  width:430px;
+  overflow:hidden;
+  margin-bottom:20px;
+}
+
+#login-form .login-links a {
+  color:#fff;
+  font-family: 'Marvel', sans-serif;
+  font-size:20px;
+  border:0;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+  padding:8px 35px;
+}
+
+#login-form .login-links a.login-fb {
+  background:#4070b1;
+  float:left;
+}
+
+#login-form .login-links a.login-ya {
+  background:#662d91;
+  float:right;
+}
+
+#login-form .login-links a.login-fb:hover {
+  text-decoration:none;
+  background:#4980c9;
+}
+
+#login-form .login-links a.login-ya:hover {
+  text-decoration:none;
+  background:#7634a8;
+}
+
+#login-form p {
+  font-size:18px;
+}
