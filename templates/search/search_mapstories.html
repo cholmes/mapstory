@@ -41,7 +41,7 @@
                     <section>
                         <header>
                             <h5 class="icn calendar">
-                                <a href="#" class="expand-content" data-toggle="collapse" data-target="#filter1">When</a>
+                                <a href="#filter1" class="expand-content" data-toggle="collapse">When</a>
                             </h5>
                         </header>
                         <div id="filter1" class="collapse in">
@@ -58,7 +58,7 @@
 
                     <section class="search-what">
                         <header>
-                            <h5><a href="#" class="expand-content" data-toggle="collapse" data-target="#filter2">What</a></h5>
+                            <h5><a href="#filter2" class="expand-content" data-toggle="collapse">What</a></h5>
                         </header>
                         <div id="filter2" class="collapse in">
                             <form action="">
@@ -70,19 +70,19 @@
                             <div class="search-options">
                                 <div class="option">
                                     <h5>
-                                        <a href="#" class="expand-content" data-toggle="collapse" data-target="#option1">Category</a>
+                                        <a href="#option1" class="expand-content" data-toggle="collapse">Category</a>
                                     </h5>
                                     <div id="option1" class="collapse">category dropdown?</div>
                                 </div>
                                 <div class="option">
                                     <h5>
-                                        <a href="#" class="expand-content" data-toggle="collapse" data-target="#option2">Keywords</a>
+                                        <a href="#option2" class="expand-content" data-toggle="collapse">Keywords</a>
                                     </h5>
                                     <div id="option2" class="collapse">input type=text?</div>
                                 </div>
                                 <div class="option">
                                     <h5>
-                                        <a href="#" class="expand-content" data-toggle="collapse" data-target="#option3">Date Added</a>
+                                        <a href="#option3" class="expand-content" data-toggle="collapse">Date Added</a>
                                     </h5>
                                     <div id="option3" class="collapse">input type=datetime?</div>
                                 </div>
@@ -92,7 +92,7 @@
 
                     <section>
                         <header>
-                            <h5><a href="#" class="expand-content" data-toggle="collapse" data-target="#filter3">Where</a></h5>
+                            <h5><a href="#filter3" class="expand-content" data-toggle="collapse">Where</a></h5>
                         </header>
                         <div id="filter3" class="collapse in">
                             <p><a href="#">Select the geographic area</a> that you'd like to explore.</p>
@@ -160,12 +160,15 @@
                 </header>
                 <div class="wrapper" id="wrapper">
                     <div class="map-box">
-                        <a href="#map-box-details1" class="expand-content" data-toggle="collapse" data-target="#map-box-details1" data-parent="#wrapper">
+                        <a href="#map-box-details1" class="expand-content" data-toggle="collapse" data-parent="#wrapper">
                             <img src="{{ STATIC_URL }}theme/img/temp/map_thumb_rect_lg.png" width="216" height="218" alt="Map thumb" />
                         </a>
                         <div class="map-details">
-                            <span class="map-title">Khmer Empire &amp; Southeast Asia,
-                            100CE - 1500 CE</span>
+                            <h6>
+                                <a href="#map-box-details1" class="expand-content" data-toggle="collapse" data-parent="#wrapper">
+                                    Khmer Empire &amp; Southeast Asia, 100CE - 1500 CE
+                                </a>
+                            </h6>
                             <footer>
                                 <a href="#" rel="author">John Smith</a> <time>on Sep 27, 2011</time>
                                 <span class="metrics">1,205 Views | 3 stars</span>
@@ -173,12 +176,15 @@
                         </div>
                     </div>
                     <div class="map-box">
-                        <a href="#" class="expand-content" data-toggle="collapse" data-target="#map-box-details2" data-parent="#wrapper">
+                        <a href="#map-box-details2" class="expand-content" data-toggle="collapse" data-parent="#wrapper">
                             <img src="{{ STATIC_URL }}theme/img/temp/map_thumb_rect_lg.png" width="216" height="218" alt="Map thumb" />
                         </a>
                         <div class="map-details">
-                            <span class="map-title">Khmer Empire &amp; Southeast Asia,
-                            100CE - 1500 CE</span>
+                            <h6>
+                                <a href="#map-box-details2" class="expand-content" data-toggle="collapse" data-parent="#wrapper">
+                                    Khmer Empire &amp; Southeast Asia, 100CE - 1500 CE
+                                </a>
+                            </h6>
                             <footer>
                                 <a href="#" rel="author">John Smith</a> <time>on Sep 27, 2011</time>
                                 <span class="metrics">1,205 Views | 3 stars</span>
@@ -186,12 +192,15 @@
                         </div>
                     </div>
                     <div class="map-box last">
-                        <a href="#" class="expand-content" data-toggle="collapse" data-target="#map-box-details3" data-parent="#wrapper">
+                        <a href="#map-box-details3" class="expand-content" data-toggle="collapse" data-parent="#wrapper">
                             <img src="{{ STATIC_URL }}theme/img/temp/map_thumb_rect_lg.png" width="216" height="218" alt="Map thumb" />
                         </a>
                         <div class="map-details">
-                            <span class="map-title">Khmer Empire &amp; Southeast Asia,
-                            100CE - 1500 CE</span>
+                            <h6>
+                                <a href="#map-box-details3" class="expand-content" data-toggle="collapse" data-parent="#wrapper">
+                                    Khmer Empire &amp; Southeast Asia, 100CE - 1500 CE
+                                </a>
+                            </h6>
                             <footer>
                                 <a href="#" rel="author">John Smith</a> <time>on Sep 27, 2011</time>
                                 <span class="metrics">1,205 Views | 3 stars</span>
@@ -203,7 +212,7 @@
                     <div class="map-box-wrap collapse" id="map-box-details1">
                         <article class="map-box-details mod first">
                             <div class="pointer"></div>
-                            <a href="#map-box-details1" class="expand-content close" data-toggle="collapse" data-target="#map-box-details1" data-parent="#wrapper">close</a>
+                            <a href="#map-box-details1" class="expand-content close" data-toggle="collapse" data-parent="#wrapper">close</a>
                             <div class="map">
                                 <img src="{{ STATIC_URL }}theme/img/temp/map227x275.png" width="227" height="275" alt="Map thumb" />
                             </div>
@@ -249,7 +258,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <a href="#map-box-details1" class="expand-content arrow-up" data-toggle="collapse" data-target="#map-box-details1" data-parent="#wrapper">Collapse</a>
+                            <a href="#map-box-details1" class="expand-content arrow-up" data-toggle="collapse" data-parent="#wrapper">Collapse</a>
 
                         </article>
                     </div>
@@ -259,7 +268,7 @@
                     <div class="map-box-wrap collapse" id="map-box-details2">
                         <article class="map-box-details mod second">
                             <div class="pointer"></div>
-                            <a href="#map-box-details2" class="expand-content close" data-toggle="collapse" data-target="#map-box-details1" data-parent="#wrapper">close</a>
+                            <a href="#map-box-details2" class="expand-content close" data-toggle="collapse" data-parent="#wrapper">close</a>
                             <div class="map">
                                 <img src="{{ STATIC_URL }}theme/img/temp/map227x275.png" width="227" height="275" alt="Map thumb" />
                             </div>
@@ -305,7 +314,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <a href="#map-box-details2" class="expand-content arrow-up" data-toggle="collapse" data-target="#map-box-details1" data-parent="#wrapper">Collapse</a>
+                            <a href="#map-box-details2" class="expand-content arrow-up" data-toggle="collapse" data-parent="#wrapper">Collapse</a>
                         </article>
                     </div>
                     {% comment %} end collapsible box 2 with map details {% endcomment %}
@@ -314,7 +323,7 @@
                     <div class="map-box-wrap collapse" id="map-box-details3">
                         <article class="map-box-details mod third">
                             <div class="pointer"></div>
-                            <a href="#map-box-details3" class="expand-content close" data-toggle="collapse" data-target="#map-box-details1" data-parent="#wrapper">close</a>
+                            <a href="#map-box-details3" class="expand-content close" data-toggle="collapse" data-parent="#wrapper">close</a>
                             <div class="map">
                                 <img src="{{ STATIC_URL }}theme/img/temp/map227x275.png" width="227" height="275" alt="Map thumb" />
                             </div>
@@ -360,7 +369,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <a href="#map-box-details3" class="expand-content arrow-up" data-toggle="collapse" data-target="#map-box-details1" data-parent="#wrapper">Collapse</a>
+                            <a href="#map-box-details3" class="expand-content arrow-up" data-toggle="collapse" data-parent="#wrapper">Collapse</a>
                         </article>
                     </div>
                     {% comment %} end collapsible box 3 with map details {% endcomment %}
@@ -368,8 +377,11 @@
                     <div class="map-box">
                         <img src="{{ STATIC_URL }}theme/img/temp/map_thumb_rect_lg.png" width="216" height="218" alt="Map thumb" />
                         <div class="map-details">
-                            <span class="map-title">Khmer Empire &amp; Southeast Asia,
-                            100CE - 1500 CE</span>
+                            <h6>
+                                <a href="#map-box-details4" class="expand-content" data-toggle="collapse" data-parent="#wrapper">
+                                    Khmer Empire &amp; Southeast Asia, 100CE - 1500 CE
+                                </a>
+                            </h6>
                             <footer>
                                 <a href="#" rel="author">John Smith</a> <time>on Sep 27, 2011</time>
                                 <span class="metrics">1,205 Views | 3 stars</span>
@@ -379,8 +391,11 @@
                     <div class="map-box">
                         <img src="{{ STATIC_URL }}theme/img/temp/map_thumb_rect_lg.png" width="216" height="218" alt="Map thumb" />
                         <div class="map-details">
-                            <span class="map-title">Khmer Empire &amp; Southeast Asia,
-                            100CE - 1500 CE</span>
+                            <h6>
+                                <a href="#map-box-details5" class="expand-content" data-toggle="collapse" data-parent="#wrapper">
+                                    Khmer Empire &amp; Southeast Asia, 100CE - 1500 CE
+                                </a>
+                            </h6>
                             <footer>
                                 <a href="#" rel="author">John Smith</a> <time>on Sep 27, 2011</time>
                                 <span class="metrics">1,205 Views | 3 stars</span>
@@ -390,8 +405,11 @@
                     <div class="map-box last">
                         <img src="{{ STATIC_URL }}theme/img/temp/map_thumb_rect_lg.png" width="216" height="218" alt="Map thumb" />
                         <div class="map-details">
-                            <span class="map-title">Khmer Empire &amp; Southeast Asia,
-                            100CE - 1500 CE</span>
+                            <h6>
+                                <a href="#map-box-details6" class="expand-content" data-toggle="collapse" data-parent="#wrapper">
+                                    Khmer Empire &amp; Southeast Asia, 100CE - 1500 CE
+                                </a>
+                            </h6>
                             <footer>
                                 <a href="#" rel="author">John Smith</a> <time>on Sep 27, 2011</time>
                                 <span class="metrics">1,205 Views | 3 stars</span>

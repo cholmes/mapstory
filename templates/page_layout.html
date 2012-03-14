@@ -9,6 +9,8 @@
     {% block extra_style %}{% endblock %}
 {% endblock %}
 
+{% block head_title %}MapStory{% endblock %}
+
 {% block extra_head_base %}
     <link rel="shortcut icon" href="{{ STATIC_URL }}theme/img/favicon.ico"/>
     <script type="text/javascript" src="{% url django.views.i18n.javascript_catalog %}"></script>
@@ -16,6 +18,7 @@
     <link href='http://fonts.googleapis.com/css?family=Marvel:400,700' rel='stylesheet' type='text/css'>
     {% block extra_head %}{% endblock %}
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}theme/site.css" media="screen" />
+    <script src="{{ STATIC_URL }}script/cssrefresh.js" type="text/javascript"></script>
 {% endblock %}
 
 {% block topbar_base %}
@@ -82,9 +85,9 @@
       <ul id="sitenav" class="selfclear">
           <li><a rel="category" href=""></a></li>
           <li><a rel="category" href=""></a></li>
-          <li><a rel="search" href="{% url search %}">Search StoryLayers</a></li>
-          <li><a rel="search" href="{% url search_maps %}">Search Stories</a></li>
-          <li><a rel="search" href="">Search StoryTellers</a></li>
+          <li><a rel="search" href="{% url search %}" class="subtab-search-layers">Search StoryLayers</a></li>
+          <li><a rel="search" href="{% url search_maps %}" class="subtab-search-stories">Search Stories</a></li>
+          <li><a rel="search" href="#" class="subtab-search-tellers">Search StoryTellers</a></li>
       </ul>
         {% endblock %}
 
@@ -106,7 +109,7 @@
                             <h2>RESOURCES FOR:</h2>
                             <div class="mini-slider fancyfont">
                                 <div class="slide">
-                                    Students <span>|</span> Educators <span>|</span> Researchers <span>|</span> Policy Makers <span>|</span> Business <span>|</span> Religious Community <span>|</span> National Security Professionals <span>|</span> NGOs
+                                    <a href="#">Students</a> <span>|</span> <a href="#">Educators</a> <span>|</span> <a href="#">Researchers</a> <span>|</span> <a href="#">Policy Makers</a> <span>|</span> <a href="#">Business</a> <span>|</span> <a href="#">Religious Community</a> <span>|</span> <a href="#">National Security Professionals</a> <span>|</span> <a href="#">NGOs</a>
                                 </div>
                             </div>
                         </div>
@@ -213,5 +216,6 @@
 
     </script>
     <script src="{{ STATIC_URL }}script/jquery-1.7.1.min.js" type="text/javascript"></script>
+    <script src="{{ STATIC_URL }}script/core.js" type="text/javascript"></script>
     {% block extra_body %}{% endblock %}
 {% endblock %}

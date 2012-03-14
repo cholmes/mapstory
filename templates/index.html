@@ -3,7 +3,7 @@
 {% load i18n %}
 
 {% block title %} {% trans "Welcome!" %} - {{ block.super }} {% endblock %}
-{% block indexclass %} class="here" {% endblock %}
+{% block body_class %}home{% endblock %}
 
 {% block extra_head %}
 <link href='http://fonts.googleapis.com/css?family=Marvel:400,400italic,700,700italic' rel='stylesheet' type='text/css'>
@@ -82,7 +82,7 @@ Ext.select('.noi').on('click',function(ev) {
 {% block main %}
 <div class="row">
     <div id="alerts" class="span12 medgraybg selfclear fancyfont" style="color:white;">
-        <div class="hvygraybg get-alerts"><a style="color:white" href="{% url alerts %}">GET ALERTS &gt;</a></div>
+        <div class="hvygraybg get-alerts"><a style="color:white" href="{% url alerts %}">GET ALERTS</a></div>
         <div style="float:left; padding: 0.8em 1em;">
             <span class="fancyfont">ALERT :</span>
             <span class="content">Disaster in Japan - {% lorem 15 w %}</span>
@@ -95,23 +95,17 @@ Ext.select('.noi').on('click',function(ev) {
     <div class="span12" id="activities">
         <ul class="selfclear">
             <li>
-                <div>
-                    <img class="padtop" src="{{ STATIC_URL}}theme/img/storylayers.png"></img>STORYLAYERS
-                </div>
+                <div class="icn-storylayers">StoryLayers</div>
                 <a class="search" href="{% url search %}">SEARCH LAYERS</a>
                 <a class="action" href="{% url data_upload %}">UPLOAD LAYERS</a>
             </li>
             <li>
-                <div>
-                    <img class="padtop" src="{{ STATIC_URL}}theme/img/mapstories.png"></img>MAPSTORIES
-                </div>
+                <div class="icn-mapstories">MapStories</div>
                 <a class="search" href="{% url search_maps %}">SEARCH STORIES</a>
                 <a class="action" href="{% url map_new %}">CREATE A MAPSTORY</a>
             </li>
             <li>
-                <div>
-                    <img src="{{ STATIC_URL}}theme/img/storyteller.png"></img>MAPSTORYTELLERS
-                </div>
+                <div class="icn-storytellers">MapStoryTellers</div>
                 <a class="search noi" href="">SEARCH STORYTELLERS</a>
                 <a class="action noi" href="">SIGN UP</a>
             </li>
@@ -127,8 +121,8 @@ Ext.select('.noi').on('click',function(ev) {
             <iframe class="youtube-player" type="text/html" width="217" height="128" src="http://www.youtube.com/embed/{{video_id}}" frameborder="0"></iframe>
         </div>
         <div class="description">
-            <h3>{% lorem 10 w %}</h3>
-            <p>{% lorem 35 w %} <a href="#"><img src="{{ STATIC_URL }}theme/img/arrow_right_gr.png" width="6" height="11" alt="" /></a></p>
+            <h3><a href="#">{% lorem 10 w %}</a></h3>
+            <p>{% lorem 35 w %} <a href="#"><img src="{{ STATIC_URL }}theme/img/arrow_right.png" width="6" height="11" alt="" /></a></p>
         </div>
     </div>
     <hr/>
@@ -158,11 +152,13 @@ Ext.select('.noi').on('click',function(ev) {
         <div class="tab-content">
           <div class="tab-pane active" id="section1">
             <article>
-                <img src="{{ STATIC_URL }}theme/img/img_95x65.png" alt="" class="left" />
+                <a href="#">
+                    <img src="{{ STATIC_URL }}theme/img/img_95x65.png" alt="" class="left" />
+                </a>
                 <div class="article-content">
                     <header>
-                        <h3>Lorem ipsum dolor sit amet, cosectetur
-                        sedour adipiscing elit sed do eiusmod.</h3>
+                        <h3><a href="#">Lorem ipsum dolor sit amet, cosectetur
+                        sedour adipiscing elit sed do eiusmod.</a></h3>
                     </header>
                     <div class="summary">
                         Lorem ipsum dolor sit amet, consectetur adipisicing
@@ -176,11 +172,13 @@ Ext.select('.noi').on('click',function(ev) {
                 </div>
             </article>
             <article>
-                <img src="{{ STATIC_URL }}theme/img/img_95x65.png" alt="" class="left" />
+                <a href="#">
+                    <img src="{{ STATIC_URL }}theme/img/img_95x65.png" alt="" class="left" />
+                </a>
                 <div class="article-content">
                     <header>
-                        <h3>Lorem ipsum dolor sit amet, cosectetur
-                        sedour adipiscing elit sed do eiusmod.</h3>
+                        <h3><a href="#">Lorem ipsum dolor sit amet, cosectetur
+                        sedour adipiscing elit sed do eiusmod.</a></h3>
                     </header>
                     <div class="summary">
                         Lorem ipsum dolor sit amet, consectetur adipisicing
@@ -194,11 +192,13 @@ Ext.select('.noi').on('click',function(ev) {
                 </div>
             </article>
             <article>
-                <img src="{{ STATIC_URL }}theme/img/img_95x65.png" alt="" class="left" />
+                <a href="#">
+                    <img src="{{ STATIC_URL }}theme/img/img_95x65.png" alt="" class="left" />
+                </a>
                 <div class="article-content">
                     <header>
-                        <h3>Lorem ipsum dolor sit amet, cosectetur
-                        sedour adipiscing elit sed do eiusmod.</h3>
+                        <h3><a href="#">Lorem ipsum dolor sit amet, cosectetur
+                        sedour adipiscing elit sed do eiusmod.</a></h3>
                     </header>
                     <div class="summary">
                         Lorem ipsum dolor sit amet, consectetur adipisicing
@@ -226,22 +226,28 @@ Ext.select('.noi').on('click',function(ev) {
         <h2>THINKERS AND THOUGHTS ON
     MAPSTORYTELLING</h2>
         <div class="storyteller">
-            <img src="http://www.gravatar.com/avatar/b59a1fea77f9350c8225395f55204abe?r=pg&s=70">
-            <h4>Ian Schneider</h4>
+            <a href="{% url storyteller %}">
+                <img src="http://www.gravatar.com/avatar/b59a1fea77f9350c8225395f55204abe?r=pg&s=70">
+            </a>
+            <h4><a href="{% url storyteller %}">Ian Schneider</a></h4>
             <p>Af/Pak Tribal Dynamics,
     1805-2010
     </p>
         </div>
         <div class="storyteller">
-            <img src="http://www.gravatar.com/avatar/a6a965150162eef63f1d2f8aae15c57c?r=pg&s=70">
-            <h4>Bart van den Eijnden</h4>
+            <a href="{% url storyteller %}">
+                <img src="http://www.gravatar.com/avatar/a6a965150162eef63f1d2f8aae15c57c?r=pg&s=70">
+            </a>
+            <h4><a href="{% url storyteller %}">Bart van den Eijnden</a></h4>
             <p>Sources of State Failure in Horn
     of Africa, 1965-2010
     </p>
         </div>
         <div class="storyteller last">
-            <img src="http://www.gravatar.com/avatar/c0c61fb94a5785be367b0fceea6985f1?r=pg&s=70">
-            <h4>Matt Priour</h4>
+            <a href="{% url storyteller %}">
+                <img src="http://www.gravatar.com/avatar/c0c61fb94a5785be367b0fceea6985f1?r=pg&s=70">
+            </a>
+            <h4><a href="{% url storyteller %}">Matt Priour</a></h4>
             <p>Rise and Fall of Meso-American
      Civilizations</p>
         </div>
