@@ -80,10 +80,14 @@ a#donate:hover {
   text-decoration:none;
 }
 
+#top-crossbar {
+  padding-bottom:5px;
+}
+
 #top-crossbar ul {
   line-height: 1;
   margin: 0;
-  padding: 0;
+  padding: 10px 0 0 0;
   list-style: none;
 }
 #top-crossbar ul span {
@@ -96,14 +100,24 @@ a#donate:hover {
 }
 #top-crossbar li {
   float: left;
-  padding: .5em;
+  padding: 0;
   cursor:pointer;
   margin-right:12px;
 }
 
-#quicksearch {
+body.search-mapstories #top-crossbar a {
+  padding:8px 10px;
+}
+
+body.search-mapstories #top-crossbar a.tab-search,
+body.search-mapstories #top-crossbar a.tab-search:hover {
+  background-color:#f47a20;
+  text-decoration:none;
+}
+
+form#quicksearch {
   float: right;
-  margin-bottom: .5em;
+  margin:-10px 0 0;
   position:relative;
 }
 
@@ -114,6 +128,7 @@ a#donate:hover {
 
 #quicksearch input {
   padding:3px;
+  margin:0;
 }
 
 #quicksearch label {
@@ -331,6 +346,7 @@ h4 {
     background: url(img/logo.png) no-repeat;
     overflow: hidden;
     text-indent: -9999em;
+    margin-bottom:4px;
 }
 
 #crossbar {

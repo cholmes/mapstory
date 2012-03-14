@@ -43,9 +43,9 @@
     <div id="top-crossbar">
        <div class="wrap selfclear">
         <ul class="fancyfont">
-            <li rel="category">SECTIONS <span>&#9662;</span></li>
-            <li rel="search">SEARCH MAPSTORY <span>&#9662;</span></li>
-            <li><a href="">HOW TO</a></li>
+            <li rel="category"><a href="#" class="tab-sections">SECTIONS <span>&#9662;</span></a></li>
+            <li rel="search"><a href="#" class="tab-search">SEARCH MAPSTORY <span>&#9662;</span></a></li>
+            <li><a href="#" class="tab-how">HOW TO</a></li>
               {% if user.is_authenticated %}
                   <li class=""><a class="" id="profileLink" href="{% url profiles_profile_detail user.username %}">{% trans "PROFILE" %}</a></li>
               {% if user.is_staff %}
