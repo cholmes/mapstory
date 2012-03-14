@@ -28,6 +28,7 @@ section {
 
 #login-area a {
     display: block;
+    font-size:13px;
 }
 
 #login-area a:hover, #login-area a:active {
