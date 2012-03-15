@@ -108,6 +108,7 @@ def create_annotations_layer(req, mapid):
     atts = ','.join([ ':'.join(map(str,a)) for a in atts])
     
     return _create_layer(
+        req.user,
         name = "_map_%s_annotations" % mapid,
         srs = 'EPSG:4326', # @todo how to obtain this in a nicer way...
         attributes = atts,
