@@ -1,0 +1,158 @@
+/* Default MovingBoxes wrapper size */
+#movingboxes {
+	width: 900px;
+	min-height: 200px;
+	height: 300px;
+	margin:0 39px;
+}
+
+/* Default MovingBoxes panel size */
+#movingboxes > li {
+	width: 200px;
+}
+
+/*** Overall MovingBoxes Slider ***/
+.mb-wrapper {
+	margin: 0 auto;
+	position: relative;
+	left: 0;
+	top: 0;
+	box-shadow: inset 0 0 10px #888;
+	-moz-box-shadow: inset 0 0 10px #888;
+	-webkit-box-shadow: inset 0 0 10px #888;
+}
+
+/* Panel Wrapper */
+.mb-slider, .mb-scroll {
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	margin: 0 auto;
+	padding: 0;
+	position: relative;
+	left: 0;
+	top: 0;
+
+	/***(>'-')> Control Panel Font size here <('-'<)***/
+}
+
+/*** Slider panel ***/
+.mb-slider .mb-panel {
+	margin: 0;
+	padding: 5px;
+	display: block;
+	cursor: pointer;
+	float: left;
+	list-style: none;
+}
+
+/* Cursor to arrow over current panel, pointer for all others,
+change .current class name using plugin option, currentPanel : 'current' */
+.mb-slider .mb-panel.current {
+	cursor: auto;
+}
+
+/*** Inside the panel ***/
+.mb-inside {
+	padding: 10px;
+	border: 1px solid #999;
+}
+
+.mb-inside * {
+	max-width: 100%;
+}
+
+/*** Left & Right Navigation Arrows ***/
+a.mb-scrollButtons {
+	display: block;
+  width:18px;
+  height:34px;
+	background: transparent url(img/arrows_gr.png) no-repeat 0 0;
+	position: absolute;
+	top: 50%;
+	margin-top: -25px; /* if you change the arrow images, you may have to adjust this (1/2 height of arrow image) */
+	cursor: pointer;
+	text-decoration: none;
+	outline: 0;
+	border: 0;
+}
+a.mb-scrollButtons.mb-left {
+	background-position: left top;
+	left: -30px;
+}
+a.mb-scrollButtons.mb-right {
+	background-position: right top;
+	right: -30px;
+}
+a.mb-scrollButtons.mb-left:hover {
+	background-position: left bottom;
+}
+a.mb-scrollButtons.mb-right:hover {
+	background-position: right bottom;
+}
+a.mb-scrollButtons.disabled {
+	display: none;
+}
+
+/*** Controls added below the panels ***/
+.mb-controls {
+	margin: 0 auto;
+	text-align: center;
+	background: #ccc;
+	position: relative;
+	z-index: 100;
+}
+.mb-controls a {
+	color: #444;
+	font: 12px Georgia, Serif;
+	display: inline-block;
+	text-decoration: none;
+	padding: 2px;
+	height: 18px;
+	margin: 0 5px 0 0;
+	text-align: center;
+	outline: 0;
+}
+.mb-controls a.current, .mb-controls a:hover {
+	color: #fff;
+}
+.mb-active-slider .mb-controls {
+	background: #999bff;
+}
+
+.mb-panel .grow {
+    padding: 10px;
+    border: 1px solid #999;
+    position: relative;
+    width: 120%;
+    left: -30px;
+    z-index: 999;
+    background: white;
+    -webkit-animation: .5s ease;
+    -moz-animation: .5s ease;
+    -ms-animation: .5s ease;
+    -o-animation: .5s ease;
+    animation: .5s ease;
+    -webkit-animation-name: grow;
+    -moz-animation-name: grow;
+    -ms-animation-name: grow;
+    -o-animation-name: grow;
+    animation-name: grow;
+}
+
+@-webkit-keyframes grow {
+    0%   { left: 0;     width: 100%; }
+    100% { left: -30px; width: 120%; }
+}
+@-moz-keyframes grow {
+    0%   { left: 0;     width: 100%; }
+    100% { left: -30px; width: 120%; }
+}
+@-ms-keyframes grow {
+    0%   { left: 0;     width: 100%; }
+    100% { left: -30px; width: 120%; }
+}
+@keyframes grow {
+    0%   { left: 0;     width: 100%; }
+    100% { left: -30px; width: 120%; }
+}​

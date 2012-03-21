@@ -168,22 +168,19 @@ form#quicksearch {
     display: none;
 }
 
-#carousel {
-    height: 214px;
-    overflow: hidden;
+#slider {
+    width: 900px;
 }
 
-#carousel .tile {
-    position: relative;
-    border: 1px solid #999;
-    width:236px;
-    height:148px;
+#slider div.tile {
+    width: 236px;
+}
+
+#slider .mb-inside {
     background:#fff;
-    padding:10px;
-    margin-top:20px;
-}
+}​
 
-#carousel .tile .info {
+#slider .tile .info {
     position: absolute;
     bottom: 0;
     text-shadow: 1px 1px 3px white;
@@ -192,12 +189,13 @@ form#quicksearch {
     padding-bottom: .3em;
 }
 
-#carousel .tile .info .title {
+#slider .tile .info .title {
   font-size:13px;
 }
 
-#carousel .tile .views {
+#slider .tile .views {
   font-weight:bold;
+  font-size:11px;
 }
 
 #carousel .wrap,
