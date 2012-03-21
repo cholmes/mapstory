@@ -86,6 +86,7 @@ GEONODE_UPLOAD_PATH = MEDIA_ROOT + 'geonode'
 GEONODE_CLIENT_LOCATION = STATIC_URL + 'static/'
 THUMBNAIL_STORAGE = os.path.join(PROJECT_ROOT, 'thumbs')
 THUMBNAIL_URL = '/thumbs/'
+DEFAULT_MAP_THUMBNAIL = '%stheme/img/img_95x65.png' % STATIC_URL
 ADMIN_MEDIA_PREFIX = STATIC_URL + 'admin/'
 
 STATICFILES_STORAGE = 'staticfiles.storage.StaticFilesStorage'
@@ -119,6 +120,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.i18n",
     "django.core.context_processors.media",
     "geonode.maps.context_processors.resource_urls",
+    "mapstory.context_processors.page",
 )
 
 MIDDLEWARE_CLASSES = (
@@ -286,6 +288,8 @@ SIMPLE_SEARCH_EXCLUSIONS = [
     'annotations_\d+',
     '_map_\d+_annotations'
 ]
+
+DESIGN_MODE = False
 
 try:
     from local_settings import *
