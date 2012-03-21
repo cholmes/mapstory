@@ -169,25 +169,35 @@ form#quicksearch {
 }
 
 #carousel {
-    height: 130px;
+    height: 214px;
     overflow: hidden;
 }
 
 #carousel .tile {
     position: relative;
     border: 1px solid #999;
+    width:236px;
+    height:148px;
+    background:#fff;
+    padding:10px;
+    margin-top:20px;
 }
 
 #carousel .tile .info {
     position: absolute;
     bottom: 0;
     text-shadow: 1px 1px 3px white;
-    background: white;
-    opacity: .5;
-    -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
-    width: 100%;
-    text-align: center;
+    background: #fff;
+    width: 236px;
     padding-bottom: .3em;
+}
+
+#carousel .tile .info .title {
+  font-size:13px;
+}
+
+#carousel .tile .views {
+  font-weight:bold;
 }
 
 #carousel .wrap,
@@ -778,7 +788,7 @@ a.back {
 }
 #carousel .arrow {
   cursor: pointer;
-  top: 30%;
+  top: 40%;
   position: absolute;
   width:18px;
   height:34px;
