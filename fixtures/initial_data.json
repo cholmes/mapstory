@@ -77,6 +77,14 @@
     }
 },
 {
+    "pk": 1, 
+    "model": "mapstory.link", 
+    "fields": {
+        "href": "http://www.youtube.com/embed/pE-1G_476nA", 
+        "name": "foo"
+    }
+},
+{
     "pk" : 1,
     "model" : "mapstory.videolink",
     "fields": {
@@ -84,7 +92,7 @@
         "name" : "lorem ipsum dolor sit amet consectetur adipisicing elit sed do",
         "text" : "lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua eos excepturi eius deleniti magni esse eligendi veniam repellat atque sit explicabo distinctio quod suscipit vero",
         "href" : "http://www.youtube.com/embed/pE-1G_476nA",
-        "publish" : "true"
+        "publish" : "True"
     }
 }
 ]
