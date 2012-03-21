@@ -12,6 +12,10 @@ section {
   padding-top:0;
 }
 
+.section_thumb {
+    width: 95px;
+}
+
 #header .wrap {
     padding-left: 30px;
     width: 950px;
@@ -174,6 +178,7 @@ form#quicksearch {
 }
 
 #carousel .tile {
+    width: 256px;
     position: relative;
     border: 1px solid #999;
     width:236px;
@@ -292,6 +297,16 @@ a:hover {
   width: 940px;
   margin-left: 0;
   margin-right: 0;
+}
+
+.twocol {
+    margin-left:0;
+    width: 590px;
+}
+
+.threecol {
+    margin-right:0;
+    width: 280px;
 }
 
 .twocol.first {
@@ -1742,6 +1757,14 @@ h2.icn-storylayer span, h2.icn-mapstory span {
 
 .modal .modal-body {
   padding:20px 30px;
+}
+
+/*bootstrap fixes*/
+.olTileImage {
+    max-width: none;
+}
+.x-form-radio-group label {
+    display: inline;
 }
 
 #login-form form {
