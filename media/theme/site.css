@@ -124,14 +124,34 @@ body.home #top-crossbar a.tab-sections:hover {
   text-decoration:none;
 }
 
-#crossbar a {
+#crossbar #sitenav {
+  margin-left:0;
+}
+
+#crossbar #sitenav li a {
   font-weight:400;
+  padding-right:30px;
 }
 
 body.search-mapstories #crossbar a:hover,
 body.search-mapstories #crossbar a.subtab-search-stories {
   text-decoration:underline;
   font-weight:700;
+}
+
+a.subtab-search-layers {
+  background: url(img/storylayers_s.png) no-repeat 0 center;
+  text-indent:15px;
+}
+
+a.subtab-search-stories {
+  background: url(img/mapstories_s.png) no-repeat 0 center;
+  text-indent:15px;
+}
+
+a.subtab-search-tellers {
+  background: url(img/storyteller_s.png) no-repeat 0 center;
+  text-indent:15px;
 }
 
 form#quicksearch {
