@@ -447,6 +447,16 @@ body {
   padding-top:0;
 }
 
+.form-actions {
+  overflow:hidden;
+  padding-right:40px;
+}
+
+.form-actions button {
+  float:right;
+  margin-left:10px;
+}
+
 /*** elements ***/
 img.left {
   float:left;
@@ -721,7 +731,7 @@ a.back {
 }
 #activities a.action {
   background: #5B2D14;
-  margin-left: 1em;
+  margin-left: .6em;
 }
 #activities a {
   color: white;
@@ -889,12 +899,17 @@ article h3 {
   font-size:15px;
 }
 
+.video-actions .actions-links a.last {
+  padding-right:0;
+}
+
 .video-actions a.icn.info { background:url(img/icons/info.png) no-repeat left center; }
 .video-actions a.icn.layers { background:url(img/icons/layers.png) no-repeat left center; }
 .video-actions a.icn.favorites { background:url(img/icons/favorites.png) no-repeat left center; }
 .video-actions a.icn.share { background:url(img/icons/share.png) no-repeat left center; }
 .video-actions a.icn.flag { background:url(img/icons/flag.png) no-repeat left center; }
 .video-actions a.icn.add { background:url(img/icons/add.png) no-repeat left center; }
+.video-actions a.icn.download { background:url(img/icons/download.png) no-repeat left center; }
 
 .video-actions .actions-links a:hover {
   text-decoration:none;
@@ -954,6 +969,7 @@ article.abstract {
   border-bottom:1px solid #d8d9d9;
   padding-bottom:12px;
   margin-bottom:12px;
+  clear:both;
 }
 
 article.abstract .read-more, section.box.storyteller-layer a.read-more {
@@ -1306,7 +1322,11 @@ section.box .article-list article footer .views {
 
 .tags {
   float:left;
-  margin-right:30px;
+  margin-right:42px;
+}
+
+.tags .label {
+  text-shadow:none;
 }
 
 .tags b {
@@ -1558,7 +1578,8 @@ body.manage-story .pointer {
   margin:-17px 0 30px 24px;
 }
 
-section.hr-tabs.manage-story .nav-tabs a {
+section.hr-tabs.manage-story .nav-tabs a,
+section.hr-tabs.manage-layer .nav-tabs a {
   font-size:18px;
 }
 
@@ -1576,7 +1597,8 @@ section.manage-story h5.icn.calendar {
   border-right:1px solid #d8d9d9;
 }
 
-section.manage-story {
+section.manage-story,
+section.manage-layer {
   border-bottom:1px solid #d8d9d9;
 }
 
@@ -1597,7 +1619,8 @@ a.i {
   font-size:14px;
 }
 
-.manage-story a.btn-custom {
+.manage-story a.btn-custom,
+.manage-layer a.btn-custom {
   display:block;
   text-align:right;
   float:right;
@@ -1612,26 +1635,26 @@ a.arrow-up {
 }
 
 /*** search layers ***/
-.story-profile {
+.manage-layer {
   margin-top:20px;
 }
 
-.story-profile h5 {
+.manage-layer h5 {
   font-size:14px;
   margin-bottom:6px;
 }
 
-.story-profile h5.icn.calendar {
+.manage-layer h5.icn.calendar {
   background: url(img/icons/calendar.png) no-repeat 94px 0;
 }
 
-.story-profile h5 span {
+.manage-layer h5 span {
   font-weight:normal;
   font-size:13px;
   padding-left:25px;
 }
 
-.story-profile form {
+.manage-layer form {
   overflow:hidden;
   margin-bottom:20px;
 }
