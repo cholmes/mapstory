@@ -3,6 +3,7 @@ from geonode.maps.models import Layer
 from geonode.maps.models import Thumbnail
 
 from mapstory.models import VideoLink
+from mapstory.models import Section
 
 from django.core.urlresolvers import reverse
 from django.conf import settings
@@ -23,6 +24,9 @@ def alerts(req):
 
 def index(req):
     # resolve video to use
+    # two modes of operation here
+    # 1) don't specify publish and one will randomly be chosen
+    # 2) specify one or more publish links and one will be chosen
     videos = VideoLink.objects.filter(publish=True)
     if not videos:
         videos = VideoLink.objects.all()
@@ -85,6 +89,20 @@ def _render_map_tile(obj,thumb=None,req=None):
 def map_tile(req, mapid):
     obj = get_object_or_404(Map,pk=mapid)
     return _render_map_tile(obj,req=req)
+
+@login_required
+def set_section(req):
+    if req.method != 'POST':
+        return HttpResponse('POST required',status=400)
+    mapid = req.POST['map']
+    mapobj = get_object_or_404(Map, pk=mapid)
+    if mapobj.owner != req.user or not req.user.has_perm('mapstory.change_section'):
+        return HttpResponse('Not sufficient permissions',status=401)
+    sectionid = req.POST['section']
+    get_object_or_404(Section, pk=sectionid)
+    Section.objects.add_to_section(sectionid, mapobj)
+    return HttpResponse('OK', status=200)
+    
 
 @login_required
 def create_annotations_layer(req, mapid):
