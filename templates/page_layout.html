@@ -26,19 +26,34 @@
         <a id="logo" href="{% url geonode.views.index %}">Map Story</a>
         <div id="login-area" class="fancyfont">
             <div>
-            <a href="{% url donate %}" id="donate">DONATE NOW</a >
+                <a href="{% url donate %}" id="donate">DONATE NOW</a >
 
-          {% if user.is_authenticated %}
-            <a id="login-link" href="{% url auth_logout %}">{% trans "Log out" %}</a>
-              <a href="{% if user.get_profile %}{{ user.get_profile.get_absolute_url }}{% else %}{% url profiles_create_profile %}{% endif %}">
-                {{ user.username}}</a>
-              <a href="{% url auth_password_change %}">{% trans "Change password" %}</a>
-          {% else %}
-            <!-- this should be updated to a url var --><a id="login-link" data-toggle="modal" href="#login-form">{% trans "Log in" %}</a>
-            {% if REGISTRATION_OPEN %} or <a href="{% url registration_register %}">{% trans "Register" %}</a>{% endif %}
-        {% endif %}
+                {% if user.is_authenticated %}
+                    <a id="login-link" href="{% url auth_logout %}">{% trans "Log out" %}</a>
+                    <a href="{% if user.get_profile %}{{ user.get_profile.get_absolute_url }}{% else %}{% url profiles_create_profile %}{% endif %}">
+                        {{ user.username}}
+                    </a>
+                    <a href="{% url auth_password_change %}">{% trans "Change password" %}</a>
+                {% else %}
+                    <a id="login-link" href="#login-form-pop">{% trans "Log in" %}</a>
+                    {% if REGISTRATION_OPEN %} or <a href="{% url registration_register %}">{% trans "Register" %}</a>{% endif %}
+                {% endif %}
+            </div>
         </div>
-
+        <div id="login-form-pop">
+            <div class="drop-pointer"></div>
+            <form action="">
+                <label for="">Username:</label>
+                <input type="text" />
+                <label for="">Password:</label>
+                <input type="password" />
+                <label class="checkbox">
+                    <input type="checkbox" />
+                    Remember me
+                </label>
+                <button type="submit" class="btn">Sign In</button>
+                <p>Don't have an account yet? <a href="#">Register now</a></p>
+            </form>
         </div>
       </div><!-- /.wrap -->
     </div><!-- /#header -->
@@ -142,33 +157,6 @@
         {% endblock %}
       </div><!-- /.container -->
     </div><!-- /#main -->
-
-    {% comment %}
-        login form styles, it will actually use ajax and will be in a different template
-
-        <div class="modal" id="login-form">
-          <div class="modal-header">
-            <a class="close" data-dismiss="modal">×</a>
-            <h3>You must be logged to contribute or edit.</h3>
-          </div>
-          <div class="modal-body">
-            <form action="">
-                <label for="">Username:</label>
-                <input type="text" />
-                <label for="">Password:</label>
-                <input type="password" />
-                <a href="#" class="forgot">Forgot?</a>
-                <button type="submit" class="btn-orange">Log In</button>
-            </form>
-            <div class="or"><span class="fancyfont">or</span></div>
-            <div class="login-links">
-                <a href="#" class="login-fb">Log In with Facebook</a>
-                <a href="#" class="login-ya">Log In with Yahoo!</a>
-            </div>
-            <p>Not registered? <a href="#">Sign Up Now</a></p>
-          </div>
-        </div>
-    {% endcomment %}
 {% endblock %}
 
 {% block footer %}
@@ -185,6 +173,7 @@
 {% endblock %}
 
 {% block extra_body_base %}
+    {# <script src="{{ STATIC_URL }}script/core.js" type="text/javascript"></script> #}
     <script type="text/javascript">
     {% autoescape off %}
     var quicksearch;
@@ -213,7 +202,12 @@
     }
     {% endautoescape %}
 
+    $(function () {
+        $('#login-link').click(function(e) {
+            e.preventDefault();
+            $($(this).attr('href')).toggle();
+        });
+    });
     </script>
-    <script src="{{ STATIC_URL }}script/core.js" type="text/javascript"></script>
     {% block extra_body %}{% endblock %}
 {% endblock %}

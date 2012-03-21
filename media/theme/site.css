@@ -1821,3 +1821,67 @@ h2.icn-storylayer span, h2.icn-mapstory span {
 #login-form p {
   font-size:18px;
 }
+
+#login-form-pop {
+  position: absolute;
+  top: 44px;
+  right: -1px;
+  z-index: 1000;
+  float: left;
+  display: none;
+  min-width: 160px;
+}
+
+#login-form-pop form {
+  padding: 15px;
+  margin: 0;
+  background: #ffffff;
+  border-color: #ccc;
+  border-color: rgba(0, 0, 0, 0.2);
+  border-style: solid;
+  border-width: 1px;
+  -webkit-border-radius: 0 0 5px 5px;
+  -moz-border-radius: 0 0 5px 5px;
+  border-radius: 0 0 5px 5px;
+  -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  -webkit-background-clip: padding-box;
+  -moz-background-clip: padding;
+  background-clip: padding-box;
+  *border-right-width: 2px;
+  *border-bottom-width: 2px;
+  overflow:visible;
+  margin-top:5px;
+}
+
+.drop-pointer {
+  background: url(img/drop_pointer.png) no-repeat 0 0;
+  width:12px;
+  height:6px;
+  position:absolute;
+  right: 20px;
+  top:0;
+  z-index:1001;
+}
+
+#login-form-pop input {
+  padding:4px;
+  margin-bottom:9px;
+}
+
+#login-form-pop button {
+  float:right;
+  margin-bottom:10px;
+}
+
+#login-form-pop p {
+  clear:both;
+  font-size:12px;
+}
+
+#login-form-pop p a {
+  color:#4a4a4a;
+  text-decoration:underline;
+  font-weight:normal;
+}
