@@ -1634,7 +1634,23 @@ a.arrow-up {
   color:#4a4a4a;
 }
 
-/*** search layers ***/
+/*** manage layer ***/
+h2.icn-storylayer {
+  background: url(img/storylayers_1.png) no-repeat left center;
+  padding-left:44px;
+  line-height:40px;
+}
+
+h2.icn-mapstory {
+  background: url(img/mapstories_1.png) no-repeat left center;
+  padding-left:50px;
+  line-height:40px;
+}
+
+h2.icn-storylayer span, h2.icn-mapstory span {
+  color:#5b2d14;
+}
+
 .manage-layer {
   margin-top:20px;
 }
