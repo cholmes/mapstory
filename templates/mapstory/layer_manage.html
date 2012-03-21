@@ -12,7 +12,7 @@
                 <a href="#">Search StoryLayers</a> <span class="divider">&gt;</span>
                 </li>
                 <li class="active">
-                    <a href="#">Layers Page</a>
+                    <a href="#">StoryLayer Page</a>
                 </li>
             </ul>
         </div>
@@ -29,14 +29,23 @@
                         <img src="{{ STATIC_URL }}theme/img/temp/player.png" width="656" height="392" alt="Player" />
                     </div>
 
-                    {% include "mapstory/_video_actions.html" %}
+                    {% include "mapstory/_video_actions_layer.html" %}
 
-                    <article class="abstract">
-                        Abstract: This map shows a scanned map from DCGIS, that displays an old plan for the District of Columbia.
-                        It is overlaid on a Google Satellite image, and made a bit transparent. Apologies for slow loading, as the image is 50 megs, and we have not integrated caching yet. <a href="#" class="read-more" data-toggle="collapse" data-target="#abstract-full">Read more</a>
-                        <div id="abstract-full" class="collapse">More content goes here and is displayed when read more is clicked.</div>
-                    </article>
-                    <section class="story-profile">
+                    <section class="hr-tabs manage-layer">
+                        <div class="tabbable">
+                            <ul class="nav nav-tabs fancyfont">
+                              <li class="active"><a href="#manage" data-toggle="tab">Manage</a></li>
+                              <li><a href="#permissions" data-toggle="tab">Permissions</a></li>
+                            </ul>
+                        </div>
+
+                        <a href="#" class="btn-custom fancyfont"><span class="icn delete"></span>Delete Layer</a>
+
+                        <article class="abstract">
+                            Abstract: This map shows a scanned map from DCGIS, that displays an old plan for the District of Columbia.
+                            It is overlaid on a Google Satellite image, and made a bit transparent. Apologies for slow loading, as the image is 50 megs, and we have not integrated caching yet. <a href="#" class="read-more" data-toggle="collapse" data-target="#abstract-full">Read more</a>
+                            <div id="abstract-full" class="collapse">More content goes here and is displayed when read more is clicked.</div>
+                        </article>
                         <h4>Profile</h4>
                         <form action="">
                             <h5>Purpose:</h5>
@@ -68,12 +77,16 @@
 
                             <h5>Resolution: <span>1 : 25,000 scale</span></h5>
 
-                            <button type="submit" class="btn-orange">Complete Metadata</button>
-
+                            <div class="form-actions">
+                                <button class="btn">Cancel</button>
+                                <button type="submit" class="btn btn-primary">Save changes</button>
+                            </div>
+                            <a href="{% url story %}" class="arrow-up">Collapse</a>
                         </form>
-
                     </section>
                 </div>
+                {% include "mapstory/_comments.html" %}
+
             </div>
         </div>
         <div class="span4">
