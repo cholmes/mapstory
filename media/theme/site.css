@@ -723,16 +723,25 @@ a.back {
 #activities div {
   font-size:24px;
   color: #d24d27;
-  padding:0 0 0 54px;
+  padding:0 0 0 47px;
   height: 34px;
   line-height: 34px;
   text-transform:uppercase;
   margin-bottom:.7em;
 }
 
-#activities div.icn-storylayers { background: url(img/storylayers.png) no-repeat left center;padding-left:46px; }
-#activities div.icn-mapstories { background: url(img/mapstories.png) no-repeat left center; }
-#activities div.icn-storytellers { background: url(img/storyteller.png) no-repeat left center;padding-left:59px; }
+h2.icn-storylayers, h2.icn-mapstories, h2.icn-storytellers {
+  padding:0 0 0 47px;
+}
+
+.icn-storylayers, .icn-mapstories, .icn-storytellers {
+  height:39px;
+  line-height:39px;
+}
+
+.icn-storylayers { background: url(img/storylayers.png) no-repeat left center; }
+.icn-mapstories { background: url(img/mapstories.png) no-repeat left center; }
+.icn-storytellers { background: url(img/storyteller.png) no-repeat left center; }
 
 #activities a.search {
   background: #9E2F1E;
