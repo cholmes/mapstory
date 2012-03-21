@@ -1,0 +1,59 @@
+{% extends "page_layout.html" %}
+{% load i18n %}
+
+{% block body_class %}search-mapstories{% endblock body_class %}
+
+{% block main %}
+    <div class="row">
+        <div class="span12">
+            <ul class="breadcrumb">
+                <li>
+                    <a href="#">Home</a> <span class="divider">&gt;</span>
+                </li>
+                <li>
+                <a href="#">Search MapStory</a> <span class="divider">&gt;</span>
+                </li>
+                <li class="active">
+                    <a href="#">MapStory Page</a>
+                </li>
+            </ul>
+        </div>
+        <div class="span8">
+            <h2 class="icn-mapstory"><span>MapStory:</span> ELLICOTT PLAN FOR WASHINGTON DC</h2>
+        </div>
+        <div class="span4">
+            <a href="#" class="back">Back to MapStory Search</a>
+        </div>
+        <div class="span8">
+            <div class="box mrg-btm">
+                <div class="story-detail">
+                    <div class="player">
+                        <img src="{{ STATIC_URL }}theme/img/temp/player.png" width="656" height="392" alt="Player" />
+                    </div>
+
+                    {% block video_actions %}
+                        {% include "mapstory/_video_actions_story.html" %}
+                    {% endblock %}
+
+                    {% block main_content %}{% endblock %}
+                    <cite>Uploaded by John Smith on Sep 27, 2011</cite>
+                </div>
+                {% include "mapstory/_comments.html" %}
+
+            </div>
+        </div>
+        <div class="span4">
+            {% include "mapstory/_widget_about_storyteller.html" %}
+
+            {% include "mapstory/_widget_by_storyteller.html" %}
+
+            <section class="box mrg-btm">
+                <h2>RELATED MAPSTORIES</h2>
+                {% include "mapstory/_mapstory_list_side.html" %}
+            </section>
+
+            {% include "mapstory/_widget_social.html" %}
+
+        </div>
+    </div>
+{% endblock %}

@@ -3,9 +3,10 @@
 {% load i18n %}
 
 {% block title %} {% trans "Welcome!" %} - {{ block.super }} {% endblock %}
-{% block indexclass %} class="here" {% endblock %}
+{% block body_class %}home{% endblock %}
 
-{% block head %} 
+{% block extra_head %}
+<link href='http://fonts.googleapis.com/css?family=Marvel:400,400italic,700,700italic' rel='stylesheet' type='text/css'>
 {% include "geonode/ext_header.html" %}
 {{ block.super }}
 <script type="text/javascript">
@@ -43,7 +44,7 @@ function runCarousel() {
             tiles.item( tile(i) ).shift({x: p});
         };
     };
-    
+
     var handle = window.setInterval(function() {go(true)}, timeout);
     var arrows = carousel.select('.arrow');
     arrows.item(0).on('click',function() {
@@ -57,8 +58,8 @@ function runCarousel() {
        go(false);
     });
     window.tile= tile;
-}    
- 
+}
+
 Ext.onReady(function(){
 {% autoescape off %}
 Ext.Ajax.request({
@@ -69,172 +70,351 @@ Ext.Ajax.request({
        runCarousel();
    }
 });
-Ext.select('.noi').on('click',function(ev) {
-    alert('Not Implemented');
-    ev.stopEvent(); 
-});
 {% endautoescape %}
 });
 </script>
-<style type="text/css">
-    #activities {
-        margin-bottom: 1em;
-        padding-left: 20px;
-    }
-    #activities ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-    }
-    #activities ul li {
-        float: left;
-        width: 320px;
-        padding: 1em 0;
-        margin: 0;
-    }
-    #activities .padtop {
-        padding-top: 6px;
-    }
-    #activities div {
-        font-size:28px;
-        color: #9E2F1E;
-        padding-bottom: .5em;
-        height: 42px;
-    }
-    #activities div img {
-        vertical-align: bottom;
-        padding-right: .5em;
-    }
-    #activities .search {
-        background: #9E2F1E;
-    }
-    #activities .action {
-        background: #5B2D14;        
-        margin-left: 1em;
-    }
-    #activities a {
-        color: white;
-        font-size: 16px;
-        padding: 8px;        
-        border-radius: 5px;
-        -moz-border-radius: 5px;
-        -webkit-border-radius: 5px;
-    }
-    #carousel {
-        position: relative;
-    }
-    #carousel .tile {
-        position: absolute;
-    }
-    #carousel .arrow {
-        cursor: pointer;
-        font-family: serif;
-        color: #8B8F7F;
-        top: 30%;
-        font-size: 32px;
-        font-weight: bold;
-        position: absolute;
-    }
-    .storyteller img {
-        float:left;
-        margin-right: 1em;
-    }
-    .storyteller {
-        padding: 1em;
-        border-bottom: 1px solid #999;
-    }
-    .storyteller h4 {
-        color: #F46817;
-        margin-top: .5em;
-        margin-bottom: 0;
-    }
-</style>
 {% endblock %}
 
-{% block main %} 
-    <div id="alerts" class="medgraybg selfclear fancyfont" style="color:white;">
-        <div class="hvygrabg" style="float:right;padding: 1em;font-size:larger"><a style="color:white" href="{% url alerts %}">GET ALERTS &gt;</a></div>
-        <div style="float:left; padding: 1em;">
-            <span style="font-size: larger">ALERT :</span>
-            <span style="font-family: sans">Disaster in Japan - {% lorem 15 w %}</span>
+{% block main %}
+<div class="row">
+    <div id="alerts" class="span12 medgraybg selfclear fancyfont" style="color:white;">
+        <div class="hvygraybg get-alerts"><a style="color:white" href="{% url alerts %}">GET ALERTS</a></div>
+        <div style="float:left; padding: 0.8em 1em;">
+            <span class="fancyfont">ALERT :</span>
+            <span class="content">Disaster in Japan - {% lorem 15 w %}</span>
         </div>
     </div>
-    <div id="carousel" class="lightgraybg">
-        <div class="arrow" style="left:15px">&#8826;</div>
-        <div class="arrow" style="right:15px">&#8827;</div>
+    <div id="carousel" class="span12 lightgraybg">
+        <div class="arrow arrow-left" style="left:15px">&#8826;</div>
+        <div class="arrow arrow-right" style="right:15px">&#8827;</div>
+        {% if page.design_mode %}
+        <div class="tile">
+            <a href="#"><img src="http://mapstory.dev.opengeo.org/thumbs/map73.png" alt="" /></a>
+            <div class="info">
+                <div class="title">Nuclear Tests and Detonations</div>
+                <div>
+                    <span>
+                        <a href="#">asu1</a>
+                        <span>on Mar 14 2012</span>
+                    </span>
+                </div>
+                <footer>
+                    <span class="views">1,205 Views</span>
+                    <span class="rating">3 stars</span>
+                </footer>
+            </div>
+        </div>
+        <div class="tile">
+            <a href="#"><img src="http://mapstory.dev.opengeo.org/thumbs/map73.png" alt="" /></a>
+            <div class="info">
+                <div class="title">Nuclear Tests and Detonations</div>
+                <div>
+                    <span>
+                        <a href="#">asu1</a>
+                        <span>on Mar 14 2012</span>
+                    </span>
+                </div>
+                <footer>
+                    <span class="views">1,205 Views</span>
+                    <span class="rating">3 stars</span>
+                </footer>
+            </div>
+        </div>
+        <div class="tile">
+            <a href="#"><img src="http://mapstory.dev.opengeo.org/thumbs/map73.png" alt="" /></a>
+            <div class="info">
+                <div class="title">Nuclear Tests and Detonations</div>
+                <div>
+                    <span>
+                        <a href="#">asu1</a>
+                        <span>on Mar 14 2012</span>
+                    </span>
+                </div>
+                <footer>
+                    <span class="views">1,205 Views</span>
+                    <span class="rating">3 stars</span>
+                </footer>
+            </div>
+        </div>
+        <div class="tile">
+            <a href="#"><img src="http://mapstory.dev.opengeo.org/thumbs/map73.png" alt="" /></a>
+            <div class="info">
+                <div class="title">Nuclear Tests and Detonations</div>
+                <div>
+                    <span>
+                        <a href="#">asu1</a>
+                        <span>on Mar 14 2012</span>
+                    </span>
+                </div>
+                <footer>
+                    <span class="views">1,205 Views</span>
+                    <span class="rating">3 stars</span>
+                </footer>
+            </div>
+        </div>
+        {% endif %}
     </div>
-    <div id="activities">
+    <div class="span12" id="activities">
         <ul class="selfclear">
             <li>
-                <div>
-                    <img class="padtop" src="{{ STATIC_URL}}theme/img/storylayers.png"></img>STORYLAYERS
-                </div>
-                <a class="search" href="{% url search %}">SEARCH LAYERS</a>
-                <a class="action" href="{% url data_upload %}">UPLOAD LAYERS</a>
+                <div class="icn-storylayers">StoryLayers</div>
+                <a class="search" href="{% url search_layers %}">SEARCH STORYLAYERS</a>
+                <a class="action" href="{% url data_upload %}">UPLOAD STORYLAYERS</a>
             </li>
             <li>
-                <div>
-                    <img class="padtop" src="{{ STATIC_URL}}theme/img/mapstories.png"></img>MAPSTORIES
-                </div>
-                <a class="search" href="{% url search_maps %}">SEARCH STORIES</a>
+                <div class="icn-mapstories">MapStories</div>
+                <a class="search" href="{% url search_maps %}">SEARCH MAPSTORIES</a>
                 <a class="action" href="{% url map_new %}">CREATE A MAPSTORY</a>
             </li>
             <li>
-                <div>
-                    <img src="{{ STATIC_URL}}theme/img/storyteller.png"></img>MAPSTORYTELLERS
-                </div>
+                <div class="icn-storytellers">MapStoryTellers</div>
                 <a class="search noi" href="">SEARCH STORYTELLERS</a>
                 <a class="action noi" href="">SIGN UP</a>
             </li>
         </ul>
     </div>
-<div class="twocol">
+</div>
+<div class="row">
+<div class="span8">
+    <div class="box mrg-btm">
     <div id="featuredvideo" class="selfclear">
-        <h2>{{ video_title }}</h2>
+        <h2>{{ video.title }}</h2>
         <div style="float:left;margin-right: 1em">
-            <iframe class="youtube-player" type="text/html" width="217" height="128" src="http://www.youtube.com/embed/{{video_id}}" frameborder="0"></iframe>
+            <iframe class="youtube-player" type="text/html" width="217" height="128" src="{{ video.href }}" frameborder="0"></iframe>
         </div>
-        <div>
-            <h3>{% lorem 10 w %}</h3>
-            <p>{% lorem 35 w %}</p>
+        <div class="description">
+            <h3><a href="#">{{ video.name }}</a></h3>
+            <p>{{ video.text}} <a href="#"><img src="{{ STATIC_URL }}theme/img/arrow_right.png" width="6" height="11" alt="" /></a></p>
         </div>
     </div>
     <hr/>
-    <div id="sections" class="selfclear">
+    <div id="sections" class="selfclear tabs-left">
         <h2>SECTIONS</h2>
-        <div style="float:left">
-            <ul>
-                {% for sec in sections %}
-                <li>{{ sec }}</li>
+
+        <ul class="nav nav-tabs">
+          {% if page.design_mode %}
+          <li class="active"><a href="#section1" data-toggle="tab">Crisis</a></li>
+          <li><a href="#section2" data-toggle="tab">GeoPolitics</a></li>
+          <li><a href="#section3" data-toggle="tab">Kids</a></li>
+          <li><a href="#section4" data-toggle="tab">Nature &amp; Environment</a></li>
+          <li><a href="#section5" data-toggle="tab">Science</a></li>
+          <li><a href="#section6" data-toggle="tab">Arts &amp; Culture</a></li>
+          <li><a href="#section7" data-toggle="tab">Technology</a></li>
+          <li><a href="#section8" data-toggle="tab">Finance &amp; Industry</a></li>
+          <li><a href="#section9" data-toggle="tab">Health</a></li>
+          <li><a href="#section10" data-toggle="tab">Religion &amp; Myth</a></li>
+          <li><a href="#section11" data-toggle="tab">Biography</a></li>
+          {% else %}
+            {% for sec in page.sections %}
+            <li {% if forloop.first %} class="active"{% endif %}>
+                <a href="#section{{ forloop.counter }}" data-toggle="tab">{{ sec }}</a>
+            </li>
+            {% endfor %}
+          {% endif %}
+        </ul>
+
+        <div class="tab-content">
+          {% if page.design_mode %}
+          <div class="tab-pane active" id="section1">
+            <article>
+                <a href="#">
+                    <img src="{{ STATIC_URL }}theme/img/img_95x65.png" alt="" class="left" />
+                </a>
+                <div class="article-content">
+                    <header>
+                        <h3><a href="#">Lorem ipsum dolor sit amet, cosectetur
+                        sedour adipiscing elit sed do eiusmod.</a></h3>
+                    </header>
+                    <div class="summary">
+                        Lorem ipsum dolor sit amet, consectetur adipisicing
+                        elit, sed do eiusmod tempor incididunt ut labore et
+                        nostrud exercitation ullamco laboris nisi ut aliquip...
+                    </div>
+                    <footer>
+                        <span class="views">1,205 Views</span>
+                        <span class="rating">3 stars</span>
+                    </footer>
+                </div>
+            </article>
+            <article>
+                <a href="#">
+                    <img src="{{ STATIC_URL }}theme/img/img_95x65.png" alt="" class="left" />
+                </a>
+                <div class="article-content">
+                    <header>
+                        <h3><a href="#">Lorem ipsum dolor sit amet, cosectetur
+                        sedour adipiscing elit sed do eiusmod.</a></h3>
+                    </header>
+                    <div class="summary">
+                        Lorem ipsum dolor sit amet, consectetur adipisicing
+                        elit, sed do eiusmod tempor incididunt ut labore et
+                        nostrud exercitation ullamco laboris nisi ut aliquip...
+                    </div>
+                    <footer>
+                        <span class="views">1,205 Views</span>
+                        <span class="rating">3 stars</span>
+                    </footer>
+                </div>
+            </article>
+            <article>
+                <a href="#">
+                    <img src="{{ STATIC_URL }}theme/img/img_95x65.png" alt="" class="left" />
+                </a>
+                <div class="article-content">
+                    <header>
+                        <h3><a href="#">Lorem ipsum dolor sit amet, cosectetur
+                        sedour adipiscing elit sed do eiusmod.</a></h3>
+                    </header>
+                    <div class="summary">
+                        Lorem ipsum dolor sit amet, consectetur adipisicing
+                        elit, sed do eiusmod tempor incididunt ut labore et
+                        nostrud exercitation ullamco laboris nisi ut aliquip...
+                    </div>
+                    <footer>
+                        <span class="views">1,205 Views</span>
+                        <span class="rating">3 stars</span>
+                    </footer>
+                </div>
+            </article>
+          </div>
+          <div class="tab-pane" id="section2">section 2 content</div>
+          <div class="tab-pane" id="section3">section 3 content</div>
+          {% else %}
+                {% for sec in page.sections %}
+                <div class="tab-pane {% if forloop.first %} class="active"{% endif %}" id="section{{ forloop.counter }}">
+                    {% for m in sec.maps.all %}
+                        <article>
+                            <img alt="{{ m.title }}" src="{{ m.get_thumbnail_url }}" class="left section_thumb"></img>
+                            <div class="article-content">
+                                <header>
+                                    <h3><a href="{{ m.get_absolute_url }}">{{ m.title }}</a></h3>
+                                </header>
+                                <div class="summary">{{ m.abstract }}</div>
+                                <footer>
+                                    <span class="views">1,205 Views</span>
+                                    <span class="rating">3 stars</span>
+                                </footer>
+                            </div>
+                        </article>
+                    {% endfor %}
+                </div>
                 {% endfor %}
-            </ul>
+          {% endif %}
+        </div>
+        {% comment %}
+            end static tabs
+        {% endcomment %}
         </div>
     </div>
 </div>
-<div class="threecol">
-    <h2>THINKERS AND THOUGHTS ON
-MAPSTORYTELLING</h2>
-    <div class="storyteller">
-        <img src="http://www.gravatar.com/avatar/b59a1fea77f9350c8225395f55204abe?r=pg&s=50">
-        <h4>Ian Schneider</h4>
-        <p>Af/Pak Tribal Dynamics,
-1805-2010
-</p>
+<div class="span4">
+    <div class="box mrg-btm">
+        <h2>THINKERS AND THOUGHTS ON
+    MAPSTORYTELLING</h2>
+        <div class="storyteller">
+            <a href="{% url storyteller %}">
+                <img src="http://www.gravatar.com/avatar/b59a1fea77f9350c8225395f55204abe?r=pg&s=70">
+            </a>
+            <h4><a href="{% url storyteller %}">Ian Schneider</a></h4>
+            <p>Af/Pak Tribal Dynamics,
+    1805-2010
+    </p>
+        </div>
+        <div class="storyteller">
+            <a href="{% url storyteller %}">
+                <img src="http://www.gravatar.com/avatar/a6a965150162eef63f1d2f8aae15c57c?r=pg&s=70">
+            </a>
+            <h4><a href="{% url storyteller %}">Bart van den Eijnden</a></h4>
+            <p>Sources of State Failure in Horn
+    of Africa, 1965-2010
+    </p>
+        </div>
+        <div class="storyteller last">
+            <a href="{% url storyteller %}">
+                <img src="http://www.gravatar.com/avatar/c0c61fb94a5785be367b0fceea6985f1?r=pg&s=70">
+            </a>
+            <h4><a href="{% url storyteller %}">Matt Priour</a></h4>
+            <p>Rise and Fall of Meso-American
+     Civilizations</p>
+        </div>
     </div>
-    <div class="storyteller">
-        <img src="http://www.gravatar.com/avatar/a6a965150162eef63f1d2f8aae15c57c?r=pg&s=50">
-        <h4>Bart van den Eijnden</h4>
-        <p>Sources of State Failure in Horn
-of Africa, 1965-2010
-</p>
-    </div>
-    <div class="storyteller">
-        <img src="http://www.gravatar.com/avatar/c0c61fb94a5785be367b0fceea6985f1?r=pg&s=50">
-        <h4>Matt Priour</h4>
-        <p>Rise and Fall of Meso-American
- Civilizations</p>
+    {% include "mapstory/_widget_social.html" %}
+    <div class="box mrg-btm">
+        <h2>TELL YOUR STORY</h2>
+        <p>If you have a story to tell... Tell it on MapStory.</p>
+        <p class="center"><a href="#" class="button orange">CREATE A MAPSTORY</a></p>
     </div>
 </div>
+</div>
 {% endblock %}
-{% block sidebar %}
+
+{% block extra_body %}
+<script type="text/javascript">
+function runCarousel() {
+    var tiles = Ext.select('#carousel .tile'),
+        carousel = Ext.get('carousel'),
+        twidth = 256,
+        margin = (carousel.getWidth() - (3 * twidth)) / 4,
+        positions = [margin, (2 * margin) + twidth, (3 * margin) + (2 * twidth)],
+        idx = 0, timeout = 5000;
+    tiles.setVisibilityMode(Ext.Element.DISPLAY);
+    if (tiles.getCount() == 0) return;
+    // reselect after stripping any bad images
+    tiles = Ext.select('#carousel .tile');
+    function tile(off) {
+        var tidx = idx + off;
+        if (off < 0) tidx += tiles.getCount();
+        return tidx % tiles.getCount();
+    }
+    function align(right) {
+        tiles.setLeft( right ? carousel.getWidth() : -twidth);
+        for (var i = 0; i < 3; i++ ) {
+            tiles.item( tile(i) ).setLeft(positions[i]);
+        }
+    }
+    align(true);
+    function go(left) {
+        var lidx = left ? idx : tile(2);
+        tiles.item(lidx).shift({x: left ? -twidth: carousel.getWidth() + twidth, callback: function() {
+            tiles.item(lidx).setLeft(left ? carousel.getRight() : -twidth);
+        }});
+        idx = tile( left ? 1: -1);
+        for (var i = 0; i < 3; i++) {
+            var p = positions[i] + carousel.getLeft();
+            tiles.item( tile(i) ).shift({x: p});
+        };
+    };
+
+    var handle = window.setInterval(function() {go(true)}, timeout);
+    var arrows = carousel.select('.arrow');
+    arrows.item(0).on('click',function() {
+       window.clearInterval(handle);
+       align(true)
+       go(true);
+    });
+    arrows.item(1).on('click',function() {
+       window.clearInterval(handle);
+       align(false)
+       go(false);
+    });
+    window.tile= tile;
+}
+
+Ext.onReady(function(){
+
+Ext.Ajax.request({
+   url: "/mapstory/tiles",
+   success: function(xhrLike) {
+       var carousel = Ext.get('carousel');
+       carousel.dom.innerHTML = carousel.dom.innerHTML + xhrLike.responseText;
+       runCarousel();
+   }
+});
+Ext.select('.noi').on('click',function(ev) {
+    alert('Not Implemented');
+    ev.stopEvent();
+});
+
+});
+</script>
 {% endblock %}

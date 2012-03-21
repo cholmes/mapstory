@@ -1,10 +1,14 @@
-{% extends "page_layout.html" %}
+{% extends "no_bottom_layout.html" %}
 {% load i18n %}
 
 {% block title %} {% trans "Upload Layer Step 2" %} - {{ block.super }} {% endblock %}
 
-{% block head %}
+{% block extra_head %}
 <style>
+    /* bootstrap workaround */
+    #timeForm label {
+        display: inline;
+    }
     .formSection {
         margin-bottom: 1em;
     }
@@ -182,8 +186,8 @@
         <li><code>s</code> second in minute</li>
     </ul>
     
-    <p class="note">Note that single quotes represent a literal character.</p>
-    <p class="note">To remove ambiguity, repeat a code to represent the maximum number of digits - for example yyyy</p>
+    <p class="alert alert-info">Note that single quotes represent a literal character.</p>
+    <p class="alert alert-info">To remove ambiguity, repeat a code to represent the maximum number of digits - for example yyyy</p>
     
     The 'best guess' will handle date and optional time variants of <a href="http://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>.
     In terms of the formatting flags noted above, these are:

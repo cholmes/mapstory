@@ -1,9 +1,9 @@
-{% extends "page_layout.html" %}
+{% extends "no_bottom_layout.html" %}
 {% load i18n %}
 
 {% block title %} {% trans "Upload Layer"  %} - {{ block.super }} {% endblock %}
 
-{% block head %}
+{% block extra_head %}
 {% include "geonode/ext_header.html" %}
 {% include "geonode/app_header.html" %}
 {% include "geonode/geo_header.html" %}
@@ -14,13 +14,13 @@
 {% block main %}
 <div class="twocol">
     <h2>{% trans "Add data" %}</h2>
-    <p class="note">Note that time support in MapStory is currently limited to everything from 1AD 
+    <p class="alert alert-error">Note that time support in MapStory is currently limited to everything from 1AD 
        until the reasonable future (5,874,897 AD).</p>
-    <p class="note">Uploading of zip files is also supported. The zip file must contain the
+    <p class="alert alert-error">Uploading of zip files is also supported. The zip file must contain the
        appropriate shapefiles (.shp,.dbf,.prj) in the top-level directory.
     </p>
     {% if enough_storage %}
-    <p class="note">There are currently {{ storage_remaining }} of space left on this server.
+    <p class="alert alert-error">There are currently {{ storage_remaining }} of space left on this server.
     Please ensure that your data is not too much bigger than this. During processing, at least 3 times
     the storage is required.</p>
     {% else %}
