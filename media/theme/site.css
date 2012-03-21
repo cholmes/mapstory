@@ -146,8 +146,10 @@ form#quicksearch {
 }
 
 #quicksearch input {
-  padding:3px;
+  padding:4px;
   margin:0;
+  width:207px;
+  background: #fff url(img/icons/search.png) no-repeat 194px center;
 }
 
 #quicksearch label {
@@ -1300,6 +1302,15 @@ section.box .article-list article footer .views {
 
 .search-filters .collapse {
   position:inherit;
+}
+
+.tags {
+  float:left;
+  margin-right:30px;
+}
+
+.tags b {
+  font-size:11px;
 }
 
 .results-summary {
