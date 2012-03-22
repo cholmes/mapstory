@@ -1,4 +1,5 @@
 @import "geonode.css";
+@import "temporal_controls.css";
 
 .clear {
   clear:both;
@@ -246,15 +247,13 @@ form#quicksearch {
 #sitenav,
 #top-crossbar .selected,
 #topPanel, /* from viewer app */
-#donate,
-#map-bbar .x-slider-thumb {
+#donate {
     background: #f47a20;
 }
 
 .palebg,
 body,
-#main,
-#map-bbar .x-slider-inner {
+#main {
     background: #F3F2F2;
 }
 
@@ -412,6 +411,7 @@ h4 {
 }
 
 /** ext overrides */
+
 #map-bbar .x-toolbar,
 #paneltbar,
 #embedded_map .x-toolbar,
@@ -428,6 +428,7 @@ h4 {
     border-width: 0 !important;
     border-color: transparent !important;
 }
+/*
 #map-bbar .x-slider-end {
     background: none
 }
@@ -466,7 +467,7 @@ h4 {
 #map-bbar .x-slider {
     background: #454238;
 }
-
+*/
 /*** bootstrap overwrite ***/
 body {
   padding-top:0;
@@ -481,7 +482,7 @@ body {
   float:right;
   margin-left:10px;
 }
-
+*/
 /*** elements ***/
 img.left {
   float:left;
