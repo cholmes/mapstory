@@ -35,6 +35,10 @@ section {
     font-size:13px;
 }
 
+#login-area .user {
+    color:white;
+}
+
 #login-area a:hover, #login-area a:active {
   text-decoration: none;
   background:#e2e0e0;
@@ -134,7 +138,7 @@ body.home #top-crossbar a.tab-sections:hover {
 
 #crossbar #sitenav li a {
   font-weight:400;
-  padding-right:30px;
+  padding-right:15px;
 }
 
 body.search-mapstories #crossbar a:hover,
@@ -200,23 +204,11 @@ form#quicksearch {
     width: 236px;
 }
 
-#carousel .tile {
-    width: 256px;
-    position: relative;
-    border: 1px solid #999;
-    width:236px;
-    height:148px;
-    background:#fff;
-    padding:10px;
-    margin-top:20px;
-}
-
 #slider .mb-inside {
     background:#fff;
-}​
+}
 
 #slider .tile .info {
-    position: absolute;
     bottom: 0;
     text-shadow: 1px 1px 3px white;
     background: #fff;
@@ -233,17 +225,12 @@ form#quicksearch {
   font-size:11px;
 }
 
-#carousel .wrap,
 #main .wrap {
     padding: 0;
 }
 
 #main {
   border-bottom: 0;
-}
-
-#carousel .tile {
-    display: inline-block;
 }
 
 .hvygraybg
@@ -832,30 +819,6 @@ h2.icn-storylayers, h2.icn-mapstories, h2.icn-storytellers {
   padding-right:15px;
 }
 
-#carousel {
-  position: relative;
-}
-#carousel .tile {
-  position: absolute;
-}
-#carousel .arrow {
-  cursor: pointer;
-  top: 40%;
-  position: absolute;
-  width:18px;
-  height:34px;
-  text-indent:-9999px;
-  background: url(img/arrows_gr.png) 0 0;
-}
-#carousel .arrow.arrow-right {
-  background-position: -28px 0;
-}
-#carousel .arrow.arrow-left:hover {
-  background-position: 0 -40px;
-}
-#carousel .arrow.arrow-right:hover {
-  background-position: -28px -40px;
-}
 .storyteller img {
   float:left;
   margin-right: 1em;
@@ -1800,9 +1763,10 @@ h2.icn-storylayer span, h2.icn-mapstory span {
 .olTileImage {
     max-width: none;
 }
-.x-form-radio-group label {
+.x-form-radio-group label, .styles-list label {
     display: inline;
 }
+/*end bootstrap fixes*/
 
 #login-form form {
   overflow:hidden;
