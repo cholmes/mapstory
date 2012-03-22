@@ -32,10 +32,7 @@
 
                 {% if user.is_authenticated %}
                     <a id="login-link" href="{% url auth_logout %}">{% trans "Log out" %}</a>
-                    <a href="{% if user.get_profile %}{{ user.get_profile.get_absolute_url }}{% else %}{% url profiles_create_profile %}{% endif %}">
-                        {{ user.username}}
-                    </a>
-                    <a href="{% url auth_password_change %}">{% trans "Change password" %}</a>
+                    <div class="user">{{ user.username }}</div>
                 {% else %}
                     <a id="login-link" href="#login-form-pop">{% trans "Log in" %}</a>
                     {% if REGISTRATION_OPEN %} or <a href="{% url registration_register %}">{% trans "Register" %}</a>{% endif %}
@@ -44,11 +41,11 @@
         </div>
         <div id="login-form-pop">
             <div class="drop-pointer"></div>
-            <form action="">
-                <label for="">Username:</label>
-                <input type="text" />
-                <label for="">Password:</label>
-                <input type="password" />
+            <form action="{% url geonode.views.ajax_login %}" method="POST">
+                <label for="username">Username:</label>
+                <input name="username" type="text" />
+                <label for="password">Password:</label>
+                <input name="password" type="password" />
                 <label class="checkbox">
                     <input type="checkbox" />
                     Remember me
@@ -215,9 +212,28 @@
 
     $(function () {
         $('#login-link').click(function(e) {
-            e.preventDefault();
-            $($(this).attr('href')).toggle();
+                e.preventDefault();
+            var href = $(this).attr('href');
+            if (href[0] == '/') {
+                $.post(href,{},function(d,s,x) {
+                    window.location.reload();
+                })
+            } else {
+                $(href).toggle();
+            }
         });
+        $("#login-form-pop button").click(function(e) {
+            var form = $("#login-form-pop form");
+            e.preventDefault();
+            $.post(form.attr('action'),form.serialize(),function(data,status,xhr) {
+                if (status == 'success') {
+                    window.location.reload();
+                } else {
+                    alert(data);
+                }
+                $("#login-form-pop").toggle();
+            });
+        })
     });
     </script>
     {% block extra_body %}{% endblock %}
