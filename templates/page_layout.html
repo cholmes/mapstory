@@ -17,7 +17,9 @@
     <link href='http://fonts.googleapis.com/css?family=Marvel:400,700' rel='stylesheet' type='text/css'>
     {% block extra_head %}{% endblock %}
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}theme/site.css" media="screen" />
+    {% if page.design_mode %}
     <script src="{{ STATIC_URL }}script/cssrefresh.js" type="text/javascript"></script>
+    {% endif %}
 {% endblock %}
 
 {% block topbar_base %}
@@ -97,8 +99,9 @@
        </form>
 
       <ul id="sitenav" class="selfclear">
-          {# <li><a rel="category" href=""></a></li> #}
-          {# <li><a rel="category" href=""></a></li> #}
+          {% for sec in page.sections %}
+              <li><a rel="category" class="noi" href="#{{ sec.slug }}">{{ sec.name }}</a></li>
+          {% endfor %}
           <li><a rel="search" href="{% url search %}" class="subtab-search-layers">Search StoryLayers</a></li>
           <li><a rel="search" href="{% url search_maps %}" class="subtab-search-stories">Search MapStories</a></li>
           <li><a rel="search" href="#" class="subtab-search-tellers">Search StoryTellers</a></li>
@@ -183,10 +186,13 @@
     quicksearch.select('input').focus();
     quicksearch.un('keypress',nixSearchLabel);
     }
-    function menu(rel) {
-    Ext.select('#top-crossbar li[rel=' + rel + ']').on('mouseover',function() {
+    function enableMenu(rel) {
         menus.setVisible(false);
         menus.item(0).parent('ul').select('[rel=' + rel + ']').show();
+    }
+    function menu(rel) {
+    Ext.select('#top-crossbar li[rel=' + rel + ']').on('mouseover',function() {
+        enableMenu(rel);
     });
     }
     //@todo make login pages not produce error
@@ -198,6 +204,11 @@
     menus = Ext.select('#sitenav li a').setVisibilityMode(Ext.Element.DISPLAY).setVisible(false,false);
     menu('category');
     menu('search');
+    enableMenu('category');
+    Ext.select('.noi').on('click',function(ev) {
+        alert('Not Implemented');
+        ev.stopEvent();
+    });
     });
     }
     {% endautoescape %}

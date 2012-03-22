@@ -13,6 +13,70 @@
 <link href="{{ STATIC_URL }}theme/movingboxes-ie.css" rel="stylesheet" media="screen" />
 <![endif]-->
 {{ block.super }}
+<script type="text/javascript">
+function runCarousel() {
+    var tiles = Ext.select('#carousel .tile'),
+        carousel = Ext.get('carousel'),
+        twidth = 256,
+        margin = (carousel.getWidth() - (3 * twidth)) / 4,
+        positions = [margin, (2 * margin) + twidth, (3 * margin) + (2 * twidth)],
+        idx = 0, timeout = 5000;
+    tiles.setVisibilityMode(Ext.Element.DISPLAY);
+    if (tiles.getCount() == 0) return;
+    // reselect after stripping any bad images
+    tiles = Ext.select('#carousel .tile');
+    function tile(off) {
+        var tidx = idx + off;
+        if (off < 0) tidx += tiles.getCount();
+        return tidx % tiles.getCount();
+    }
+    function align(right) {
+        tiles.setLeft( right ? carousel.getWidth() : -twidth);
+        for (var i = 0; i < 3; i++ ) {
+            tiles.item( tile(i) ).setLeft(positions[i]);
+        }
+    }
+    align(true);
+    function go(left) {
+        var lidx = left ? idx : tile(2);
+        tiles.item(lidx).shift({x: left ? -twidth: carousel.getWidth() + twidth, callback: function() {
+            tiles.item(lidx).setLeft(left ? carousel.getRight() : -twidth);
+        }});
+        idx = tile( left ? 1: -1);
+        for (var i = 0; i < 3; i++) {
+            var p = positions[i] + carousel.getLeft();
+            tiles.item( tile(i) ).shift({x: p});
+        };
+    };
+
+    var handle = window.setInterval(function() {go(true)}, timeout);
+    var arrows = carousel.select('.arrow');
+    arrows.item(0).on('click',function() {
+       window.clearInterval(handle);
+       align(true)
+       go(true);
+    });
+    arrows.item(1).on('click',function() {
+       window.clearInterval(handle);
+       align(false)
+       go(false);
+    });
+    window.tile= tile;
+}
+
+Ext.onReady(function(){
+{% autoescape off %}
+Ext.Ajax.request({
+   url: "{% url map_tiles %}",
+   success: function(xhrLike) {
+       var carousel = Ext.get('carousel');
+       carousel.dom.innerHTML = carousel.dom.innerHTML + xhrLike.responseText;
+       runCarousel();
+   }
+});
+{% endautoescape %}
+});
+</script>
 {% endblock %}
 
 {% block main %}
@@ -24,22 +88,19 @@
             <span class="content">Disaster in Japan - {% lorem 15 w %}</span>
         </div>
     </div>
-    <div class="span12 lightgraybg">
-        <div id="slider">
-            <div class="tile">
-                <a href="#"><img src="http://mapstory.dev.opengeo.org/thumbs/map73.png" alt="" /></a>
-                <div class="info">
-                    <div class="title">Nuclear Tests and Detonations</div>
-                    <div>
-                        <span>
-                            <a href="#">asu1</a>
-                            <span>on Mar 14 2012</span>
-                        </span>
-                    </div>
-                    <footer>
-                        <span class="views">1,205 Views</span>
-                        <span class="rating">3 stars</span>
-                    </footer>
+    <div id="carousel" class="span12 lightgraybg">
+        <div class="arrow arrow-left" style="left:15px">&#8826;</div>
+        <div class="arrow arrow-right" style="right:15px">&#8827;</div>
+        {% if page.design_mode %}
+        <div class="tile">
+            <a href="#"><img src="http://mapstory.dev.opengeo.org/thumbs/map73.png" alt="" /></a>
+            <div class="info">
+                <div class="title">Nuclear Tests and Detonations</div>
+                <div>
+                    <span>
+                        <a href="#">asu1</a>
+                        <span>on Mar 14 2012</span>
+                    </span>
                 </div>
             </div>
             <div class="tile">
@@ -91,12 +152,13 @@
                 </div>
             </div>
         </div>
+        {% endif %}
     </div>
     <div class="span12" id="activities">
         <ul class="selfclear">
             <li>
                 <div class="icn-storylayers">StoryLayers</div>
-                <a class="search" href="{% url search %}">SEARCH STORYLAYERS</a>
+                <a class="search" href="{% url search_layers %}">SEARCH STORYLAYERS</a>
                 <a class="action" href="{% url data_upload %}">UPLOAD STORYLAYERS</a>
             </li>
             <li>
@@ -116,34 +178,21 @@
 <div class="span8">
     <div class="box mrg-btm">
     <div id="featuredvideo" class="selfclear">
-        <h2>{{ video_title }}</h2>
+        <h2>{{ video.title }}</h2>
         <div style="float:left;margin-right: 1em">
-            <iframe class="youtube-player" type="text/html" width="217" height="128" src="http://www.youtube.com/embed/{{video_id}}" frameborder="0"></iframe>
+            <iframe class="youtube-player" type="text/html" width="217" height="128" src="{{ video.href }}" frameborder="0"></iframe>
         </div>
         <div class="description">
-            <h3><a href="#">{% lorem 10 w %}</a></h3>
-            <p>{% lorem 35 w %} <a href="#"><img src="{{ STATIC_URL }}theme/img/arrow_right.png" width="6" height="11" alt="" /></a></p>
+            <h3><a href="#">{{ video.name }}</a></h3>
+            <p>{{ video.text}} <a href="#"><img src="{{ STATIC_URL }}theme/img/arrow_right.png" width="6" height="11" alt="" /></a></p>
         </div>
     </div>
     <hr/>
     <div id="sections" class="selfclear tabs-left">
         <h2>SECTIONS</h2>
 
-        {% comment %}
-          actual code for tabs, has to be finished
-        {% endcomment %}
-        {# <ul class="nav nav-tabs"> #}
-        {#     {% for sec in sections %} #}
-        {#     <li {% if forloop.first %} class="active"{% endif %}> #}
-                  {# <a href="#section{% forloop.counter %}" data-toggle="tab">{{ sec }}</a> #}
-              {# </li> #}
-        {#     {% endfor %} #}
-        {# </ul> #}
-
-        {% comment %}
-            static tabs
-        {% endcomment %}
         <ul class="nav nav-tabs">
+          {% if page.design_mode %}
           <li class="active"><a href="#section1" data-toggle="tab">Crisis</a></li>
           <li><a href="#section2" data-toggle="tab">GeoPolitics</a></li>
           <li><a href="#section3" data-toggle="tab">Kids</a></li>
@@ -155,9 +204,17 @@
           <li><a href="#section9" data-toggle="tab">Health</a></li>
           <li><a href="#section10" data-toggle="tab">Religion &amp; Myth</a></li>
           <li><a href="#section11" data-toggle="tab">Biography</a></li>
+          {% else %}
+            {% for sec in page.sections %}
+            <li {% if forloop.first %} class="active"{% endif %}>
+                <a href="#section{{ forloop.counter }}" data-toggle="tab">{{ sec }}</a>
+            </li>
+            {% endfor %}
+          {% endif %}
         </ul>
 
         <div class="tab-content">
+          {% if page.design_mode %}
           <div class="tab-pane active" id="section1">
             <article>
                 <a href="#">
@@ -222,6 +279,27 @@
           </div>
           <div class="tab-pane" id="section2">section 2 content</div>
           <div class="tab-pane" id="section3">section 3 content</div>
+          {% else %}
+                {% for sec in page.sections %}
+                <div class="tab-pane {% if forloop.first %} class="active"{% endif %}" id="section{{ forloop.counter }}">
+                    {% for m in sec.maps.all %}
+                        <article>
+                            <img alt="{{ m.title }}" src="{{ m.get_thumbnail_url }}" class="left section_thumb"></img>
+                            <div class="article-content">
+                                <header>
+                                    <h3><a href="{{ m.get_absolute_url }}">{{ m.title }}</a></h3>
+                                </header>
+                                <div class="summary">{{ m.abstract }}</div>
+                                <footer>
+                                    <span class="views">1,205 Views</span>
+                                    <span class="rating">3 stars</span>
+                                </footer>
+                            </div>
+                        </article>
+                    {% endfor %}
+                </div>
+                {% endfor %}
+          {% endif %}
         </div>
         {% comment %}
             end static tabs

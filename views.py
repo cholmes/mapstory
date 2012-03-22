@@ -2,6 +2,9 @@ from geonode.maps.models import Map
 from geonode.maps.models import Layer
 from geonode.maps.models import Thumbnail
 
+from mapstory.models import VideoLink
+from mapstory.models import Section
+
 from django.core.urlresolvers import reverse
 from django.conf import settings
 from django.db.models import signals
@@ -14,14 +17,23 @@ from django.template import loader
 from django.contrib.contenttypes.models import ContentType
 
 import os
+import random
 
 def alerts(req): 
     return render_to_response('mapstory/alerts.html', RequestContext(req))
 
-def index(req): 
+def index(req):
+    # resolve video to use
+    # two modes of operation here
+    # 1) don't specify publish and one will randomly be chosen
+    # 2) specify one or more publish links and one will be chosen
+    videos = VideoLink.objects.filter(publish=True)
+    if not videos:
+        videos = VideoLink.objects.all()
+    video = random.choice(videos)
+    
     return render_to_response('index.html', RequestContext(req,{
-        "video_id" : "pE-1G_476nA",
-        "video_title" : "VIDEO TITLE GOES HERE",
+        "video" : video,
     }))
 
 def donate(req):
@@ -37,6 +49,8 @@ def get_map_carousel_maps():
     # get all Map thumbnails
     thumb_type = ContentType.objects.get_for_model(Map)
     thumbs = Thumbnail.objects.filter(content_type__pk=thumb_type.id)
+    # trim this down to a smaller set
+    thumbs = random.sample(thumbs, min(10,len(thumbs)))
     # and make sure they have a valid file path
     return [ t.content_object for t in thumbs if os.path.exists(t.get_thumbnail_path())]
 
@@ -77,6 +91,20 @@ def map_tile(req, mapid):
     return _render_map_tile(obj,req=req)
 
 @login_required
+def set_section(req):
+    if req.method != 'POST':
+        return HttpResponse('POST required',status=400)
+    mapid = req.POST['map']
+    mapobj = get_object_or_404(Map, pk=mapid)
+    if mapobj.owner != req.user or not req.user.has_perm('mapstory.change_section'):
+        return HttpResponse('Not sufficient permissions',status=401)
+    sectionid = req.POST['section']
+    get_object_or_404(Section, pk=sectionid)
+    Section.objects.add_to_section(sectionid, mapobj)
+    return HttpResponse('OK', status=200)
+    
+
+@login_required
 def create_annotations_layer(req, mapid):
     '''Create an annotations layer with the predefined schema.
     
@@ -108,6 +136,7 @@ def create_annotations_layer(req, mapid):
     atts = ','.join([ ':'.join(map(str,a)) for a in atts])
     
     return _create_layer(
+        req.user,
         name = "_map_%s_annotations" % mapid,
         srs = 'EPSG:4326', # @todo how to obtain this in a nicer way...
         attributes = atts,
