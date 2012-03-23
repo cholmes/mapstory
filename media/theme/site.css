@@ -1,5 +1,6 @@
 @import "geonode.css";
 @import "temporal_controls.css";
+@import "ext-theme.css";
 
 .clear {
   clear:both;
@@ -20,10 +21,6 @@ section {
 #header .wrap {
     padding-left: 30px;
     width: 950px;
-}
-
-#logo {
-    margin: 1em 0em 1em -15px;
 }
 
 #login-area {

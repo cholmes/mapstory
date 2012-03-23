@@ -84,37 +84,41 @@ background-position-x: 0;
     background-image:url('img/icons/control_fastforward.png')
 }
 */
-#map-bbar .x-slider-horz, 
-#map-bbar .x-slider-horz .x-slider-end, 
-#map-bbar .x-slider-horz .x-slider-inner{
+div.gx_timeslider, 
+div.gx_timeslider .x-slider-end, 
+div.gx_timeslider .x-slider-inner{
 	background-image:none;
 }
 
-#map-bbar div.x-slider-horz{
+div.gx_timeslider {
 	border: 1px solid white;
 	padding-top: 4px;
 	padding-left: 12px;
 }
 
-#map-bbar .x-slider-horz .x-slider-thumb{
+div.gx_timeslider .x-slider-thumb{
 /*	background-image: url('img/icons/range_right.png'); */
 	background: 0 -44px no-repeat;
 	top: -14px;
     width: 24px;
     height: 50px;
+    cursor: pointer;
 }
 
-#map-bbar .x-slider-horz .x-slider-thumb{
+div.gx_timeslider .x-slider-thumb{
 	background-image: url('img/icons/range_right.png');
 }
 
-#map-bbar .x-slider-horz .x-slider-min-thumb{
+div.gx_timeslider .x-slider-min-thumb{
     background-image: url('img/icons/range_left.png');
+    cursor: pointer;
 }
-#map-bbar .x-slider-horz .x-slider-max-thumb{
+div.gx_timeslider .x-slider-max-thumb{
     background-image:url('img/icons/range_right.png');
+    cursor: pointer;
 }
-#map-bbar .x-slider-horz .x-slider-tail-thumb{
+div.gx_timeslider .x-slider-tail-thumb{
     background-image:url('img/icons/range_left.png');
     left:-14px;
+    cursor: pointer;
 }
