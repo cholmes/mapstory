@@ -33,6 +33,10 @@ section {
     font-size:13px;
 }
 
+#login-area .user {
+    color:white;
+}
+
 #login-area a:hover, #login-area a:active {
   text-decoration: none;
   background:#e2e0e0;
@@ -126,14 +130,34 @@ body.home #top-crossbar a.tab-sections:hover {
   text-decoration:none;
 }
 
-#crossbar a {
+#crossbar #sitenav {
+  margin-left:0;
+}
+
+#crossbar #sitenav li a {
   font-weight:400;
+  padding-right:15px;
 }
 
 body.search-mapstories #crossbar a:hover,
 body.search-mapstories #crossbar a.subtab-search-stories {
   text-decoration:underline;
   font-weight:700;
+}
+
+a.subtab-search-layers {
+  background: url(img/storylayers_s.png) no-repeat 0 center;
+  text-indent:15px;
+}
+
+a.subtab-search-stories {
+  background: url(img/mapstories_s.png) no-repeat 0 center;
+  text-indent:15px;
+}
+
+a.subtab-search-tellers {
+  background: url(img/storyteller_s.png) no-repeat 0 center;
+  text-indent:15px;
 }
 
 form#quicksearch {
@@ -170,24 +194,19 @@ form#quicksearch {
     display: none;
 }
 
-#carousel {
-    height: 214px;
-    overflow: hidden;
+#slider {
+    width: 900px;
 }
 
-#carousel .tile {
-    width: 256px;
-    position: relative;
-    border: 1px solid #999;
-    width:236px;
-    height:148px;
+#slider div.tile {
+    width: 236px;
+}
+
+#slider .mb-inside {
     background:#fff;
-    padding:10px;
-    margin-top:20px;
 }
 
-#carousel .tile .info {
-    position: absolute;
+#slider .tile .info {
     bottom: 0;
     text-shadow: 1px 1px 3px white;
     background: #fff;
@@ -195,25 +214,21 @@ form#quicksearch {
     padding-bottom: .3em;
 }
 
-#carousel .tile .info .title {
+#slider .tile .info .title {
   font-size:13px;
 }
 
-#carousel .tile .views {
+#slider .tile .views {
   font-weight:bold;
+  font-size:11px;
 }
 
-#carousel .wrap,
 #main .wrap {
     padding: 0;
 }
 
 #main {
   border-bottom: 0;
-}
-
-#carousel .tile {
-    display: inline-block;
 }
 
 .hvygraybg
@@ -738,16 +753,25 @@ a.back {
 #activities div {
   font-size:24px;
   color: #d24d27;
-  padding:0 0 0 54px;
+  padding:0 0 0 47px;
   height: 34px;
   line-height: 34px;
   text-transform:uppercase;
   margin-bottom:.7em;
 }
 
-#activities div.icn-storylayers { background: url(img/storylayers.png) no-repeat left center;padding-left:46px; }
-#activities div.icn-mapstories { background: url(img/mapstories.png) no-repeat left center; }
-#activities div.icn-storytellers { background: url(img/storyteller.png) no-repeat left center;padding-left:59px; }
+h2.icn-storylayers, h2.icn-mapstories, h2.icn-storytellers {
+  padding:0 0 0 47px;
+}
+
+.icn-storylayers, .icn-mapstories, .icn-storytellers {
+  height:39px;
+  line-height:39px;
+}
+
+.icn-storylayers { background: url(img/storylayers.png) no-repeat left center; }
+.icn-mapstories { background: url(img/mapstories.png) no-repeat left center; }
+.icn-storytellers { background: url(img/storyteller.png) no-repeat left center; }
 
 #activities a.search {
   background: #9E2F1E;
@@ -793,30 +817,6 @@ a.back {
   padding-right:15px;
 }
 
-#carousel {
-  position: relative;
-}
-#carousel .tile {
-  position: absolute;
-}
-#carousel .arrow {
-  cursor: pointer;
-  top: 40%;
-  position: absolute;
-  width:18px;
-  height:34px;
-  text-indent:-9999px;
-  background: url(img/arrows_gr.png) 0 0;
-}
-#carousel .arrow.arrow-right {
-  background-position: -28px 0;
-}
-#carousel .arrow.arrow-left:hover {
-  background-position: 0 -40px;
-}
-#carousel .arrow.arrow-right:hover {
-  background-position: -28px -40px;
-}
 .storyteller img {
   float:left;
   margin-right: 1em;
@@ -1761,9 +1761,10 @@ h2.icn-storylayer span, h2.icn-mapstory span {
 .olTileImage {
     max-width: none;
 }
-.x-form-radio-group label {
+.x-form-radio-group label, .styles-list label {
     display: inline;
 }
+/*end bootstrap fixes*/
 
 #login-form form {
   overflow:hidden;

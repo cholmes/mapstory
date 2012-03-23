@@ -32,8 +32,11 @@ def index(req):
         videos = VideoLink.objects.all()
     video = random.choice(videos)
     
+    tiles = ''.join( [ _render_map_tile(m) for m in get_map_carousel_maps()] )
+    
     return render_to_response('index.html', RequestContext(req,{
         "video" : video,
+        "tiles" : tiles
     }))
 
 def donate(req):
