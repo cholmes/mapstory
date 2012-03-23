@@ -1,0 +1,36 @@
+div.x-window, div.x-panel, div.x-layer, div.x-combo-list {
+	color:whitesmoke;
+}
+div.x-form-field label, input.x-form-field, div.x-form-element label, div.x-form-item label{
+	color:whitesmoke;
+}
+div.x-form-item label{
+	display:inline;
+}
+.x-form-item input[disabled], .x-form-item select[disabled], 
+.x-form-item textarea[disabled], .x-form-item input[readonly], 
+.x-form-item select[readonly], .x-form-item textarea[readonly]{
+	background-color: #33373d;
+	border-color: #737B8C;
+}
+
+/*
+div.x-window-mc, div.x-window-ml, div.x-window-mr, div.x-window-tc, div.x-window-tl, div.x-window-tr, div.x-window-bl, div.x-window-br, div.x-window-bc {
+border-color: #F47A20;
+background: #F47A20;
+}
+
+div.x-window div.x-window-header, div.x-window div.x-window-body, div.x-window div.x-window-footer{
+	font-family: 'Marvel', sans-serif;
+	font-size:110%;
+}
+*/
+.x-fieldset legend {
+font-size: 13px;
+width: auto;
+border-bottom: none;
+}
+
+div.x-panel, div.x-tab-panel .x-tab-panel-body{
+	background: #1F2730;
+}
