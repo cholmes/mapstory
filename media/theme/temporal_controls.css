@@ -22,6 +22,9 @@ background-position-x: 0;
 #map-bbar .x-btn-over button, #map-bbar .x-btn-pressed td button{
 	background-position-y: -44px;
 }
+#map-bbar .x-btn-pressed td button:hover{
+	background-position-y: 0;
+}
 .x-btn button.gxp-icon-settings{
     background-image:url('img/icons/settings.png')
 }
@@ -37,7 +40,7 @@ background-position-x: 0;
     background-image:url('img/icons/play.png')
 }
 .x-btn button.gxp-icon-pause{
-    background-image:url('img/icons/legend.png')
+    background-image:url('img/icons/pause.png')
 }
 /*
 .x-btn .gxp-icon-stop{
@@ -53,7 +56,7 @@ background-position-x: 0;
 }
 
 .x-btn button.gxp-icon-play4x{
-    background-image:url('img/icons/2x.png')
+    background-image:url('img/icons/4x.png')
 }
 /*
 .x-btn-over .gxp-icon-reset{
@@ -100,6 +103,7 @@ div.gx_timeslider .x-slider-thumb{
 /*	background-image: url('img/icons/range_right.png'); */
 	background: 0 -44px no-repeat;
 	top: -14px;
+	margin-left: -5px;
     width: 24px;
     height: 50px;
     cursor: pointer;
