@@ -13,7 +13,7 @@ Ext.onReady(function() {
 {% has_obj_perm user map "maps.change_map_permissions" as can_change_permissions %}
 {% autoescape off %}
     var config = Ext.apply({
-        //useToolbar: false,
+        useToolbar: false,
         proxy: "/proxy/?url=",
         rest: "/maps/",
 

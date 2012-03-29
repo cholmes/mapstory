@@ -26,10 +26,14 @@ background-position-x: 0;
 	background-position-y: 0;
 }
 .x-btn button.gxp-icon-settings{
-    background-image:url('img/icons/settings.png')
+    background-image:url('img/icons/large/settings.png')
 }
 .x-btn button.gxp-icon-next{
-    background-image:url('img/icons/step1.png')
+    background-image:url('img/icons/large/step1.png')
+}
+
+.x-btn button.gxp-icon-prev{
+    background-image:url('img/icons/large/step1_back.png')
 }
 /*
 .x-btn .gxp-icon-last{
@@ -37,10 +41,10 @@ background-position-x: 0;
 }
 */
 .x-btn button.gxp-icon-play{
-    background-image:url('img/icons/play.png')
+    background-image:url('img/icons/large/play.png')
 }
 .x-btn button.gxp-icon-pause{
-    background-image:url('img/icons/pause.png')
+    background-image:url('img/icons/large/pause.png')
 }
 /*
 .x-btn .gxp-icon-stop{
@@ -48,16 +52,29 @@ background-position-x: 0;
 }
 */
 .x-btn button.gxp-icon-loop{
-    background-image:url('img/icons/replay.png')
+    background-image:url('img/icons/large/replay.png')
 }
 
 .x-btn button.gxp-icon-ffwd, .x-btn button.gxp-icon-play2x{
-    background-image:url('img/icons/2x.png')
+    background-image:url('img/icons/large/2x.png')
 }
 
 .x-btn button.gxp-icon-play4x{
-    background-image:url('img/icons/4x.png')
+    background-image:url('img/icons/large/4x.png')
 }
+
+.x-btn button.gxp-icon-fullScreen{
+    background-image:url('img/icons/large/fullscreen.png')
+}
+
+.x-btn button.gxp-icon-smallScreen{
+    background-image:url('img/icons/large/smallscreen.png')
+}
+
+.x-btn button.gxp-icon-legend{
+    background-image:url('img/icons/large/legend_btn.png')
+}
+
 /*
 .x-btn-over .gxp-icon-reset{
     background-image:url('img/icons/control_start.png')
@@ -110,19 +127,19 @@ div.gx_timeslider .x-slider-thumb{
 }
 
 div.gx_timeslider .x-slider-thumb{
-	background-image: url('img/icons/range_right.png');
+	background-image: url('img/icons/large/range_right.png');
 }
 
 div.gx_timeslider .x-slider-min-thumb{
-    background-image: url('img/icons/range_left.png');
+    background-image: url('img/icons/large/range_left.png');
     cursor: pointer;
 }
 div.gx_timeslider .x-slider-max-thumb{
-    background-image:url('img/icons/range_right.png');
+    background-image:url('img/icons/large/range_right.png');
     cursor: pointer;
 }
 div.gx_timeslider .x-slider-tail-thumb{
-    background-image:url('img/icons/range_left.png');
+    background-image:url('img/icons/large/range_left.png');
     left:-14px;
     cursor: pointer;
 }
