@@ -31,8 +31,8 @@ temppath = lambda *p: os.path.join(tempdir, *p)
 os.system('unzip %s -d %s' % (zipfile, tempdir))
 
 # can't check return value since pg_restore will complain if any drop statements fail :(
-retval = os.system('pg_restore --dbname=%s --clean --username=%s < %s' % (
-    settings.DB_DATASTORE_DATABASE, settings.DB_DATASTORE_USER, temppath('layer.dump')
+retval = os.system('pg_restore --host=%s --dbname=%s --clean --username=%s < %s' % (
+    settings.DB_DATASTORE_HOST, settings.DB_DATASTORE_DATABASE, settings.DB_DATASTORE_USER, temppath('layer.dump')
 ))
 
 # rebuild the geometry columns entry
