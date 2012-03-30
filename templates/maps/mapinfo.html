@@ -21,7 +21,25 @@ Ext.onReady(function() {
         portalConfig: {
             height: 450, //512 + 55 bbar - 100 -> rounded
             renderTo: "embedded_map"
-        }
+        },
+        // tools
+        tools:[{
+                ptype: "gxp_wmsgetfeatureinfo",
+                format: "grid",
+                toggleGroup: this.toggleGroup,
+                layerParams: ['TIME'],
+                outputConfig: {width: 400, height: 300}
+            }, {
+                ptype: "gxp_playback",
+                id: "playback-tool",
+                outputTarget: "map-bbar",
+                looped: true,
+                outputConfig:{
+                    //xtype: 'app_playbacktoolbar',
+                    defaults: {scale: 'large'},
+                    playbackActions: ["play","slider","loop","fastforward","next", {xtype:'tbspacer',width:48},"settings"]
+                      
+                }}]
     }, {{ config }});
     app = new GeoExplorer.Viewer(config);
 {% if can_change_permissions %}
