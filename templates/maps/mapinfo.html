@@ -36,11 +36,10 @@ Ext.onReady(function() {
                 looped: true,
                 outputConfig:{
                     //xtype: 'app_playbacktoolbar',
-                    
                     defaults: {scale: 'large'},
                     playbackActions: ["play","slider","loop","fastforward","next", {xtype:'tbspacer',width:48},"settings"]
                       
-                }]
+                }}]
     }, {{ config }});
     app = new GeoExplorer.Viewer(config);
 {% if can_change_permissions %}
