@@ -5,6 +5,7 @@ from geonode.maps.models import Thumbnail
 from mapstory.models import VideoLink
 from mapstory.models import Section
 
+from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.conf import settings
 from django.db.models import signals
@@ -105,7 +106,12 @@ def set_section(req):
     get_object_or_404(Section, pk=sectionid)
     Section.objects.add_to_section(sectionid, mapobj)
     return HttpResponse('OK', status=200)
-    
+
+def about_storyteller(req, username):
+    user = get_object_or_404(User, username=username)
+    return render_to_response('mapstory/about_storyteller.html', RequestContext(req,{
+        "user" : user,
+    }))
 
 @login_required
 def create_annotations_layer(req, mapid):
@@ -126,7 +132,7 @@ def create_annotations_layer(req, mapid):
     atts = [
         #name, type, nillable
         ('title','java.lang.String',False),
-        ('description','java.lang.String',False),
+        ('content','java.lang.String',False),
         ('the_geom','com.vividsolutions.jts.geom.Geometry',True),
         ('start_time','java.lang.Long',True),
         ('end_time','java.lang.Long',True),
