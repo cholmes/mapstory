@@ -194,6 +194,57 @@ form#quicksearch {
     display: none;
 }
 
+#carousel {
+    position: relative;
+    height: 214px;
+    overflow: hidden;
+}
+
+#carousel .tile {
+    position: absolute;
+    border: 1px solid #999;
+    width:236px;
+    height:148px;
+    background:#fff;
+    padding:10px;
+    margin-top:20px;
+}
+
+#carousel .tile .info {
+    position: absolute;
+    bottom: 0;
+    text-shadow: 1px 1px 3px white;
+    background: #fff;
+    width: 236px;
+    padding-bottom: .3em;
+}
+
+#carousel .tile .info .title {
+  font-size:13px;
+}
+
+#carousel .tile .views {
+  font-weight:bold;
+}
+#carousel .arrow {
+  cursor: pointer;
+  top: 40%;
+  position: absolute;
+  width:18px;
+  height:34px;
+  text-indent:-9999px;
+  background: url(img/arrows_gr.png) 0 0;
+}
+#carousel .arrow.arrow-right {
+  background-position: -28px 0;
+}
+#carousel .arrow.arrow-left:hover {
+  background-position: 0 -40px;
+}
+#carousel .arrow.arrow-right:hover {
+  background-position: -28px -40px;
+}
+
 #slider {
     width: 900px;
 }
