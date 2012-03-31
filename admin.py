@@ -13,6 +13,10 @@ class VideoLinkAdmin(admin.ModelAdmin):
     list_display = 'id','name','title','href','publish'
     list_display_links = 'id',
     list_editable = 'name','title','publish'
+    
+class ContactDetailAdmin(admin.ModelAdmin):
+    pass
 
 admin.site.register(VideoLink, VideoLinkAdmin)
 admin.site.register(Section, SectionAdmin)
+admin.site.register(ContactDetail, ContactDetailAdmin)
