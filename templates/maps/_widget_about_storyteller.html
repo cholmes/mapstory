@@ -1,0 +1,13 @@
+{% load avatar_tags %}
+
+{% with map.owner.contact_set.0 as contact %}
+<section class="box mrg-btm about-storyteller pd-btm">
+    <h2>ABOUT THE STORYTELLER</h2>
+    {% avatar map.owner %}
+    <h4>{{ map.owner.username }} {% if contact.organization %},{% endif %} {{contact.organization}}</h4>
+    {% if map.owner.contactdetail %}
+    <p class="clear">{{ map.owner.contactdetail.blurb }}</p>
+    {% endif %}
+    <a href="{% url about_storyteller map.owner.username %}" class="read-more">Read more about this Storyteller</a>
+</section>
+{% endwith %}
