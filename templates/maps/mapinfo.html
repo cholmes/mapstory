@@ -1,6 +1,9 @@
 {% extends "page_layout.html" %}
 {% load i18n %}
 {% load geonode_auth %}
+{% load mapstory_tags %}
+
+{% has_obj_perm user map "maps.change_map_permissions" as can_change_permissions %}
 
 {% block extra_head %}
 {% include "geonode/ext_header.html" %}
@@ -10,7 +13,6 @@
 <script type="text/javascript">
 var app;
 Ext.onReady(function() {
-{% has_obj_perm user map "maps.change_map_permissions" as can_change_permissions %}
 {% autoescape off %}
     var config = Ext.apply({
         useToolbar: false,
@@ -68,54 +70,133 @@ Ext.onReady(function() {
 });
 </script>
 {% endblock %}
+{% block body_class %}search-mapstories{% endblock body_class %}
 
 {% block main %}
-<div class="twocol">
-  <h3>{{map.title}}</h3>
-  <p><strong>{% trans "Abstract:" %}</strong> {{map.abstract}}</p>
+    <div class="row">
+        <div class="span12">
+            <ul class="breadcrumb">
+                <li>
+                    <a href="#">Home</a> <span class="divider">&gt;</span>
+                </li>
+                <li>
+                <a href="#">Search MapStory</a> <span class="divider">&gt;</span>
+                </li>
+                <li class="active">
+                    <a href="#">MapStory Page</a>
+                </li>
+            </ul>
+        </div>
+        <div class="span8">
+            <h2 class="icn-mapstories">ELLICOTT PLAN FOR WASHINGTON DC</h2>
+        </div>
+        <div class="span4">
+            <a href="#" class="back">Back to MapStory Search</a>
+        </div>
+        <div class="span8">
+            <div class="box mrg-btm">
+                <div class="story-detail">
+                    <div id="embedded_map"></div>
 
-  <div id="embedded_map">
-  </div>
-  <p><strong>{% trans "Contact:" %}</strong> <a href="{{ map.owner.get_profile.get_absolute_url }}">{{ map.owner }}</a></a></p>
-</div>
-{% endblock %}
-{% block sidebar %}
-<div id="sidebar" class="threecol">
-    <h3>{% trans "Download" %}</h3>
-    <p><a href="{% url geonode.maps.views.map_download map.id %}">{% trans "Download all layers included in this map" %}</a></p>
-    <h3>{% trans "Layers" %}</h3>
-  <p>{% trans "This map uses the following layers" %} </p>
-  <ul>
-    {% for layer in layers %}
-    {% if not layer.group == "background" %}
-    <li>{% autoescape off %}{{layer.local_link}}{% endautoescape %}</li>
-    {% endif %}
-    {% endfor %}
-  </ul>
-  <h3>{% trans "Manage" %}</h3>
-  <ul>
-    {% has_obj_perm user map "maps.change_map" as can_change %}
-    {% has_obj_perm user map "maps.delete_map" as can_delete %}
+                    <div class="video-actions tabbable">
+                        <ul class="actions-links nav nav-tabs fancyfont">
+                            <li><a href="#describemap" class="icn info" data-toggle="pill">Info</a></li>
+                            <li><a href="#actions2" class="icn layers" data-toggle="pill">Layers</a></li>
+<!--                            <a href="#" class="icn favorites">Add to Favorites</a>-->
+                            <li><a href="#actions3" class="icn share" data-toggle="pill">Share</a></li>
+                            <li><a href="#actions4" class="icn flag" data-toggle="pill">Flag</a></li>
+                            <li><a href="#actions5" class="icn add" data-toggle="pill">Add</a></li>
+                        </ul>
+                        <div class="metrics">
+                            <span class="views"><i>1,205</i> Views</span>
+                            <span class="rating">3 stars</span>
+                        </div>
+                    </div>
+                    <div class="video-actions tab-content">
+                        <div class="tab-pane active" id="describemap">
+                            {% has_obj_perm user map "maps.change_map" as can_change %}
+                            {{ user }} {{ can_change }}
+                            {% if can_change %}
+                            <form id="info-form" method="POST" action="{% url geonode.maps.views.map_controller map.id %}?describe">
+                            <label>Title:</label>
+                            <input name="map-title" type="text" value="{{map.title}}">
+                            <label>Author:</label>
+                            <p>{{map.owner}}</p>
+                            <label>Keywords:</label>
+                            <textarea name="map-keywords">{{map.keywords}}</textarea>
+                            <label>Abstract:</label>
+                            <textarea name="map-abstract">{{map.abstract}}</textarea>
+                            <div>
+                                <button>Update Information</button>
+                            </div>
+                            {% csrf_token %}
+                            </form>
+                            <script type="text/javascript">
+                                $(function() {
+                                    $("#describemap button").click(function(ev) {
+                                        ev.preventDefault();
+                                        var form = $(this).closest('form');
+                                        $.post(
+                                            form.attr('action'),
+                                            form.serialize(),
+                                            function() {
+                                                alert('updated');
+                                            }
+                                        );
+                                    });
+                                })
+                            </script>
+                            {% else %}
+                            <label>Title:</label>
+                            <p>{{ map.title }}</p>
+                            <label>Author:</label>
+                            <p>{{map.owner}}</p>
+                            <label>Keywords:</label>
+                            <p>{{map.keywords}}</p>
+                            {% endif %}
+                        </div>
+                        <div class="tab-pane" id="actions2">
+                            <p>{% trans "This map uses the following layers" %} </p>
+                            <ul>
+                                {% for layer in layers %}
+                                {% if not layer.group == "background" %}
+                                <li>{% autoescape off %}{{layer.local_link}}{% endautoescape %}</li>
+                                {% endif %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <div class="tab-pane" id="actions3">
+                            <p>Embed this map:<p>
+                            <textarea><iframe style="border: none;" height="400" width="600" src="{{ req.META.SERVER_NAME %}{% url geonode.maps.views.embed map.id %}"></iframe></textarea>
+                        </div>
+                        <div class="tab-pane" id="actions4">
+                            Flag not implemented yet
+                        </div>
+                        <div class="tab-pane" id="actions5">
+                            Add to what?
+                            {% map_info_tile map %}
+                        </div>
+                    </div>
 
-    <li><a href="{% url geonode.maps.views.view map.id %}">{% trans "View or edit this map" %}</a></li>
-    {% if can_change %}
-    <li><a href="{% url geonode.maps.views.map_controller map.id %}?describe">{% trans "Edit metadata" %}</a></li>
-    <li><a id="set_thumbnail" href="{% url geonode.maps.views.map_controller map.id %}?thumbnail">{% trans "Set thumbnail" %}</a></li>
-    {% include "mapstory/_widget_section_chooser.html" %}
-    {% endif %}
-    {% if can_change_permissions %}
-    <li><a href="{% url edit_map_permissions map.id %}">{% trans "Edit permissions" %}</a></li>
-    {% endif %}
-    {% if can_delete %}
-    <li><a href="{% url geonode.maps.views.map_controller map.id %}?remove">{% trans "Delete map" %}</a></li>
-    {% endif %}
-    <li><a href="{% url geonode.maps.views.newmap %}?copy={{map.id}}">{% trans "Duplicate map" %}</a></li>
-  </ul>
-  {% has_obj_perm user map "maps.change_map_permissions" as can_change_permissions %}
-  {% if can_change_permissions %}
-  <h3>{% trans "Permissions" %}</h3>
-    <p>{% trans "Select what kind of privileges to allow." %}</p>
-    <div id="permissions_form"></div>
-  {% endif %}
-</div>
+                    <article class="abstract">Abstract: {{ map.abstract }}</article>
+                    <cite>Uploaded by {{ map.owner.username }} on {{ map.last_modified|date:"N j Y" }}</cite>
+                </div>
+                {% include "mapstory/_comments.html" %}
+
+            </div>
+        </div>
+        <div class="span4">
+            {% include "maps/_widget_about_storyteller.html" %}
+
+            {% include "mapstory/_widget_by_storyteller.html" %}
+
+            <section class="box mrg-btm">
+                <h2>RELATED MAPSTORIES</h2>
+                {% include "mapstory/_mapstory_list_side.html" %}
+            </section>
+
+            {% include "mapstory/_widget_social.html" %}
+
+        </div>
+    </div>
 {% endblock %}
