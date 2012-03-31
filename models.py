@@ -49,12 +49,13 @@ class VideoLink(Link):
     text = models.CharField(max_length=256)
     publish = models.BooleanField(default=False)
     
-class ContactDetails(models.Model):
+class ContactDetail(models.Model):
     '''Additional User details'''
     user = models.OneToOneField(User)
-    biography = models.CharField(max_length=1024, null=True)
-    education = models.CharField(max_length=512, null=True)
-    expertise = models.CharField(max_length=256, null=True)
+    blurb = models.CharField(max_length=140, null=True)
+    biography = models.CharField(max_length=1024, null=True, blank=True)
+    education = models.CharField(max_length=512, null=True, blank=True)
+    expertise = models.CharField(max_length=256, null=True, blank=True)
     links = models.ManyToManyField(Link)
 
 def create_contact_details(instance, sender, **kw):
