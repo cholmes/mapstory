@@ -16,3 +16,4 @@ class VideoLinkAdmin(admin.ModelAdmin):
 
 admin.site.register(VideoLink, VideoLinkAdmin)
 admin.site.register(Section, SectionAdmin)
+admin.site.register(Topic)
