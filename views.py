@@ -2,8 +2,7 @@ from geonode.maps.models import Map
 from geonode.maps.models import Layer
 from geonode.maps.models import Thumbnail
 
-from mapstory.models import VideoLink
-from mapstory.models import Section
+from mapstory.models import *
 
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
@@ -112,6 +111,29 @@ def about_storyteller(req, username):
     return render_to_response('mapstory/about_storyteller.html', RequestContext(req,{
         "user" : user,
     }))
+    
+@login_required
+def topics_api(req, layer_or_map_id):
+    try:
+        obj = Map.objects.get(pk = layer_or_map_id)
+        perm = 'maps.change_map'
+    except Map.DoesNotExist:
+        obj = get_object_or_404(Layer, pk = layer_or_map_id)
+        perm = 'maps.change_layer'
+
+    if obj.owner != req.user or not req.user.has_perm(perm):
+        return HttpResponse('Not sufficient permissions',status=401)
+        
+    if req.method == 'GET':
+        pass
+    elif req.method == 'POST':
+        topics = req.POST['topics']
+        Topic.objects.tag(obj,topics)
+    if req.method != 'POST':
+        return HttpResponse(status=400)
+    
+    return HttpResponse('OK', status=200)
+
 
 @login_required
 def create_annotations_layer(req, mapid):
