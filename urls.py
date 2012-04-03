@@ -4,6 +4,8 @@ from django.views.generic.simple import direct_to_template
 from staticfiles.urls import staticfiles_urlpatterns
 from geonode.sitemap import LayerSitemap, MapSitemap
 from geonode.proxy.urls import urlpatterns as proxy_urlpatterns
+from mapstory.models import *
+from geonode.maps.models import *
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
@@ -19,6 +21,14 @@ sitemaps = {
     "map": MapSitemap
 }
 
+_section_topic_context = {
+    "template" : "mapstory/test/topic-tagging.html",
+    "extra_context" : {
+    "sections" : lambda : Section.objects.all(),
+    "topic_object" : lambda: Map.objects.all()[0]
+    }
+}
+
 urlpatterns = patterns('mapstory.views',
     (r'^(?:index/?)?$', 'index'),
 
@@ -29,7 +39,12 @@ urlpatterns = patterns('mapstory.views',
     url(r'^mapstory/alerts$','alerts',name='alerts'),
     url(r'^mapstory/tile/(?P<mapid>\d+)$','map_tile',name='map_tile'),
     url(r'^mapstory/tiles$','map_tiles',name='map_tiles'),
-    url(r'^mapstory/sections$','set_section',name='set_section'),
+    
+    # semi-temp urls
+    url(r'^mapstory/topics/(?P<layer_or_map_id>\d+)$','topics_api',name='topics_api'),
+
+    # testing urls
+    url(r'^mapstory/test/topic-tagging$',direct_to_template, _section_topic_context),
     
     # temp urls
     url(r"^mapstory/story/", direct_to_template, {"template": "mapstory/story_detail.html"}, name="story"),
