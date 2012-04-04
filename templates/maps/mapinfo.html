@@ -88,7 +88,7 @@ Ext.onReady(function() {
             </ul>
         </div>
         <div class="span8">
-            <h2 class="icn-mapstories">ELLICOTT PLAN FOR WASHINGTON DC</h2>
+            <h2 class="icn-mapstories">{{ map.title }}</h2>
         </div>
         <div class="span4">
             <a href="#" class="back">Back to MapStory Search</a>
@@ -115,7 +115,6 @@ Ext.onReady(function() {
                     <div class="video-actions tab-content">
                         <div class="tab-pane active" id="describemap">
                             {% has_obj_perm user map "maps.change_map" as can_change %}
-                            {{ user }} {{ can_change }}
                             {% if can_change %}
                             <form id="info-form" method="POST" action="{% url geonode.maps.views.map_controller map.id %}?describe">
                             <label>Title:</label>
@@ -174,11 +173,10 @@ Ext.onReady(function() {
                         </div>
                         <div class="tab-pane" id="actions5">
                             Add to what?
-                            {% map_info_tile map %}
                         </div>
                     </div>
 
-                    <article class="abstract">Abstract: {{ map.abstract }}</article>
+                    <article class="abstract"><p>Abstract: {{ map.abstract }}</p></article>
                     <cite>Uploaded by {{ map.owner.username }} on {{ map.last_modified|date:"N j Y" }}</cite>
                 </div>
                 {% include "mapstory/_comments.html" %}
@@ -186,9 +184,9 @@ Ext.onReady(function() {
             </div>
         </div>
         <div class="span4">
-            {% include "maps/_widget_about_storyteller.html" %}
+            {% about_storyteller map %}
 
-            {% include "mapstory/_widget_by_storyteller.html" %}
+            {% include "maps/_widget_by_storyteller.html" %}
 
             <section class="box mrg-btm">
                 <h2>RELATED MAPSTORIES</h2>

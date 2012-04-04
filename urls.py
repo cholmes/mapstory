@@ -32,6 +32,9 @@ urlpatterns = patterns('mapstory.views',
     url(r'^mapstory/sections$','set_section',name='set_section'),
     url(r'^mapstory/storyteller/(?P<username>\w+)$','about_storyteller',name='about_storyteller'),
     
+    # ugh, overrides
+    url(r'^(?P<layername>[^/]*)/metadata$', 'layer_metadata', name="layer_metadata"),
+
     # temp urls
     url(r"^mapstory/story/", direct_to_template, {"template": "mapstory/story_detail.html"}, name="story"),
     url(r"^mapstory/manage/", direct_to_template, {"template": "mapstory/story_manage.html"}, name="story_manage"),

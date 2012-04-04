@@ -1,10 +1,13 @@
-<article>
+{% load mapstory_tags %}
+<article class="tile-left">
     <a href="{{ map.get_absolute_url }}">
-        <img src="{{ map.get_thumbnail_url }}" width="90" height="90" alt="{{ map.title }}" class="thumb" />
+        <div class="image-wrapper">
+            <img class="thumb" height="90" src="{{ map.get_thumbnail_url }}" alt="{{ map.title }}">
+        </div>
     </a>
     <div class="details">
         <h6><a href="{{ map.get_absolute_url }}">{{map.title}}</a></h6>
-        <a href="#" rel="author">{{ map.owner.username }}</a>
+        <a href="#" rel="author">{{ map|user_name }}</a>
         <time pubdate datetime="{{ map.last_modified|date:"Y-m-d" }}">on {{ map.last_modified|date:"N j Y" }}</time>
         <footer>
             <span class="views">1,205 Views</span>

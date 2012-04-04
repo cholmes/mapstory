@@ -1026,6 +1026,12 @@ article h3 {
     font-weight: bold;
 }
 
+.video-actions #describemap input,
+.video-actions #describemap textarea
+{
+    width: 99%;
+}
+
 /** video mini **/
 .storyteller-details section.video-mini {
   border-bottom: 0;
@@ -1142,7 +1148,6 @@ section.box a.read-more:hover, a.read-more:hover {
 section.box .article-list {
   overflow-y:auto;
   max-height:330px;
-  margin-right:-14px;
 }
 
 section.box .article-list article {
@@ -1165,14 +1170,9 @@ section.box .article-list article h6 a:hover {
  color:#f47a20;
 }
 
-section.box .article-list article img.thumb {
-  float:left;
-  margin:0 10px 10px 0;
-}
-
 section.box .article-list article .details {
   float:left;
-  width:172px;
+  width:158px;
 }
 
 section.box .article-list article a[rel="name"],
@@ -1189,6 +1189,19 @@ section.box .article-list article footer {
 section.box .article-list article footer .views {
   border-right:1px solid #777;
   padding-right:8px;
+}
+
+.tile-left .image-wrapper {
+    width:90px;
+    overflow: hidden;
+    float: left;
+    margin:0 10px 10px 0;
+}
+.tile-left .image-wrapper .thumb {
+    height:90px;
+    position: relative;
+    right: 25%;
+    max-width: none;
 }
 
 /*** storyteller details ***/

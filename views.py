@@ -62,37 +62,34 @@ def map_tiles(req):
     maps = get_map_carousel_maps()
     return HttpResponse(''.join( [ _render_map_tile(m) for m in maps] ))
 
-def _render_map_tile(obj,thumb=None,req=None):
-    if not thumb:
-        thumb = obj.get_thumbnail()
-    if thumb:
-        thumb = thumb.get_thumbnail_url()
-    else:
-        thumb = '%stheme/img/silk/map.png' % settings.STATIC_URL
-    if obj.owner.first_name:
-        author = '%s %s' % (obj.owner.first_name,obj.owner.last_name)
-    else:
-        author = obj.owner.username
+def _render_map_tile(obj,req=None):
         
-    author_link = reverse('profiles.views.profile_detail', args=(obj.owner.username,))
-        
-    ctx = {
-        'title' : obj.title,
-        'author' : author,
-        'author_link' : author_link,
-        'thumb' : thumb,
-        'map_view' : reverse( 'geonode.maps.views.map_controller' , args=[obj.id]),
-        'last_modified' : obj.last_modified.strftime('%b %d %Y')
-    }
-    
-    template = 'mapstory/tile.html'
+    template = 'mapstory/_story_tile.html'
     if req:
-        return render_to_response(template, RequestContext(req,ctx))
-    return loader.render_to_string(template,ctx)
+        return render_to_response(template, RequestContext(req,{'map':obj}))
+    return loader.render_to_string(template,{'map':obj})
 
 def map_tile(req, mapid):
     obj = get_object_or_404(Map,pk=mapid)
     return _render_map_tile(obj,req=req)
+
+@login_required
+def layer_metadata(request, layername):
+    '''ugh, override the default'''
+    from geonode.maps.views import LayerDescriptionForm
+    layer = get_object_or_404(Layer, typename=layername)
+    if not request.user.has_perm('maps.change_layer', obj=layer):
+        return HttpResponse(loader.render_to_string('401.html', 
+            RequestContext(request, {'error_message': 
+                _("You are not permitted to modify this layer's metadata")})), status=401)
+    if request.method == "POST":
+        form = LayerDescriptionForm(request.POST, prefix="layer")
+        form.is_valid()
+        layer.title = form.cleaned_data['title']
+        layer.keywords = form.cleaned_data['keywords']
+        layer.abstract = form.cleaned_data['abstract']
+        layer.save()
+        return HttpResponse('OK')
 
 @login_required
 def set_section(req):
