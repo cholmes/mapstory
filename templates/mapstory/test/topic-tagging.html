@@ -2,20 +2,7 @@
 
 {% block extra_head %}
 <style type="text/css">
-    .section {
-        background: #F47A20;
-    }
-    .topic-list li {
-        list-style: none;
-    }
-    #section-dropdown .dropdown-menu {
-        height: 25em;
-        overflow: auto;
-    }
-    .btn {
-        font-style: none;
-        font-weight: normal;
-    }
+
 </style>
 {% endblock %}
 
@@ -37,14 +24,6 @@
                 </ul>
                 {% endfor %}
             </ul>
-        </div>
-        <div class="selected-topics-list">
-            <h4>Selected Topics</h4>
-            {% for t in topic_object.topic_set.all %}
-            <a class="btn" href="topic-{{t.pk}}">
-                <i class="icon-remove"></i>{{t.name}}
-            </a>
-            {% endfor %}
         </div>
     </div>
 </div>

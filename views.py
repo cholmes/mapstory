@@ -117,8 +117,8 @@ def topics_api(req, layer_or_map_id):
     except Map.DoesNotExist:
         obj = get_object_or_404(Layer, pk = layer_or_map_id)
         perm = 'maps.change_layer'
-
-    if obj.owner != req.user or not req.user.has_perm(perm):
+        
+    if obj.owner != req.user or not req.user.has_perm(perm, obj):
         return HttpResponse('Not sufficient permissions',status=401)
         
     if req.method == 'GET':

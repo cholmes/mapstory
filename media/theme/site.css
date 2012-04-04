@@ -968,6 +968,7 @@ article h3 {
 }
 
 .video-actions.tab-content {
+    overflow: visible;
     border-top: 1px solid #D8D9D9;
     border-bottom: 1px solid #D8D9D9;
 }
@@ -1311,6 +1312,11 @@ section.box .article-list article footer .views {
 
 .activity-stream div {
   line-height:1.2em;
+}
+
+.btn {
+    font-style: none;
+    font-weight: normal;
 }
 
 .btn-custom {
@@ -2002,4 +2008,16 @@ h2.icn-storylayer span, h2.icn-mapstory span {
   color:#4a4a4a;
   text-decoration:underline;
   font-weight:normal;
+}
+
+/** topic-selection widget **/
+#topic-dropdown .section {
+    background: #F47A20;
+}
+#topic-dropdown .topic-list li {
+    list-style: none;
+}
+#topic-dropdown .dropdown-menu {
+    height: 25em;
+    overflow: auto;
 }
