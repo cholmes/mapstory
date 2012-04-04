@@ -1,13 +1,13 @@
+from itertools import chain
+
 from django.db import models
 from django.db.models import Count
 from django.db.models import signals
-from django.template import defaultfilters
 
-from django.contrib.contenttypes.models import ContentType
-from django.contrib.contenttypes import generic
 from django.contrib.auth.models import User
 
 from geonode.maps.models import Map
+from geonode.maps.models import Layer
 
 class SectionManager(models.Manager):
     def sections_with_maps(self):
@@ -21,24 +21,52 @@ class SectionManager(models.Manager):
         s = self.get(id = sid)
         s.maps.add(amap)
         s.save()
+        
+class TopicManager(models.Manager):
+    def tag(self, obj, topic, allow_create=False):
+        if allow_create:
+            topic,_ = self.get_or_create(name=topic)
+        else:
+            print 'getting',int(topic)
+            topic = self.get(pk=int(topic))
+        related = isinstance(obj, Map) and topic.maps or topic.layers
+        # @todo - only allowing one topic per item (UI work needed)
+        obj.topic_set.clear()
+        related.add(obj)
+        topic.save()
+        
     
+class Topic(models.Model):
+    objects = TopicManager()
+    
+    name = models.CharField(max_length=64)
+    layers = models.ManyToManyField(Layer)
+    maps = models.ManyToManyField(Map)
+    
+    def __unicode__(self):
+        return 'Topic - %s' % self.name
+    
+     
 class Section(models.Model):
     objects = SectionManager()
     
     name = models.CharField(max_length=64)
-    slug = models.SlugField(max_length=64)
-    maps = models.ManyToManyField(Map)
+    topics = models.ManyToManyField(Topic)
     order = models.IntegerField(null=True)
     
-    def save(self):
-        slugtext = self.name.replace('&','and')
-        self.slug = defaultfilters.slugify(slugtext)
-        if self.order is None:
-            self.order = self.id
-        models.Model.save(self)
+    def _children(self, att):
+        field = lambda t: getattr(t,att).filter()
+        return set(chain(*[ field(t) for t in self.topics.all()]))
+    
+    def get_maps(self):
+        return self._children('maps')
+        
+    def get_layers(self):
+        return self._children('layers')
     
     def __unicode__(self):
-        return self.name
+        return 'Section %s' % self.name
+
     
 class Link(models.Model):
     name = models.CharField(max_length=64)

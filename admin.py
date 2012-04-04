@@ -20,3 +20,4 @@ class ContactDetailAdmin(admin.ModelAdmin):
 admin.site.register(VideoLink, VideoLinkAdmin)
 admin.site.register(Section, SectionAdmin)
 admin.site.register(ContactDetail, ContactDetailAdmin)
+admin.site.register(Topic)
