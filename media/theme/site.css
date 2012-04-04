@@ -626,7 +626,8 @@ p.center {
 }
 
 #sections .tab-content {
-  overflow: hidden;
+  overflow: auto;
+  height: 450px;
 }
 
 /** section tabs **/

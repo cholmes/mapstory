@@ -57,6 +57,10 @@ class Section(models.Model):
         field = lambda t: getattr(t,att).filter()
         return set(chain(*[ field(t) for t in self.topics.all()]))
     
+    def all_children(self):
+        x = self.get_maps() | self.get_layers()
+        return x
+    
     def get_maps(self):
         return self._children('maps')
         

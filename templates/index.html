@@ -1,6 +1,7 @@
 {% extends "page_layout.html" %}
 {% load webdesign %}
 {% load i18n %}
+{% load mapstory_tags %}
 
 {% block title %} {% trans "Welcome!" %} - {{ block.super }} {% endblock %}
 {% block body_class %}home{% endblock %}
@@ -222,22 +223,15 @@
           <div class="tab-pane" id="section3">section 3 content</div>
           {% else %}
                 {% for sec in page.sections %}
-                <div class="tab-pane {% if forloop.first %} class="active"{% endif %}" id="section{{ forloop.counter }}">
-                    {% for m in sec.maps.all %}
-                        <article>
-                            <img alt="{{ m.title }}" src="{{ m.get_thumbnail_url }}" class="left section_thumb"></img>
-                            <div class="article-content">
-                                <header>
-                                    <h3><a href="{{ m.get_absolute_url }}">{{ m.title }}</a></h3>
-                                </header>
-                                <div class="summary">{{ m.abstract }}</div>
-                                <footer>
-                                    <span class="views">1,205 Views</span>
-                                    <span class="rating">3 stars</span>
-                                </footer>
-                            </div>
-                        </article>
-                    {% endfor %}
+                <div class="tab-pane {% if forloop.first %}active{% endif %}" id="section{{ forloop.counter }}">
+                    {% with sec.all_children as items %}
+                        {% if not items %}
+                        <p>No Items in this Section</p>
+                        {% endif %}
+                        {% for i in items %}
+                            {% map_info_tile i left %}
+                        {% endfor %}
+                    {% endwith %}
                 </div>
                 {% endfor %}
           {% endif %}
