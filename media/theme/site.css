@@ -24,17 +24,20 @@ section {
 }
 
 #login-area {
-    top: 20px;
-    width: 15em;
+    width: 217px;
+    float: right;
+    top: 0;
 }
 
 #login-area a {
     display: block;
-    font-size:13px;
 }
 
 #login-area .user {
     color:white;
+    font-size:1em;
+    line-height:1.5em;
+    clear:both;
 }
 
 #login-area a:hover, #login-area a:active {
@@ -72,12 +75,12 @@ html.x-viewport #login-area {
   font-family: sans-serif;
   display: inline-block !important;
   font-size:11px;
+  position: relative;
+  top: 11px;
 }
 
 #donate {
-  position: absolute;
-  left: 0;
-  font-size: larger;
+  float: left;
   color: white;
   padding: .3em 1em;
   -moz-border-radius: 2px;

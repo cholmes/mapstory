@@ -27,17 +27,15 @@
       <div class="wrap selfclear">
         <a id="logo" href="{% url geonode.views.index %}">Map Story</a>
         <div id="login-area" class="fancyfont">
-            <div>
-                <a href="{% url donate %}" id="donate">DONATE NOW</a >
+            <a href="{% url donate %}" id="donate">DONATE NOW</a >
 
-                {% if user.is_authenticated %}
-                    <a id="login-link" href="{% url auth_logout %}">{% trans "Log out" %}</a>
-                    <div class="user">{{ user.username }}</div>
-                {% else %}
-                    <a id="login-link" href="#login-form-pop">{% trans "Log in" %}</a>
-                    {% if REGISTRATION_OPEN %} or <a href="{% url registration_register %}">{% trans "Register" %}</a>{% endif %}
-                {% endif %}
-            </div>
+            {% if user.is_authenticated %}
+                <a id="login-link" href="{% url auth_logout %}">{% trans "Log out" %}</a>
+                <div class="user">Welcome {{ user.username }}</div>
+            {% else %}
+                <a id="login-link" href="#login-form-pop">{% trans "Log in" %}</a>
+                {% if REGISTRATION_OPEN %} or <a href="{% url registration_register %}">{% trans "Register" %}</a>{% endif %}
+            {% endif %}
         </div>
         <div id="login-form-pop">
             <div class="drop-pointer"></div>
@@ -70,7 +68,7 @@
               {% endif %}
 
         </ul>
-        <form id="quicksearch" action="{% url search %}" method="POST">
+        <form id="quicksearch" action="{% url new_search %}" method="POST">
             {% csrf_token %}
             <label for="q">Quick Search</label>
             <input name="q" />
