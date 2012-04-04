@@ -60,6 +60,6 @@ class ContactDetail(models.Model):
 
 def create_contact_details(instance, sender, **kw):
     if kw['created']:
-        ContactDetails.objects.create(user = instance)
+        ContactDetail.objects.create(user = instance)
     
 signals.post_save.connect(create_contact_details, sender=User)
