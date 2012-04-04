@@ -868,6 +868,10 @@ h2.icn-storylayers, h2.icn-mapstories, h2.icn-storytellers {
   padding-right:15px;
 }
 
+.about-storyteller h4 {
+    display:inline;
+}
+
 .storyteller img {
   float:left;
   margin-right: 1em;
@@ -954,11 +958,15 @@ article h3 {
   margin-bottom:20px;
 }
 
-.video-actions {
+.video-actions.tabbable {
   overflow:hidden;
-  border-bottom:1px solid #d8d9d9;
   padding-bottom:8px;
   margin-bottom:8px;
+}
+
+.video-actions.tab-content {
+    border-top: 1px solid #D8D9D9;
+    border-bottom: 1px solid #D8D9D9;
 }
 
 .video-actions .actions-links {
@@ -967,14 +975,21 @@ article h3 {
   padding-top:20px;
 }
 
-.video-actions .actions-links a {
+.video-actions .actions-links li a {
   display:inline-block;
   padding:0 22px 0 23px;
   font-size:15px;
 }
 
-.video-actions .actions-links a.last {
+.video-actions .actions-links li a.last {
   padding-right:0;
+}
+
+.video-actions .nav {
+    margin-bottom: 0;
+}
+.video-actions .nav-tabs {
+    border-bottom: 0;
 }
 
 .video-actions a.icn.info { background:url(img/icons/info.png) no-repeat left center; }
@@ -1005,6 +1020,16 @@ article h3 {
 .video-actions .metrics .views i {
   font-size:17px;
   font-style:normal;
+}
+
+.video-actions #describemap label {
+    font-weight: bold;
+}
+
+.video-actions #describemap input,
+.video-actions #describemap textarea
+{
+    width: 99%;
 }
 
 /** video mini **/
@@ -1123,7 +1148,6 @@ section.box a.read-more:hover, a.read-more:hover {
 section.box .article-list {
   overflow-y:auto;
   max-height:330px;
-  margin-right:-14px;
 }
 
 section.box .article-list article {
@@ -1146,14 +1170,9 @@ section.box .article-list article h6 a:hover {
  color:#f47a20;
 }
 
-section.box .article-list article img.thumb {
-  float:left;
-  margin:0 10px 10px 0;
-}
-
 section.box .article-list article .details {
   float:left;
-  width:172px;
+  width:158px;
 }
 
 section.box .article-list article a[rel="name"],
@@ -1170,6 +1189,19 @@ section.box .article-list article footer {
 section.box .article-list article footer .views {
   border-right:1px solid #777;
   padding-right:8px;
+}
+
+.tile-left .image-wrapper {
+    width:90px;
+    overflow: hidden;
+    float: left;
+    margin:0 10px 10px 0;
+}
+.tile-left .image-wrapper .thumb {
+    height:90px;
+    position: relative;
+    right: 25%;
+    max-width: none;
 }
 
 /*** storyteller details ***/

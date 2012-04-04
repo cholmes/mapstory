@@ -79,7 +79,7 @@ USE_I18N = True
 
 MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'static', 'uploaded')
 
-MEDIA_URL = '/uploaded/'
+MEDIA_URL = '/static/uploaded/'
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
 STATIC_URL = '/static/'
 GEONODE_UPLOAD_PATH = MEDIA_ROOT + 'geonode'

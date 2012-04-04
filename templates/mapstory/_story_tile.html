@@ -1,0 +1,13 @@
+{% load mapstory_tags %}
+<div class="tile">
+    <a href="{{ map.get_absolute_url }}">
+        <img height="128" src="{{ map.get_thumbnail_url }}">
+    </a>
+    <div class="info">
+        <div class="title">{{ map.title }}</div>
+        <div class="">
+            <span><a href="#">{{ map|user_name }}</a></span>
+            <span> on {{ map.last_modified|date:"N j Y" }}</span>
+        </div>
+    </div>
+</div>
