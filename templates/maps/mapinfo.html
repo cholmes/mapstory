@@ -2,6 +2,8 @@
 {% load i18n %}
 {% load geonode_auth %}
 {% load mapstory_tags %}
+{% load dialogos_tags %}
+{% load agon_ratings_tags %}
 
 {% has_obj_perm user map "maps.change_map_permissions" as can_change_permissions %}
 
@@ -80,7 +82,8 @@ Ext.onReady(function() {
                         </ul>
                         <div class="metrics">
                             <span class="views"><i>1,205</i> Views</span>
-                            <span class="rating">3 stars</span>
+                            {% overall_rating map "map" as map_rating %}
+                            <span class="overall_rating" data-rating="{{ map_rating }}"></span>
                         </div>
                     </div>
                     <div class="video-actions tab-content">
@@ -138,6 +141,13 @@ Ext.onReady(function() {
                         <div class="tab-pane" id="actions3">
                             <p>Embed this map:<p>
                             <textarea><iframe style="border: none;" height="400" width="600" src="{{ req.META.SERVER_NAME %}{% url geonode.maps.views.embed map.id %}"></iframe></textarea>
+                            <g:plusone size="small" href="http://{{ request.get_host }}{{ request.get_full_path }}"></g:plusone>
+                            <div class="fb-like" data-href="http://{{ request.get_host }}{{ request.get_full_path }}" data-send="false" data-width="50" data-layout="button_count" data-show-faces="false"></div>
+                            {% if request.user.is_authenticated %}
+                                <h3>{% trans "Rate this MapStory" %}</h3>
+                                {% user_rating request.user map "map" as user_map_rating %}
+                                <div id="user_rating" class="category-map"></div>
+                            {% endif %}
                         </div>
                         <div class="tab-pane" id="actions4">
                             Flag not implemented yet
@@ -168,4 +178,27 @@ Ext.onReady(function() {
 
         </div>
     </div>
+{% endblock %}
+
+{% block extra_body %}
+{% if request.user.is_authenticated %}
+	{% user_rating_js request.user map "map" %}
+{% else %}
+	<script src="{{ STATIC_URL }}agon_ratings/js/jquery.raty.js"></script>
+{% endif %}
+<script type="text/javascript">
+$(function() {
+    $('span.overall_rating').raty({
+        half: true,
+        readOnly: true,
+        start: $('span.overall_rating').data('rating'),
+        path: "{{ STATIC_URL }}agon_ratings/img/"
+    });
+});
+(function() {
+    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+    po.src = 'https://apis.google.com/js/plusone.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+})();
+</script>
 {% endblock %}

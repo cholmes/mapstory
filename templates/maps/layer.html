@@ -2,6 +2,8 @@
 {% load i18n %}
 {% load geonode_auth %}
 {% load mapstory_tags %}
+{% load dialogos_tags %}
+{% load agon_ratings_tags %}
 
 {% block extra_head %}
 {% include "geonode/ext_header.html" %}
@@ -151,7 +153,8 @@
                         </ul>
                         <div class="metrics">
                             <span class="views"><i>1,205</i> Views</span>
-                            <span class="rating">3 stars</span>
+                            {% overall_rating layer "layer" as layer_rating %}
+                            <span class="overall_rating" data-rating="{{ layer_rating }}"></span>
                         </div>
                     </div>
                     <div class="video-actions tab-content">
@@ -197,7 +200,13 @@
                             {% endif %}
                         </div>
                         <div class="tab-pane" id="actions3">
-                            Social links here
+                            <g:plusone size="small" href="http://{{ request.get_host }}{{ request.get_full_path }}"></g:plusone>
+                            <div class="fb-like" data-href="http://{{ request.get_host }}{{ request.get_full_path }}" data-send="false" data-width="50" data-layout="button_count" data-show-faces="false"></div>
+                            {% if request.user.is_authenticated %}
+                                <h3>{% trans "Rate this StoryLayer" %}</h3>
+                                {% user_rating request.user layer "layer" as user_layer_rating %}
+                                <div id="user_rating" class="category-layer"></div>
+                            {% endif %}
                         </div>
                         <div class="tab-pane" id="actions4">
                             Flag not implemented yet
@@ -269,11 +278,24 @@
 {% endblock %}
 
 {% block extra_body %}
-    <script type="text/javascript">
-        $(function() {
-            $("article.abstract a.read-more").click(function(event) {
-                event.preventDefault();
-            });
-        });
-    </script>
+{% if request.user.is_authenticated %}
+	{% user_rating_js request.user layer "layer" %}
+{% else %}
+	<script src="{{ STATIC_URL }}agon_ratings/js/jquery.raty.js"></script>
+{% endif %}
+<script type="text/javascript">
+$(function() {
+    $('span.overall_rating').raty({
+        half: true,
+        readOnly: true,
+        start: $('span.overall_rating').data('rating'),
+        path: "{{ STATIC_URL }}agon_ratings/img/"
+    });
+});
+(function() {
+    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+    po.src = 'https://apis.google.com/js/plusone.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+})();
+</script>
 {% endblock %}
