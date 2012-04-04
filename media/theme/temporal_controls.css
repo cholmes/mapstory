@@ -1,29 +1,38 @@
-/*
-.x-btn .gxp-icon-reset{
-    background-image:url('img/icons/control_start_blue.png')
-}
-*/
-
-.x-btn-icon .x-btn-large .x-btn-text, .x-btn-noicon .x-btn-large .x-btn-text{
+div.gx-overlay-playback .x-btn-icon .x-btn-large .x-btn-text, .x-btn-noicon .x-btn-large .x-btn-text{
     height: 50px;
-	width: 32px;
+	width: 34px;
+}
+.x-btn-icon .x-btn-medium .x-btn-text, .x-btn-noicon .x-btn-medium .x-btn-text {
+    width: 34px;
 }
 
-/*** General #map-bbar button properties ***/
-#map-bbar .x-btn-pressed td {
+/*** Playback toolbar positioning ***/
+div.gx-playback-wrap div.gx-overlay-playback{
+    position:relative;
+    top: 390px;
+    left: 10px;
+}
+#map-bbar .x-toolbar, div.gx-playback-wrap .x-toolbar{
+    background: rgba(11,11,11,0.6);
+}
+
+/*** General playback button properties ***/
+#map-bbar .x-btn-pressed td, div.gx-playback-wrap .x-btn-pressed td {
 background-image: none;
-background-position-y: 0;
+background-position-y: -10px;
 background-position-x: 0;
 /*background-color: rgba(255, 255, 255, 0.85);*/
 }
-#map-bbar .x-btn button{
-	background-position-y: 0;
+#map-bbar .x-btn button, div.gx-playback-wrap .x-btn button{
+	background-position-y: -10px;
 }
-#map-bbar .x-btn-over button, #map-bbar .x-btn-pressed td button{
-	background-position-y: -44px;
+#map-bbar .x-btn-over button, #map-bbar .x-btn-pressed td button,
+div.gx-playback-wrap .x-btn-over button, div.gx-playback-wrap .x-btn-pressed td button{
+	background-position-y: -54px;
 }
-#map-bbar .x-btn-pressed td button:hover{
-	background-position-y: 0;
+#map-bbar .x-btn-pressed td button:hover,
+div.gx-playback-wrap .x-btn-pressed td button:hover{
+	background-position-y: -10px;
 }
 .x-btn button.gxp-icon-settings{
     background-image:url('img/icons/large/settings.png')
