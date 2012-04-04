@@ -27,7 +27,6 @@ class TopicManager(models.Manager):
         if allow_create:
             topic,_ = self.get_or_create(name=topic)
         else:
-            print 'getting',int(topic)
             topic = self.get(pk=int(topic))
         related = isinstance(obj, Map) and topic.maps or topic.layers
         # @todo - only allowing one topic per item (UI work needed)
