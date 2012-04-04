@@ -148,7 +148,7 @@
           {% else %}
             {% for sec in page.sections %}
             <li {% if forloop.first %} class="active"{% endif %}>
-                <a href="#section{{ forloop.counter }}" data-toggle="tab">{{ sec }}</a>
+                <a href="#section{{ forloop.counter }}" data-toggle="tab">{{ sec.name }}</a>
             </li>
             {% endfor %}
           {% endif %}

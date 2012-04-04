@@ -548,7 +548,6 @@ body {
   float:right;
   margin-left:10px;
 }
-*/
 /*** elements ***/
 img.left {
   float:left;
@@ -589,13 +588,13 @@ p.center {
 
 #sections .nav-tabs {
   float:left;
-  width:168px;
+  width:217px;
   border-right:0;
 }
 
 #sections .nav-tabs > li > a {
   display:block;
-  width:169px;
+  width:217px;
   height:32px;
   line-height:32px;
   text-indent:12px;
