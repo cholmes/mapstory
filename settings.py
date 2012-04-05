@@ -77,9 +77,9 @@ NOSE_ARGS = [
 # to load the internationalization machinery.
 USE_I18N = True
 
-MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'static', 'uploaded')
+MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'uploaded')
 
-MEDIA_URL = '/uploaded/'
+MEDIA_URL = '/media/'
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
 STATIC_URL = '/static/'
 GEONODE_UPLOAD_PATH = MEDIA_ROOT + 'geonode'

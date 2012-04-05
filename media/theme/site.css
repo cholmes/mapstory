@@ -1,4 +1,6 @@
 @import "geonode.css";
+@import "temporal_controls.css";
+@import "ext-theme.css";
 
 .clear {
   clear:both;
@@ -21,22 +23,21 @@ section {
     width: 950px;
 }
 
-#logo {
-    margin: 1em 0em 1em -15px;
-}
-
 #login-area {
-    top: 20px;
-    width: 15em;
+    width: 217px;
+    float: right;
+    top: 0;
 }
 
 #login-area a {
     display: block;
-    font-size:13px;
 }
 
 #login-area .user {
     color:white;
+    font-size:1em;
+    line-height:1.5em;
+    clear:both;
 }
 
 #login-area a:hover, #login-area a:active {
@@ -74,12 +75,12 @@ html.x-viewport #login-area {
   font-family: sans-serif;
   display: inline-block !important;
   font-size:11px;
+  position: relative;
+  top: 11px;
 }
 
 #donate {
-  position: absolute;
-  left: 0;
-  font-size: larger;
+  float: left;
   color: white;
   padding: .3em 1em;
   -moz-border-radius: 2px;
@@ -196,6 +197,57 @@ form#quicksearch {
     display: none;
 }
 
+#carousel {
+    position: relative;
+    height: 214px;
+    overflow: hidden;
+}
+
+#carousel .tile {
+    position: absolute;
+    border: 1px solid #999;
+    width:236px;
+    height:148px;
+    background:#fff;
+    padding:10px;
+    margin-top:20px;
+}
+
+#carousel .tile .info {
+    position: absolute;
+    bottom: 0;
+    text-shadow: 1px 1px 3px white;
+    background: #fff;
+    width: 236px;
+    padding-bottom: .3em;
+}
+
+#carousel .tile .info .title {
+  font-size:13px;
+}
+
+#carousel .tile .views {
+  font-weight:bold;
+}
+#carousel .arrow {
+  cursor: pointer;
+  top: 40%;
+  position: absolute;
+  width:18px;
+  height:34px;
+  text-indent:-9999px;
+  background: url(img/arrows_gr.png) 0 0;
+}
+#carousel .arrow.arrow-right {
+  background-position: -28px 0;
+}
+#carousel .arrow.arrow-left:hover {
+  background-position: 0 -40px;
+}
+#carousel .arrow.arrow-right:hover {
+  background-position: -28px -40px;
+}
+
 #slider {
     width: 900px;
 }
@@ -261,15 +313,13 @@ form#quicksearch {
 #sitenav,
 #top-crossbar .selected,
 #topPanel, /* from viewer app */
-#donate,
-#map-bbar .x-slider-thumb {
+#donate {
     background: #f47a20;
 }
 
 .palebg,
 body,
-#main,
-#map-bbar .x-slider-inner {
+#main {
     background: #F3F2F2;
 }
 
@@ -427,6 +477,7 @@ h4 {
 }
 
 /** ext overrides */
+
 #map-bbar .x-toolbar,
 #paneltbar,
 #embedded_map .x-toolbar,
@@ -443,6 +494,7 @@ h4 {
     border-width: 0 !important;
     border-color: transparent !important;
 }
+/*
 #map-bbar .x-slider-end {
     background: none
 }
@@ -481,7 +533,7 @@ h4 {
 #map-bbar .x-slider {
     background: #454238;
 }
-
+*/
 /*** bootstrap overwrite ***/
 body {
   padding-top:0;
@@ -496,7 +548,6 @@ body {
   float:right;
   margin-left:10px;
 }
-
 /*** elements ***/
 img.left {
   float:left;
@@ -537,13 +588,13 @@ p.center {
 
 #sections .nav-tabs {
   float:left;
-  width:168px;
+  width:217px;
   border-right:0;
 }
 
 #sections .nav-tabs > li > a {
   display:block;
-  width:169px;
+  width:217px;
   height:32px;
   line-height:32px;
   text-indent:12px;
@@ -575,7 +626,8 @@ p.center {
 }
 
 #sections .tab-content {
-  overflow: hidden;
+  overflow: auto;
+  height: 450px;
 }
 
 /** section tabs **/
@@ -819,6 +871,10 @@ h2.icn-storylayers, h2.icn-mapstories, h2.icn-storytellers {
   padding-right:15px;
 }
 
+.about-storyteller h4 {
+    display:inline;
+}
+
 .storyteller img {
   float:left;
   margin-right: 1em;
@@ -905,11 +961,16 @@ article h3 {
   margin-bottom:20px;
 }
 
-.video-actions {
+.video-actions.tabbable {
   overflow:hidden;
-  border-bottom:1px solid #d8d9d9;
   padding-bottom:8px;
   margin-bottom:8px;
+}
+
+.video-actions.tab-content {
+    overflow: visible;
+    border-top: 1px solid #D8D9D9;
+    border-bottom: 1px solid #D8D9D9;
 }
 
 .video-actions .actions-links {
@@ -918,14 +979,21 @@ article h3 {
   padding-top:20px;
 }
 
-.video-actions .actions-links a {
+.video-actions .actions-links li a {
   display:inline-block;
   padding:0 22px 0 23px;
   font-size:15px;
 }
 
-.video-actions .actions-links a.last {
+.video-actions .actions-links li a.last {
   padding-right:0;
+}
+
+.video-actions .nav {
+    margin-bottom: 0;
+}
+.video-actions .nav-tabs {
+    border-bottom: 0;
 }
 
 .video-actions a.icn.info { background:url(img/icons/info.png) no-repeat left center; }
@@ -956,6 +1024,16 @@ article h3 {
 .video-actions .metrics .views i {
   font-size:17px;
   font-style:normal;
+}
+
+.video-actions #describemap label {
+    font-weight: bold;
+}
+
+.video-actions #describemap input,
+.video-actions #describemap textarea
+{
+    width: 99%;
 }
 
 /** video mini **/
@@ -1074,7 +1152,6 @@ section.box a.read-more:hover, a.read-more:hover {
 section.box .article-list {
   overflow-y:auto;
   max-height:330px;
-  margin-right:-14px;
 }
 
 section.box .article-list article {
@@ -1097,14 +1174,9 @@ section.box .article-list article h6 a:hover {
  color:#f47a20;
 }
 
-section.box .article-list article img.thumb {
-  float:left;
-  margin:0 10px 10px 0;
-}
-
 section.box .article-list article .details {
   float:left;
-  width:172px;
+  width:158px;
 }
 
 section.box .article-list article a[rel="name"],
@@ -1121,6 +1193,19 @@ section.box .article-list article footer {
 section.box .article-list article footer .views {
   border-right:1px solid #777;
   padding-right:8px;
+}
+
+.tile-left .image-wrapper {
+    width:90px;
+    overflow: hidden;
+    float: left;
+    margin:0 10px 10px 0;
+}
+.tile-left .image-wrapper .thumb {
+    height:90px;
+    position: relative;
+    right: 25%;
+    max-width: none;
 }
 
 /*** storyteller details ***/
@@ -1227,6 +1312,11 @@ section.box .article-list article footer .views {
 
 .activity-stream div {
   line-height:1.2em;
+}
+
+.btn {
+    font-style: none;
+    font-weight: normal;
 }
 
 .btn-custom {
@@ -1918,4 +2008,16 @@ h2.icn-storylayer span, h2.icn-mapstory span {
   color:#4a4a4a;
   text-decoration:underline;
   font-weight:normal;
+}
+
+/** topic-selection widget **/
+#topic-dropdown .section {
+    background: #F47A20;
+}
+#topic-dropdown .topic-list li {
+    list-style: none;
+}
+#topic-dropdown .dropdown-menu {
+    height: 25em;
+    overflow: auto;
 }
