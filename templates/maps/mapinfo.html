@@ -161,7 +161,7 @@ Ext.onReady(function() {
                     <article class="abstract"><p>Abstract: {{ map.abstract }}</p></article>
                     <cite>Uploaded by {{ map.owner.username }} on {{ map.last_modified|date:"N j Y" }}</cite>
                 </div>
-                {% include "mapstory/_comments.html" %}
+                {% comments_section map %}
 
             </div>
         </div>

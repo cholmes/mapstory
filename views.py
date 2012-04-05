@@ -109,12 +109,16 @@ def about_storyteller(req, username):
         "user" : user,
     }))
     
+def delete_story_comment(req, layer_or_map, layer_or_map_id):
+    '''allow a user to delete comments attached to their layer or map'''
+    pass
+    
 @login_required
-def topics_api(req, layer_or_map_id):
-    try:
-        obj = Map.objects.get(pk = layer_or_map_id)
+def topics_api(req, layer_or_map, layer_or_map_id):
+    if layer_or_map == 'map':
+        obj = get_object_or_404(Map, pk = layer_or_map_id)
         perm = 'maps.change_map'
-    except Map.DoesNotExist:
+    else:
         obj = get_object_or_404(Layer, pk = layer_or_map_id)
         perm = 'maps.change_layer'
         

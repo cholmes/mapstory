@@ -34,7 +34,8 @@ urlpatterns = patterns('mapstory.views',
     url(r'^mapstory/storyteller/(?P<username>\w+)$','about_storyteller',name='about_storyteller'),
     
     # semi-temp urls
-    url(r'^mapstory/topics/(?P<layer_or_map_id>\d+)$','topics_api',name='topics_api'),
+    url(r'^mapstory/topics/(?P<layer_or_map>\w+)/(?P<layer_or_map_id>\d+)$','topics_api',name='topics_api'),
+    url(r'^mapstory/comment/(?P<layer_or_map_id>\d+)/(?P<comment_id>\d+)$','delete_story_comment',name='delete_story_comment'),
 
     # ugh, overrides
     url(r'^(?P<layername>[^/]*)/metadata$', 'layer_metadata', name="layer_metadata"),

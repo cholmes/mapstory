@@ -216,6 +216,19 @@
                             Add to what?
                         </div>
                         <div class="tab-pane" id="actions6">
+                            <h4>Download this data:</h4>
+                            <div class="btn-group">
+                                <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                                    Available Formats
+                                    <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    {% for l in layer.download_links %}
+                                    <li><a href="{{l.2}}" target="dlframe">{{l.1}}</a></li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            <iframe id="dlframe" style="display:none"></iframe>
                         </div>
                     </div>
                 </div>
@@ -223,7 +236,7 @@
                 <article class="abstract"><p>Abstract: {{ layer.abstract }}</p></article>
                 <cite>Uploaded by {{ layer.owner.username }} on {{ layer.date|date:"N j Y" }}</cite>
                 
-                {% include "mapstory/_comments.html" %}
+                {% comments_section layer %}
 
             </div>
         </div>

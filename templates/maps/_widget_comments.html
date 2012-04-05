@@ -1,0 +1,55 @@
+{% load dialogos_tags %}
+{% load geonode_auth %}
+{% load i18n %}
+
+<h3>{% trans "Comments" %}</h3>
+<div class="comments_container">
+    {% comments comment_object as comments %}
+    {% if not comments %}
+    <p>No Comments. Be the first!</p>
+    {% endif %}
+    {% for comment in comments %}
+        <div class="comment">
+            <div class="comment_content">
+                {{ comment.comment|escape|urlize|safe }} &mdash; 
+                <span class="comment_ago">
+                {% blocktrans with comment.submit_date|timesince as age %}
+                {{ age }} ago
+                {% endblocktrans %}
+                </span>
+            </div>
+            <cite rel="author"><a href="{{comment.author.get_absolute_url}}">{{ comment.author.get_full_name|default:comment.author|capfirst }}</a></cite>
+            {% if comment.author == request.user %}
+            <a href="{% url delete_comment comment.id %}" class="btn"><i class="icon-trash"></i>Delete</a>
+            {% endif %}
+        </div>
+    {% endfor %}
+
+    {% if request.user.is_authenticated %}
+        <h3>{% trans "Post a comment" %}</h3>
+        {% comment_form comment_object as comment_form %}
+        <form method="POST" action="{% comment_target comment_object %}">
+            {% csrf_token %}
+            <div class="comment_box">
+                {{ comment_form.comment }}
+            </div>
+            <div class="comment_post">
+                <input class="btn" type="submit" value="{% trans "Submit" %}" />
+            </div>
+            <input type="hidden" name="next" value="{{ request.path }}" />
+        </form>
+    {% else %}
+        <p><a href="{% url auth_login %}">{% trans "Login to add a comment" %}</a></p>
+    {% endif %}
+</div>
+<script type="text/javascript">
+$(function() {
+    $(".comment .btn").click(function(ev) {
+        var el = $(this);
+        ev.preventDefault();
+        $.post(el.attr('href'),function() {
+            el.closest('.comment').fadeOut();
+        });
+    });
+});  
+</script>
