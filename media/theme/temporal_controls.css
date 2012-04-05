@@ -83,6 +83,10 @@ div.gx-playback-wrap .x-btn-pressed td button:hover{
     background-image:url('img/icons/large/legend_btn.png')
 }
 
+.x-btn button.gxp-icon-editMap{
+    background-image:url('img/icons/large/edit_btn.png')
+}
+
 /*
 .x-btn-over .gxp-icon-reset{
     background-image:url('img/icons/control_start.png')
