@@ -142,7 +142,7 @@ Ext.onReady(function() {
                         <div class="tab-pane" id="actions3">
                             <p>Embed this map:<p>
                             <textarea><iframe style="border: none;" height="400" width="600" src="{{ req.META.SERVER_NAME %}{% url geonode.maps.views.embed map.id %}"></iframe></textarea>
-                            <g:plusone size="small" href="http://{{ request.get_host }}{{ request.get_full_path }}"></g:plusone>
+                            <g:plusone size="small"></g:plusone>
                             <div class="fb-like" data-href="http://{{ request.get_host }}{{ request.get_full_path }}" data-send="false" data-width="50" data-layout="button_count" data-show-faces="false"></div>
                             {% if request.user.is_authenticated %}
                                 <h3>{% trans "Rate this MapStory" %}</h3>
