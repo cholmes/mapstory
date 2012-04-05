@@ -100,13 +100,14 @@ Ext.onReady(function() {
                             <label>Abstract:</label>
                             <textarea name="map-abstract">{{map.abstract}}</textarea>
                             <div>
-                                <button>Update Information</button>
+                                <button class="btn" id="submit">Update Information</button>
                             </div>
+                            {% topic_selection map %}
                             {% csrf_token %}
                             </form>
                             <script type="text/javascript">
                                 $(function() {
-                                    $("#describemap button").click(function(ev) {
+                                    $("#submit").click(function(ev) {
                                         ev.preventDefault();
                                         var form = $(this).closest('form');
                                         $.post(

@@ -171,13 +171,14 @@
                             <label>Abstract:</label>
                             <textarea name="layer-abstract">{{layer.abstract}}</textarea>
                             <div>
-                                <button>Update Information</button>
+                                <button class="btn" id="submit">Update Information</button>
                             </div>
                             {% csrf_token %}
                             </form>
+                            {% topic_selection layer %}
                             <script type="text/javascript">
                                 $(function() {
-                                    $("#describemap button").click(function(ev) {
+                                    $("#submit").click(function(ev) {
                                         ev.preventDefault();
                                         var form = $(this).closest('form');
                                         $.post(
