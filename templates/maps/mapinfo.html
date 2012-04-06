@@ -5,7 +5,6 @@
 {% load dialogos_tags %}
 {% load agon_ratings_tags %}
 
-{% has_obj_perm user map "maps.change_map_permissions" as can_change_permissions %}
 
 {% block extra_head %}
 {% include "geonode/ext_header.html" %}
@@ -17,24 +16,25 @@ var app;
 Ext.onReady(function() {
 {% autoescape off %}
     app = new mapstory.Viewer({{config}});
+{% has_obj_perm user map "maps.change_map_permissions" as can_change_permissions %}
 {% if can_change_permissions %}
-    new GeoNode.PermissionsEditor({
-        levels: {
-            'admin': 'map_admin',
-            'readwrite': 'map_readwrite',
-            'readonly': 'map_readonly',
-            '_none': '_none'
-        },
-        renderTo: "permissions_form",
-        userLookup: "{% url geonode.views.ajax_lookup %}",
-        permissions: {{ permissions_json }},
-        listeners: {
-            updated: function(perms) {
-                var submitTo = "{% url geonode.maps.views.ajax_map_permissions map.id %}";
-                Ext.Ajax.request({ url: submitTo, jsonData: perms.writePermissions() });
-            }
-        }
-    });
+//    new GeoNode.PermissionsEditor({
+//        levels: {
+//            'admin': 'map_admin',
+//            'readwrite': 'map_readwrite',
+//            'readonly': 'map_readonly',
+//            '_none': '_none'
+//        },
+//        renderTo: "permissions_form",
+//        userLookup: "{% url geonode.views.ajax_lookup %}",
+//        permissions: {{ permissions_json }},
+//        listeners: {
+//            updated: function(perms) {
+//                var submitTo = "{% url geonode.maps.views.ajax_map_permissions map.id %}";
+//                Ext.Ajax.request({ url: submitTo, jsonData: perms.writePermissions() });
+//            }
+//        }
+//    });
     var hasThumb = {% if map.get_thumbnail %}true{% else %}false{% endif %};
     var thumbURL = "{% url geonode.maps.views.map_controller map.id %}?thumbnail";
     {% include "maps/thumbnail_help.js" %}
@@ -104,6 +104,8 @@ Ext.onReady(function() {
                             </div>
                             {% topic_selection map %}
                             {% csrf_token %}
+                            <p>Generate a thumbnail for this map</p>
+                            <a id="set_thumbnail" class="btn" href="#thumbnail">{% trans "Set thumbnail" %}</a>
                             </form>
                             <script type="text/javascript">
                                 $(function() {
