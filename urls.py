@@ -32,6 +32,7 @@ urlpatterns = patterns('mapstory.views',
     url(r'^mapstory/tile/(?P<mapid>\d+)$','map_tile',name='map_tile'),
     url(r'^mapstory/tiles$','map_tiles',name='map_tiles'),
     url(r'^mapstory/storyteller/(?P<username>\w+)$','about_storyteller',name='about_storyteller'),
+    url(r'^mapstory/section/(?P<section>[-\w]+)$','section_detail',name='section_detail'),
     
     # semi-temp urls
     url(r'^mapstory/topics/(?P<layer_or_map>\w+)/(?P<layer_or_map_id>\d+)$','topics_api',name='topics_api'),

@@ -44,6 +44,12 @@ def index(req):
 def donate(req):
     return render_to_response('mapstory/donate.html', RequestContext(req))
 
+def section_detail(req, section):
+    sec = get_object_or_404(Section, slug=section)
+    return render_to_response('mapstory/section_detail.html', RequestContext(req,{
+        'section' : sec
+    }))
+
 def get_map_carousel_maps():
     '''Get the carousel ids/thumbnail dict either
     1. as specified (model does not exist yet...)

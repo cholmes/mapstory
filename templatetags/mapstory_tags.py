@@ -120,13 +120,18 @@ class RelatedStoriesNode(template.Node):
         self.obj_name = obj_name
     def render(self, context):
         obj = context[self.obj_name]
-        topics = list(obj.topic_set.all())
+        if isinstance(obj, Section):
+            topics = obj.topics.all()
+        else:
+            topics = list(obj.topic_set.all())
         result = ""
         template_name = "mapstory/_story_tile_left.html"
+        print topics
         if topics:
             sec = topics[0].section_set.all()[0]
             maps = sec.get_maps()
-            maps.remove(obj)
+            if isinstance(obj, Map):
+                maps.remove(obj)
             result = "\n".join([
                 loader.render_to_string(template_name,{"map": m}) for m in maps
             ])

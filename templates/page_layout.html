@@ -95,7 +95,7 @@
 
       <ul id="sitenav" class="selfclear">
           {% for sec in page.sections %}
-              <li><a rel="category" class="noi" href="#{{ sec.slug }}">{{ sec.name }}</a></li>
+              <li><a rel="category" href="{{ sec.get_absolute_url }}">{{ sec.name }}</a></li>
           {% endfor %}
           <li><a rel="search" href="{% url search %}" class="subtab-search-layers">Search StoryLayers</a></li>
           <li><a rel="search" href="{% url search_maps %}" class="subtab-search-stories">Search MapStories</a></li>
