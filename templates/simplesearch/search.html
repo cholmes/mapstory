@@ -194,10 +194,12 @@
             <form id="searchForm">
                 <input id="searchField" name="search">
             </form>
+            {% if user.is_authenticated %}
             <h5 style="color:#F46817">Favorites</h5>
             <div id="favorites">
                 {% favorites %}
             </div>
+            {% endif %}
         </div>
             
         <div class="box">
