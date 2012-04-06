@@ -70,6 +70,9 @@ Layer.objects.gs_catalog.http.request(settings.GEOSERVER_BASE_URL + "rest/reload
 # now we can create the django model - must be done last when gscatalog is ready
 with open(temppath("model.json")) as fp:
     layer = serializers.deserialize("json", fp.read()).next()
+    owner = User.objects.filter(pk=layer.object.owner_id)
+    if not owner:
+        layer.object.owner = User.objects.get(pk=1)
 layer.save()
 
 shutil.rmtree(tempdir)
