@@ -81,7 +81,7 @@ class TopicSelectionNode(template.Node):
             'sections' : Section.objects.all(),
             'topic_object_type': isinstance(obj, Map) and 'map' or 'layer'
         })
-        
+
 @register.tag
 def comments_section(parse, token):
     try:
@@ -102,3 +102,30 @@ class CommentsSectionNode(template.Node):
             'comment_object' : obj
         }))
         return r
+
+@register.tag
+def related_mapstories(parse, token):
+    try:
+        tokens = token.split_contents()
+        tag_name = tokens.pop(0)
+        obj_name = tokens.pop(0)
+    except ValueError:
+        raise template.TemplateSyntaxError, "%r tag requires a single argument" % token.contents.split()[0]
+    return RelatedStoriesNode(obj_name)
+
+class RelatedStoriesNode(template.Node):
+    def __init__(self, obj_name):
+        self.obj_name = obj_name
+    def render(self, context):
+        obj = context[self.obj_name]
+        topics = list(obj.topic_set.all())
+        result = ""
+        template_name = "mapstory/_story_tile_left.html"
+        if topics:
+            sec = topics[0].section_set.all()[0]
+            maps = sec.get_maps()
+            maps.remove(obj)
+            result = "\n".join([
+                loader.render_to_string(template_name,{"map": m}) for m in maps
+            ])
+        return result
