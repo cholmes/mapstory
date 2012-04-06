@@ -14,7 +14,8 @@
     <link rel="shortcut icon" href="{{ STATIC_URL }}theme/img/favicon.ico"/>
     <script type="text/javascript" src="{% url django.views.i18n.javascript_catalog %}"></script>
     <script type="text/javascript" src="{% url lang %}"></script>
-    <link href='http://fonts.googleapis.com/css?family=Marvel:400,700' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Marvel:400,400italic,700,700italic' rel='stylesheet' type='text/css'>
+    {% include "geonode/ext_header.html" %}
     {% block extra_head %}{% endblock %}
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}theme/site.css" media="screen" />
     {% if page.design_mode %}
