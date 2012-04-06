@@ -108,7 +108,7 @@ def set_section(req):
 def about_storyteller(req, username):
     user = get_object_or_404(User, username=username)
     return render_to_response('mapstory/about_storyteller.html', RequestContext(req,{
-        "user" : user,
+        "storyteller" : user,
     }))
     
 def delete_story_comment(req, layer_or_map, layer_or_map_id):
