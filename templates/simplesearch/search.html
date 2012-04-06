@@ -1,0 +1,254 @@
+{% extends "page_layout.html" %}
+{% load i18n %}
+
+{% block head_title %} {% trans "Search Data" %} - {{ block.super }} {% endblock %}
+
+{% block extra_script %}
+{% comment %}Not using ext_header include - css causes problems at the moment{% endcomment %}
+<script type="text/javascript" src="{{ GEONODE_CLIENT_LOCATION }}externals/ext/adapter/ext/ext-base.js"></script>
+<script type="text/javascript" src="{{ GEONODE_CLIENT_LOCATION }}externals/ext/ext-all.js"></script>
+<script type="text/javascript">
+    {% autoescape off %} 
+    var viewer_config = {{ viewer_config }};
+    var init_search = {{ init_search }};
+    {% include "simplesearch/search.js" %}
+    {% endautoescape %}
+</script>
+{% endblock %}
+
+{% block extra_head %}
+<style type="text/css">
+    #thumbHover {
+        position: absolute;
+        display: none;
+        z-index: 100;
+    }
+    #search_results {
+        
+    }
+    #search_results ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    #search_results .thumb {
+        width: 219px;
+        height: 110px;
+    }
+    #favorites-box input {
+        width: 171px;
+    }
+    #favorites-container {
+        background: #454238;
+        padding: 10px;
+    }
+    #favorites-container #searchForm {
+        margin: 0;
+        padding: 0;
+    }
+    #favorites-container #searchForm input {
+        margin: 0;
+        padding: 0;
+        background: url("{{ STATIC_URL }}theme/img/icons/search.png") no-repeat scroll 194px center #FFFFFF;
+    }
+    #favorites {
+        border: 2px solid #8E9184;
+        background: white;
+    }
+    .searchLinks li {
+        list-style: none;
+    }
+    .refineSection h5 {
+        margin: 0;
+    }
+    .searchLinks ul {
+        margin: 0;
+    }
+    .itemInfo {
+        color: gray;
+    }
+    .itemButtons {
+        float: right;
+    }
+    .itemButtons > div {
+        float: left;
+    }
+    #refineSummary {
+        margin-bottom: 1em;
+    }
+    #loading {
+        text-align: center;
+        line-height: 32px;
+        height: 32px;
+        /* ha-ha */
+        text-decoration: blink;
+        background: url('{{ STATIC_URL }}static/externals/ext/resources/images/default/shared/blue-loading.gif') no-repeat 50% 0;
+    }
+    /* work around boilerplate setting of margin */
+    ul.x-menu-list {
+        margin: 0;
+    }
+    #search_results li {
+        float: left;
+        display: block;
+        width: 219px;
+        height: 173px;
+        overflow: none;
+        margin: 5px;
+    }
+    .center {
+        text-align: center;
+    }
+    .removeFilter {
+        vertical-align: baseline;
+        cursor: pointer;
+    }
+    .cartAddButton {
+        /* @todo */
+        background: url('{{ STATIC_URL }}theme/img/silk/add.png');
+    }
+    .cartRemoveButton {
+        /* @todo */
+        background: url('{{ STATIC_URL }}theme/img/silk/delete.png');
+    }
+    .saveButton {
+        /* @todo */
+        background: url('{{ STATIC_URL }}theme/img/geosilk/map_save.png');
+    }
+    .addToMapButton {
+        /* @todo */
+        background: url('{{ STATIC_URL }}theme/img/silk/map_add.png');
+    }
+    .refineSection {
+        margin-bottom: 1em;
+    }
+    .refineSection > * {
+        margin-left: 16px;
+    }
+    .refineSection p {
+        color: gray;
+        margin: 0;
+    }
+    .refineSection h5 {
+        padding-left: 16px;
+        cursor: pointer;
+    }
+    .refineSection.collapse h5 {
+        background: url('{{ STATIC_URL }}static/externals/ext/resources/images/default/grid/group-expand.gif') no-repeat 0 50%;
+    }
+    .refineSection.expand h5 {
+        background: url('{{ STATIC_URL }}static/externals/ext/resources/images/default/grid/group-collapse.gif') no-repeat 0 50%;
+    }
+    .pdf {        /* @todo */
+
+    background-image: url({{ STATIC_URL }}theme/img/silk/page_white_acrobat.png)
+    }
+
+    .kml,
+    .kmz {        /* @todo */
+
+    background-image: url({{ STATIC_URL }}theme/img/geosilk/kml.png)
+    }
+
+    .geotiff,
+    .tiff,
+    .png {        /* @todo */
+
+    background-image: url({{ STATIC_URL }}theme/img/geosilk/page_white_raster.png)
+    }
+
+    .csv
+    .shp,
+    .zip {        /* @todo */
+
+    background-image: url({{ STATIC_URL }}theme/img/geosilk/page_white_vector.png)
+    }
+</style>
+{% endblock %}
+
+{% block main %}
+<div class="row">
+    <h2 style="margin-top: 10px">{% trans "Search Mapstory" %}</h2>
+</div>
+
+<div class="row">
+    <div class="span3">
+        <div id="favorites-container">
+            
+            <form id="searchForm">
+                <input id="searchField" name="search">
+            </form>
+            <h5 style="color:#F46817">Favorites</h5>
+            <div id="favorites">
+                Coming Soon...
+            </div>
+        </div>
+            
+        <div class="box">
+        <h3>{% trans "Narrow By" %}</h3>
+
+        <div id="refineSummary">
+            <h5 style="display:none">Current Filters</h5>
+        </div>
+            
+        <h4>What</h4>
+        
+        <div class="refineSection expand">
+            <h5>By type</h5>
+            <ul id="bytype" class="searchLinks refineControls">
+                <li><a href="#map">Maps</a></li>
+                <li><a href="#layer">Layers</a>
+                    <ul style="margin-left:.5em">
+                        <li><a href="#dataStore">Vector</a></li>
+                        <li><a href="#coverageStore">Raster</a></li>
+                    </ul>
+                </li>
+                <!-- <li><a href="#contact">Users</a><span>({{ counts.users }})</span></li> -->
+            </ul>
+        </div>
+            
+        <div class="refineSection expand">
+            <h5>By section</h5>
+            <ul id="bysection" class="searchLinks refineControls">
+                {% for s in sections %}
+                <li><a href="#{{ s.pk }}">{{ s.name }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+            
+        <div class="refineSection expand">
+            <h5>By keywords</h5>
+            <ul id="bykeyword" class="searchLinks refineControls">
+                {% for kw,cnt in keywords.items %}
+                <li><a href="#{{ kw }}">{{ kw }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+            
+        <input type="button" value="Refine" id="refine"/>
+        </div>
+    </div>
+        
+        
+    <div class="span9">
+        <div class="box">
+            <form id="sortForm">
+                <strong>sort by</strong>
+                <select name="sortby">
+                    <option disabled="true" value="relevance">Relevance</option>
+                    <option value="newest" selected="true">Newest</option>
+                    <option value="oldest">Oldest</option>
+                    <option value="alphaaz">Alphabetical (A-Z)</option>
+                    <option value="alphaza">Alphabetical (Z-A)</option>
+                    <option disabled="true" value="popularity">Popularity</option>
+                </select>
+                <input type="submit" value="Search">
+            </form>
+            <div id="search_results"><ul></ul><div class="clearfix"></div></div>
+            <div style="text-align:center;visibility:hidden;"><div id="displaying"></div><p id="displayNote">Scroll down for more results</p></div>
+            <div id="loading">Loading More Results</div>
+            <img id="thumbHover"/>
+        </div>
+    </div>
+</div>
+{% endblock %}
