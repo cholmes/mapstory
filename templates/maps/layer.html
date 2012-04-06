@@ -1,9 +1,11 @@
-{% extends "mapstory/story_detail_base.html" %}
+{% extends "page_layout.html" %}
 {% load i18n %}
 {% load geonode_auth %}
 {% load mapstory_tags %}
 {% load dialogos_tags %}
 {% load agon_ratings_tags %}
+
+{% block head_title %}{{layer.title}}{% endblock %}
 
 {% block extra_head %}
 {% include "geonode/ext_header.html" %}
@@ -118,24 +120,8 @@
 
 {% block main %}
     <div class="row">
-        <div class="span12">
-            <ul class="breadcrumb">
-                <li>
-                    <a href="#">Home</a> <span class="divider">&gt;</span>
-                </li>
-                <li>
-                <a href="#">Search StoryLayers</a> <span class="divider">&gt;</span>
-                </li>
-                <li class="active">
-                    <a href="#">StoryLayer Page</a>
-                </li>
-            </ul>
-        </div>
-        <div class="span8">
+        <div class="span12 mrg-top" >
             <h2 class="icn-storylayers">{{ layer.title }}</h2>
-        </div>
-        <div class="span4">
-            <a href="#" class="back">Back to Search</a>
         </div>
         <div class="span8">
             <div class="box mrg-btm describe-object">
