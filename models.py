@@ -5,6 +5,8 @@ from django.db.models import Count
 from django.db.models import signals
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
+from django.core.urlresolvers import reverse
+from django.template import defaultfilters
 
 from django.contrib.auth.models import User
 
@@ -53,7 +55,9 @@ class Section(models.Model):
     objects = SectionManager()
     
     name = models.CharField(max_length=64)
-    topics = models.ManyToManyField(Topic)
+    slug = models.SlugField(max_length=64)
+    text = models.TextField()
+    topics = models.ManyToManyField(Topic,blank=True)
     order = models.IntegerField(null=True)
     
     def _children(self, att):
@@ -69,6 +73,16 @@ class Section(models.Model):
         
     def get_layers(self):
         return self._children('layers')
+    
+    def save(self,*args,**kw):
+        slugtext = self.name.replace('&','and')
+        self.slug = defaultfilters.slugify(slugtext)
+        if self.order is None:
+            self.order = self.id
+        models.Model.save(self)
+        
+    def get_absolute_url(self):
+        return reverse('section_detail',args=[self.slug])
     
     def __unicode__(self):
         return 'Section %s' % self.name
