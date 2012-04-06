@@ -299,10 +299,12 @@ AGON_RATINGS_CATEGORY_CHOICES = {
 
 
 
-SIMPLE_SEARCH_EXCLUSIONS = [
+LAYER_EXCLUSIONS = [
     'annotations_\d+',
     '_map_\d+_annotations'
 ]
+# @todo unify these?
+SIMPLE_SEARCH_EXCLUSIONS = LAYER_EXCLUSIONS
 
 DESIGN_MODE = False
 

@@ -1,0 +1,12 @@
+{% load avatar_tags %}
+
+<h2>THINKERS AND THOUGHTS ON MAPSTORYTELLING</h2>
+{% for u in users %}
+<div class="storyteller">
+    <a href="{{ u.get_absolute_url }}">
+        {% avatar u %}
+    </a>
+    <h4><a href="{{ u.get_absolute_url }}">{% firstof u.get_full_name u.username %}</a></h4>
+    <p>{{ u.organization }}</p>
+</div>
+{% endfor %}

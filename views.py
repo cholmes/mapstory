@@ -33,10 +33,12 @@ def index(req):
     video = random.choice(videos)
     
     tiles = ''.join( [ _render_map_tile(m) for m in get_map_carousel_maps()] )
+    users = User.objects.all()
     
     return render_to_response('index.html', RequestContext(req,{
         "video" : video,
-        "tiles" : tiles
+        "tiles" : tiles,
+        "users" : users
     }))
 
 def donate(req):
@@ -89,6 +91,20 @@ def layer_metadata(request, layername):
         layer.abstract = form.cleaned_data['abstract']
         layer.save()
         return HttpResponse('OK')
+    
+@login_required
+def favorite(req, layer_or_map, id, in_progress=False):
+    if layer_or_map == 'map':
+        obj = get_object_or_404(Map, pk = id)
+    else:
+        obj = get_object_or_404(Layer, pk = id)
+    Favorite.objects.create_favorite(obj, req.user, in_progress)
+    return HttpResponse('OK', status=200)
+
+@login_required
+def delete_favorite(req, id):
+    Favorite.objects.get(user=req.user, pk=id).delete()
+    return HttpResponse('OK', status=200)
 
 @login_required
 def set_section(req):
@@ -106,7 +122,7 @@ def set_section(req):
 def about_storyteller(req, username):
     user = get_object_or_404(User, username=username)
     return render_to_response('mapstory/about_storyteller.html', RequestContext(req,{
-        "user" : user,
+        "storyteller" : user,
     }))
     
 def delete_story_comment(req, layer_or_map, layer_or_map_id):

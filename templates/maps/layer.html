@@ -1,15 +1,17 @@
-{% extends "mapstory/story_detail_base.html" %}
+{% extends "page_layout.html" %}
 {% load i18n %}
 {% load geonode_auth %}
 {% load mapstory_tags %}
 {% load dialogos_tags %}
 {% load agon_ratings_tags %}
 
+{% block head_title %}{{layer.title}}{% endblock %}
+
 {% block extra_head %}
 {% include "geonode/ext_header.html" %}
 {% include "geonode/app_header.html" %}
 {% include "geonode/geo_header.html" %}
-
+<script type="text/javascript" src="{{ STATIC_URL}}script/favorites.js"></script>
     <script type="text/javascript">
 {% autoescape off %}
         var styleEditor, modified = false;
@@ -73,27 +75,27 @@
 
 {% has_obj_perm user layer "maps.change_layer_permissions" as can_change_permissions %}
 {% if can_change_permissions %}
-            new GeoNode.PermissionsEditor({
-                renderTo: "permissions_form",
-                userLookup: "{% url geonode.views.ajax_lookup %}",
-                permissions: {{ permissions_json }},
-                levels: {
-                    'admin': 'layer_admin',
-                    'readwrite': 'layer_readwrite',
-                    'readonly': 'layer_readonly',
-                    '_none': '_none'
-                },
-                listeners: {
-                    updated: function(perms) {
-                        var submitTo = "{% url geonode.maps.views.ajax_layer_permissions layer.typename %}";
-                        Ext.Ajax.request({ url: submitTo, jsonData: perms.writePermissions() });
-                    }
-                }
-            });
-{% endif %}
+//            new GeoNode.PermissionsEditor({
+//                renderTo: "permissions_form",
+//                userLookup: "{% url geonode.views.ajax_lookup %}",
+//                permissions: {{ permissions_json }},
+//                levels: {
+//                    'admin': 'layer_admin',
+//                    'readwrite': 'layer_readwrite',
+//                    'readonly': 'layer_readonly',
+//                    '_none': '_none'
+//                },
+//                listeners: {
+//                    updated: function(perms) {
+//                        var submitTo = "{% url geonode.maps.views.ajax_layer_permissions layer.typename %}";
+//                        Ext.Ajax.request({ url: submitTo, jsonData: perms.writePermissions() });
+//                    }
+//                }
+//            });
             var hasThumb = {% if layer.get_thumbnail %}true{% else %}false{% endif %};
             var thumbURL = "{% url layer_thumbnail layer.typename %}";
             {% include "maps/thumbnail_help.js" %}
+{% endif %}
         });
 
         function showStyle(styleName) {
@@ -118,27 +120,11 @@
 
 {% block main %}
     <div class="row">
-        <div class="span12">
-            <ul class="breadcrumb">
-                <li>
-                    <a href="#">Home</a> <span class="divider">&gt;</span>
-                </li>
-                <li>
-                <a href="#">Search StoryLayers</a> <span class="divider">&gt;</span>
-                </li>
-                <li class="active">
-                    <a href="#">StoryLayer Page</a>
-                </li>
-            </ul>
-        </div>
-        <div class="span8">
+        <div class="span12 mrg-top" >
             <h2 class="icn-storylayers">{{ layer.title }}</h2>
         </div>
-        <div class="span4">
-            <a href="#" class="back">Back to Search</a>
-        </div>
         <div class="span8">
-            <div class="box mrg-btm">
+            <div class="box mrg-btm describe-object">
                 <div class="story-detail">
                     <div id="preview_map"></div>
 
@@ -191,6 +177,8 @@
                                     });
                                 })
                             </script>
+                            <p>Generate a thumbnail for this map</p>
+                            <a id="set_thumbnail" class="btn" href="#thumbnail">{% trans "Set thumbnail" %}</a>
                             {% else %}
                             <label>Title:</label>
                             <p>{{ layer.title }}</p>
@@ -213,7 +201,8 @@
                             Flag not implemented yet
                         </div>
                         <div class="tab-pane" id="actions5">
-                            Add to what?
+                            {% add_to_favorites layer %}
+                            {% add_to_inprogress layer %}
                         </div>
                         <div class="tab-pane" id="actions6">
                             <h4>Download this data:</h4>
@@ -256,7 +245,7 @@
                     <p>No Maps are using this StoryLayer. Be the first!</p>
                     {% endif %}
                 {% endwith %}
-                <button>Create A Map</button>
+                <a class="btn" href="{% url geonode.maps.views.newmap %}?layer={{layer.typename}}">Create A Map</a>
             </section>
 
             <section class="box mrg-btm storyteller-layer">

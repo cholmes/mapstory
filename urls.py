@@ -36,6 +36,11 @@ urlpatterns = patterns('mapstory.views',
     # semi-temp urls
     url(r'^mapstory/topics/(?P<layer_or_map>\w+)/(?P<layer_or_map_id>\d+)$','topics_api',name='topics_api'),
     url(r'^mapstory/comment/(?P<layer_or_map_id>\d+)/(?P<comment_id>\d+)$','delete_story_comment',name='delete_story_comment'),
+    url(r'^favorite/map/(?P<id>\d+)$','favorite',{'layer_or_map':'map'}, name='add_favorite_map'),
+    url(r'^favorite/map/in_progress(?P<id>\d+)$','favorite',{'layer_or_map':'map','in_progress':True}, name='add_inprogress_map',),
+    url(r'^favorite/layer/(?P<id>\d+)$','favorite',{'layer_or_map':'layer'}, name='add_favorite_layer'),
+    url(r'^favorite/layer/in_progress(?P<id>\d+)$','favorite',{'layer_or_map':'layer','in_progress':True}, name='add_inprogress_layer',),
+    url(r'^favorite/(?P<id>\d+)/delete$','delete_favorite',name='delete_favorite'),
 
     # ugh, overrides
     url(r'^(?P<layername>[^/]*)/metadata$', 'layer_metadata', name="layer_metadata"),

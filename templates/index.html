@@ -243,35 +243,8 @@
     </div>
 </div>
 <div class="span4">
-    <div class="box mrg-btm">
-        <h2>THINKERS AND THOUGHTS ON
-    MAPSTORYTELLING</h2>
-        <div class="storyteller">
-            <a href="{% url storyteller %}">
-                <img src="http://www.gravatar.com/avatar/b59a1fea77f9350c8225395f55204abe?r=pg&s=70">
-            </a>
-            <h4><a href="{% url storyteller %}">Ian Schneider</a></h4>
-            <p>Af/Pak Tribal Dynamics,
-    1805-2010
-    </p>
-        </div>
-        <div class="storyteller">
-            <a href="{% url storyteller %}">
-                <img src="http://www.gravatar.com/avatar/a6a965150162eef63f1d2f8aae15c57c?r=pg&s=70">
-            </a>
-            <h4><a href="{% url storyteller %}">Bart van den Eijnden</a></h4>
-            <p>Sources of State Failure in Horn
-    of Africa, 1965-2010
-    </p>
-        </div>
-        <div class="storyteller last">
-            <a href="{% url storyteller %}">
-                <img src="http://www.gravatar.com/avatar/c0c61fb94a5785be367b0fceea6985f1?r=pg&s=70">
-            </a>
-            <h4><a href="{% url storyteller %}">Matt Priour</a></h4>
-            <p>Rise and Fall of Meso-American
-     Civilizations</p>
-        </div>
+    <div class="box mrg-btm author-list">
+        {% include "_widget_author_list.html" %}
     </div>
     {% include "mapstory/_widget_social.html" %}
     <div class="box mrg-btm">

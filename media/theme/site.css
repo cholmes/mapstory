@@ -432,6 +432,10 @@ h4 {
   margin-bottom:20px;
 }
 
+.mrg-top {
+  margin-top:10px;
+}
+
 .pd-btm {
   padding-bottom:15px;
 }
@@ -697,6 +701,11 @@ section.hr-tabs .nav-tabs > .active > a, section.hr-tabs .nav-tabs > .active > a
 
 section.hr-tabs .nav-tabs a:hover {
   background:#f47a20;
+}
+
+.author-list {
+    height: 368px;
+    overflow: auto;
 }
 
 /*** breadcrumbs ***/
@@ -1026,14 +1035,17 @@ article h3 {
   font-style:normal;
 }
 
-.video-actions #describemap label {
+.describe-object form label {
     font-weight: bold;
 }
 
-.video-actions #describemap input,
-.video-actions #describemap textarea
+.describe-object form input,
+.describe-object form textarea
 {
     width: 99%;
+}
+.describe-object form textarea {
+    resize: both;
 }
 
 /** video mini **/

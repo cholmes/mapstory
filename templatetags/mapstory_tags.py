@@ -1,9 +1,11 @@
 from django import template
 from django.template import loader
 from django.template import RequestContext
+from django.core.urlresolvers import reverse
 
 from geonode.maps.models import Map
 from mapstory.models import Section
+from mapstory.models import Favorite
 
 register = template.Library()
 
@@ -81,7 +83,7 @@ class TopicSelectionNode(template.Node):
             'sections' : Section.objects.all(),
             'topic_object_type': isinstance(obj, Map) and 'map' or 'layer'
         })
-        
+
 @register.tag
 def comments_section(parse, token):
     try:
@@ -102,3 +104,84 @@ class CommentsSectionNode(template.Node):
             'comment_object' : obj
         }))
         return r
+
+@register.tag
+def related_mapstories(parse, token):
+    try:
+        tokens = token.split_contents()
+        tag_name = tokens.pop(0)
+        obj_name = tokens.pop(0)
+    except ValueError:
+        raise template.TemplateSyntaxError, "%r tag requires a single argument" % token.contents.split()[0]
+    return RelatedStoriesNode(obj_name)
+
+class RelatedStoriesNode(template.Node):
+    def __init__(self, obj_name):
+        self.obj_name = obj_name
+    def render(self, context):
+        obj = context[self.obj_name]
+        topics = list(obj.topic_set.all())
+        result = ""
+        template_name = "mapstory/_story_tile_left.html"
+        if topics:
+            sec = topics[0].section_set.all()[0]
+            maps = sec.get_maps()
+            maps.remove(obj)
+            result = "\n".join([
+                loader.render_to_string(template_name,{"map": m}) for m in maps
+            ])
+        return result
+    
+@register.tag
+def favorites(parse, token):
+    try:
+        tokens = token.split_contents()
+        tag_name = tokens.pop(0)
+    except ValueError:
+        raise template.TemplateSyntaxError, "%r tag requires a single argument" % token.contents.split()[0]
+    return FavoritesNode()
+
+class FavoritesNode(template.Node):
+    def render(self, context):
+        template_name = "mapstory/_widget_favorites.html"
+        user = context['user']
+        ctx = {
+            "favorites" : Favorite.objects.favorites_for_user(user),
+            "in_progress" : Favorite.objects.inprogress_for_user(user)
+        }
+        return loader.render_to_string(template_name,ctx)
+
+@register.tag
+def add_to_inprogress(parse, token):
+    try:
+        tokens = token.split_contents()
+        tag_name = tokens.pop(0)
+        obj_name = tokens.pop(0)
+    except ValueError:
+        raise template.TemplateSyntaxError, "%r tag requires a single argument" % token.contents.split()[0]
+    return AddToFavoritesNode(obj_name)
+
+    
+@register.tag
+def add_to_favorites(parse, token):
+    try:
+        tokens = token.split_contents()
+        tag_name = tokens.pop(0)
+        obj_name = tokens.pop(0)
+    except ValueError:
+        raise template.TemplateSyntaxError, "%r tag requires a single argument" % token.contents.split()[0]
+    return AddToFavoritesNode(obj_name,True)
+
+class AddToFavoritesNode(template.Node):
+    def __init__(self,obj_name,in_progress=False):
+        self.obj_name = obj_name
+        self.in_progress = in_progress
+    def render(self, context):
+        template = '<a class="add-to-favorites btn btn-mini" href="%s"><i class="icon-heart"></i>%s</a>'
+        obj = context[self.obj_name]
+        obj_name = isinstance(obj,Map) and "map" or "layer"
+        url = self.in_progress and "add_inprogress_%s" or "add_favorite_%s"
+        url = url % obj_name
+        url = reverse(url, args=[obj.pk])
+        text = self.in_progress and "Add to InProgress" or "Add to Favorites"
+        return template % (url,text)

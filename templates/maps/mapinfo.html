@@ -5,36 +5,39 @@
 {% load dialogos_tags %}
 {% load agon_ratings_tags %}
 
-{% has_obj_perm user map "maps.change_map_permissions" as can_change_permissions %}
+{% block head_title %}{{map.title}}{% endblock %}
+
 
 {% block extra_head %}
 {% include "geonode/ext_header.html" %}
 {% include "geonode/app_header.html" %}
 {% include "geonode/geo_header.html" %}
+<script type="text/javascript" src="{{ STATIC_URL}}script/favorites.js"></script>
 {{ block.super }}
 <script type="text/javascript">
 var app;
 Ext.onReady(function() {
 {% autoescape off %}
     app = new mapstory.Viewer({{config}});
+{% has_obj_perm user map "maps.change_map_permissions" as can_change_permissions %}
 {% if can_change_permissions %}
-    new GeoNode.PermissionsEditor({
-        levels: {
-            'admin': 'map_admin',
-            'readwrite': 'map_readwrite',
-            'readonly': 'map_readonly',
-            '_none': '_none'
-        },
-        renderTo: "permissions_form",
-        userLookup: "{% url geonode.views.ajax_lookup %}",
-        permissions: {{ permissions_json }},
-        listeners: {
-            updated: function(perms) {
-                var submitTo = "{% url geonode.maps.views.ajax_map_permissions map.id %}";
-                Ext.Ajax.request({ url: submitTo, jsonData: perms.writePermissions() });
-            }
-        }
-    });
+//    new GeoNode.PermissionsEditor({
+//        levels: {
+//            'admin': 'map_admin',
+//            'readwrite': 'map_readwrite',
+//            'readonly': 'map_readonly',
+//            '_none': '_none'
+//        },
+//        renderTo: "permissions_form",
+//        userLookup: "{% url geonode.views.ajax_lookup %}",
+//        permissions: {{ permissions_json }},
+//        listeners: {
+//            updated: function(perms) {
+//                var submitTo = "{% url geonode.maps.views.ajax_map_permissions map.id %}";
+//                Ext.Ajax.request({ url: submitTo, jsonData: perms.writePermissions() });
+//            }
+//        }
+//    });
     var hasThumb = {% if map.get_thumbnail %}true{% else %}false{% endif %};
     var thumbURL = "{% url geonode.maps.views.map_controller map.id %}?thumbnail";
     {% include "maps/thumbnail_help.js" %}
@@ -47,27 +50,11 @@ Ext.onReady(function() {
 
 {% block main %}
     <div class="row">
-        <div class="span12">
-            <ul class="breadcrumb">
-                <li>
-                    <a href="#">Home</a> <span class="divider">&gt;</span>
-                </li>
-                <li>
-                <a href="#">Search MapStory</a> <span class="divider">&gt;</span>
-                </li>
-                <li class="active">
-                    <a href="#">MapStory Page</a>
-                </li>
-            </ul>
-        </div>
-        <div class="span8">
+        <div class="span8 mrg-top">
             <h2 class="icn-mapstories">{{ map.title }}</h2>
         </div>
-        <div class="span4">
-            <a href="#" class="back">Back to MapStory Search</a>
-        </div>
         <div class="span8">
-            <div class="box mrg-btm">
+            <div class="box mrg-btm describe-object">
                 <div class="story-detail">
                     <div id="embedded_map"></div>
 
@@ -104,6 +91,8 @@ Ext.onReady(function() {
                             </div>
                             {% topic_selection map %}
                             {% csrf_token %}
+                            <p>Generate a thumbnail for this map</p>
+                            <a id="set_thumbnail" class="btn" href="#thumbnail">{% trans "Set thumbnail" %}</a>
                             </form>
                             <script type="text/javascript">
                                 $(function() {
@@ -154,7 +143,8 @@ Ext.onReady(function() {
                             Flag not implemented yet
                         </div>
                         <div class="tab-pane" id="actions5">
-                            Add to what?
+                            {% add_to_favorites map %}
+                            {% add_to_inprogress map %}
                         </div>
                     </div>
 
@@ -170,9 +160,9 @@ Ext.onReady(function() {
 
             {% include "maps/_widget_by_storyteller.html" %}
 
-            <section class="box mrg-btm">
+            <section class="box mrg-btm related-stories clearfix">
                 <h2>RELATED MAPSTORIES</h2>
-                {% include "mapstory/_mapstory_list_side.html" %}
+                {% related_mapstories map %}
             </section>
 
             {% include "mapstory/_widget_social.html" %}
