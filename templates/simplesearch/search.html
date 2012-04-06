@@ -1,7 +1,7 @@
 {% extends "page_layout.html" %}
 {% load i18n %}
 
-{% block head_title %} {% trans "Search Data" %} - {{ block.super }} {% endblock %}
+{% block head_title %}Search{% endblock %}
 
 {% block extra_script %}
 {% comment %}Not using ext_header include - css causes problems at the moment{% endcomment %}
@@ -72,6 +72,9 @@
     }
     .itemButtons > div {
         float: left;
+    }
+    .removeFilter {
+        cursor: pointer;
     }
     #refineSummary {
         margin-bottom: 1em;
@@ -187,7 +190,7 @@
         <div class="box">
         <h3>{% trans "Narrow By" %}</h3>
 
-        <div id="refineSummary">
+        <div id="refineSummary" title="Click to remove a filter">
             <h5 style="display:none">Current Filters</h5>
         </div>
             

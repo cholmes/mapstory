@@ -7,7 +7,7 @@ Ext.onReady(function() {
     "<div class='itemInfo'>{_display_type}, uploaded by <a href='{owner_detail}'>{owner}</a> on {last_modified:date(\"F j, Y\")}</div>" +
     "<div class='itemAbstract>{abstract}</div>"+
     "</li>",
-    filterTemplate = "<div class='{typeclass}'><img height='8' src='/static/theme/img/silk/delete.png' class='removeFilter' href='#removeFilter'> </a><strong>{type}</strong> {value}</div>",
+    filterTemplate = "<div class='removeFilter' class='{typeclass}'><img height='8' src='/static/theme/img/silk/delete.png' class='removeFilter' href='#removeFilter'> </a><strong>{type}</strong> {value}</div>",
     fetching = false,
     list = Ext.get(Ext.query('#search_results ul')[0]),
     store = new Ext.data.JsonStore({
@@ -134,7 +134,6 @@ Ext.onReady(function() {
         var scroll = Ext.fly(document).getScroll().top;
         var height = list.getHeight() + list.getTop();
         var windowHeight = Ext.isIE ? document.body.clientHeight : window.innerHeight;
-        console.log(scroll,windowHeight,height);
         if (scroll + windowHeight > height) {
             fetch();
         }
@@ -206,10 +205,10 @@ Ext.onReady(function() {
     });
     
     function updateAciveFilterHeader() {
-        if (Ext.get("refineSummary").select('*').getCount()) {
+        if (Ext.get("refineSummary").select('div').getCount()) {
             Ext.select("#refineSummary h5").show();
         } else {
-            Ext.select("#refineSummary h5").hide();
+            Ext.select("#refineSummary h5").setVisibilityMode(Ext.Element.DISPLAY).hide();
         }
     }
 
@@ -263,11 +262,21 @@ Ext.onReady(function() {
     enableSearchLink('#bytype a','bytype',false);
     enableSearchLink('#bykeyword a','bykw',false);
     enableSearchLink('#bysection a','bysection',false);
-
+    
+    new Ext.ToolTip({
+        target: 'filter-tip'
+    });
+    
     // and combine with search form
-    Ext.get('searchForm').on('submit',function(ev) {
-        ev.preventDefault();
-        queryItems['q'] = this.dom.search.value;
+    Ext.get('searchForm').on('keypress',function(ev) {
+        var keycode = (ev.keyCode ? ev.keyCode : ev.which);
+        if (keycode == '13') {
+            ev.preventDefault();
+            queryItems['q'] = this.dom.search.value;
+            reset();
+        }
+    });
+    Ext.get('sortForm').on('click',function(ev) {
         queryItems['sort'] = this.dom.sortby.value;
         reset();
     });
