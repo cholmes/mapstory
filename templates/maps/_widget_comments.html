@@ -34,7 +34,7 @@
                 {{ comment_form.comment }}
             </div>
             <div class="comment_post">
-                <input class="btn" type="submit" value="{% trans "Submit" %}" />
+                <button class="btn" type="submit">{% trans "Submit" %}</button>
             </div>
             <input type="hidden" name="next" value="{{ request.path }}" />
         </form>

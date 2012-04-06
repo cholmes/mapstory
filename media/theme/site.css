@@ -1026,14 +1026,17 @@ article h3 {
   font-style:normal;
 }
 
-.video-actions #describemap label {
+.describe-object form label {
     font-weight: bold;
 }
 
-.video-actions #describemap input,
-.video-actions #describemap textarea
+.describe-object form input,
+.describe-object form textarea
 {
     width: 99%;
+}
+.describe-object form textarea {
+    resize: both;
 }
 
 /** video mini **/
