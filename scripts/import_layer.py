@@ -4,6 +4,7 @@ from django.core import serializers
 
 from geonode.maps.models import *
 
+from optparse import OptionParser
 import psycopg2
 import sys
 import os
@@ -12,15 +13,33 @@ import shutil
 
 gs_data_dir = '/var/lib/geoserver/geonode-data/'
 
-args = sys.argv[1:]
-if not args:
-    print 'please provide a layer extract zip file'
-    sys.exit(1)
-if '-d' in args:
-    idx = args.index('-d')
-    args.pop(idx)
-    gs_data_dir = args.pop(idx) 
-    
+parser = OptionParser('usage: %s [options] layer_import_file.zip')
+parser.add_option('-d', '--data-dir',
+                  dest='data_dir',
+                  default=gs_data_dir,
+                  help='geoserver data dir')
+parser.add_option('-P', '--no-password',
+                  dest='no_password', action='store_true',
+                  help='Add the --no-password option to the pg_restore'
+                  'command. This assumes the user has a ~/.pgpass file'
+                  'with the credentials. See the pg_restore man page'
+                  'for details.',
+                  default=False,
+                  )
+parser.add_option('-c', '--chown-to',
+                  dest='chown_to',
+                  help='If set, chown the files copied into the'
+                  'geoserver data directory to a particular'
+                  'user. Assumes the user running is root or has'
+                  'permission to do so. This is useful to chown the'
+                  'files to something like tomcat6 afterwards.',
+                  )
+
+(options, args) = parser.parse_args()
+if len(args) != 1:
+    parser.error('please provide a layer extract zip file')
+gs_data_dir = options.data_dir
+
 gspath = lambda *p: os.path.join(gs_data_dir, *p)
     
 zipfile = args.pop()
@@ -30,10 +49,13 @@ tempdir = tempfile.mkdtemp()
 temppath = lambda *p: os.path.join(tempdir, *p)
 os.system('unzip %s -d %s' % (zipfile, tempdir))
 
+restore_string = 'pg_restore --host=%s --dbname=%s --clean --username=%s %s < %s' % (
+    settings.DB_DATASTORE_HOST, settings.DB_DATASTORE_DATABASE, settings.DB_DATASTORE_USER,
+    options.no_password and '--no-password' or '',
+    temppath('layer.dump'),
+)
 # can't check return value since pg_restore will complain if any drop statements fail :(
-retval = os.system('pg_restore --host=%s --dbname=%s --clean --username=%s < %s' % (
-    settings.DB_DATASTORE_HOST, settings.DB_DATASTORE_DATABASE, settings.DB_DATASTORE_USER, temppath('layer.dump')
-))
+retval = os.system(restore_string)
 
 # rebuild the geometry columns entry
 with open(temppath("geom.info")) as fp:
@@ -64,6 +86,14 @@ for ws in os.listdir(temppath('workspaces')):
             for f in os.listdir(fdir):
                 shutil.copy(os.path.join(fdir,f), dest_dir)
         
+if options.chown_to:
+    from pwd import getpwnam
+    userid = getpwnam(options.chown_to)[2]
+    for root, dirs, files in os.walk(gspath()):
+        os.chown(root, userid, -1)
+        for f in files:
+            os.chown(os.path.join(root, f), userid, -1)
+
 # reload catalog
 Layer.objects.gs_catalog.http.request(settings.GEOSERVER_BASE_URL + "rest/reload",'POST')
 
