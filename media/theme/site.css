@@ -699,6 +699,11 @@ section.hr-tabs .nav-tabs a:hover {
   background:#f47a20;
 }
 
+.author-list {
+    height: 368px;
+    overflow: auto;
+}
+
 /*** breadcrumbs ***/
 .breadcrumb {
   background:none;
