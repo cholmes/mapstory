@@ -11,7 +11,7 @@
 {% include "geonode/ext_header.html" %}
 {% include "geonode/app_header.html" %}
 {% include "geonode/geo_header.html" %}
-
+<script type="text/javascript" src="{{ STATIC_URL}}script/favorites.js"></script>
     <script type="text/javascript">
 {% autoescape off %}
         var styleEditor, modified = false;
@@ -201,7 +201,8 @@
                             Flag not implemented yet
                         </div>
                         <div class="tab-pane" id="actions5">
-                            Add to what?
+                            {% add_to_favorites layer %}
+                            {% add_to_inprogress layer %}
                         </div>
                         <div class="tab-pane" id="actions6">
                             <h4>Download this data:</h4>

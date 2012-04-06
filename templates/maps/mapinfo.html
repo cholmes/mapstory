@@ -12,6 +12,7 @@
 {% include "geonode/ext_header.html" %}
 {% include "geonode/app_header.html" %}
 {% include "geonode/geo_header.html" %}
+<script type="text/javascript" src="{{ STATIC_URL}}script/favorites.js"></script>
 {{ block.super }}
 <script type="text/javascript">
 var app;
@@ -142,7 +143,8 @@ Ext.onReady(function() {
                             Flag not implemented yet
                         </div>
                         <div class="tab-pane" id="actions5">
-                            Add to what?
+                            {% add_to_favorites layer %}
+                            {% add_to_inprogress layer %}
                         </div>
                     </div>
 

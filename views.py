@@ -91,6 +91,20 @@ def layer_metadata(request, layername):
         layer.abstract = form.cleaned_data['abstract']
         layer.save()
         return HttpResponse('OK')
+    
+@login_required
+def favorite(req, layer_or_map, id, in_progress=False):
+    if layer_or_map == 'map':
+        obj = get_object_or_404(Map, pk = id)
+    else:
+        obj = get_object_or_404(Layer, pk = id)
+    Favorite.objects.create_favorite(obj, req.user, in_progress)
+    return HttpResponse('OK', status=200)
+
+@login_required
+def delete_favorite(req, id):
+    Favorite.objects.get(user=req.user, pk=id).delete()
+    return HttpResponse('OK', status=200)
 
 @login_required
 def set_section(req):
