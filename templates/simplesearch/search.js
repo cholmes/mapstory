@@ -7,7 +7,7 @@ Ext.onReady(function() {
     "<div class='itemInfo'>{_display_type}, uploaded by <a href='{owner_detail}'>{owner}</a> on {last_modified:date(\"F j, Y\")}</div>" +
     "<div class='itemAbstract>{abstract}</div>"+
     "</li>",
-    filterTemplate = "<div class='removeFilter' class='{typeclass}'><img height='8' src='/static/theme/img/silk/delete.png' class='removeFilter' href='#removeFilter'> </a><strong>{type}</strong> {value}</div>",
+    filterTemplate = "<div class='removeFilter {typeclass}'><img height='8' src='/static/theme/img/silk/delete.png' class='removeFilter' href='#removeFilter'> </a><strong>{type}</strong> {value}</div>",
     fetching = false,
     list = Ext.get(Ext.query('#search_results ul')[0]),
     store = new Ext.data.JsonStore({
