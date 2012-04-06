@@ -5,6 +5,8 @@
 {% load dialogos_tags %}
 {% load agon_ratings_tags %}
 
+{% block head_title %}{{map.title}}{% endblock %}
+
 
 {% block extra_head %}
 {% include "geonode/ext_header.html" %}
@@ -47,24 +49,8 @@ Ext.onReady(function() {
 
 {% block main %}
     <div class="row">
-        <div class="span12">
-            <ul class="breadcrumb">
-                <li>
-                    <a href="#">Home</a> <span class="divider">&gt;</span>
-                </li>
-                <li>
-                <a href="#">Search MapStory</a> <span class="divider">&gt;</span>
-                </li>
-                <li class="active">
-                    <a href="#">MapStory Page</a>
-                </li>
-            </ul>
-        </div>
-        <div class="span8">
+        <div class="span8 mrg-top">
             <h2 class="icn-mapstories">{{ map.title }}</h2>
-        </div>
-        <div class="span4">
-            <a href="#" class="back">Back to MapStory Search</a>
         </div>
         <div class="span8">
             <div class="box mrg-btm describe-object">
@@ -172,9 +158,9 @@ Ext.onReady(function() {
 
             {% include "maps/_widget_by_storyteller.html" %}
 
-            <section class="box mrg-btm">
+            <section class="box mrg-btm related-stories clearfix">
                 <h2>RELATED MAPSTORIES</h2>
-                {% include "mapstory/_mapstory_list_side.html" %}
+                {% related_mapstories map %}
             </section>
 
             {% include "mapstory/_widget_social.html" %}
