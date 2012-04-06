@@ -258,7 +258,7 @@
                     <p>No Maps are using this StoryLayer. Be the first!</p>
                     {% endif %}
                 {% endwith %}
-                <button>Create A Map</button>
+                <a class="btn" href="{% url geonode.maps.views.newmap %}?layer={{layer.typename}}">Create A Map</a>
             </section>
 
             <section class="box mrg-btm storyteller-layer">
