@@ -1,39 +1,35 @@
-/*** Fixes for accessibility theme and bootstrap css ***/
-/* Not using accessibility theme
-div.x-window, div.x-panel, div.x-layer, div.x-combo-list {
-	color:whitesmoke;
-}
-div.x-form-field label, input.x-form-field, div.x-form-element label, div.x-form-item label{
-	color:whitesmoke;
-}
-div.x-panel, div.x-tab-panel .x-tab-panel-body{
-	background: #1F2730;
-}
-*/
+/** Fixes for bootstrap interfering with ExtJs **/
 div.x-form-item label{
 	display:inline;
 }
-/*
-.x-form-item input[disabled], .x-form-item select[disabled], 
-.x-form-item textarea[disabled], .x-form-item input[readonly], 
-.x-form-item select[readonly], .x-form-item textarea[readonly]{
-	background-color: #33373d;
-	border-color: #737B8C;
-}
-*/
-/*
-div.x-window-mc, div.x-window-ml, div.x-window-mr, div.x-window-tc, div.x-window-tl, div.x-window-tr, div.x-window-bl, div.x-window-br, div.x-window-bc {
-border-color: #F47A20;
-background: #F47A20;
-}
-
-div.x-window div.x-window-header, div.x-window div.x-window-body, div.x-window div.x-window-footer{
-	font-family: 'Marvel', sans-serif;
-	font-size:110%;
-}
-*/
 .x-fieldset legend {
 font-size: 13px;
 width: auto;
 border-bottom: none;
+}
+
+/** Mapstory theming on ExtJs components **/
+/* In-map Layer Manager */
+.olMap div.gxp-layermanager-tree .x-tree-node .x-tree-selected{
+    background-color: rgba(50, 50, 50, 0.70);
+}
+.olMap div.gxp-layermanager-tree .x-tree-node a span, .x-dd-drag-ghost a span {
+    /*color: #F46817;*/
+    color: orange;
+}
+.olMap div.gxp-layermanager-tree img.x-tree-elbow-minus, 
+.olMap div.gxp-layermanager-tree img.x-tree-elbow-plus,
+.olMap div.gxp-layermanager-tree img.x-tree-elbow-end-minus, 
+.olMap div.gxp-layermanager-tree img.x-tree-elbow-end-plus {
+    background-image: url(img/ext_arrows.gif);
+}
+.olMap div.gxp-layermanager-tree div.x-panel-body{
+    /* color: #F46817; */
+    color: orange;
+    background: transparent;
+}
+.olMap div.gxp-layermanager-tree {
+    padding: 5px;
+    background: rgba(11, 11, 11, 0.60);
+    border-radius: 8px;
 }
