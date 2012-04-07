@@ -6,7 +6,7 @@
     <div class="info">
         <div class="title">{{ map.title }}</div>
         <div class="">
-            <span><a href="#">{{ map|user_name }}</a></span>
+            <span><a rel="author" href="{% url about_storyteller map.owner %}">{{ map|user_name }}</a></span>
             <span> on {{ map.last_modified|date:"N j Y" }}</span>
         </div>
     </div>

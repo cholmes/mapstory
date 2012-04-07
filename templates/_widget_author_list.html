@@ -6,7 +6,7 @@
     <a href="{{ u.get_absolute_url }}">
         {% avatar u %}
     </a>
-    <h4><a href="{{ u.get_absolute_url }}">{% firstof u.get_full_name u.username %}</a></h4>
+    <h4><a href="{% url about_storyteller u %}">{% firstof u.get_full_name u.username %}</a></h4>
     <p>{{ u.organization }}</p>
 </div>
 {% endfor %}
