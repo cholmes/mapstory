@@ -11,7 +11,6 @@
         <a href="{% url about_storyteller map.owner %}" rel="author">{{ map|user_name }}</a>
         <time pubdate datetime="{{ map.last_modified|date:"Y-m-d" }}">on {{ map.last_modified|date:"N j Y" }}</time>
         <footer>
-            <span class="views">1,205 Views</span>
             {% overall_rating map "map" as map_rating %}
             <span class="rating">{{ map_rating }} stars</span>
         </footer>
