@@ -55,10 +55,10 @@ class Section(models.Model):
     objects = SectionManager()
     
     name = models.CharField(max_length=64)
-    slug = models.SlugField(max_length=64)
-    text = models.TextField()
+    slug = models.SlugField(max_length=64,blank=True)
+    text = models.TextField(null=True)
     topics = models.ManyToManyField(Topic,blank=True)
-    order = models.IntegerField(null=True)
+    order = models.IntegerField(null=True,blank=True)
     
     def _children(self, att):
         field = lambda t: getattr(t,att).filter()
