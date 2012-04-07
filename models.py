@@ -10,7 +10,7 @@ from django.template import defaultfilters
 
 from django.contrib.auth.models import User
 
-
+from geonode.maps.models import Contact
 from geonode.maps.models import Map
 from geonode.maps.models import Layer
 
@@ -97,9 +97,8 @@ class VideoLink(Link):
     text = models.CharField(max_length=256)
     publish = models.BooleanField(default=False)
     
-class ContactDetail(models.Model):
+class ContactDetail(Contact):
     '''Additional User details'''
-    user = models.OneToOneField(User)
     blurb = models.CharField(max_length=140, null=True)
     biography = models.CharField(max_length=1024, null=True, blank=True)
     education = models.CharField(max_length=512, null=True, blank=True)
@@ -146,8 +145,8 @@ class Favorite(models.Model):
     def __unicode__(self):
         return "%s likes %s" % (self.user, self.content_object)
 
-def create_contact_details(instance, sender, **kw):
+def create_profile(instance, sender, **kw):
     if kw['created']:
         ContactDetail.objects.create(user = instance)
-    
-signals.post_save.connect(create_contact_details, sender=User)
+        
+signals.post_save.connect(create_profile, sender=User)

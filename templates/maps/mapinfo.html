@@ -67,7 +67,6 @@ Ext.onReady(function() {
                             <li><a href="#actions5" class="icn add" data-toggle="pill">Add</a></li>
                         </ul>
                         <div class="metrics">
-                            <span class="views"><i>1,205</i> Views</span>
                             {% overall_rating map "map" as map_rating %}
                             <span class="overall_rating" data-rating="{{ map_rating }}"></span>
                         </div>
@@ -157,7 +156,7 @@ Ext.onReady(function() {
         <div class="span4">
             {% about_storyteller map %}
 
-            {% include "maps/_widget_by_storyteller.html" %}
+            {% by_storyteller map %}
 
             <section class="box mrg-btm related-stories clearfix">
                 <h2>RELATED MAPSTORIES</h2>

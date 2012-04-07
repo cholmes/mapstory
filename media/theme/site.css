@@ -38,6 +38,7 @@ section {
     font-size:1em;
     line-height:1.5em;
     clear:both;
+    padding-top: .5em;
 }
 
 #login-area a:hover, #login-area a:active {
@@ -88,6 +89,8 @@ html.x-viewport #login-area {
   border-radius: 2px;
   font-size:18px;
   line-height:18px;
+  position: relative;
+  top: 3px;
 }
 
 a#donate:hover {
@@ -125,8 +128,8 @@ a#donate:hover {
 }
 
 #top-crossbar a:hover,
-body.search-mapstories #top-crossbar a.tab-search,
-body.search-mapstories #top-crossbar a.tab-search:hover,
+body.search #top-crossbar a.tab-search,
+body.search #top-crossbar a.tab-search:hover,
 body.home #top-crossbar a.tab-sections,
 body.home #top-crossbar a.tab-sections:hover {
   background-color:#f47a20;
@@ -165,8 +168,8 @@ a.subtab-search-tellers {
 
 form#quicksearch {
   float: right;
-  margin:-10px 0 0;
   position:relative;
+  font-family: sans-serif;
 }
 
 #quicksearch * {
@@ -175,9 +178,8 @@ form#quicksearch {
 }
 
 #quicksearch input {
-  padding:4px;
   margin:0;
-  width:207px;
+  width:215px;
   background: #fff url(img/icons/search.png) no-repeat 194px center;
 }
 
@@ -2032,4 +2034,12 @@ h2.icn-storylayer span, h2.icn-mapstory span {
 #topic-dropdown .dropdown-menu {
     height: 25em;
     overflow: auto;
+}
+
+.edit-profile form .form input {
+    width: 50%;
+}
+.edit-profile form .form textarea {
+    width: 80%;
+    resize: both;
 }

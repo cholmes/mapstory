@@ -2,6 +2,7 @@ from django import template
 from django.template import loader
 from django.template import RequestContext
 from django.core.urlresolvers import reverse
+from django.contrib.auth.models import User
 
 from geonode.maps.models import Map
 from mapstory.models import Section
@@ -190,3 +191,25 @@ class AddToFavoritesNode(template.Node):
         url = reverse(url, args=[obj.pk])
         text = self.in_progress and "Add to InProgress" or "Add to Favorites"
         return template % (url,text)
+
+@register.tag
+def by_storyteller(parse, token):
+    try:
+        tokens = token.split_contents()
+        tag_name = tokens.pop(0)
+        obj_name = tokens.pop(0)
+    except ValueError:
+        raise template.TemplateSyntaxError, "%r tag requires a single argument" % token.contents.split()[0]
+    return ByStoryTellerNode(obj_name)
+
+class ByStoryTellerNode(template.Node):
+    def __init__(self,obj_name):
+        self.obj_name = obj_name
+    def render(self, context):
+        obj = context[self.obj_name]
+        if isinstance(obj, User):
+            user = obj
+        else:
+            user = obj.owner
+        template_name = "maps/_widget_by_storyteller.html"
+        return loader.render_to_string(template_name,{'user':user})

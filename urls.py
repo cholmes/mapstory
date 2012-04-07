@@ -5,6 +5,7 @@ from staticfiles.urls import staticfiles_urlpatterns
 from geonode.sitemap import LayerSitemap, MapSitemap
 from geonode.proxy.urls import urlpatterns as proxy_urlpatterns
 from mapstory.models import *
+from mapstory.forms import ProfileForm
 from geonode.maps.models import *
 
 # Uncomment the next two lines to enable the admin:
@@ -21,7 +22,12 @@ sitemaps = {
     "map": MapSitemap
 }
 
-urlpatterns = patterns('mapstory.views',
+urlpatterns = patterns('',
+    ('^profiles/edit', 'profiles.views.edit_profile', {'form_class': ProfileForm,}),
+    ('^profiles/create', 'profiles.views.create_profile', {'form_class': ProfileForm,}),
+)
+
+urlpatterns += patterns('mapstory.views',
     (r'^(?:index/?)?$', 'index'),
 
     (r'', include('geonode.simplesearch.urls')), # put this first to ensure search urls priority

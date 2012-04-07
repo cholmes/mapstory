@@ -3,11 +3,11 @@
 {% load mapstory_tags %}
 
 {% block head_title %}Search{% endblock %}
+{% block body_class %}search{% endblock %}
+
 
 {% block extra_script %}
 {% comment %}Not using ext_header include - css causes problems at the moment{% endcomment %}
-<script type="text/javascript" src="{{ GEONODE_CLIENT_LOCATION }}externals/ext/adapter/ext/ext-base.js"></script>
-<script type="text/javascript" src="{{ GEONODE_CLIENT_LOCATION }}externals/ext/ext-all.js"></script>
 <script type="text/javascript">
     {% autoescape off %} 
     var viewer_config = {{ viewer_config }};

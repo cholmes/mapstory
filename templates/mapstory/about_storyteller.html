@@ -17,30 +17,49 @@
                 <div class="cols">
                     <div class="col-side storyteller-info">
                         {% avatar storyteller %}
+                        {% with storyteller.get_profile as p %}
                         <section>
                             <ul>
-                                {% if storyteller.contact.email %}
-                                <li><a href="mailto:{{user.contact.email}}">{{ storyteller.contact.email }}</a></li>
+                                {% if p.email %}
+                                <li><a href="mailto:{{user.contact.email}}">{{ p.email }}</a></li>
                                 {% endif %}
-                                {% if storyteller.contact.voice %}
-                                <li>{{ storyteller.contact.voice }}</li>
+                                {% if p.voice %}
+                                <li>{{ p.voice }}</li>
                                 {% endif %}
-                                {% if storyteller.contact.city %}
-                                <li>{{ storyteller.contact.city }}</li>
+                                {% if p.city %}
+                                <li>{{ p.city }}</li>
                                 {% endif %}
-                                {% if storyteller.contact.area %}
-                                <li>{{ storyteller.contact.area }}</li>
+                                {% if p.area %}
+                                <li>{{ p.area }}</li>
                                 {% endif %}
                             </ul>
                         </section>
+                        {% if p.education %}
+                        <section>
+                            <h6>Education</h6>
+                            <p>{{ p.education|linebreaks }}</p>
+                        </section>
+                        {% endif %}
+                        {% if p.expertise %}
+                        <section>
+                            <h6>Expertise</h6>
+                            <p>{{ p.expertise }}</p>
+                        </section>
+                        {% endif %}
+                        {% endwith %}
                     </div>
                     <div class="col-main storyteller-details">
-                        <p>Biography goes here.</p>
+                        <h4>{% firstof storyteller.get_full_name storyteller.username %}</h4>
+                        <section>
+                            <h3>Biography:</h3>
+                            <p>{{ storyteller.get_profile.biography }}</p>
+                        </section>
                     </div>
                 </div>
             </div>
         </div>
         <div class="span4">
+            {% include "maps/_widget_by_storyteller.html" %}
         </div>
     </div>
 {% endblock %}

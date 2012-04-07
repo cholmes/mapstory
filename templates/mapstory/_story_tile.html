@@ -1,4 +1,5 @@
 {% load mapstory_tags %}
+{% load agon_ratings_tags %}
 <div class="tile">
     <a href="{{ map.get_absolute_url }}">
         <img height="128" src="{{ map.get_thumbnail_url }}">
@@ -6,8 +7,12 @@
     <div class="info">
         <div class="title">{{ map.title }}</div>
         <div class="">
-            <span><a href="#">{{ map|user_name }}</a></span>
-            <span> on {{ map.last_modified|date:"N j Y" }}</span>
+            <span><a rel="author" href="{% url about_storyteller map.owner %}">{{ map|user_name }}</a></span>
+            <time pubdate datetime="{{ map.last_modified|date:"Y-m-d" }}">on {{ map.last_modified|date:"N j Y" }}</time>
         </div>
     </div>
+    <footer>
+            {% overall_rating map "map" as map_rating %}
+            <span class="rating">{{ map_rating }} stars</span>
+    </footer>
 </div>
