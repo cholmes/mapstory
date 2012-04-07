@@ -2033,3 +2033,11 @@ h2.icn-storylayer span, h2.icn-mapstory span {
     height: 25em;
     overflow: auto;
 }
+
+.edit-profile form .form input {
+    width: 50%;
+}
+.edit-profile form .form textarea {
+    width: 80%;
+    resize: both;
+}
