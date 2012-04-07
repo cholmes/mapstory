@@ -127,7 +127,6 @@ class RelatedStoriesNode(template.Node):
             topics = list(obj.topic_set.all())
         result = ""
         template_name = "mapstory/_story_tile_left.html"
-        print topics
         if topics:
             sec = topics[0].section_set.all()[0]
             maps = sec.get_maps()
