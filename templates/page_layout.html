@@ -37,6 +37,11 @@
                 <a id="login-link" href="#login-form-pop">{% trans "Log in" %}</a>
                 {% if REGISTRATION_OPEN %} or <a href="{% url registration_register %}">{% trans "Register" %}</a>{% endif %}
             {% endif %}
+            <form id="quicksearch" action="{% url new_search %}" method="POST">
+            {% csrf_token %}
+            <label for="q">Quick Search</label>
+            <input name="q" />
+            </form>
         </div>
         <div id="login-form-pop">
             <div class="drop-pointer"></div>
@@ -58,9 +63,9 @@
     <div id="top-crossbar">
        <div class="wrap selfclear">
         <ul class="fancyfont">
-            <li rel="category"><a href="#" class="tab-sections">SECTIONS <span>&#9662;</span></a></li>
-            <li rel="search"><a href="#" class="tab-search">SEARCH MAPSTORY <span>&#9662;</span></a></li>
-            <li><a href="#" class="tab-how">HOW TO</a></li>
+            <li rel="category"><a href="/" class="tab-sections {% if page.active_top_nav == "sections" %}active{% endif %}">SECTIONS</a></li>
+            <li rel="search"><a href="{% url new_search %}" class="tab-search {% if page.active_top_nav == "search" %}active{% endif %}">SEARCH MAPSTORY</a></li>
+            <li><a class="noi" href="#" class="tab-how">HOW TO</a></li>
               {% if user.is_authenticated %}
                   <li class=""><a class="" id="profileLink" href="{% url profiles_profile_detail user.username %}">{% trans "PROFILE" %}</a></li>
               {% if user.is_staff %}
@@ -69,11 +74,6 @@
               {% endif %}
 
         </ul>
-        <form id="quicksearch" action="{% url new_search %}" method="POST">
-            {% csrf_token %}
-            <label for="q">Quick Search</label>
-            <input name="q" />
-        </form>
        </div>
     </div>
     <div id="crossbar">
@@ -100,7 +100,7 @@
           {% endfor %}
           <li><a rel="search" href="{% url search %}" class="subtab-search-layers">Search StoryLayers</a></li>
           <li><a rel="search" href="{% url search_maps %}" class="subtab-search-stories">Search MapStories</a></li>
-          <li><a rel="search" href="#" class="subtab-search-tellers">Search StoryTellers</a></li>
+          <li><a rel="search" href="#" class="noi subtab-search-tellers">Search StoryTellers</a></li>
       </ul>
         {% endblock %}
 
@@ -204,7 +204,7 @@
     menu('search');
     enableMenu('category');
     Ext.select('.noi').on('click',function(ev) {
-        alert('Not Implemented');
+        alert('Coming Soon...');
         ev.stopEvent();
     });
     });
