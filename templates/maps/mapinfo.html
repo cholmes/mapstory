@@ -127,15 +127,10 @@ Ext.onReady(function() {
                             </ul>
                         </div>
                         <div class="tab-pane" id="actions3">
-                            <p>Embed this map:<p>
-                            <textarea><iframe style="border: none;" height="400" width="600" src="{{ req.META.SERVER_NAME %}{% url geonode.maps.views.embed map.id %}"></iframe></textarea>
                             <g:plusone size="small"></g:plusone>
                             <div class="fb-like" data-href="http://{{ request.get_host }}{{ request.get_full_path }}" data-send="false" data-width="50" data-layout="button_count" data-show-faces="false"></div>
-                            {% if request.user.is_authenticated %}
-                                <h3>{% trans "Rate this MapStory" %}</h3>
-                                {% user_rating request.user map "map" as user_map_rating %}
-                                <div id="user_rating" class="category-map"></div>
-                            {% endif %}
+                            <p>Embed this map:</p>
+                            <textarea><iframe style="border: none;" height="400" width="600" src="{{ req.META.SERVER_NAME %}{% url geonode.maps.views.embed map.id %}"></iframe></textarea>
                         </div>
                         <div class="tab-pane" id="actions4">
                             Flag not implemented yet
@@ -145,7 +140,13 @@ Ext.onReady(function() {
                             {% add_to_inprogress map %}
                         </div>
                     </div>
-
+                        {% if request.user.is_authenticated %}
+                        <div class="rating-area">
+                            <span>{% trans "Rate this MapStory" %}</span>
+                            {% user_rating request.user map "map" as user_map_rating %}
+                            <div id="user_rating" class="category-map"></div>
+                        </div>
+                        {% endif %}
                     <cite>Uploaded by {{ map.owner.username }} on {{ map.last_modified|date:"N j Y" }}</cite>
                     <article class="abstract"><p>Abstract: {{ map.abstract }}</p></article>
                 </div>

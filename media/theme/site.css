@@ -1062,6 +1062,16 @@ article h3 {
 .describe-object form textarea {
     resize: both;
 }
+.describe-object .rating-area {
+    float: right;
+}
+.describe-object .rating-area #user_rating {
+    display: inline-block;
+}
+.describe-object .rating-area span {
+    vertical-align: top;
+    font-size: 13px;
+}
 
 /** video mini **/
 .storyteller-details section.video-mini {
