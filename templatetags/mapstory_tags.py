@@ -3,8 +3,10 @@ from django.template import loader
 from django.template import RequestContext
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
+from django.conf import settings
 
 from geonode.maps.models import Map
+from geonode.maps.models import Layer
 from mapstory.models import Section
 from mapstory.models import Favorite
 
@@ -228,4 +230,11 @@ class ByStoryTellerNode(template.Node):
         else:
             user = obj.owner
         template_name = "maps/_widget_by_storyteller.html"
-        return loader.render_to_string(template_name,{'user':user})
+        layers = Layer.objects.all()
+        for e in settings.LAYER_EXCLUSIONS:
+            layers = layers.exclude(name__regex=e)
+        return loader.render_to_string(template_name,{
+            'user':user,
+            'maps':user.map_set.all(),
+            'layers':layers
+        })
