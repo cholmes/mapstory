@@ -300,7 +300,6 @@ AGON_RATINGS_CATEGORY_CHOICES = {
 
 
 LAYER_EXCLUSIONS = [
-    'annotations_\d+',
     '_map_\d+_annotations'
 ]
 # @todo unify these?
