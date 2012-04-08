@@ -129,7 +129,7 @@
 
                     <div class="video-actions tabbable">
                         <ul class="actions-links nav nav-tabs fancyfont">
-                            <li><a href="#describemap" class="icn info" data-toggle="pill">Info</a></li>
+                            <li><a href="#describemap" class="icn info active" data-toggle="pill">Info</a></li>
 <!--                            <a href="#" class="icn favorites">Add to Favorites</a>-->
                             <li><a href="#actions3" class="icn share" data-toggle="pill">Share</a></li>
                             <li><a href="#actions4" class="icn flag" data-toggle="pill">Flag</a></li>
@@ -142,7 +142,7 @@
                         </div>
                     </div>
                     <div class="video-actions tab-content">
-                        <div class="tab-pane active" id="describemap">
+                        <div class="tab-pane" id="describemap">
                             {% has_obj_perm user layer "maps.change_layer" as can_change %}
                             {% if can_change %}
                             <form id="info-form" method="POST" action="{% url layer_metadata layer.typename %}">
@@ -219,9 +219,9 @@
                         </div>
                     </div>
                 </div>
-                
-                <article class="abstract"><p>Abstract: {{ layer.abstract }}</p></article>
+                                
                 <cite>Uploaded by {{ layer.owner.username }} on {{ layer.date|date:"N j Y" }}</cite>
+                <article class="abstract"><p>Abstract: {{ layer.abstract }}</p></article>
                 
                 {% comments_section layer %}
 

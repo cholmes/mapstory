@@ -136,13 +136,17 @@ body.home #top-crossbar a.tab-sections:hover {
   text-decoration:none;
 }
 
-#crossbar #sitenav {
+#sitenav {
   margin-left:0;
 }
 
-#crossbar #sitenav li a {
+#sitenav li a {
   font-weight:400;
   padding-right:15px;
+}
+
+#sitenav a.active_nav {
+    text-decoration: underline;
 }
 
 body.search-mapstories #crossbar a:hover,
@@ -974,26 +978,35 @@ article h3 {
 
 .video-actions.tabbable {
   overflow:hidden;
-  padding-bottom:8px;
-  margin-bottom:8px;
+  margin-top: 10px;
 }
 
 .video-actions.tab-content {
     overflow: visible;
-    border-top: 1px solid #D8D9D9;
-    border-bottom: 1px solid #D8D9D9;
+    background: #F3F2F2;
+    margin-bottom: 10px;
+}
+
+.video-actions .tab-pane {
+    padding: 10px;
 }
 
 .video-actions .actions-links {
   float:left;
   width:500px;
-  padding-top:20px;
 }
 
 .video-actions .actions-links li a {
   display:inline-block;
-  padding:0 22px 0 23px;
+  padding:0 22px 0 28px;
   font-size:15px;
+  outline: none;
+  height: 20px;
+  margin-right:0px;
+}
+
+.video-actions .actions-links li.active {
+    background: #F3F2F2;
 }
 
 .video-actions .actions-links li a.last {
@@ -1007,13 +1020,13 @@ article h3 {
     border-bottom: 0;
 }
 
-.video-actions a.icn.info { background:url(img/icons/info.png) no-repeat left center; }
-.video-actions a.icn.layers { background:url(img/icons/layers.png) no-repeat left center; }
-.video-actions a.icn.favorites { background:url(img/icons/favorites.png) no-repeat left center; }
-.video-actions a.icn.share { background:url(img/icons/share.png) no-repeat left center; }
-.video-actions a.icn.flag { background:url(img/icons/flag.png) no-repeat left center; }
-.video-actions a.icn.add { background:url(img/icons/add.png) no-repeat left center; }
-.video-actions a.icn.download { background:url(img/icons/download.png) no-repeat left center; }
+.video-actions a.icn.info { background:url(img/icons/info.png) no-repeat 5px; center; }
+.video-actions a.icn.layers { background:url(img/icons/layers.png) no-repeat 5px center; }
+.video-actions a.icn.favorites { background:url(img/icons/favorites.png) no-repeat 5px center; }
+.video-actions a.icn.share { background:url(img/icons/share.png) no-repeat 5px center; }
+.video-actions a.icn.flag { background:url(img/icons/flag.png) no-repeat 5px center; }
+.video-actions a.icn.add { background:url(img/icons/add.png) no-repeat 5px center; }
+.video-actions a.icn.download { background:url(img/icons/download.png) no-repeat 5px center; }
 
 .video-actions .actions-links a:hover {
   text-decoration:none;
@@ -1044,7 +1057,7 @@ article h3 {
 .describe-object form input,
 .describe-object form textarea
 {
-    width: 99%;
+    width: 90%;
 }
 .describe-object form textarea {
     resize: both;

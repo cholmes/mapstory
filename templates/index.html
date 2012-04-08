@@ -21,74 +21,7 @@
     <div id="carousel" class="span12 lightgraybg">
         <div class="arrow arrow-left" style="left:15px">&#8826;</div>
         <div class="arrow arrow-right" style="right:15px">&#8827;</div>
-        {% if page.design_mode %}
-            <div class="tile">
-                <a href="#"><img src="http://mapstory.dev.opengeo.org/thumbs/map73.png" alt="" /></a>
-                <div class="info">
-                    <div class="title">Nuclear Tests and Detonations</div>
-                    <div>
-                        <span>
-                            <a href="#">asu1</a>
-                            <span>on Mar 14 2012</span>
-                        </span>
-                    </div>
-                    <footer>
-                        <span class="views">1,205 Views</span>
-                        <span class="rating">3 stars</span>
-                    </footer>
-                </div>
-            </div>
-            <div class="tile">
-                <a href="#"><img src="http://mapstory.dev.opengeo.org/thumbs/map73.png" alt="" /></a>
-                <div class="info">
-                    <div class="title">Nuclear Tests and Detonations</div>
-                    <div>
-                        <span>
-                            <a href="#">asu1</a>
-                            <span>on Mar 14 2012</span>
-                        </span>
-                    </div>
-                    <footer>
-                        <span class="views">1,205 Views</span>
-                        <span class="rating">3 stars</span>
-                    </footer>
-                </div>
-            </div>
-            <div class="tile">
-                <a href="#"><img src="http://mapstory.dev.opengeo.org/thumbs/map73.png" alt="" /></a>
-                <div class="info">
-                    <div class="title">Nuclear Tests and Detonations</div>
-                    <div>
-                        <span>
-                            <a href="#">asu1</a>
-                            <span>on Mar 14 2012</span>
-                        </span>
-                    </div>
-                    <footer>
-                        <span class="views">1,205 Views</span>
-                        <span class="rating">3 stars</span>
-                    </footer>
-                </div>
-            </div>
-            <div class="tile">
-                <a href="#"><img src="http://mapstory.dev.opengeo.org/thumbs/map73.png" alt="" /></a>
-                <div class="info">
-                    <div class="title">Nuclear Tests and Detonations</div>
-                    <div>
-                        <span>
-                            <a href="#">asu1</a>
-                            <span>on Mar 14 2012</span>
-                        </span>
-                    </div>
-                    <footer>
-                        <span class="views">1,205 Views</span>
-                        <span class="rating">3 stars</span>
-                    </footer>
-                </div>
-            </div>
-        {% else %}
         {{ tiles|safe }}
-        {% endif %}
     </div>
     <div class="span12" id="activities">
         <ul class="selfclear">
@@ -113,109 +46,29 @@
 <div class="row">
 <div class="span8">
     <div class="box mrg-btm">
-    <div id="featuredvideo" class="selfclear">
-        <h2>{{ video.title }}</h2>
-        <div style="float:left;margin-right: 1em">
-            <iframe class="youtube-player" type="text/html" width="217" height="128" src="{{ video.href }}" frameborder="0"></iframe>
+        <div id="featuredvideo" class="selfclear">
+            <h2>{{ video.title }}</h2>
+            <div style="float:left;margin-right: 1em">
+                <iframe class="youtube-player" type="text/html" width="217" height="128" src="{{ video.href }}" frameborder="0"></iframe>
+            </div>
+            <div class="description">
+                <h3><a href="#">{{ video.name }}</a></h3>
+                <p>{{ video.text}} <a href="#"><img src="{{ STATIC_URL }}theme/img/arrow_right.png" width="6" height="11" alt="" /></a></p>
+            </div>
         </div>
-        <div class="description">
-            <h3><a href="#">{{ video.name }}</a></h3>
-            <p>{{ video.text}} <a href="#"><img src="{{ STATIC_URL }}theme/img/arrow_right.png" width="6" height="11" alt="" /></a></p>
-        </div>
-    </div>
-    <hr/>
-    <div id="sections" class="selfclear tabs-left">
-        <h2>SECTIONS</h2>
+        <hr/>
+        <div id="sections" class="selfclear tabs-left">
+            <h2>SECTIONS</h2>
 
-        <ul class="nav nav-tabs">
-          {% if page.design_mode %}
-          <li class="active"><a href="#section1" data-toggle="tab">Crisis</a></li>
-          <li><a href="#section2" data-toggle="tab">GeoPolitics</a></li>
-          <li><a href="#section3" data-toggle="tab">Kids</a></li>
-          <li><a href="#section4" data-toggle="tab">Nature &amp; Environment</a></li>
-          <li><a href="#section5" data-toggle="tab">Science</a></li>
-          <li><a href="#section6" data-toggle="tab">Arts &amp; Culture</a></li>
-          <li><a href="#section7" data-toggle="tab">Technology</a></li>
-          <li><a href="#section8" data-toggle="tab">Finance &amp; Industry</a></li>
-          <li><a href="#section9" data-toggle="tab">Health</a></li>
-          <li><a href="#section10" data-toggle="tab">Religion &amp; Myth</a></li>
-          <li><a href="#section11" data-toggle="tab">Biography</a></li>
-          {% else %}
-            {% for sec in page.sections %}
-            <li {% if forloop.first %} class="active"{% endif %}>
-                <a href="#section{{ forloop.counter }}" data-toggle="tab">{{ sec.name }}</a>
-            </li>
-            {% endfor %}
-          {% endif %}
-        </ul>
+            <ul class="nav nav-tabs">
+                {% for sec in page.sections %}
+                <li {% if forloop.first %} class="active"{% endif %}>
+                    <a href="#section{{ forloop.counter }}" data-toggle="tab">{{ sec.name }}</a>
+                </li>
+                {% endfor %}
+            </ul>
 
-        <div class="tab-content">
-          {% if page.design_mode %}
-          <div class="tab-pane active" id="section1">
-            <article>
-                <a href="#">
-                    <img src="{{ STATIC_URL }}theme/img/img_95x65.png" alt="" class="left" />
-                </a>
-                <div class="article-content">
-                    <header>
-                        <h3><a href="#">Lorem ipsum dolor sit amet, cosectetur
-                        sedour adipiscing elit sed do eiusmod.</a></h3>
-                    </header>
-                    <div class="summary">
-                        Lorem ipsum dolor sit amet, consectetur adipisicing
-                        elit, sed do eiusmod tempor incididunt ut labore et
-                        nostrud exercitation ullamco laboris nisi ut aliquip...
-                    </div>
-                    <footer>
-                        <span class="views">1,205 Views</span>
-                        <span class="rating">3 stars</span>
-                    </footer>
-                </div>
-            </article>
-            <article>
-                <a href="#">
-                    <img src="{{ STATIC_URL }}theme/img/img_95x65.png" alt="" class="left" />
-                </a>
-                <div class="article-content">
-                    <header>
-                        <h3><a href="#">Lorem ipsum dolor sit amet, cosectetur
-                        sedour adipiscing elit sed do eiusmod.</a></h3>
-                    </header>
-                    <div class="summary">
-                        Lorem ipsum dolor sit amet, consectetur adipisicing
-                        elit, sed do eiusmod tempor incididunt ut labore et
-                        nostrud exercitation ullamco laboris nisi ut aliquip...
-                    </div>
-                    <footer>
-                        <span class="views">1,205 Views</span>
-                        <span class="rating">3 stars</span>
-                    </footer>
-                </div>
-            </article>
-            <article>
-                <a href="#">
-                    <img src="{{ STATIC_URL }}theme/img/img_95x65.png" alt="" class="left" />
-                </a>
-                <div class="article-content">
-                    <header>
-                        <h3><a href="#">Lorem ipsum dolor sit amet, cosectetur
-                        sedour adipiscing elit sed do eiusmod.</a></h3>
-                    </header>
-                    <div class="summary">
-                        Lorem ipsum dolor sit amet, consectetur adipisicing
-                        elit, sed do eiusmod tempor incididunt ut labore et
-                        nostrud exercitation ullamco laboris nisi ut aliquip...
-                    </div>
-                    <footer>
-                        <span class="views">1,205 Views</span>
-                        <span class="rating">3 stars</span>
-                    </footer>
-                </div>
-            </article>
-          </div>
-          <div class="tab-pane" id="section2">section 2 content</div>
-          <div class="tab-pane" id="section3">section 3 content</div>
-          {% else %}
+            <div class="tab-content">
                 {% for sec in page.sections %}
                 <div class="tab-pane {% if forloop.first %}active{% endif %}" id="section{{ forloop.counter }}">
                     {% with sec.all_children as items %}
@@ -228,11 +81,7 @@
                     {% endwith %}
                 </div>
                 {% endfor %}
-          {% endif %}
-        </div>
-        {% comment %}
-            end static tabs
-        {% endcomment %}
+            </div>
         </div>
     </div>
 </div>

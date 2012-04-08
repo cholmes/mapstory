@@ -2,6 +2,7 @@
 
 {% load staticfiles %}
 {% load i18n %}
+{% load mapstory_tags %}
 
 {% block style_base %}
     <link href="{{ STATIC_URL }}theme/bootstrap_custom.css" rel="stylesheet" />
@@ -18,9 +19,6 @@
     {% include "geonode/ext_header.html" %}
     {% block extra_head %}{% endblock %}
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}theme/site.css" media="screen" />
-    {% if page.design_mode %}
-    <script src="{{ STATIC_URL }}script/cssrefresh.js" type="text/javascript"></script>
-    {% endif %}
 {% endblock %}
 
 {% block topbar_base %}
@@ -35,6 +33,7 @@
                 <div class="user">Welcome {{ user.username }}</div>
             {% else %}
                 <a id="login-link" href="#login-form-pop">{% trans "Log in" %}</a>
+                <div class="user">&nbsp;</div>
                 {% if REGISTRATION_OPEN %} or <a href="{% url registration_register %}">{% trans "Register" %}</a>{% endif %}
             {% endif %}
             <form id="quicksearch" action="{% url new_search %}" method="POST">
@@ -63,8 +62,8 @@
     <div id="top-crossbar">
        <div class="wrap selfclear">
         <ul class="fancyfont">
-            <li rel="category"><a href="/" class="tab-sections {% if page.active_top_nav == "sections" %}active{% endif %}">SECTIONS</a></li>
-            <li rel="search"><a href="{% url new_search %}" class="tab-search {% if page.active_top_nav == "search" %}active{% endif %}">SEARCH MAPSTORY</a></li>
+            <li rel="category"><a href="/" class="tab-sections {% active_nav_tab request "sections" %}">SECTIONS</a></li>
+            <li rel="search"><a href="{% url new_search %}" class="tab-search {% active_nav_tab request "search" %}">SEARCH MAPSTORY</a></li>
             <li><a class="noi" href="#" class="tab-how">HOW TO</a></li>
               {% if user.is_authenticated %}
                   <li class=""><a class="" id="profileLink" href="{% url profiles_profile_detail user.username %}">{% trans "PROFILE" %}</a></li>
@@ -96,10 +95,14 @@
 
       <ul id="sitenav" class="selfclear">
           {% for sec in page.sections %}
-              <li><a rel="category" href="{{ sec.get_absolute_url }}">{{ sec.name }}</a></li>
+              {% with sec.get_absolute_url as url %}
+              <li><a rel="category" class="{% active_sub_nav request url %}" href="{{ url }}">{{ sec.name }}</a></li>
+              {% endwith %}
           {% endfor %}
-          <li><a rel="search" href="{% url search %}" class="subtab-search-layers">Search StoryLayers</a></li>
-          <li><a rel="search" href="{% url search_maps %}" class="subtab-search-stories">Search MapStories</a></li>
+          {% url search as search_layers %}
+          {% url search_maps as search_maps %}
+          <li><a rel="search" href="{% url search %}" class="subtab-search-layers {% active_sub_nav request search_layers %}">Search StoryLayers</a></li>
+          <li><a rel="search" href="{% url search_maps %}" class="subtab-search-stories {% active_sub_nav request search_maps %}">Search MapStories</a></li>
           <li><a rel="search" href="#" class="noi subtab-search-tellers">Search StoryTellers</a></li>
       </ul>
         {% endblock %}
@@ -174,69 +177,6 @@
 {% endblock %}
 
 {% block extra_body_base %}
-    {# <script src="{{ STATIC_URL }}script/core.js" type="text/javascript"></script> #}
-    <script type="text/javascript">
-    {% autoescape off %}
-    var quicksearch;
-    var menus;
-    function nixSearchLabel() {
-    quicksearch.select('label').remove();
-    quicksearch.select('input').focus();
-    quicksearch.un('keypress',nixSearchLabel);
-    }
-    function enableMenu(rel) {
-        menus.setVisible(false);
-        menus.item(0).parent('ul').select('[rel=' + rel + ']').show();
-    }
-    function menu(rel) {
-    Ext.select('#top-crossbar li[rel=' + rel + ']').on('mouseover',function() {
-        enableMenu(rel);
-    });
-    }
-    //@todo make login pages not produce error
-    if ('Ext' in window) {
-    Ext.onReady(function() {
-    quicksearch = Ext.get('quicksearch');
-    quicksearch.on('keypress',nixSearchLabel);
-    quicksearch.on('click',nixSearchLabel);
-    menus = Ext.select('#sitenav li a').setVisibilityMode(Ext.Element.DISPLAY).setVisible(false,false);
-    menu('category');
-    menu('search');
-    enableMenu('category');
-    Ext.select('.noi').on('click',function(ev) {
-        alert('Coming Soon...');
-        ev.stopEvent();
-    });
-    });
-    }
-    {% endautoescape %}
-
-    $(function () {
-        $('#login-link').click(function(e) {
-                e.preventDefault();
-            var href = $(this).attr('href');
-            if (href[0] == '/') {
-                $.post(href,{},function(d,s,x) {
-                    window.location.reload();
-                })
-            } else {
-                $(href).toggle();
-            }
-        });
-        $("#login-form-pop button").click(function(e) {
-            var form = $("#login-form-pop form");
-            e.preventDefault();
-            $.post(form.attr('action'),form.serialize(),function(data,status,xhr) {
-                if (status == 'success') {
-                    window.location.reload();
-                } else {
-                    alert(data);
-                }
-                $("#login-form-pop").toggle();
-            });
-        })
-    });
-    </script>
     <div id="fb-root"></div>
     <script>(function(d, s, id) {
     var js, fjs = d.getElementsByTagName(s)[0];

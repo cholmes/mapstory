@@ -8,6 +8,8 @@ from geonode.maps.models import Map
 from mapstory.models import Section
 from mapstory.models import Favorite
 
+import re
+
 register = template.Library()
 
 # @todo lots of duplication can be removed
@@ -21,6 +23,21 @@ def user_name(obj):
     else:
         name = obj.username
     return name
+
+@register.simple_tag
+def active_nav_tab(req, which):
+    if which == 'sections':
+        if req.path == '/' or req.path == '' or req.path.startswith('/mapstory/section'):
+            return 'active_nav'
+    if which == 'search' and req.path.find('search') >= 0:
+        return 'active_nav'
+    return ''
+
+@register.simple_tag
+def active_sub_nav(request, pattern):
+    if pattern and re.match(pattern, request.path):
+        return 'active_nav'
+    return ''
 
 @register.tag
 def map_info_tile(parser, token):

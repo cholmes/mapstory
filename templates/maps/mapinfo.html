@@ -59,7 +59,7 @@ Ext.onReady(function() {
 
                     <div class="video-actions tabbable">
                         <ul class="actions-links nav nav-tabs fancyfont">
-                            <li><a href="#describemap" class="icn info" data-toggle="pill">Info</a></li>
+                            <li><a href="#describemap" class="icn info active" data-toggle="pill">Info</a></li>
                             <li><a href="#actions2" class="icn layers" data-toggle="pill">Layers</a></li>
 <!--                            <a href="#" class="icn favorites">Add to Favorites</a>-->
                             <li><a href="#actions3" class="icn share" data-toggle="pill">Share</a></li>
@@ -72,7 +72,7 @@ Ext.onReady(function() {
                         </div>
                     </div>
                     <div class="video-actions tab-content">
-                        <div class="tab-pane active" id="describemap">
+                        <div class="tab-pane" id="describemap">
                             {% has_obj_perm user map "maps.change_map" as can_change %}
                             {% if can_change %}
                             <form id="info-form" method="POST" action="{% url geonode.maps.views.map_controller map.id %}?describe">
@@ -146,8 +146,8 @@ Ext.onReady(function() {
                         </div>
                     </div>
 
-                    <article class="abstract"><p>Abstract: {{ map.abstract }}</p></article>
                     <cite>Uploaded by {{ map.owner.username }} on {{ map.last_modified|date:"N j Y" }}</cite>
+                    <article class="abstract"><p>Abstract: {{ map.abstract }}</p></article>
                 </div>
                 {% comments_section map %}
 
