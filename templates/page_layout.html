@@ -64,7 +64,7 @@
         <ul class="fancyfont">
             <li rel="category"><a href="/" class="tab-sections {% active_nav_tab request "sections" %}">SECTIONS</a></li>
             <li rel="search"><a href="{% url new_search %}" class="tab-search {% active_nav_tab request "search" %}">SEARCH MAPSTORY</a></li>
-            <li><a class="noi" href="#" class="tab-how">HOW TO</a></li>
+            <li><a href="{% url how_to %}" class="tab-how">HOW TO</a></li>
               {% if user.is_authenticated %}
                   <li class=""><a class="" id="profileLink" href="{% url profiles_profile_detail user.username %}">{% trans "PROFILE" %}</a></li>
               {% if user.is_staff %}
@@ -170,7 +170,9 @@
           Powered by <a href="http://geonode.org">{% trans "GeoNode" %}</a>
           | <strong>{% trans "Need Help?" %}</strong>
           <a href="{% url geonode.views.static "help" %}">{% trans "Help" %}</a>
+          {% comment %}
           | <a href="{% url geonode.views.developer %}">{% trans "For Developers" %}</a>
+          {% endcomment %}
         </div>
       </div><!-- /.wrap -->
     </div><!-- /#footer -->

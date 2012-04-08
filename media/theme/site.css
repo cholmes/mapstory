@@ -1865,6 +1865,15 @@ h2.icn-storylayer span, h2.icn-mapstory span {
   font-size:12px;
 }
 
+#helppage, #howtopage {
+    margin-top: 10px;
+}
+
+#helppage section {
+    font-size:12px;
+    margin-bottom: 10px;
+}
+
 /*** modal ***/
 .modal {
   -moz-border-radius:0;
