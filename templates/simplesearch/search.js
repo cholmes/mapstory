@@ -4,7 +4,7 @@ Ext.onReady(function() {
     loadnotify = Ext.get('loading'),
     itemTemplate = "<li id='item{iid}'><a href='{detail}'><img class='thumb {thumbclass}' src='{thumb}'></img></a>" +
     "<div class='itemTitle'><a href='{detail}'>{title}</a></div>" +
-    "<div class='itemInfo'>{_display_type}, by <a href='{owner_detail}'>{owner}</a> on {last_modified:date(\"F j, Y\")}</div>" +
+    "<div class='itemInfo'>{_display_type}, by <a href='{owner_detail}'>{owner}</a> on {last_modified}</div>" +
     "<div class='itemAbstract>{abstract}</div>"+
     "<div class='rating'>{rating} stars</div>"+
     "</li>",
