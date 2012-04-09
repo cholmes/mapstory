@@ -6,6 +6,7 @@ Ext.onReady(function() {
     "<div class='itemTitle'><a href='{detail}'>{title}</a></div>" +
     "<div class='itemInfo'>{_display_type}, by <a href='{owner_detail}'>{owner}</a> on {last_modified:date(\"F j, Y\")}</div>" +
     "<div class='itemAbstract>{abstract}</div>"+
+    "<div class='rating'>{rating} stars</div>"+
     "</li>",
     filterTemplate = "<div class='removeFilter {typeclass}'><img height='8' src='/static/theme/img/silk/delete.png' class='removeFilter' href='#removeFilter'> </a><strong>{type}</strong> {value}</div>",
     fetching = false,
@@ -90,6 +91,10 @@ Ext.onReady(function() {
                 r.thumbclass = "";
             }
             var item = itemTemplate.append(list,r,true);
+            new Ext.ToolTip({
+                target: 'item' + r.iid,
+                html: r['abstract']
+            });
         });
 
     }
