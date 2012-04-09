@@ -976,6 +976,12 @@ article h3 {
   margin-bottom:20px;
 }
 
+.top-detail-actions a {
+    float: right;
+    margin-top: 10px;
+    padding-left: 12px;
+}
+
 .video-actions.tabbable {
   overflow:hidden;
   margin-top: 10px;

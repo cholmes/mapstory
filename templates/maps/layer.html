@@ -118,10 +118,15 @@
 {% block body_class %}manage-layer-page{% endblock %}
 
 {% block main %}
-    <div class="row">
-        <div class="span12 mrg-top" >
+    <div class="row mrg-top">
+        <div class="span8">
             <h2 class="icn-storylayers">{{ layer.title }}</h2>
         </div>
+        <div class="span4 top-detail-actions">
+            <a href="{% url map_new %}?layer{{layer.typename}}" target="_">Create a Story using this StoryLayer</a>
+        </div>
+    </div>
+    <div class="row">
         <div class="span8">
             <div class="box mrg-btm describe-object">
                 <div class="story-detail">
