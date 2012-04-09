@@ -13,6 +13,8 @@ import tempfile
 import re
 import shutil
 
+from export_layer import export_layer
+
 gs_data_dir = '/var/lib/geoserver/geonode-data/'
 
 parser = OptionParser('usage: %s [options] maps_export_file.zip' % sys.argv[0])
@@ -74,6 +76,7 @@ def fetch_layer(layer_name):
 
 maps = filter(None, map(fetch_map, map_ids))
 layers = filter(None, map(fetch_layer, layer_names))
+maplayers = sum([m.layers for m in maps], [])
 
 def layers_from_map(m):
     layers = []
@@ -90,3 +93,37 @@ def layers_from_map(m):
 all_layers = sum(map(layers_from_map, maps), []) + layers
 unique_layers_map = dict((l.id, l) for l in all_layers)
 layers_to_export = unique_layers_map.values()
+
+# create the layout for the uber zip file that will contain the maps/layers underneath
+tempdir = tempfile.mkdtemp()
+
+temppath = lambda *args: os.path.join(tempdir, *args)
+
+layersdir = os.path.join(tempdir, 'layers')
+os.mkdir(layersdir)
+
+# keep track of where we are
+curdir = os.getcwd()
+
+# export all the layers
+for layer in layers_to_export:
+    layerdirpath = os.path.join(layersdir, layer.name)
+    os.mkdir(layerdirpath)
+    export_layer(gs_data_dir, layerdirpath, layer)
+
+# export the maps and the maplayers
+def export_json(path, data):
+    with open(path, 'w') as out:
+        serializers.serialize('json', data, stream=out)
+
+export_json(temppath('maps.json'), maps)
+export_json(temppath('maplayers.json'), maplayers)
+
+# create the uber zip
+zipfilename = args[0]
+os.chdir(tempdir)
+os.system('zip -r %s .' % zipfilename)
+
+# move the zip file to the current directory
+os.chdir(curdir)
+shutil.move(os.path.join(tempdir, zipfilename), zipfilename)
