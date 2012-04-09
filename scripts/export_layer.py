@@ -10,18 +10,13 @@ import os
 import tempfile
 import shutil
 
-def export_layer(gs_data_dir, tempdir, layer):
+def export_layer(gs_data_dir, conn, tempdir, layer):
     gslayer = Layer.objects.gs_catalog.get_layer(layer.typename)
     gsresource = gslayer.resource
 
     temppath = lambda *p: os.path.join(tempdir, *p)
     gspath = lambda *p: os.path.join(gs_data_dir, *p)
 
-    conn = psycopg2.connect("dbname='" + settings.DB_DATASTORE_DATABASE + 
-                            "' user='" + settings.DB_DATASTORE_USER + 
-                            "' password='" + settings.DB_DATASTORE_PASSWORD + 
-                            "' port=" + settings.DB_DATASTORE_PORT + 
-                            " host='" + settings.DB_DATASTORE_HOST + "'")
     cursor = conn.cursor()
 
     #dump db table - this gets the table schema, too
@@ -64,6 +59,8 @@ def export_layer(gs_data_dir, tempdir, layer):
     os.chdir(tempdir)
     os.system('zip -r %s/%s-extract.zip .' % (curdir,layer_name))
 
+    cursor.close()
+
 if __name__ == '__main__':
     gs_data_dir = '/var/lib/geoserver/geonode-data/'
 
@@ -76,6 +73,12 @@ if __name__ == '__main__':
         args.pop(idx)
         gs_data_dir = args.pop(idx) 
     
+    conn = psycopg2.connect("dbname='" + settings.DB_DATASTORE_DATABASE + 
+                            "' user='" + settings.DB_DATASTORE_USER + 
+                            "' password='" + settings.DB_DATASTORE_PASSWORD + 
+                            "' port=" + settings.DB_DATASTORE_PORT + 
+                            " host='" + settings.DB_DATASTORE_HOST + "'")
+
     layer_name = args.pop()
     try:
         layer = Layer.objects.get(name=layer_name)
@@ -85,7 +88,7 @@ if __name__ == '__main__':
 
     tempdir = tempfile.mkdtemp()
 
-    export_layer(tempdir, layer)
+    export_layer(gs_data_dir, conn, tempdir, layer)
 
     # and cleanup
     shutil.rmtree(tempdir)

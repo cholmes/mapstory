@@ -105,11 +105,18 @@ os.mkdir(layersdir)
 # keep track of where we are
 curdir = os.getcwd()
 
+# connect to database for layer export
+conn = psycopg2.connect("dbname='" + settings.DB_DATASTORE_DATABASE + 
+                        "' user='" + settings.DB_DATASTORE_USER + 
+                        "' password='" + settings.DB_DATASTORE_PASSWORD + 
+                        "' port=" + settings.DB_DATASTORE_PORT + 
+                        " host='" + settings.DB_DATASTORE_HOST + "'")
+
 # export all the layers
 for layer in layers_to_export:
     layerdirpath = os.path.join(layersdir, layer.name)
     os.mkdir(layerdirpath)
-    export_layer(gs_data_dir, layerdirpath, layer)
+    export_layer(gs_data_dir, conn, layerdirpath, layer)
 
 # export the maps and the maplayers
 def export_json(path, data):
@@ -127,3 +134,5 @@ os.system('zip -r %s .' % zipfilename)
 # move the zip file to the current directory
 os.chdir(curdir)
 shutil.move(os.path.join(tempdir, zipfilename), zipfilename)
+
+conn.close()
