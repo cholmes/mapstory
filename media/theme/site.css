@@ -609,7 +609,7 @@ p.center {
   line-height:32px;
   text-indent:12px;
   font-family: 'Marvel', sans-serif;
-  font-size: 1.6em;
+  font-size: 16px;
   color:#787878;
   margin-bottom:10px;
   padding:0;
@@ -976,6 +976,16 @@ article h3 {
   margin-bottom:20px;
 }
 
+.story-detail .abstract p {
+  margin: 1em 0;
+}
+
+.top-detail-actions a {
+    float: right;
+    margin-top: 10px;
+    padding-left: 12px;
+}
+
 .video-actions.tabbable {
   overflow:hidden;
   margin-top: 10px;
@@ -1061,6 +1071,16 @@ article h3 {
 }
 .describe-object form textarea {
     resize: both;
+}
+.describe-object .rating-area {
+    float: right;
+}
+.describe-object .rating-area #user_rating {
+    display: inline-block;
+}
+.describe-object .rating-area span {
+    vertical-align: top;
+    font-size: 13px;
 }
 
 /** video mini **/
@@ -1853,6 +1873,15 @@ h2.icn-storylayer span, h2.icn-mapstory span {
   color:#F46817;
   line-height:1.35em;
   font-size:12px;
+}
+
+#helppage, #howtopage {
+    margin-top: 10px;
+}
+
+#helppage section {
+    font-size:12px;
+    margin-bottom: 10px;
 }
 
 /*** modal ***/

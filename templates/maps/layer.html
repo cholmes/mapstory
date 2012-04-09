@@ -118,10 +118,15 @@
 {% block body_class %}manage-layer-page{% endblock %}
 
 {% block main %}
-    <div class="row">
-        <div class="span12 mrg-top" >
+    <div class="row mrg-top">
+        <div class="span8">
             <h2 class="icn-storylayers">{{ layer.title }}</h2>
         </div>
+        <div class="span4 top-detail-actions">
+            <a href="{% url map_new %}?layer{{layer.typename}}" target="_">Create a Story using this StoryLayer</a>
+        </div>
+    </div>
+    <div class="row">
         <div class="span8">
             <div class="box mrg-btm describe-object">
                 <div class="story-detail">
@@ -189,11 +194,6 @@
                         <div class="tab-pane" id="actions3">
                             <g:plusone size="small"></g:plusone>
                             <div class="fb-like" data-href="http://{{ request.get_host }}{{ request.get_full_path }}" data-send="false" data-width="50" data-layout="button_count" data-show-faces="false"></div>
-                            {% if request.user.is_authenticated %}
-                                <h3>{% trans "Rate this StoryLayer" %}</h3>
-                                {% user_rating request.user layer "layer" as user_layer_rating %}
-                                <div id="user_rating" class="category-layer"></div>
-                            {% endif %}
                         </div>
                         <div class="tab-pane" id="actions4">
                             Flag not implemented yet
@@ -220,8 +220,15 @@
                     </div>
                 </div>
                                 
+                <div class="rating-area">
+                    {% if request.user.is_authenticated %}
+                        <span>{% trans "Rate this StoryLayer" %}</span>
+                        {% user_rating request.user layer "layer" as user_layer_rating %}
+                        <div id="user_rating" class="category-layer"></div>
+                    {% endif %}
+                </div>
                 <cite>Uploaded by {{ layer.owner.username }} on {{ layer.date|date:"N j Y" }}</cite>
-                <article class="abstract"><p>Abstract: {{ layer.abstract }}</p></article>
+                <article class="abstract"><p>Abstract:</p> {{ layer.abstract|linebreaks }}</article>
                 
                 {% comments_section layer %}
 
@@ -246,33 +253,6 @@
                 <a class="btn" href="{% url geonode.maps.views.newmap %}?layer={{layer.typename}}">Create A Map</a>
             </section>
 
-            <section class="box mrg-btm storyteller-layer">
-                <h2>STORYTELLERS USING THIS LAYER:</h2>
-                    <div class="storyteller">
-                        <img src="http://www.gravatar.com/avatar/b59a1fea77f9350c8225395f55204abe?r=pg&s=70">
-                        <h4>Prof. Jim Jones,<br /> Notre Dame</h4>
-                        <h5>Layers Used:</h5>
-                        <p><a href="#">This is link to layer 1</a>, <a href="#">This is link to layer 2</a>,
-                        <a href="#">Link layer 3</a>,  <a href="#">Link to layer 4</a></p>
-                        <p><a href="#" class="read-more">More Layers</a></p>
-                    </div>
-                    <div class="storyteller">
-                        <img src="http://www.gravatar.com/avatar/a6a965150162eef63f1d2f8aae15c57c?r=pg&s=70">
-                        <h4>Gary Lewin,<br /> EU Institute of Humanities</h4>
-                        <h5>Layers Used:</h5>
-                        <p><a href="#">This is link to layer 1</a>, <a href="#">This is link to layer 2</a>,
-                        <a href="#">Link layer 3</a>,  <a href="#">Link to layer 4</a></p>
-                        <p><a href="#" class="read-more">More Layers</a></p>
-                    </div>
-                    <div class="storyteller last">
-                        <img src="http://www.gravatar.com/avatar/c0c61fb94a5785be367b0fceea6985f1?r=pg&s=70">
-                        <h4>Susan Turner,<br /> American Museum of Natural History</h4>
-                        <h5>Layers Used:</h5>
-                        <p><a href="#">This is link to layer 1</a>, <a href="#">This is link to layer 2</a>,
-                        <a href="#">Link layer 3</a>,  <a href="#">Link to layer 4</a></p>
-                        <p><a href="#" class="read-more">More Layers</a></p>
-                    </div>
-            </section>
             {% include "mapstory/_widget_social.html" %}
         </div>
     </div>

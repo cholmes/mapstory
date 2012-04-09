@@ -23,6 +23,7 @@ sitemaps = {
 }
 
 urlpatterns = patterns('',
+    # inject our form into these views
     ('^profiles/edit', 'profiles.views.edit_profile', {'form_class': ProfileForm,}),
     ('^profiles/create', 'profiles.views.create_profile', {'form_class': ProfileForm,}),
 )
@@ -37,8 +38,9 @@ urlpatterns += patterns('mapstory.views',
     url(r'^mapstory/alerts$','alerts',name='alerts'),
     url(r'^mapstory/tile/(?P<mapid>\d+)$','map_tile',name='map_tile'),
     url(r'^mapstory/tiles$','map_tiles',name='map_tiles'),
-    url(r'^mapstory/storyteller/(?P<username>\w+)$','about_storyteller',name='about_storyteller'),
+    url(r'^mapstory/storyteller/(?P<username>\S+)$','about_storyteller',name='about_storyteller'),
     url(r'^mapstory/section/(?P<section>[-\w]+)$','section_detail',name='section_detail'),
+    url(r'^mapstory/how-to$',direct_to_template,{"template":"mapstory/how_to.html"},name='how_to'),
     
     # semi-temp urls
     url(r'^mapstory/topics/(?P<layer_or_map>\w+)/(?P<layer_or_map_id>\d+)$','topics_api',name='topics_api'),

@@ -112,6 +112,9 @@
         overflow: none;
         margin: 5px;
     }
+    #search_results li.noresults {
+        width: 100%;
+    }
     .center {
         text-align: center;
     }
@@ -149,7 +152,7 @@
         padding-left: 16px;
         cursor: pointer;
     }
-    .refineSection.collapse h5 {
+    .refineSection.collapsed h5 {
         background: url('{{ STATIC_URL }}static/externals/ext/resources/images/default/grid/group-expand.gif') no-repeat 0 50%;
     }
     .refineSection.expand h5 {
@@ -184,7 +187,9 @@
 
 {% block main %}
 <div class="row">
-    <h2 style="margin-top: 10px">{% trans "Search Mapstory" %}</h2>
+    <div class="span12">
+        <h2 style="margin-top: 10px">{% trans "Search MapStory" %}</h2>
+    </div>
 </div>
 
 <div class="row">
@@ -209,24 +214,24 @@
             <h5 style="display:none">Current Filters</h5>
         </div>
             
-        <h4>What</h4>
-        
         <div class="refineSection expand">
-            <h5>By type</h5>
+            <h5>Type</h5>
             <ul id="bytype" class="searchLinks refineControls">
-                <li><a href="#map">Maps</a></li>
-                <li><a href="#layer">Layers</a>
+                <li><a href="#map">MapStories</a></li>
+                <li><a href="#layer">StoryLayers</a>
+                    <!--
                     <ul style="margin-left:.5em">
                         <li><a href="#dataStore">Vector</a></li>
                         <li><a href="#coverageStore">Raster</a></li>
                     </ul>
+                    -->
                 </li>
                 <!-- <li><a href="#contact">Users</a><span>({{ counts.users }})</span></li> -->
             </ul>
         </div>
             
         <div class="refineSection expand">
-            <h5>By section</h5>
+            <h5>Section</h5>
             <ul id="bysection" class="searchLinks refineControls">
                 {% for s in sections %}
                 <li><a href="#{{ s.pk }}">{{ s.name }}</a></li>
@@ -234,8 +239,8 @@
             </ul>
         </div>
             
-        <div class="refineSection expand">
-            <h5>By keywords</h5>
+        <div class="refineSection collapsed">
+            <h5>Keywords</h5>
             <ul id="bykeyword" class="searchLinks refineControls">
                 {% for kw,cnt in keywords.items %}
                 <li><a href="#{{ kw }}">{{ kw }}</a></li>
@@ -259,7 +264,6 @@
                     <option value="alphaza">Alphabetical (Z-A)</option>
                     <option disabled="true" value="popularity">Popularity</option>
                 </select>
-                <input type="submit" value="Search">
             </form>
             <div id="search_results"><ul></ul><div class="clearfix"></div></div>
             <div style="text-align:center;visibility:hidden;"><div id="displaying"></div><p id="displayNote">Scroll down for more results</p></div>

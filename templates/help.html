@@ -1,0 +1,85 @@
+{% extends "page_layout.html" %}
+{% block main %}
+
+<div id="helppage" class="row">
+    <div class="span3 offset1">
+        <div id="toc" style="position:fixed">
+            <h4>Contents:</h4>
+            <ul></ul>
+        </div>
+    </div>
+    <div id="sections" class="span6 offset4">
+        <h2>MapStory Help</h2>
+        <section>
+            MapStory empowers all users to discover, play and browse StoryLayers and MapStories published by registered users.  Registered users are further enabled to contribute their observations about the world in the form of StoryLayers, and to assemble MapStories from a collection of StoryLayers published by themselves or others.  And, registered users can “remix” someone else’s MapStory to represent their own point of view.  
+        </section>
+        <section>
+            <h3>Search</h3>
+            Whether you are searching for StoryLayers, MapStories, or MapStorytellers, the task is basically the same.  Just find the orange “Search” tab above the map carousel, or the red buttons below, and click on the relevant button.  Once you get to the search page, you can define the “where”, “when”, and “what” of your search.  The search results page will provide you with first order results, and using the options to the left of the results, you can refine your search.  Feel free to click on any of the StoryLayers and MapStories in order to preview them – and play them just like a YouTube video.  Click on any of the MapStorytellers in order to learn about them, their StoryLayers, MapStories, comments and edits.
+        </section>
+        <section>
+            <h3>Sections</h3>
+            The content contributed to the MapStory data commons will be categorized by its contributors within a series of Sections and Topics to help users easily browse the content.  Since MapStory’s content will ultimately cover everything from the beginnings of the Earth, these sections are rather broad.  Crisis; Human Settlement; Geopolitics; Science, Technology and Industry; Nature & Environment; Culture & Ideas; and Biography.  Yes, these categories are artificial, and indeed many Topics fall in more than one Section.  But, perhaps this scheme will help you navigate the content amassing within MapStory.
+        </section>
+        <section>
+            <h3>How To</h3>
+            Instructional videos that describe how to accomplish various tasks within MapStory will be available by clicking on the orange “How To” tab at the top of the page.  Ultimately, these will cover everything from how to properly time-encode your data, upload your data, build MapStories and much, much more.  But, remember, this is a work in progress, so if we don’t yet have the “How To” video you need, feel free to email us, Tweet us, or reach out to us on Facebook.
+        </section>
+        <section>
+            <h3>Register</h3>
+            If you are wondering how to register, that means that you have not yet been invited!  MapStory will soon be opened up to the general public, but as we work out the kinks, if you have great data that you want to contribute to this new dimension of the global data commons, contact us via email, Twitter or Facebook and we will send you an invitation to register.  Soon, we will open up viral invitations so that you can invite your friends.  Until then, we welcome your interest in MapStory.  Just drop us a line, and we will get you involved.
+        </section>        
+        <section>
+            <h3>Upload StoryLayers</h3>
+            Once you are registered, you are able to add all sorts of value to MapStory, including the upload of your own StoryLayers.  Think of StoryLayers as map layers that show change over time.  You may have this data available as Shapefiles or KMLs.  Instructional videos are available for the proper encoding and upload of such data on the “How To” page.  We hope to soon make additional methods for easily uploading and otherwise generating StoryLayers available on this page.
+        </section>
+        <section>
+            <h3>Creating or Remixing a MapStory</h3>
+            MapStories are spatio-temporally enabled narratives that you can generate through the assembly of one or more StoryLayers with your own annotations.  You can publish these for the world to see on MapStory through your own MapStoryteller Page, by embedding it on another website (see ‘Embedding a StoryLayer or MapStory’ below), or by sending the link out on Twitter, Facebook and the like.  And remember, any MapStory can serve as the starting point for a new (remixed) MapStory.
+            Once you are logged in and in full screen mode, you can add, delete, re-order, re-style and annotate the StoryLayers within a MapStory.  To add StoryLayers, click on the green plus button located below the tab on the left hand side of the screen. This will open a new tab with the search interface.  Any StoryLayer could be added to your MapStory in Progress.  And, as discussed above, you could upload new StoryLayers too.  Change the display order of the StoryLayers listed in the data tab by simply dragging and dropping their names. The order in the MapStory will be updated to reflect that. To turn a layer's visibility off simply uncheck it, and to remove it entirely select it and hit the red minus button.
+            Once a suitable set of StoryLayers and zoom level has been found it's time to save it so others can see it. Click the Save button--the left most icon on the top toolbar, an image of a map with a disk--on the top menu and fill out the title, abstract, and other mandatory metadata to tell the world why this MapStory is important.  So, in review:
+            1. Open the MapStory in Full Screen mode.
+            2. Add and remove StoryLayers as you like, and add your own annotations.
+            3. Pan and zoom to highlight the area of interest, and change the temporal extent of the MapStory.
+            4. IMPORTANT: Update the title, abstract, tags, and other metadata so that users will understand the value of your new MapStory.
+            5. Save the MapStory.
+            You will be able to see your new MapStory on your MapStoryteller page, and when you search for it.
+        </section>
+        <section>
+            <h3>Embedding a StoryLayer or MapStory</h3>
+            Any MapStory or StoryLayer can be embedded for use in another website or blog. To export a MapStory or StoryLayer:
+            1. Find the MapStory or StoryLayer you are interested in highlighting within another online presence.
+            2. Click on the orange “Share” button below the viewer.  Click on the “Embed” button that pops up.
+            3. Choose your desired height and width for the widget in the wizard.
+            4. Copy the HTML snippet provided in the wizard to any HTML page or iFrame-supporting blog post.
+            This will put an interactive MapStory widget in your web page or blog post.
+            Note that the fullscreen MapStory Composer also has a button to export the map. Just be sure to save the map before exporting if there are changes that you want others to see. It exports the last saved version, not the last viewed version.
+        </section>
+        <section>
+            <h3>OGC Web Service Access</h3>
+            If you don’t know what Open Geospatial Consortium compliant web services are, you should!  Just as http and xml are the dial tone of the World Wide Web, OGC web services are the dial tone of the Spatial Web.  And, under the hood, MapStory is fundamentally based on OGC web services for discovery, data visualization and data access.  If you are a registered user of MapStory, you will be able to use your credentials for web service access by 3rd party applications, whether web-clients, GoogleEarth, or GIS packages like QGIS, ESRI’s ArcGIS, ERDAS IMAGINE, you name it.
+        </section>
+        <section>
+            <h3>Download Data</h3>
+            The actual spatio-temporal data within any given StoryLayer and that drive every MapStory can be downloaded for use in other geospatial visualization and analysis applications.  A wide variety of data formats are supported such as Shapefile, KML, GeoJSON, etc.  But, please don’t horde data!  Every download costs MapStory money, and the data will still be here tomorrow!
+        </section>
+        <section>
+            <h3>Developer Access</h3>
+            If MapStory doesn’t provide all the functionality that you need, you can change that!  You can join the MapStory volunteer developer community on GitHub and help change the world.  While Wikipedia was built using a Wiki, MapStory has been built upon spatio-temporally enabled collaborative open source software called the GeoNode.  We have a big development roadmap that aims to add all sorts of functionality to MapStory via the GeoNode.  If you would like to be a part of realizing this vision, contact us and we will try to match your skills to our roadmap as best as possible.
+        </section>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_body %}
+<script type="text/javascript">
+$(function() {
+   var toc = $("#toc ul");
+   $("#sections h3").each(function(i,e) {
+       var h = $(e), anchor = e.innerHTML.replace(' ','_');
+       h.attr('id', anchor);
+       $("<li><a href='#" + anchor + "'>" + e.innerHTML + "</a></li>").appendTo(toc);
+   });
+});
+</script>
+{% endblock %}

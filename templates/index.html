@@ -2,6 +2,7 @@
 {% load webdesign %}
 {% load i18n %}
 {% load mapstory_tags %}
+{% load cache %}
 
 {% block title %} {% trans "Welcome!" %} - {{ block.super }} {% endblock %}
 {% block body_class %}home{% endblock %}
@@ -11,6 +12,7 @@
 
 {% block main %}
 <div class="row">
+    {% comment %}
     <div id="alerts" class="span12 medgraybg selfclear fancyfont" style="color:white;">
         <div class="hvygraybg get-alerts"><a style="color:white" href="{% url alerts %}">GET ALERTS</a></div>
         <div style="float:left; padding: 0.8em 1em;">
@@ -18,6 +20,7 @@
             <span class="content">Disaster in Japan - {% lorem 15 w %}</span>
         </div>
     </div>
+    {% endcomment %}
     <div id="carousel" class="span12 lightgraybg">
         <div class="arrow arrow-left" style="left:15px">&#8826;</div>
         <div class="arrow arrow-right" style="right:15px">&#8827;</div>
@@ -47,19 +50,19 @@
 <div class="span8">
     <div class="box mrg-btm">
         <div id="featuredvideo" class="selfclear">
-            <h2>{{ video.title }}</h2>
             <div style="float:left;margin-right: 1em">
                 <iframe class="youtube-player" type="text/html" width="217" height="128" src="{{ video.href }}" frameborder="0"></iframe>
             </div>
             <div class="description">
-                <h3><a href="#">{{ video.name }}</a></h3>
-                <p>{{ video.text}} <a href="#"><img src="{{ STATIC_URL }}theme/img/arrow_right.png" width="6" height="11" alt="" /></a></p>
+                <h2><a href="#">{{ video.name }}</a></h2>
+                <p>{{ video.text}} {#<a href="#"><img src="{{ STATIC_URL }}theme/img/arrow_right.png" width="6" height="11" alt="" /></a>#}</p>
             </div>
         </div>
         <hr/>
         <div id="sections" class="selfclear tabs-left">
             <h2>SECTIONS</h2>
 
+            {% cache 60 sections %}
             <ul class="nav nav-tabs">
                 {% for sec in page.sections %}
                 <li {% if forloop.first %} class="active"{% endif %}>
@@ -82,6 +85,7 @@
                 </div>
                 {% endfor %}
             </div>
+            {% endcache %}
         </div>
     </div>
 </div>

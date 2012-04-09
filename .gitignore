@@ -8,3 +8,4 @@ local_settings.py
 .DS_Store
 static
 /thumbs/
+/uploaded/

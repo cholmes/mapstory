@@ -1,6 +1,7 @@
 {% extends "page_layout.html" %}
 {% load i18n %}
 {% load avatar_tags %}
+{% load mapstory_tags %}
 
 {% block head_title %}{{storyteller.username}}{% endblock %}
 
@@ -59,7 +60,7 @@
             </div>
         </div>
         <div class="span4">
-            {% include "maps/_widget_by_storyteller.html" %}
+            {% by_storyteller storyteller %}
         </div>
     </div>
 {% endblock %}

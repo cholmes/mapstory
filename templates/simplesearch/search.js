@@ -4,8 +4,9 @@ Ext.onReady(function() {
     loadnotify = Ext.get('loading'),
     itemTemplate = "<li id='item{iid}'><a href='{detail}'><img class='thumb {thumbclass}' src='{thumb}'></img></a>" +
     "<div class='itemTitle'><a href='{detail}'>{title}</a></div>" +
-    "<div class='itemInfo'>{_display_type}, uploaded by <a href='{owner_detail}'>{owner}</a> on {last_modified:date(\"F j, Y\")}</div>" +
+    "<div class='itemInfo'>{_display_type}, by <a href='{owner_detail}'>{owner}</a> on {last_modified}</div>" +
     "<div class='itemAbstract>{abstract}</div>"+
+    "<div class='rating'>{rating} stars</div>"+
     "</li>",
     filterTemplate = "<div class='removeFilter {typeclass}'><img height='8' src='/static/theme/img/silk/delete.png' class='removeFilter' href='#removeFilter'> </a><strong>{type}</strong> {value}</div>",
     fetching = false,
@@ -49,6 +50,7 @@ Ext.onReady(function() {
             note = Ext.get('displayNote');
         if (cnt == 0) {
             displaying.hide();
+            note.hide();
         } else {
             if (cnt == totalQueryCount) {
                 note.hide();
@@ -68,7 +70,7 @@ Ext.onReady(function() {
         var read = store.reader.readRecords(results);
         if (read.records.length == 0) {
             if (start == 0) {
-                Ext.DomHelper.append(list,'<li><h4 class="center">No Results</h4></li>');
+                Ext.DomHelper.append(list,'<li class="noresults"><h4 class="center">No Results</h4></li>');
             }
             start = -1;
             updateDisplaying();
@@ -89,6 +91,10 @@ Ext.onReady(function() {
                 r.thumbclass = "";
             }
             var item = itemTemplate.append(list,r,true);
+            new Ext.ToolTip({
+                target: 'item' + r.iid,
+                html: r['abstract']
+            });
         });
 
     }
@@ -140,7 +146,7 @@ Ext.onReady(function() {
     });
 
     function toggleSection(el) {
-        var expand = el.hasClass('collapse');
+        var expand = el.hasClass('collapsed');
         var isbbox = el.dom.id == 'refine';
         if (expand) {
             if (isbbox) {
@@ -153,17 +159,17 @@ Ext.onReady(function() {
                 bbox.disable();
             }
         }
-        el.toggleClass('collapse');
+        el.toggleClass('collapsed');
         el.toggleClass('expand');
     }
     function expandSection(el) {
-        el.first('.refineControls').slideIn('t',{useDisplay:true});
+        el.select('.refineControls').slideIn('t',{useDisplay:true});
     }
     function collapseSection(el) {
-        el.first('.refineControls').slideOut('t',{useDisplay:true});
+        el.select('.refineControls').slideOut('t',{useDisplay:true});
     }
     Ext.select('.refineSection').each(function(e,i) {
-        if (e.hasClass('collapse')) {
+        if (e.hasClass('collapsed')) {
             collapseSection(e);
         }
         var h = e.first('h5');

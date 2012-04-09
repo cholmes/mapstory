@@ -30,19 +30,19 @@ function runCarousel() {
         for (var i = 0; i < 3; i++) {
             var p = positions[i] + carousel.getLeft();
             tiles.item( tile(i) ).shift({x: p});
-        };
-    };
+        }
+    }
 
     var handle = window.setInterval(function() {go(true)}, timeout);
     var arrows = carousel.select('.arrow');
     arrows.item(0).on('click',function() {
        window.clearInterval(handle);
-       align(true)
+       align(true);
        go(true);
     });
     arrows.item(1).on('click',function() {
        window.clearInterval(handle);
-       align(false)
+       align(false);
        go(false);
     });
     window.tile= tile;

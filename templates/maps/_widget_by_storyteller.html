@@ -10,14 +10,14 @@
         <div class="tab-content">
             <div class="tab-pane active" id="1">
                 <div class="article-list">
-                {% for m in user.map_set.all %}
+                {% for m in maps %}
                     {% map_info_tile m left %}
                 {% endfor %}
                 </div>
             </div>
             <div class="tab-pane" id="2">
                 <div class="article-list">
-                {% for l in user.layer_set.all %}
+                {% for l in layers %}
                     {% map_info_tile l left %}
                 {% endfor %}
                 </div>
