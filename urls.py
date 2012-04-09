@@ -26,8 +26,6 @@ urlpatterns = patterns('',
     # inject our form into these views
     ('^profiles/edit', 'profiles.views.edit_profile', {'form_class': ProfileForm,}),
     ('^profiles/create', 'profiles.views.create_profile', {'form_class': ProfileForm,}),
-    # hot patch the crappy pattern matcher
-    (r'^profiles(?P<username>\S+)/$', 'profiles.views.profile_detail', 'profiles_profile_detail'),
 )
 
 urlpatterns += patterns('mapstory.views',
