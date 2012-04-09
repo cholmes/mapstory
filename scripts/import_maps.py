@@ -37,6 +37,22 @@ if __name__ == '__main__':
                       dest='data_dir',
                       default=gs_data_dir,
                       help='geoserver data dir')
+    parser.add_option('-P', '--no-password',
+                      dest='no_password', action='store_true',
+                      help='Add the --no-password option to the pg_restore'
+                      'command. This assumes the user has a ~/.pgpass file'
+                      'with the credentials. See the pg_restore man page'
+                      'for details.',
+                      default=False,
+                      )
+    parser.add_option('-c', '--chown-to',
+                      dest='chown_to',
+                      help='If set, chown the files copied into the'
+                      'geoserver data directory to a particular'
+                      'user. Assumes the user running is root or has'
+                      'permission to do so. This is useful to chown the'
+                      'files to something like tomcat6 afterwards.',
+                      )
 
     (options, args) = parser.parse_args()
     if len(args) != 1:
@@ -49,6 +65,7 @@ if __name__ == '__main__':
                             " host='" + settings.DB_DATASTORE_HOST + "'")
 
     zipfile = args[0]
-    import_maps(options.data_dir, conn, zipfile)
+    import_maps(options.data_dir, conn, zipfile,
+                options.no_password, options.chown_to)
     conn.commit()
     conn.close()
