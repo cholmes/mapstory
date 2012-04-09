@@ -37,7 +37,7 @@ urlpatterns += patterns('mapstory.views',
     url(r'^mapstory/alerts$','alerts',name='alerts'),
     url(r'^mapstory/tile/(?P<mapid>\d+)$','map_tile',name='map_tile'),
     url(r'^mapstory/tiles$','map_tiles',name='map_tiles'),
-    url(r'^mapstory/storyteller/(?P<username>\w+)$','about_storyteller',name='about_storyteller'),
+    url(r'^mapstory/storyteller/(?P<username>\S+)$','about_storyteller',name='about_storyteller'),
     url(r'^mapstory/section/(?P<section>[-\w]+)$','section_detail',name='section_detail'),
     url(r'^mapstory/how-to$',direct_to_template,{"template":"mapstory/how_to.html"},name='how_to'),
     
