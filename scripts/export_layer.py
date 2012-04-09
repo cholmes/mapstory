@@ -2,13 +2,14 @@
 from django.core import serializers
 from django.conf import settings
 
-from geonode.maps.models import *
+from geonode.maps.models import Layer
 
 import psycopg2
 import sys
 import os
 import tempfile
 import shutil
+import xml.dom.minidom
 
 def export_layer(gs_data_dir, conn, tempdir, layer):
     gslayer = Layer.objects.gs_catalog.get_layer(layer.typename)
@@ -45,10 +46,22 @@ def export_layer(gs_data_dir, conn, tempdir, layer):
         shutil.copy(gspath(workspace_path,f), temppath(workspace_path,f))
 
     os.makedirs(temppath('styles'))
+    def parse_sld_filename(stylexmlpath):
+        with open(stylexmlpath) as f:
+            dom = xml.dom.minidom.parse(f)
+            filename = dom.getElementsByTagName('filename')
+            if filename:
+                return filename[0].firstChild.nodeValue;
+
     def copy_style(style):
         if not style: return
-        shutil.copy(gspath('styles',style.name + ".sld"), temppath('styles'))
-        shutil.copy(gspath('styles',style.name + ".xml"), temppath('styles'))
+        xmlfilepath = gspath('styles',style.name + ".xml")
+        sld_filename = parse_sld_filename(xmlfilepath)
+        shutil.copy(xmlfilepath, temppath('styles'))
+        if not sld_filename:
+            print 'Could not parse sld filename from: %s' % xmlfilepath
+        else:
+            shutil.copy(gspath('styles', sld_filename), temppath('styles'))
 
     #gather styles
     copy_style(gslayer.default_style)
@@ -92,3 +105,4 @@ if __name__ == '__main__':
 
     # and cleanup
     shutil.rmtree(tempdir)
+    conn.close()
