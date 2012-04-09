@@ -94,7 +94,7 @@ class Link(models.Model):
     
 class VideoLink(Link):
     title = models.CharField(max_length=32)
-    text = models.CharField(max_length=256)
+    text = models.CharField(max_length=300)
     publish = models.BooleanField(default=False)
     
 class ContactDetail(Contact):
