@@ -976,6 +976,10 @@ article h3 {
   margin-bottom:20px;
 }
 
+.story-detail .abstract p {
+  margin: 1em 0;
+}
+
 .top-detail-actions a {
     float: right;
     margin-top: 10px;
