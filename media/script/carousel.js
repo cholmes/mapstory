@@ -49,12 +49,5 @@ function runCarousel() {
 }
 
 Ext.onReady(function(){
-Ext.Ajax.request({
-   url: carouselTileURL,
-   success: function(xhrLike) {
-       var carousel = Ext.get('carousel');
-       carousel.dom.innerHTML = carousel.dom.innerHTML + xhrLike.responseText;
-       runCarousel();
-   }
-});
+    runCarousel();
 });
