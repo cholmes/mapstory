@@ -1,0 +1,162 @@
+#thumbHover {
+    position: absolute;
+    display: none;
+    z-index: 100;
+}
+#search_results {
+
+}
+#search_results ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+#search_results .thumb {
+    width: 219px;
+    height: 110px;
+}
+#favorites-box input {
+    width: 171px;
+}
+#favorites-container {
+    background: #454238;
+    padding: 10px;
+}
+#favorites-container #searchForm {
+    margin: 0;
+    padding: 0;
+}
+#favorites-container #searchForm input {
+    margin: 0;
+    padding: 0;
+    background: url("/static/theme/img/icons/search.png") no-repeat scroll 194px center #FFFFFF;
+}
+#favorites {
+    border: 2px solid #8E9184;
+    background: white;
+    padding: 5px;
+}
+#favorites ul {
+    padding: 0;
+    margin: 0;
+}
+#favorites li {
+    list-style: none;
+}
+#favorites li btn {
+    margin-right: 5px;
+}
+.searchLinks li {
+    list-style: none;
+}
+.refineSection h5 {
+    margin: 0;
+}
+.searchLinks ul {
+    margin: 0;
+}
+.itemInfo {
+    color: gray;
+}
+.itemButtons {
+    float: right;
+}
+.itemButtons > div {
+    float: left;
+}
+.removeFilter {
+    cursor: pointer;
+}
+#refineSummary {
+    margin-bottom: 1em;
+}
+#loading {
+    text-align: center;
+    line-height: 32px;
+    height: 32px;
+    /* ha-ha */
+    text-decoration: blink;
+    background: url('/static/static/externals/ext/resources/images/default/shared/blue-loading.gif') no-repeat 50% 0;
+}
+/* work around boilerplate setting of margin */
+ul.x-menu-list {
+    margin: 0;
+}
+#search_results li {
+    float: left;
+    display: block;
+    width: 219px;
+    height: 173px;
+    overflow: none;
+    margin: 5px;
+}
+#search_results li.noresults {
+    width: 100%;
+}
+.center {
+    text-align: center;
+}
+.removeFilter {
+    vertical-align: baseline;
+    cursor: pointer;
+}
+.cartAddButton {
+    /* @todo */
+    background: url('img/silk/add.png');
+}
+.cartRemoveButton {
+    /* @todo */
+    background: url('img/silk/delete.png');
+}
+.saveButton {
+    /* @todo */
+    background: url('img/geosilk/map_save.png');
+}
+.addToMapButton {
+    /* @todo */
+    background: url('img/silk/map_add.png');
+}
+.refineSection {
+    margin-bottom: 1em;
+}
+.refineSection > * {
+    margin-left: 16px;
+}
+.refineSection p {
+    color: gray;
+    margin: 0;
+}
+.refineSection h5 {
+    padding-left: 16px;
+    cursor: pointer;
+}
+.refineSection.collapsed h5 {
+    background: url('/static/static/externals/ext/resources/images/default/grid/group-expand.gif') no-repeat 0 50%;
+}
+.refineSection.expand h5 {
+    background: url('/static/static/externals/ext/resources/images/default/grid/group-collapse.gif') no-repeat 0 50%;
+}
+.pdf {        /* @todo */
+
+    background-image: url(img/silk/page_white_acrobat.png)
+}
+
+.kml,
+.kmz {        /* @todo */
+
+    background-image: url(img/geosilk/kml.png)
+}
+
+.geotiff,
+.tiff,
+.png {        /* @todo */
+
+    background-image: url(img/geosilk/page_white_raster.png)
+}
+
+.csv
+.shp,
+.zip {        /* @todo */
+
+    background-image: url(img/geosilk/page_white_vector.png)
+}

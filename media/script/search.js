@@ -85,7 +85,7 @@ Ext.onReady(function() {
         };
         Ext.each(results.rows,function(r,i) {
             if (r.thumb == null) {
-                r.thumb = "{{ STATIC_URL }}theme/img/silk/map.png";
+                r.thumb = static_url + "theme/img/silk/map.png";
                 r.thumbclass = "missing";
             } else {
                 r.thumbclass = "";
@@ -116,7 +116,7 @@ Ext.onReady(function() {
                 limit: limit
             },queryItems);
         Ext.Ajax.request({
-            url: '{% url new_search_api %}',
+            url: search_url,
             method: 'GET',
             success: appendResults,
             params: params
