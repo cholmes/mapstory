@@ -939,6 +939,10 @@ article h3 {
   margin-top:-3px;
 }
 
+#featuredvideo .description h2 {
+    margin: 0;
+}
+
 #featuredvideo .description h3 a {
   color:#787878;
 }
