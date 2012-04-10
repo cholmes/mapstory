@@ -48,7 +48,6 @@ def lazy_context(f):
     '''build a factory for lazy context objects'''
     def value(s):
         if s._value is None:
-            print 'loading value'
             s._value = f()
         return s._value
     lazy_type = type('lazy_%s' % f.__name__,(object,), dict(
