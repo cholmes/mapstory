@@ -15,6 +15,11 @@ def export_layer(gs_data_dir, conn, tempdir, layer):
     gslayer = Layer.objects.gs_catalog.get_layer(layer.typename)
     gsresource = gslayer.resource
 
+    # fetch the nativeName, the name of the table in the database
+    # which is not necessarily the same name as the layer
+    gsresource.fetch()
+    nativeName = gsresource.dom.find('nativeName').text
+
     temppath = lambda *p: os.path.join(tempdir, *p)
     gspath = lambda *p: os.path.join(gs_data_dir, *p)
 
@@ -22,7 +27,7 @@ def export_layer(gs_data_dir, conn, tempdir, layer):
 
     #dump db table - this gets the table schema, too
     dump_cmd = 'pg_dump -f %s --format=c --create --table=\\"%s\\" --username=%s %s' % (
-        os.path.join(tempdir, 'layer.dump'), gsresource.name, settings.DB_DATASTORE_USER, settings.DB_DATASTORE_DATABASE)
+        os.path.join(tempdir, 'layer.dump'), nativeName, settings.DB_DATASTORE_USER, settings.DB_DATASTORE_DATABASE)
     retval = os.system(dump_cmd)
     if retval != 0:
         print dump_cmd
