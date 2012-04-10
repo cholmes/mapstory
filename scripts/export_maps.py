@@ -81,10 +81,11 @@ maplayers = sum([m.layers for m in maps], [])
 def layers_from_map(m):
     layers = []
     for maplayer in m.layers:
-        # is this right?
-        if maplayer.ows_url:
+        try:
             layer = Layer.objects.get(typename=maplayer.name)
             layers.append(layer)
+        except Layer.DoesNotExist:
+            pass
     return layers
 
 # get a list of all layers to export
