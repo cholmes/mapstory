@@ -2,6 +2,7 @@
 
 from django.core import serializers
 from django.conf import settings
+from django.contrib.auth.models import User
 
 from optparse import OptionParser
 import psycopg2
@@ -24,14 +25,19 @@ def import_maps(gs_data_dir, conn, zipfile, no_password=False, chown_to=None):
 
     print 'layers import complete'
 
-    def import_models(path):
+    def import_models(path, add_owner=False):
         with open(path, 'r') as f:
             models = serializers.deserialize('json', f)
             for model in models:
+                if add_owner:
+                    owner = User.objects.filter(pk=model.object.owner_id)
+                    if not owner:
+                        model.object.owner = User.objects.get(pk=1)
+
                 model.save()
 
     print 'importing maps'
-    import_models(temppath('maps.json'))
+    import_models(temppath('maps.json'), add_owner=True)
     print 'importing map layers'
     import_models(temppath('maplayers.json'))
 
