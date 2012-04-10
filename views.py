@@ -32,21 +32,23 @@ def index(req):
     # two modes of operation here
     # 1) don't specify publish and one will randomly be chosen
     # 2) specify one or more publish links and one will be chosen
-    videos = VideoLink.objects.filter(publish=True)
-    if not videos:
-        videos = VideoLink.objects.all()
-    video = random.choice(videos)
     
     users = User.objects.all()
     
     return render_to_response('index.html', RequestContext(req,{
-        "video" : video,
+        "video" : VideoLink.objects.front_page_video(),
         "tiles" : lazy_tiles(),
         "users" : users
     }))
 
 def donate(req):
     return render_to_response('mapstory/donate.html', RequestContext(req))
+
+def how_to(req):
+    'direct_to_template',{"template":""}
+    return render_to_response('mapstory/how_to.html', RequestContext(req,{
+        'videos' : VideoLink.objects.how_to_videos()
+    }))
 
 def section_detail(req, section):
     sec = get_object_or_404(Section, slug=section)

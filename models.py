@@ -1,4 +1,5 @@
 from itertools import chain
+import random
 
 from django.db import models
 from django.db.models import Count
@@ -92,10 +93,29 @@ class Link(models.Model):
     name = models.CharField(max_length=64)
     href = models.CharField(max_length=256)
     
+_VIDEO_LOCATION_FRONT_PAGE = 'FP'
+_VIDEO_LOCATION_HOW_TO = 'HT'
+_VIDEO_LOCATION_CHOICES = [
+    (_VIDEO_LOCATION_FRONT_PAGE,'Front Page'),
+    (_VIDEO_LOCATION_HOW_TO,'How To')
+]
+    
+class VideoLinkManager(models.Manager):
+    def front_page_video(self):
+        videos = VideoLink.objects.filter(publish=True,location=_VIDEO_LOCATION_FRONT_PAGE)
+        if not videos:
+            videos = VideoLink.objects.all()
+        return random.choice(videos)
+    def how_to_videos(self):
+        return VideoLink.objects.filter(publish=True,location=_VIDEO_LOCATION_HOW_TO)
+
 class VideoLink(Link):
+    objects = VideoLinkManager()
+    
     title = models.CharField(max_length=32)
     text = models.CharField(max_length=350)
     publish = models.BooleanField(default=False)
+    location = models.CharField(max_length=2, choices=_VIDEO_LOCATION_CHOICES)
     
 class ContactDetail(Contact):
     '''Additional User details'''

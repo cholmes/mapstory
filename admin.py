@@ -35,9 +35,9 @@ class VideoLinkForm(forms.ModelForm):
         model = VideoLink
 
 class VideoLinkAdmin(admin.ModelAdmin):
-    list_display = 'id','name','title','href','publish'
+    list_display = 'id','name','title','href','publish','location'
     list_display_links = 'id',
-    list_editable = 'name','title','publish'
+    list_editable = 'name','title','publish','href','location'
     form = VideoLinkForm
     
 class ContactDetailAdmin(admin.ModelAdmin):

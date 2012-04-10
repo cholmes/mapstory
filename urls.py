@@ -41,7 +41,7 @@ urlpatterns += patterns('mapstory.views',
     url(r'^mapstory/storyteller/(?P<username>\S+)$','about_storyteller',name='about_storyteller'),
     url(r'^mapstory/section/(?P<section>[-\w]+)$','section_detail',name='section_detail'),
     url(r'^mapstory/resource/(?P<resource>[-\w]+)$','resource_detail',name='mapstory_resource'),
-    url(r'^mapstory/how-to$',direct_to_template,{"template":"mapstory/how_to.html"},name='how_to'),
+    url(r'^mapstory/how-to$','how_to',name='how_to'),
     
     # semi-temp urls
     url(r'^mapstory/topics/(?P<layer_or_map>\w+)/(?P<layer_or_map_id>\d+)$','topics_api',name='topics_api'),
