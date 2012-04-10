@@ -53,7 +53,7 @@ def import_layer(gs_data_dir, conn, layer_tempdir, layer_name,
             
     if chown_to:
         from pwd import getpwnam
-        userid = getpwnam(options.chown_to)[2]
+        userid = getpwnam(chown_to)[2]
         for root, dirs, files in os.walk(gspath()):
             os.chown(root, userid, -1)
             for f in files:
