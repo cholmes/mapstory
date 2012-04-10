@@ -11,9 +11,50 @@
     padding: 0;
     margin: 0;
 }
+#search_results li .itemAbstract {
+    display: none;
+}
 #search_results .thumb {
     width: 219px;
     height: 110px;
+    cursor: pointer;
+    border: 1px solid none;
+}
+#search_results .thumb selected {
+    border: 1px solid #454238;
+}
+#search_results #bigtile {
+    width: 689px;
+    display: none;
+    border-top: 1px solid #8E9184;
+    border-bottom: 1px solid #8E9184;
+    position: relative;
+    padding: 10px 0;
+}
+.pointerthing {
+    position: absolute;
+    color: #8E9184;
+    font-size: 21px;
+    top: -20px;
+}
+.pointerthing.one {
+    left: 15%;
+}
+.pointerthing.three {
+    left: 80%;
+}
+#search_results #bigtile img {
+    height: 173px;
+    width: auto;
+}
+#search_results #bigtile .infoBox {
+    float: right;
+    width: 333px;
+}
+#search_results #bigtile .itemAbstract {
+    display: block;
+    height: 7em;
+    overflow: auto;
 }
 #favorites-box input {
     width: 171px;

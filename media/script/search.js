@@ -2,12 +2,12 @@ Ext.onReady(function() {
     var start = 0,
     limit = 10,
     loadnotify = Ext.get('loading'),
-    itemTemplate = "<li id='item{iid}'><a href='{detail}'><img class='thumb {thumbclass}' src='{thumb}'></img></a>" +
-    "<div class='itemTitle'><a href='{detail}'>{title}</a></div>" +
+    itemTemplate = "<li class='tile' id='item{iid}'><img class='thumb {thumbclass}' src='{thumb}'></img>" +
+    "<div class='infoBox'><div class='itemTitle'><a href='{detail}'>{title}</a></div>" +
     "<div class='itemInfo'>{_display_type}, by <a href='{owner_detail}'>{owner}</a> on {last_modified}</div>" +
-    "<div class='itemAbstract>{abstract}</div>"+
+    "<div class='itemAbstract'>Abstract: {abstract}</div>"+
     "<div class='rating'>{rating} stars</div>"+
-    "</li>",
+    "<div></li>",
     filterTemplate = "<div class='removeFilter {typeclass}'><img height='8' src='/static/theme/img/silk/delete.png' class='removeFilter' href='#removeFilter'> </a><strong>{type}</strong> {value}</div>",
     fetching = false,
     list = Ext.get(Ext.query('#search_results ul')[0]),
@@ -95,8 +95,30 @@ Ext.onReady(function() {
                 target: 'item' + r.iid,
                 html: r['abstract']
             });
+            item.select('.thumb').item(0).on('click',function(ev) {
+                expandTile(this.parent());
+            });
         });
-
+    }
+    
+    function expandTile(tile) {
+        var row, tiles, insertionPoint, newTile, col, cls;
+        Ext.select('#bigtile').fadeOut().remove();
+        newTile = tile.dom.cloneNode(true);
+        newTile.id = 'bigtile';
+        tiles = tile.parent().select('li');
+        col = tiles.indexOf(tile) % 3;
+        row = Math.floor(tiles.indexOf(tile) / 3) + 1;
+        insertionPoint = (row * 3) - 1;
+        newTile = new Ext.Element(newTile).insertAfter(tiles.item(insertionPoint));
+        cls = 'pointerthing';
+        if (col == 0) {
+            cls = cls + ' one';
+        } else if (col == 2) {
+            cls = cls + ' three';
+        }
+        Ext.DomHelper.append(newTile,{tag:'span',html:'&#9651;',cls:cls});
+        newTile.show().frame();
     }
 
     function reset() {
