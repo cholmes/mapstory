@@ -35,7 +35,7 @@ def export_layer(gs_data_dir, conn, tempdir, layer):
         sys.exit(1)
 
     #get the geometry_columns entry
-    cursor.execute("select * from geometry_columns where f_table_name='%s'" % layer.name)
+    cursor.execute("select * from geometry_columns where f_table_name='%s'" % nativeName)
     with open(temppath('geom.info'),'wb') as fp:
         fp.write(str(cursor.fetchall()))
     
