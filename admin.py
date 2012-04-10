@@ -1,18 +1,32 @@
 from mapstory.models import *
+from django import forms
 from django.contrib.contenttypes.models import ContentType
 from django.contrib import admin
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 
+class SectionForm(forms.ModelForm):
+    text = forms.CharField(widget=forms.Textarea)
+    class Meta:
+        model = Section
+
 class SectionAdmin(admin.ModelAdmin):
     list_display = 'id','name','order'
     list_display_links = 'id',
     list_editable = 'name','order'
+    form = SectionForm
+    ordering = ['order',]
+    
+class VideoLinkForm(forms.ModelForm):
+    text = forms.CharField(widget=forms.Textarea)
+    class Meta:
+        model = VideoLink
 
 class VideoLinkAdmin(admin.ModelAdmin):
     list_display = 'id','name','title','href','publish'
     list_display_links = 'id',
     list_editable = 'name','title','publish'
+    form = VideoLinkForm
     
 class ContactDetailAdmin(admin.ModelAdmin):
     pass
