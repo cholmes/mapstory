@@ -73,6 +73,8 @@ def import_layer(gs_data_dir, conn, layer_tempdir, layer_name,
         layer_exists = Layer.objects.filter(typename=layer.object.typename)
         if not layer_exists:
             layer.save()
+        else:
+            print 'Layer %s already exists ... skipping model save' % layer_name
 
     cursor.close()
 
