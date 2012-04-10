@@ -14,6 +14,7 @@ import shutil
 def import_layer(gs_data_dir, conn, layer_tempdir, layer_name,
                  no_password=False, chown_to=None):
 
+    print 'importing layer: %s' % layer_name
     gspath = lambda *p: os.path.join(gs_data_dir, *p)
 
     temppath = lambda *p: os.path.join(layer_tempdir, *p)
@@ -69,7 +70,9 @@ def import_layer(gs_data_dir, conn, layer_tempdir, layer_name,
         owner = User.objects.filter(pk=layer.object.owner_id)
         if not owner:
             layer.object.owner = User.objects.get(pk=1)
-    layer.save()
+        layer_exists = Layer.objects.filter(typename=layer.object.typename)
+        if not layer_exists:
+            layer.save()
 
     cursor.close()
 

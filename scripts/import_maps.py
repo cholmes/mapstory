@@ -20,6 +20,9 @@ def import_maps(gs_data_dir, conn, zipfile, no_password=False, chown_to=None):
         import_layer(gs_data_dir, conn,
                      temppath('layers', layer_name), layer_name,
                      no_password, chown_to)
+        conn.commit()
+
+    print 'layers import complete'
 
     def import_models(path):
         with open(path, 'r') as f:
@@ -27,7 +30,9 @@ def import_maps(gs_data_dir, conn, zipfile, no_password=False, chown_to=None):
             for model in models:
                 model.save()
 
+    print 'importing maps'
     import_models(temppath('maps.json'))
+    print 'importing map layers'
     import_models(temppath('maplayers.json'))
 
 if __name__ == '__main__':
