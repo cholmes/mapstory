@@ -72,11 +72,6 @@ def export_layer(gs_data_dir, conn, tempdir, layer):
     copy_style(gslayer.default_style)
     map(copy_style, gslayer.styles)
 
-    # zip files
-    curdir = os.getcwd()
-    os.chdir(tempdir)
-    os.system('zip -r %s/%s-extract.zip .' % (curdir,layer_name))
-
     cursor.close()
 
 if __name__ == '__main__':
@@ -106,7 +101,13 @@ if __name__ == '__main__':
 
     tempdir = tempfile.mkdtemp()
 
+    # creates the layer layout structure in the temp directory
     export_layer(gs_data_dir, conn, tempdir, layer)
+
+    # zip files
+    curdir = os.getcwd()
+    os.chdir(tempdir)
+    os.system('zip -r %s/%s-extract.zip .' % (curdir,layer_name))
 
     # and cleanup
     shutil.rmtree(tempdir)

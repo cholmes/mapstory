@@ -130,10 +130,7 @@ export_json(temppath('maplayers.json'), maplayers)
 # create the uber zip
 zipfilename = args[0]
 os.chdir(tempdir)
-os.system('zip -r %s .' % zipfilename)
-
-# move the zip file to the current directory
-os.chdir(curdir)
-shutil.move(os.path.join(tempdir, zipfilename), zipfilename)
+os.system('zip -r %s/%s .' % (curdir, zipfilename))
 
 conn.close()
+shutil.rmtree(tempdir)
