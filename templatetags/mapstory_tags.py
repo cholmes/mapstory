@@ -230,7 +230,7 @@ class ByStoryTellerNode(template.Node):
         else:
             user = obj.owner
         template_name = "maps/_widget_by_storyteller.html"
-        layers = Layer.objects.all()
+        layers = user.layer_set.all()
         for e in settings.LAYER_EXCLUSIONS:
             layers = layers.exclude(name__regex=e)
         return loader.render_to_string(template_name,{
