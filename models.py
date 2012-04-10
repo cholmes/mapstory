@@ -105,6 +105,21 @@ class ContactDetail(Contact):
     expertise = models.CharField(max_length=256, null=True, blank=True)
     links = models.ManyToManyField(Link)
     
+class Resource(models.Model):
+    name = models.CharField(max_length=64)
+    slug = models.SlugField(max_length=64,blank=True)
+    order = models.IntegerField(null=True,blank=True)
+    text = models.TextField(null=True)
+
+    def save(self,*args,**kw):
+        slugtext = self.name.replace('&','and')
+        self.slug = defaultfilters.slugify(slugtext)
+        if self.order is None:
+            self.order = self.id
+        models.Model.save(self)
+        
+    def get_absolute_url(self):
+        return reverse('mapstory_resource',args=[self.slug])
     
 class FavoriteManager(models.Manager):
     

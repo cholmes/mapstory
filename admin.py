@@ -5,6 +5,18 @@ from django.contrib import admin
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 
+class ResourceForm(forms.ModelForm):
+    text = forms.CharField(widget=forms.Textarea)
+    class Meta:
+        model = Resource
+        
+class ResourceAdmin(admin.ModelAdmin):
+    list_display = 'id','name','order'
+    list_display_links = 'id',
+    list_editable = 'name','order'
+    form = ResourceForm
+    ordering = ['order',]
+
 class SectionForm(forms.ModelForm):
     text = forms.CharField(widget=forms.Textarea)
     class Meta:
@@ -34,4 +46,5 @@ class ContactDetailAdmin(admin.ModelAdmin):
 admin.site.register(VideoLink, VideoLinkAdmin)
 admin.site.register(Section, SectionAdmin)
 admin.site.register(ContactDetail, ContactDetailAdmin)
+admin.site.register(Resource, ResourceAdmin)
 admin.site.register(Topic)

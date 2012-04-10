@@ -1,0 +1,11 @@
+{% extends "page_layout.html" %}
+{% block head_title %}Resources for {{resource.name}}{% endblock %}
+
+{% block main %}
+<div class="row">
+    <div class="span8">
+        <h2 class="mrg-top">Resources for {{resource.name}}</h2>
+        <p class="box">{{resource.text}}</p>
+    </div>
+</div>
+{% endblock %}

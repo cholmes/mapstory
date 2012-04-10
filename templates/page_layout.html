@@ -131,7 +131,12 @@
                             <h2>RESOURCES FOR:</h2>
                             <div class="mini-slider fancyfont">
                                 <div class="slide">
-                                    <a href="#">Students</a> <span>|</span> <a href="#">Educators</a> <span>|</span> <a href="#">Researchers</a> <span>|</span> <a href="#">Policy Makers</a> <span>|</span> <a href="#">Business</a> <span>|</span> <a href="#">Religious Community</a> <span>|</span> <a href="#">National Security Professionals</a> <span>|</span> <a href="#">NGOs</a>
+                                    {% for r in page.resources.value %}
+                                        <a href="{{ r.get_absolute_url }}">{{ r.name }}</a>
+                                        {% if not forloop.last %}
+                                        <span>|</span>
+                                        {% endif %}
+                                    {% endfor %}
                                 </div>
                             </div>
                         </div>

@@ -53,6 +53,12 @@ def section_detail(req, section):
     return render_to_response('mapstory/section_detail.html', RequestContext(req,{
         'section' : sec
     }))
+    
+def resource_detail(req, resource):
+    res = get_object_or_404(Resource, slug=resource)
+    return render_to_response('mapstory/resource.html', RequestContext(req,{
+        'resource' : res
+    }))
 
 def get_map_carousel_maps():
     '''Get the carousel ids/thumbnail dict either

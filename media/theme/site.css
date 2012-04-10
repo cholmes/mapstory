@@ -769,9 +769,10 @@ a.back {
 }
 
 .mini-slider {
-  font-size:18px;
+  font-size:16px;
   color:#787878;
   margin-bottom:15px;
+  text-align: center;
 }
 
 .mini-slider span {
