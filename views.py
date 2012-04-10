@@ -3,6 +3,7 @@ from geonode.maps.models import Layer
 from geonode.maps.models import Thumbnail
 
 from mapstory.models import *
+from mapstory.util import lazy_context
 
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
@@ -22,6 +23,10 @@ import random
 def alerts(req): 
     return render_to_response('mapstory/alerts.html', RequestContext(req))
 
+@lazy_context
+def lazy_tiles():
+    return ''.join( [ _render_map_tile(m) for m in get_map_carousel_maps()] )
+
 def index(req):
     # resolve video to use
     # two modes of operation here
@@ -32,12 +37,11 @@ def index(req):
         videos = VideoLink.objects.all()
     video = random.choice(videos)
     
-    tiles = ''.join( [ _render_map_tile(m) for m in get_map_carousel_maps()] )
     users = User.objects.all()
     
     return render_to_response('index.html', RequestContext(req,{
         "video" : video,
-        "tiles" : tiles,
+        "tiles" : lazy_tiles(),
         "users" : users
     }))
 

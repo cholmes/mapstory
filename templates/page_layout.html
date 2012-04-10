@@ -100,7 +100,7 @@
        </form>
 
       <ul id="sitenav" class="selfclear">
-          {% for sec in page.sections %}
+          {% for sec in page.sections.value %}
               {% with sec.get_absolute_url as url %}
               <li><a rel="category" class="{% active_sub_nav request url %}" href="{{ url }}">{{ sec.name }}</a></li>
               {% endwith %}

@@ -24,7 +24,7 @@
     <div id="carousel" class="span12 lightgraybg">
         <div class="arrow arrow-left" style="left:15px">&#8826;</div>
         <div class="arrow arrow-right" style="right:15px">&#8827;</div>
-        {{ tiles|safe }}
+        {{ tiles.value|safe }}
     </div>
     <div class="span12" id="activities">
         <ul class="selfclear">
@@ -49,7 +49,7 @@
 <div class="row">
 <div class="span8">
     <div class="box mrg-btm">
-        <div id="featuredvideo" class="selfclear">
+        <div id="featuredvideo" class="clearfix">
             <div style="float:left;margin-right: 1em">
                 <iframe class="youtube-player" type="text/html" width="217" height="128" src="{{ video.href }}" frameborder="0"></iframe>
             </div>
@@ -64,7 +64,7 @@
 
             {% cache 60 sections %}
             <ul class="nav nav-tabs">
-                {% for sec in page.sections %}
+                {% for sec in page.sections.value %}
                 <li {% if forloop.first %} class="active"{% endif %}>
                     <a href="#section{{ forloop.counter }}" data-toggle="tab">{{ sec.name }}</a>
                 </li>
@@ -72,7 +72,7 @@
             </ul>
 
             <div class="tab-content">
-                {% for sec in page.sections %}
+                {% for sec in page.sections.value %}
                 <div class="tab-pane {% if forloop.first %}active{% endif %}" id="section{{ forloop.counter }}">
                     {% with sec.all_children as items %}
                         {% if not items %}
