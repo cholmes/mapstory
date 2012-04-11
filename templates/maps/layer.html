@@ -199,8 +199,12 @@
                             Flag not implemented yet
                         </div>
                         <div class="tab-pane" id="actions5">
+                            {% if user.is_authenticated %}
                             {% add_to_favorites layer %}
                             {% add_to_map layer %}
+                            {% else %}
+                            <p>Login to add to your favorites list.</p>
+                            {% endif %}
                         </div>
                         <div class="tab-pane" id="actions6">
                             <h4>Download this data:</h4>

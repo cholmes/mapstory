@@ -155,7 +155,11 @@ Ext.onReady(function() {
                             Flag not implemented yet
                         </div>
                         <div class="tab-pane" id="actions5">
+                            {% if user.is_authenticated %}
                             {% add_to_favorites map %}
+                            {% else %}
+                            <p>Login to add to your favorites list.</p>
+                            {% endif %}
                         </div>
                     </div>
                         {% if request.user.is_authenticated %}
