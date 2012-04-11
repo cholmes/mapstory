@@ -119,17 +119,19 @@ Ext.onReady(function() {
             cls = cls + ' three';
         }
         Ext.DomHelper.append(newTile,{tag:'span',html:'&#9651;',cls:cls});
+        if (favorites_links_url) {
+            ident = newTile.query('.actions')[0].id;
+            Ext.Ajax.request({
+                url: favorites_links_url + "?ident=" + ident,
+                method: 'GET',
+                success: function(results) {
+                    newTile.query('.actions')[0].innerHTML = results.responseText;
+                    enablePostButton('.add-to-favorites');
+                    enablePostButton('.add-to-map');
+                }
+            });
+        }
         newTile.show().frame();
-        ident = newTile.query('.actions')[0].id;
-        Ext.Ajax.request({
-            url: favorites_links_url + "?ident=" + ident,
-            method: 'GET',
-            success: function(results) {
-                newTile.query('.actions')[0].innerHTML = results.responseText;
-                enablePostButton('.add-to-favorites');
-                enablePostButton('.add-to-map');
-            }
-        });
     }
     
     function enablePostButton(selector) {
