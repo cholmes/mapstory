@@ -12,7 +12,8 @@ import tempfile
 
 from import_layer import import_layer
 
-def import_maps(gs_data_dir, conn, zipfile, no_password=False, chown_to=None):
+def import_maps(gs_data_dir, conn, zipfile,
+                no_password=False, chown_to=None, do_django_layer_save=True):
     tempdir = tempfile.mkdtemp()
     temppath = lambda *p: os.path.join(tempdir, *p)
     os.system('unzip %s -d %s' % (zipfile, tempdir))
@@ -20,7 +21,7 @@ def import_maps(gs_data_dir, conn, zipfile, no_password=False, chown_to=None):
     for layer_name in os.listdir(temppath('layers')):
         import_layer(gs_data_dir, conn,
                      temppath('layers', layer_name), layer_name,
-                     no_password, chown_to)
+                     no_password, chown_to, do_django_layer_save)
         conn.commit()
 
     print 'layers import complete'
@@ -64,6 +65,12 @@ if __name__ == '__main__':
                       'permission to do so. This is useful to chown the'
                       'files to something like tomcat6 afterwards.',
                       )
+    parser.add_option('-L', '--skip-django-layer-save',
+                      dest='do_django_layer_save',
+                      default=True,
+                      action='store_false',
+                      help='Whether to skip loading the django layer models'
+                      )
 
     (options, args) = parser.parse_args()
     if len(args) != 1:
@@ -77,6 +84,7 @@ if __name__ == '__main__':
 
     zipfile = args[0]
     import_maps(options.data_dir, conn, zipfile,
-                options.no_password, options.chown_to)
+                options.no_password, options.chown_to,
+                options.do_django_layer_save)
     conn.commit()
     conn.close()

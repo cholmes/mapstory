@@ -12,7 +12,7 @@ import tempfile
 import shutil
 
 def import_layer(gs_data_dir, conn, layer_tempdir, layer_name,
-                 no_password=False, chown_to=None):
+                 no_password=False, chown_to=None, do_django_layer_save=True):
 
     print 'importing layer: %s' % layer_name
     gspath = lambda *p: os.path.join(gs_data_dir, *p)
@@ -63,18 +63,19 @@ def import_layer(gs_data_dir, conn, layer_tempdir, layer_name,
     # reload catalog
     Layer.objects.gs_catalog.http.request(settings.GEOSERVER_BASE_URL + "rest/reload",'POST')
 
-    # now we can create the django model - must be done last when gscatalog is ready
-    with open(temppath("model.json")) as fp:
-        json = fp.read()
-        layer = serializers.deserialize("json", json).next()
-        owner = User.objects.filter(pk=layer.object.owner_id)
-        if not owner:
-            layer.object.owner = User.objects.get(pk=1)
-        layer_exists = Layer.objects.filter(typename=layer.object.typename)
-        if not layer_exists:
-            layer.save()
-        else:
-            print 'Layer %s already exists ... skipping model save' % layer_name
+    if do_django_layer_save:
+        # now we can create the django model - must be done last when gscatalog is ready
+        with open(temppath("model.json")) as fp:
+            json = fp.read()
+            layer = serializers.deserialize("json", json).next()
+            owner = User.objects.filter(pk=layer.object.owner_id)
+            if not owner:
+                layer.object.owner = User.objects.get(pk=1)
+            layer_exists = Layer.objects.filter(typename=layer.object.typename)
+            if not layer_exists:
+                layer.save()
+            else:
+                print 'Layer %s already exists ... skipping model save' % layer_name
 
     cursor.close()
 
@@ -102,6 +103,12 @@ if __name__ == '__main__':
                       'permission to do so. This is useful to chown the'
                       'files to something like tomcat6 afterwards.',
                       )
+    parser.add_option('-L', '--skip-django-layer-save',
+                      dest='do_django_layer_save',
+                      default=True,
+                      action='store_false',
+                      help='Whether to skip loading the django layer model'
+                      )
 
     (options, args) = parser.parse_args()
     if len(args) != 1:
@@ -119,7 +126,8 @@ if __name__ == '__main__':
     os.system('unzip %s -d %s' % (zipfile, tempdir))
 
     import_layer(options.data_dir, conn, tempdir, layer_name,
-                 options.no_password, options.chown_to)
+                 options.no_password, options.chown_to,
+                 options.do_django_layer_save)
 
     shutil.rmtree(tempdir)
     conn.commit()
