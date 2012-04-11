@@ -297,7 +297,10 @@ AGON_RATINGS_CATEGORY_CHOICES = {
     },
 }
 
-
+USERS_TO_EXCLUDE_IN_LISTINGS = [
+    'admin',
+    'geonode'
+]
 
 LAYER_EXCLUSIONS = [
     '_map_\d+_annotations'

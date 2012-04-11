@@ -34,7 +34,7 @@ def index(req):
     # 1) don't specify publish and one will randomly be chosen
     # 2) specify one or more publish links and one will be chosen
     
-    users = User.objects.all()
+    users = User.objects.exclude(username__in=settings.USERS_TO_EXCLUDE_IN_LISTINGS)
     
     return render_to_response('index.html', RequestContext(req,{
         "video" : VideoLink.objects.front_page_video(),
