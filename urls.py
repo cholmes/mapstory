@@ -52,6 +52,16 @@ urlpatterns += patterns('mapstory.views',
     url(r'^mapstory/public/(?P<id>\d+)/(?P<status>[ \w]+)','publish_status',name='publish_status'),
     url(r'^mapstory/add-to-map/(?P<id>\d+)/(?P<typename>[:\w]+)','add_to_map',name='add_to_map'),
     url(r'^search/favoriteslinks$','favoriteslinks',name='favoriteslinks'),
+    
+    # for now, direct-to-template but should be in database
+    url(r"^mapstory/thoughts/jonathan-marino", direct_to_template, {"template": "mapstory/thoughts.html",
+        "extra_context" : {'html':'mapstory/thoughts/jm.html'}}, name="thoughts-jm"),
+    url(r"^mapstory/thoughts/parag-khanna", direct_to_template, {"template": "mapstory/thoughts.html",
+        "extra_context" : {'html':'mapstory/thoughts/pk.html'}}, name="thoughts-pk"),
+    url(r"^mapstory/thoughts/roberta-balstad", direct_to_template, {"template": "mapstory/thoughts.html",
+        "extra_context" : {'html':'mapstory/thoughts/rb.html'}}, name="thoughts-rb"),
+    url(r"^mapstory/thoughts/r-siva-kumar", direct_to_template, {"template": "mapstory/thoughts.html",
+        "extra_context" : {'html':'mapstory/thoughts/sk.html'}}, name="thoughts-sk"),
 
     # ugh, overrides
     url(r'^(?P<layername>[^/]*)/metadata$', 'layer_metadata', name="layer_metadata"),

@@ -1,6 +1,7 @@
 {% load avatar_tags %}
 
 <h2>THINKERS AND THOUGHTS ON MAPSTORYTELLING</h2>
+{% comment %}
 {% for u in users %}
 <div class="storyteller">
     <a href="{{ u.get_absolute_url }}">
@@ -10,3 +11,32 @@
     <p>{{ u.organization }}</p>
 </div>
 {% endfor %}
+{% endcomment %}
+<div class="storyteller">
+    <a href="{% url thoughts-jm %}">
+        <img src="/static/img/jm.jpg">
+    </a>
+    <h4><a href="{% url thoughts-jm %}">Jonathan Marino</a></h4>
+    <p>A 2007 Fulbright Scholar, is a Senior Associate for Innovation at the Council of Chief State School Officers, coordinating the Research & Innovation Lab</p>
+</div>
+<div class="storyteller">
+    <a href="{% url thoughts-pk %}">
+        <img src="/static/img/pk.jpg">
+    </a>
+    <h4><a href="{% url thoughts-pk %}">Parag Khanna</a></h4>
+    <p>Parag Khanna is Director of the Global Governance Initiative at the New America Foundation, and author of the international best-seller The Second World: Empires and Influence in the New Global Order</p>
+</div>
+<div class="storyteller">
+    <a href="{% url thoughts-rb %}">
+        <img src="/static/img/rb.jpg">
+    </a>
+    <h4><a href="{% url thoughts-rb %}">Professor Roberta Balstad</a></h4>
+    <p>Distinguished historian and social scientist, Chief Editor of the ‘Weather, Climate and Society’ journal of the American Meteorological Society, and emeritus Director of CIESIN within Columbia University’s Earth Institute.</p>
+</div>
+<div class="storyteller">
+    <a href="{% url thoughts-sk %}">
+        <img src="/static/img/sk.jpg">
+    </a>
+    <h4><a href="{% url thoughts-sk %}">Dr. R. Siva Kumar</a></h4>
+    <p>CEO of India’s National Spatial Data Infrastructure. </p>
+</div>

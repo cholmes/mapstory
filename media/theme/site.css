@@ -717,7 +717,7 @@ section.hr-tabs .nav-tabs a:hover {
 }
 
 .author-list {
-    height: 368px;
+    height: 450px;
     overflow: auto;
 }
 
@@ -901,6 +901,7 @@ h2.icn-storylayers, h2.icn-mapstories, h2.icn-storytellers {
 .storyteller img {
   float:left;
   margin-right: 1em;
+  width: 100px;
 }
 .storyteller {
   padding: 0 1em 15px 1em;
@@ -983,6 +984,28 @@ article h3 {
   margin-right:5px;
 }
 
+.content h2 {
+    margin-top: 10px;
+}
+
+.content p {
+    margin: 1em 0;
+    indent: 4em;
+}
+
+.content li {
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 13px;
+    line-height: 18px;
+    list-style: decimal inside;
+}
+
+.content p img.thoughts {
+    float: right;
+    width: 250px;
+    margin: 10px;
+}
+
 /*** story detail ***/
 .story-detail {
   margin-bottom:20px;
@@ -1042,7 +1065,7 @@ article h3 {
     border-bottom: 0;
 }
 
-.video-actions a.icn.info { background:url(img/icons/info.png) no-repeat 5px; center; }
+.video-actions a.icn.info { background:url(img/icons/info.png) no-repeat 5px center; }
 .video-actions a.icn.layers { background:url(img/icons/layers.png) no-repeat 5px center; }
 .video-actions a.icn.favorites { background:url(img/icons/favorites.png) no-repeat 5px center; }
 .video-actions a.icn.share { background:url(img/icons/share.png) no-repeat 5px center; }
