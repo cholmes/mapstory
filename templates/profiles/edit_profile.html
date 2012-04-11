@@ -1,0 +1,42 @@
+{% extends "profiles/base.html" %}
+{% load i18n avatar_tags %}
+
+{% block content %}
+<div class="onecol edit-profile">
+  <h2>Edit {{ profile.user.username }}'s profile</h2>
+  <p>{% trans "Your current avatar: " %}</p>
+  {% avatar user %}
+  {% if not user.avatar_set.all %}
+  <p>{% trans "You haven't uploaded an avatar yet. Please upload one now." %}</p>
+  {% else %}
+  {% comment %}
+  {# this doens't work - not investigated why #}
+  <form method="POST" action="{% url avatar_change %}">
+    <ul>
+      {{ primary_avatar_form.as_ul }}
+    </ul>
+    <p>{% csrf_token %}<input type="submit" value="{% trans "Choose new Default" %}" /></p>
+  </form>
+  {% endcomment %}
+  {% endif %}
+
+  <form enctype="multipart/form-data" method="POST" action="{% url avatar_add %}">
+    {{ upload_avatar_form.as_p }}
+    <p>{% csrf_token %}<input class="btn" type="submit" value="{% trans "Upload New Image" %}" /></p>
+  </form>
+
+  <hr/>
+  {% if not form.cleaned_data %}
+  <p class="alert alert-error">
+      <b>One or more fields is invalid</b>. Please check and try again.
+  </p>
+  
+  <form action="" method="post">
+  {% csrf_token %}
+  <ul class="form">
+   {{ form.as_ul }}
+  </ul>
+  <input class="btn" type="submit" value="Submit" />
+  </form>
+</div>
+{% endblock %}
