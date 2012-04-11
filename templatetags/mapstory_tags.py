@@ -147,8 +147,11 @@ class RelatedStoriesNode(template.Node):
             topics = list(obj.topic_set.all())
         result = ""
         template_name = "mapstory/_story_tile_left.html"
-        if topics:
-            sec = topics[0].section_set.all()[0]
+        
+        # @todo gather from all topics and respective sections
+        sections = topics and topics[0].section_set.all() or None
+        if topics and sections:
+            sec = sections[0]
             maps = sec.get_maps()
             if isinstance(obj, Map) and obj in maps:
                 maps.remove(obj)
