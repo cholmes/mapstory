@@ -11,4 +11,9 @@ $(function() {
         ev.preventDefault();
         $.post(el.attr('href'));
     });
+    $(".add-to-map").click(function(ev) {
+        var el = $(this);
+        ev.preventDefault();
+        $.post(el.attr('href'));
+    });
 });

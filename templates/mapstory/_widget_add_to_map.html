@@ -1,0 +1,13 @@
+<div class="btn-group">
+    <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+        Add To Map In Progress
+        <span class="caret"></span>
+    </a>
+    <ul class="dropdown-menu">
+        {% for m in maps %}
+        <li>
+            <a class="add-to-map" href="{% url add_to_map m.id layer.typename %}">{{ m.title }}</a>
+        </li>
+        {% endfor %}
+    </ul>
+</div>

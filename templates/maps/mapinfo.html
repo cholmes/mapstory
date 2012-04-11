@@ -110,8 +110,22 @@ Ext.onReady(function() {
                                             }
                                         );
                                     });
+                                    $("#publish_status").click(function(ev) {
+                                        ev.preventDefault();
+                                        $.post(
+                                            $(this).attr('href'),
+                                            function() {
+                                                $("#publish_info").fadeOut();
+                                            }
+                                        )
+                                    });
                                 })
                             </script>
+                            <div id="publish_info">
+                            <p>Publish this map (or not):</p>
+                            <p>The current status is <b>{{map.publish.status}}</b></p>
+                            <a id="publish_status" href="{% url publish_status map.id map.publish.get_toggle_value %}" class="btn">Make {{map.publish.get_toggle_value}}</a>
+                            </div>
                             {% else %}
                             <label>Title:</label>
                             <p>{{ map.title }}</p>
@@ -142,7 +156,6 @@ Ext.onReady(function() {
                         </div>
                         <div class="tab-pane" id="actions5">
                             {% add_to_favorites map %}
-                            {% add_to_inprogress map %}
                         </div>
                     </div>
                         {% if request.user.is_authenticated %}

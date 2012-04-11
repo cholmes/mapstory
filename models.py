@@ -61,8 +61,8 @@ class Section(models.Model):
     topics = models.ManyToManyField(Topic,blank=True)
     order = models.IntegerField(null=True,blank=True)
     
-    def _children(self, att):
-        field = lambda t: getattr(t,att).filter()
+    def _children(self, att, **kw):
+        field = lambda t: getattr(t,att).filter(**kw)
         return set(chain(*[ field(t) for t in self.topics.all()]))
     
     def all_children(self):
@@ -70,7 +70,7 @@ class Section(models.Model):
         return x
     
     def get_maps(self):
-        return self._children('maps')
+        return self._children('maps', publish__status='Public')
         
     def get_layers(self):
         return self._children('layers')
@@ -144,26 +144,21 @@ class Resource(models.Model):
 class FavoriteManager(models.Manager):
     
     def favorites_for_user(self, user):
-        return self.filter(user=user,in_progress=False)
+        return self.filter(user=user)
     
-    def inprogress_for_user(self, user):
-        return self.filter(user=user,in_progress=True)
-    
-    def create_favorite(self, content_object, user, in_progress):
+    def create_favorite(self, content_object, user):
         content_type = ContentType.objects.get_for_model(type(content_object))
         favorite = Favorite(
             user=user,
             content_type=content_type,
             object_id=content_object.pk,
             content_object=content_object,
-            in_progress=in_progress
             )
         favorite.save()
         return favorite
     
 class Favorite(models.Model):
     user = models.ForeignKey(User)
-    in_progress = models.BooleanField(default=False)
     content_type = models.ForeignKey(ContentType)
     object_id = models.PositiveIntegerField()
     content_object = generic.GenericForeignKey('content_type', 'object_id')
@@ -179,9 +174,46 @@ class Favorite(models.Model):
     
     def __unicode__(self):
         return "%s likes %s" % (self.user, self.content_object)
+    
+_MAP_PUBLISHING_IN_PROGRESS = "In Progress"
+_MAP_PUBLISHING_PUBLIC = "Public"
+_MAP_PUBLISHING_CHOICES = [
+    (_MAP_PUBLISHING_IN_PROGRESS,_MAP_PUBLISHING_IN_PROGRESS),
+    (_MAP_PUBLISHING_PUBLIC,_MAP_PUBLISHING_PUBLIC),
+]
 
+class PublishingStatusMananger(models.Manager):
+    def get_public(self, user):
+        return Map.objects.filter(owner=user, publish__status=_MAP_PUBLISHING_PUBLIC)
+    def get_in_progress(self, user):
+        return Map.objects.filter(owner=user, publish__status=_MAP_PUBLISHING_IN_PROGRESS)
+    def set_status(self, mapobj, status):
+        status = self.get_or_create(map_obj)
+        status.status = status
+        status.save()
+    def set_public(self,map_obj):
+        self.set_status(_MAP_PUBLISHING_PUBLIC)
+    def set_in_progress(self,map_obj):
+        self.set_status(_MAP_PUBLISHING_IN_PROGRESS)
+
+class PublishingStatus(models.Model):
+    objects = PublishingStatusMananger()
+    
+    map = models.OneToOneField(Map,related_name='publish')
+    status = models.CharField(max_length=16,choices=_MAP_PUBLISHING_CHOICES,default=_MAP_PUBLISHING_IN_PROGRESS)
+    
+    def get_toggle_value(self):
+        if self.status == _MAP_PUBLISHING_IN_PROGRESS: 
+            return _MAP_PUBLISHING_PUBLIC
+        return _MAP_PUBLISHING_IN_PROGRESS
+    
 def create_profile(instance, sender, **kw):
     if kw['created']:
         ContactDetail.objects.create(user = instance)
         
+def create_publishing_status(instance, sender, **kw):
+    if kw['created']:
+        PublishingStatus.objects.create(map = instance)
+        
 signals.post_save.connect(create_profile, sender=User)
+signals.post_save.connect(create_publishing_status, sender=Map)

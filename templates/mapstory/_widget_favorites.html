@@ -18,8 +18,7 @@ You have not selected any favorites.
 <ul>
 {% for f in in_progress %}
     <li>
-        <a class="rm-favorite btn btn-mini" href="{% url delete_favorite f.pk %}"><i class="icon-remove"></i></a>
-        <a href="{{ f.content_object.get_absolute_url }}">{{ f.content_object.title }}</a>
+        <a href="{{ f.get_absolute_url }}">{{ f.title }}</a>
     </li>
 {% endfor %}
 </ul>
