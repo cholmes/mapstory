@@ -20,4 +20,4 @@ def page(req):
         #@todo temp for design work
         'design_mode' : settings.DESIGN_MODE
     }
-    return {'page':page}
+    return {'page':page,'cache_time':60}

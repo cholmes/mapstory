@@ -24,7 +24,9 @@
     <div id="carousel" class="span12 lightgraybg">
         <div class="arrow arrow-left" style="left:15px">&#8826;</div>
         <div class="arrow arrow-right" style="right:15px">&#8827;</div>
+        {% cache cache_time carousel_tiles %}
         {{ tiles.value|safe }}
+        {% endcache %}
     </div>
     <div class="span12" id="activities">
         <ul class="selfclear">
@@ -62,7 +64,7 @@
         <div id="sections" class="selfclear tabs-left">
             <h2>SECTIONS</h2>
 
-            {% cache 60 sections %}
+            {% cache cache_time sections %}
             <ul class="nav nav-tabs">
                 {% for sec in page.sections.value %}
                 <li {% if forloop.first %} class="active"{% endif %}>
@@ -91,7 +93,9 @@
 </div>
 <div class="span4">
     <div class="box mrg-btm author-list">
+        {% cache cache_time author_list %}
         {% include "_widget_author_list.html" %}
+        {% endcache %}
     </div>
     {% include "mapstory/_widget_social.html" %}
     <div class="box mrg-btm">

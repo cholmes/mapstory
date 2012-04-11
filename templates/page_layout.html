@@ -3,6 +3,7 @@
 {% load staticfiles %}
 {% load i18n %}
 {% load mapstory_tags %}
+{% load cache %}
 
 {% block style_base %}
     <link href="{{ STATIC_URL }}theme/bootstrap_custom.css" rel="stylesheet" />
@@ -100,6 +101,7 @@
        </form>
 
       <ul id="sitenav" class="selfclear">
+          {% cache cache_time page_layout_sections request.path %}
           {% for sec in page.sections.value %}
               {% with sec.get_absolute_url as url %}
               <li><a rel="category" class="{% active_sub_nav request url %}" href="{{ url }}">{{ sec.name }}</a></li>
@@ -110,6 +112,7 @@
           <li><a rel="search" href="{% url search_layers %}" class="subtab-search-layers {% active_sub_nav request search_layers %}">Search StoryLayers</a></li>
           <li><a rel="search" href="{% url search_maps %}" class="subtab-search-stories {% active_sub_nav request search_maps %}">Search MapStories</a></li>
           <li><a rel="search" href="#" class="noi subtab-search-tellers">Search StoryTellers</a></li>
+          {% endcache %}
       </ul>
         {% endblock %}
 
