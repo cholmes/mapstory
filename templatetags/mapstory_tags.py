@@ -9,6 +9,7 @@ from geonode.maps.models import Map
 from geonode.maps.models import Layer
 from mapstory.models import Section
 from mapstory.models import Favorite
+from mapstory.models import PublishingStatus
 
 import re
 
@@ -149,7 +150,7 @@ class RelatedStoriesNode(template.Node):
         if topics:
             sec = topics[0].section_set.all()[0]
             maps = sec.get_maps()
-            if isinstance(obj, Map):
+            if isinstance(obj, Map) and obj in maps:
                 maps.remove(obj)
             result = "\n".join([
                 loader.render_to_string(template_name,{"map": m}) for m in maps
@@ -171,20 +172,9 @@ class FavoritesNode(template.Node):
         user = context['user']
         ctx = {
             "favorites" : Favorite.objects.favorites_for_user(user),
-            "in_progress" : Favorite.objects.inprogress_for_user(user)
+            "in_progress" : Map.objects.filter(owner=user, publish__status='In Progress')
         }
         return loader.render_to_string(template_name,ctx)
-
-@register.tag
-def add_to_inprogress(parse, token):
-    try:
-        tokens = token.split_contents()
-        tag_name = tokens.pop(0)
-        obj_name = tokens.pop(0)
-    except ValueError:
-        raise template.TemplateSyntaxError, "%r tag requires a single argument" % token.contents.split()[0]
-    return AddToFavoritesNode(obj_name)
-
     
 @register.tag
 def add_to_favorites(parse, token):
@@ -194,21 +184,41 @@ def add_to_favorites(parse, token):
         obj_name = tokens.pop(0)
     except ValueError:
         raise template.TemplateSyntaxError, "%r tag requires a single argument" % token.contents.split()[0]
-    return AddToFavoritesNode(obj_name,True)
+    return AddToFavoritesNode(obj_name)
 
 class AddToFavoritesNode(template.Node):
-    def __init__(self,obj_name,in_progress=False):
+    def __init__(self,obj_name):
         self.obj_name = obj_name
-        self.in_progress = in_progress
     def render(self, context):
         template = '<a class="add-to-favorites btn btn-mini" href="%s"><i class="icon-heart"></i>%s</a>'
         obj = context[self.obj_name]
         obj_name = isinstance(obj,Map) and "map" or "layer"
-        url = self.in_progress and "add_inprogress_%s" or "add_favorite_%s"
-        url = url % obj_name
+        url = "add_favorite_%s" % obj_name
         url = reverse(url, args=[obj.pk])
-        text = self.in_progress and "Add to InProgress" or "Add to Favorites"
+        text = "Add to Favorites"
         return template % (url,text)
+    
+@register.tag
+def add_to_map(parse, token):
+    try:
+        tokens = token.split_contents()
+        tag_name = tokens.pop(0)
+        obj_name = tokens.pop(0)
+    except ValueError:
+        raise template.TemplateSyntaxError, "%r tag requires a single argument" % token.contents.split()[0]
+    return AddToMapNode(obj_name)
+
+class AddToMapNode(template.Node):
+    def __init__(self,obj_name):
+        self.obj_name = obj_name
+    def render(self, context):
+        layer = context[self.obj_name]
+        user = context['user']
+        template_name = 'mapstory/_widget_add_to_map.html'
+        return loader.render_to_string(template_name,{
+            'maps' : PublishingStatus.objects.get_in_progress(user), # user.map_set.all()
+            'layer' : layer
+        })
 
 @register.tag
 def by_storyteller(parse, token):
@@ -235,6 +245,6 @@ class ByStoryTellerNode(template.Node):
             layers = layers.exclude(name__regex=e)
         return loader.render_to_string(template_name,{
             'user':user,
-            'maps':user.map_set.all(),
+            'maps':PublishingStatus.objects.get_public(user),
             'layers':layers
         })

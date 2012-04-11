@@ -7,6 +7,7 @@ Ext.onReady(function() {
     "<div class='itemInfo'>{_display_type}, by <a href='{owner_detail}'>{owner}</a> on {last_modified}</div>" +
     "<div class='itemAbstract'>Abstract: {abstract}</div>"+
     "<div class='rating'>{rating} stars</div>"+
+    "<div class='actions' id='{_type}-{id}'></div>"+
     "<div></li>",
     filterTemplate = "<div class='removeFilter {typeclass}'><img height='8' src='/static/theme/img/silk/delete.png' class='removeFilter' href='#removeFilter'> </a><strong>{type}</strong> {value}</div>",
     fetching = false,
@@ -102,7 +103,7 @@ Ext.onReady(function() {
     }
     
     function expandTile(tile) {
-        var row, tiles, insertionPoint, newTile, col, cls;
+        var row, tiles, insertionPoint, newTile, col, cls, ident;
         Ext.select('#bigtile').fadeOut().remove();
         newTile = tile.dom.cloneNode(true);
         newTile.id = 'bigtile';
@@ -119,6 +120,26 @@ Ext.onReady(function() {
         }
         Ext.DomHelper.append(newTile,{tag:'span',html:'&#9651;',cls:cls});
         newTile.show().frame();
+        ident = newTile.query('.actions')[0].id;
+        Ext.Ajax.request({
+            url: favorites_links_url + "?ident=" + ident,
+            method: 'GET',
+            success: function(results) {
+                newTile.query('.actions')[0].innerHTML = results.responseText;
+                enablePostButton('.add-to-favorites');
+                enablePostButton('.add-to-map');
+            }
+        });
+    }
+    
+    function enablePostButton(selector) {
+        Ext.select(selector).item(0).on('click',function(ev) {
+            ev.preventDefault();
+            Ext.Ajax.request({
+                url: this.getAttribute('href'),
+                method: 'POST'
+            })
+        });
     }
 
     function reset() {

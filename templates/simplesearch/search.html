@@ -14,6 +14,7 @@
     var init_search = {{ init_search }};
     var static_url = "{{ STATIC_URL }}";
     var search_url = "{% url new_search_api %}";
+    var favorites_links_url = "{% url favoriteslinks %}";
     {% endautoescape %}
 </script>
 <script type="text/javascript" src="{{ STATIC_URL}}script/search.js"></script>

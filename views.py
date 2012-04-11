@@ -1,5 +1,6 @@
 from geonode.maps.models import Map
 from geonode.maps.models import Layer
+from geonode.maps.models import MapLayer
 from geonode.maps.models import Thumbnail
 
 from mapstory.models import *
@@ -92,6 +93,21 @@ def map_tile(req, mapid):
     obj = get_object_or_404(Map,pk=mapid)
     return _render_map_tile(obj,req=req)
 
+def favoriteslinks(req):
+    ident = req.GET['ident']
+    layer_or_map, id = ident.split('-')
+    if layer_or_map == 'map':
+        obj = get_object_or_404(Map, pk = id)
+        maps = PublishingStatus.objects.get_in_progress(req.user)
+    else:
+        obj = get_object_or_404(Layer, pk = id)
+        maps = None
+    return render_to_response("search/_widget_search_favorites.html",{
+        layer_or_map : obj,
+        "maps" : maps,
+        "user" : req.user
+    });
+
 @login_required
 def layer_metadata(request, layername):
     '''ugh, override the default'''
@@ -111,12 +127,12 @@ def layer_metadata(request, layername):
         return HttpResponse('OK')
     
 @login_required
-def favorite(req, layer_or_map, id, in_progress=False):
+def favorite(req, layer_or_map, id):
     if layer_or_map == 'map':
         obj = get_object_or_404(Map, pk = id)
     else:
         obj = get_object_or_404(Layer, pk = id)
-    Favorite.objects.create_favorite(obj, req.user, in_progress)
+    Favorite.objects.create_favorite(obj, req.user)
     return HttpResponse('OK', status=200)
 
 @login_required
@@ -129,13 +145,40 @@ def set_section(req):
     if req.method != 'POST':
         return HttpResponse('POST required',status=400)
     mapid = req.POST['map']
-    mapobj = get_object_or_404(Map, pk=mapid)
+    mapobj = get_object_or_404(Map, id=mapid)
     if mapobj.owner != req.user or not req.user.has_perm('mapstory.change_section'):
         return HttpResponse('Not sufficient permissions',status=401)
     sectionid = req.POST['section']
     get_object_or_404(Section, pk=sectionid)
     Section.objects.add_to_section(sectionid, mapobj)
     return HttpResponse('OK', status=200)
+
+@login_required
+def publish_status(req,id,status):
+    if req.method != 'POST':
+        return HttpResponse('POST required',status=400)
+    mapobj = get_object_or_404(Map, id=id)
+    if mapobj.owner != req.user or not req.user.has_perm('mapstory.change_section'):
+        return HttpResponse('Not sufficient permissions',status=401)
+    pubobj, _ = PublishingStatus.objects.get_or_create(map = mapobj)
+    pubobj.status = status
+    pubobj.save()
+    return HttpResponse('OK', status=200)
+
+def add_to_map(req,id,typename):
+    if req.method != 'POST':
+        return HttpResponse('POST required',status=400)
+    mapobj = get_object_or_404(Map, id=id)
+    if mapobj.owner != req.user or not req.user.has_perm('mapstory.change_section'):
+        return HttpResponse('Not sufficient permissions',status=401)
+    layer = get_object_or_404(Layer, typename=typename)
+    existing = MapLayer.objects.filter(map = mapobj)
+    vs_url = settings.GEOSERVER_BASE_URL + '%s/%s/wms' % tuple(layer.typename.split(':'))
+    stack_order = max([l.stack_order for l in existing]) + 1
+    maplayer = MapLayer(name = layer.typename, ows_url=vs_url, map=mapobj, stack_order=stack_order)
+    maplayer.save()
+    return HttpResponse('OK', status=200)
+
 
 def about_storyteller(req, username):
     user = get_object_or_404(User, username=username)

@@ -1,0 +1,9 @@
+{% load mapstory_tags %}
+
+{% if map %}
+{% add_to_favorites map %}
+{% endif %}
+{% if layer %}
+{% add_to_favorites layer %}
+{% add_to_map layer %}    
+{% endif %}
