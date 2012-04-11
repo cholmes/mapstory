@@ -45,8 +45,8 @@ class Topic(models.Model):
     objects = TopicManager()
     
     name = models.CharField(max_length=64)
-    layers = models.ManyToManyField(Layer)
-    maps = models.ManyToManyField(Map)
+    layers = models.ManyToManyField(Layer,blank=True)
+    maps = models.ManyToManyField(Map,blank=True)
     
     def __unicode__(self):
         return 'Topic - %s' % self.name
