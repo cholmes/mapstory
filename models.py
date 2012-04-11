@@ -105,6 +105,8 @@ class VideoLinkManager(models.Manager):
         videos = VideoLink.objects.filter(publish=True,location=_VIDEO_LOCATION_FRONT_PAGE)
         if not videos:
             videos = VideoLink.objects.all()
+        if not videos:
+            return None
         return random.choice(videos)
     def how_to_videos(self):
         return VideoLink.objects.filter(publish=True,location=_VIDEO_LOCATION_HOW_TO)
