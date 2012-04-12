@@ -11,8 +11,11 @@ import os
 import tempfile
 import shutil
 
+from update_thumb_specs import make_thumbnail_updater
+
 def import_layer(gs_data_dir, conn, layer_tempdir, layer_name,
-                 no_password=False, chown_to=None, do_django_layer_save=True):
+                 no_password=False, chown_to=None, do_django_layer_save=True,
+                 th_from_string=None, th_to_string=None):
 
     print 'importing layer: %s' % layer_name
     gspath = lambda *p: os.path.join(gs_data_dir, *p)
@@ -77,6 +80,31 @@ def import_layer(gs_data_dir, conn, layer_tempdir, layer_name,
             else:
                 print 'Layer %s already exists ... skipping model save' % layer_name
 
+        # add thumbnail if exists in src and not destination
+        try:
+            layer = Layer.objects.get(typename='geonode:%s' % layer_name)
+        except Layer.DoesNotExist:
+            print 'Layer %s does not exist. Could not update thumbnail spec' % layer_name
+        else:
+            thumb_spec_path = temppath('thumb_spec.json')
+            thumbnail = layer.get_thumbnail()
+            if thumbnail:
+                print 'thumbnail already exists for: %s ... skipping creation' % layer_name
+            else:
+                if os.path.isfile(thumb_spec_path):
+                    with open(thumb_spec_path) as f:
+                        thumb_spec = json.load(f)
+                        layer.set_thumbnail(thumb_spec)
+            
+            # rename thumb_spec if asked to
+            if (th_from_string is not None and th_to_string is not None):
+                thumbnail = layer.get_thumbnail()
+                if thumbnail:
+                    updater =  make_thumbnail_updater(th_from_string, th_to_string)
+                    updater(thumbnail)
+                else:
+                    print 'No thumbnail to update spec for layer: %s' % layer_name
+
     cursor.close()
 
 if __name__ == '__main__':
@@ -109,6 +137,14 @@ if __name__ == '__main__':
                       action='store_false',
                       help='Whether to skip loading the django layer model'
                       )
+    parser.add_option('-f', '--thumbnail-from-string',
+                      dest='th_from_string',
+                      help='Used as the source string to use when replacing the thumb_spec',
+                      )
+    parser.add_option('-t', '--thumbnail-to-string',
+                      dest='th_to_string',
+                      help='Used as the replacement string to use when replacing the thumb_spec',
+                      )
 
     (options, args) = parser.parse_args()
     if len(args) != 1:
@@ -127,7 +163,8 @@ if __name__ == '__main__':
 
     import_layer(options.data_dir, conn, tempdir, layer_name,
                  options.no_password, options.chown_to,
-                 options.do_django_layer_save)
+                 options.do_django_layer_save,
+                 options.th_from_string, options.th_to_string)
 
     shutil.rmtree(tempdir)
     conn.commit()
