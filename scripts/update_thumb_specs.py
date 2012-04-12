@@ -14,6 +14,7 @@ def make_updater(from_string, to_string, attr):
         orig_value = getattr(model, attr)
         new_value = orig_value.replace(from_string, to_string)
         if orig_value != new_value:
+            print 'updating %s %s' % (model._meta.object_name, model.id)
             setattr(model, attr, new_value)
             model.save()
     return updater
@@ -39,9 +40,30 @@ def update_maplayer_params(from_string, to_string):
 
 if __name__ == '__main__':
     parser = OptionParser('usage: %s from-string to-string' % sys.argv[0])
+    parser.add_option('-t', '--thumbnails',
+                      dest='update_thumbnails',
+                      default=None,
+                      action='store_true',
+                      help='Update Thumbnails'
+                      )
+    parser.add_option('-m', '--maplayers',
+                      dest='update_maplayers',
+                      default=None,
+                      action='store_true',
+                      help='Update MapLayers',
+                      )
 
     options, args = parser.parse_args()
     if len(args) != 2:
         parser.error('please specify the from-string and to-string to replace on thumb specs')
+    if not (options.update_thumbnails or options.update_maplayers):
+        parser.error('need to update thumbnails or maplayers')
 
-    update_thumbnail_specs(args[0], args[1])
+    from_string, to_string = args
+
+    if options.update_thumbnails:
+        print 'updating thumbnails'
+        update_thumbnail_specs(from_string, to_string)
+    if options.update_maplayers:
+        print 'updating maplayers'
+        update_maplayer_params(from_string, to_string)
