@@ -1,19 +1,41 @@
+# contains functions to update specs/params
+# useful for updating urls when migrating across domains
+
+from geonode.maps.models import MapLayer
 from geonode.maps.models import Thumbnail
 from optparse import OptionParser
 import sys
 
-def update_specs(from_string, to_string):
-    """run a string replace on all thumb specs from -> to"""
-    
-    def update_spec(spec):
-        return spec.replace(from_string, to_string)
+def make_updater(from_string, to_string, attr):
+    """make an update function that given a model, fetches the attr,
+    which must be a string, runs the string replace, and saves the
+    model if the replace caused a change"""
+    def updater(model):
+        orig_value = getattr(model, attr)
+        new_value = orig_value.replace(from_string, to_string)
+        if orig_value != new_value:
+            setattr(model, attr, new_value)
+            model.save()
+    return updater
 
+def make_thumbnail_updater(from_string, to_string):
+    return make_updater(from_string, to_string, 'thumb_spec')
+
+def make_maplayer_updater(from_string, to_string):
+    return make_updater(from_string,  to_string, 'layer_params')
+
+def update_thumbnail_specs(from_string, to_string):
+    """run a string replace on all thumb specs from -> to"""
+    updater = make_thumbnail_updater(from_string, to_string)
     for th in Thumbnail.objects.all():
-        orig_spec = th.thumb_spec
-        new_spec = update_spec(orig_spec)
-        th.thumb_spec = new_spec
-        if orig_spec != new_spec:
-            th.save()
+        updater(th)
+
+def update_maplayer_params(from_string, to_string):
+    """run a string replace on all maplayer params"""
+    updater = make_maplayer_updater(from_string, to_string)
+    for ml in MapLayer.objects.all():
+        updater(ml)
+
 
 if __name__ == '__main__':
     parser = OptionParser('usage: %s from-string to-string' % sys.argv[0])
@@ -22,4 +44,4 @@ if __name__ == '__main__':
     if len(args) != 2:
         parser.error('please specify the from-string and to-string to replace on thumb specs')
 
-    update_specs(args[0], args[1])
+    update_thumbnail_specs(args[0], args[1])
