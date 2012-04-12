@@ -1,4 +1,4 @@
-from geonode.maps.models import Map
+from geonode.maps.models import Thumbnail
 from optparse import OptionParser
 import sys
 
@@ -8,16 +8,12 @@ def update_specs(from_string, to_string):
     def update_spec(spec):
         return spec.replace(from_string, to_string)
 
-    for m in Map.objects.all():
-        th = m.get_thumbnail()
-        if th:
-            orig_spec = th.thumb_spec
-            new_spec = update_spec(orig_spec)
-            th.thumb_spec = new_spec
-            if orig_spec != new_spec:
-                th.save()
-        else:
-            print 'Map %s has no thumbnail' % m.id
+    for th in Thumbnail.objects.all():
+        orig_spec = th.thumb_spec
+        new_spec = update_spec(orig_spec)
+        th.thumb_spec = new_spec
+        if orig_spec != new_spec:
+            th.save()
 
 if __name__ == '__main__':
     parser = OptionParser('usage: %s from-string to-string' % sys.argv[0])
