@@ -14,7 +14,8 @@ def make_updater(from_string, to_string, attr):
         orig_value = getattr(model, attr)
         new_value = orig_value.replace(from_string, to_string)
         if orig_value != new_value:
-            print 'updating %s %s' % (model._meta.object_name, model.id)
+            print ('updating %s: %s - attribute: %s'
+                   % (model._meta.object_name, model.id, attr))
             setattr(model, attr, new_value)
             model.save()
     return updater
