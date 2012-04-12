@@ -4,6 +4,7 @@ from django.conf import settings
 
 from geonode.maps.models import Layer
 
+import json
 import psycopg2
 import sys
 import os
@@ -71,6 +72,12 @@ def export_layer(gs_data_dir, conn, tempdir, layer):
     #gather styles
     copy_style(gslayer.default_style)
     map(copy_style, gslayer.styles)
+
+    # dump out thumb_spec if exists
+    t = layer.get_thumbnail()
+    if t:
+        with open(temppath('thumb_spec.json'), 'w') as f:
+            json.dump(t.thumb_spec, f)
 
     cursor.close()
 
