@@ -1,4 +1,5 @@
 h2. Understanding Frontiers through MapStorytelling
+
 h3. Professor Roberta Balstad
 
 !(thoughts)/static/img/rb.jpg!
