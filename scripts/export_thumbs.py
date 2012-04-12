@@ -1,4 +1,3 @@
-from django.core.serializers import serialize
 from geonode.maps.models import Map
 from optparse import OptionParser
 import json
@@ -6,13 +5,12 @@ import sys
 
 def export_thumbs(maps, outputstream):
     # output json will be a list of tuples of
-    # (mapid, [django serialized thumbnail object])
+    # (mapid, thumb_spec)
     output_data = []
     for m in maps:
         th = m.get_thumbnail()
         if th:
-            serialized_thumb = serialize('json', [th])
-            output_data.append((m.id, serialized_thumb))
+            output_data.append((m.id, th.thumb_spec))
         else:
             print 'Map: %s has no thumbnail' % m.id
     json.dump(output_data, outputstream)
