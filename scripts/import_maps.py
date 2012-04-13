@@ -5,15 +5,22 @@ from django.conf import settings
 from django.contrib.auth.models import User
 
 from optparse import OptionParser
+import json
 import psycopg2
 import sys
 import os
 import tempfile
 
+from geonode.maps.models import Map
+from geonode.maps.models import MapLayer
+
 from import_layer import import_layer
+from update_thumb_specs import make_thumbnail_updater
+from update_thumb_specs import make_maplayer_updater
 
 def import_maps(gs_data_dir, conn, zipfile,
-                no_password=False, chown_to=None, do_django_layer_save=True):
+                no_password=False, chown_to=None, do_django_layer_save=True,
+                from_string=None, to_string=None):
     tempdir = tempfile.mkdtemp()
     temppath = lambda *p: os.path.join(tempdir, *p)
     os.system('unzip %s -d %s' % (zipfile, tempdir))
@@ -36,11 +43,38 @@ def import_maps(gs_data_dir, conn, zipfile,
                         model.object.owner = User.objects.get(pk=1)
 
                 model.save()
+            return models
 
     print 'importing maps'
-    import_models(temppath('maps.json'), add_owner=True)
     print 'importing map layers'
-    import_models(temppath('maplayers.json'))
+    maplayer_models = import_models(temppath('maplayers.json'))
+
+    print 'importing map thumb specs'
+    with open(temppath('map_thumb_specs.json')) as f:
+        map_thumbs = json.load(f)
+        thumb_updater = (make_thumbnail_updater(from_string, to_string)
+                         if (from_string is not None and to_string is not None)
+                         else lambda m:m.save())
+        for mapid, thumb_spec in map_thumbs:
+            try:
+                m = Map.objects.get(pk=mapid)
+            except Map.DoesNotExist:
+                print 'No map "%s" for importing thumb spec' % mapid
+            else:
+                m.set_thumbnail(thumb_spec)
+                t = m.get_thumbnail()
+                thumb_updater(t)
+
+    if from_string is not None and to_string is not None:
+        print 'adjusting maplayer params'
+        updater = make_maplayer_updater(from_string, to_string)
+        for maplayer_model in maplayer_models:
+            try:
+                maplayer = MapLayer.objects.get(pk=maplayer_model.object.id)
+            except MapLayer.DoesNotExist:
+                print 'No maplayer "%s" for updating layer params' % maplayer.object.id
+            else:
+                updater(maplayer)
 
 if __name__ == '__main__':
     gs_data_dir = '/var/lib/geoserver/geonode-data/'
@@ -71,6 +105,14 @@ if __name__ == '__main__':
                       action='store_false',
                       help='Whether to skip loading the django layer models'
                       )
+    parser.add_option('-f', '--from-string',
+                      dest='from_string',
+                      help='Used as the source string to use when replacing the thumb_spec and maplayer params',
+                      )
+    parser.add_option('-t', '--to-string',
+                      dest='to_string',
+                      help='Used as the replacement string to use when replacing the thumb_spec and maplayer params',
+                      )
 
     (options, args) = parser.parse_args()
     if len(args) != 1:
@@ -85,6 +127,7 @@ if __name__ == '__main__':
     zipfile = args[0]
     import_maps(options.data_dir, conn, zipfile,
                 options.no_password, options.chown_to,
-                options.do_django_layer_save)
+                options.do_django_layer_save,
+                options.from_string, options.to_string)
     conn.commit()
     conn.close()
