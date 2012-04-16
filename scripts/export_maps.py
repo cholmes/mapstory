@@ -6,6 +6,7 @@ from django.conf import settings
 from geonode.maps.models import *
 
 from optparse import OptionParser
+import json
 import psycopg2
 import sys
 import os
@@ -126,6 +127,16 @@ def export_json(path, data):
 
 export_json(temppath('maps.json'), maps)
 export_json(temppath('maplayers.json'), maplayers)
+
+# export map thumb specs
+# list of (map_id, thumb_specs)
+def map_thumb_spec(m):
+    t = m.get_thumbnail()
+    return t and (m.id, t.thumb_spec)
+
+map_thumbs = filter(None, map(map_thumb_spec, maps))
+with open(temppath('map_thumb_specs.json'), 'w') as f:
+    json.dump(map_thumbs, f)
 
 # create the uber zip
 zipfilename = args[0]
