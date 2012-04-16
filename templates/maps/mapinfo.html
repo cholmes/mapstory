@@ -149,7 +149,7 @@ Ext.onReady(function() {
                             <g:plusone size="small"></g:plusone>
                             <div class="fb-like" data-href="http://{{ request.get_host }}{{ request.get_full_path }}" data-send="false" data-width="50" data-layout="button_count" data-show-faces="false"></div>
                             <p>Embed this map:</p>
-                            <textarea><iframe style="border: none;" height="400" width="600" src="{{ req.META.SERVER_NAME %}{% url geonode.maps.views.embed map.id %}"></iframe></textarea>
+                            <textarea><iframe style="border: none;" height="400" width="600" src="http://{{ request.get_host }}{% url geonode.maps.views.embed map.id %}"></iframe></textarea>
                         </div>
                         <div class="tab-pane" id="actions4">
                             Flag not implemented yet
