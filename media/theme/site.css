@@ -87,6 +87,10 @@ html.x-viewport #login-area {
   top: 11px;
 }
 
+.loginmsg {
+    display: none;
+}
+
 #donate {
   float: left;
   color: white;
@@ -2039,7 +2043,7 @@ h2.icn-storylayer span, h2.icn-mapstory span {
 
 #login-form-pop {
   position: absolute;
-  top: 44px;
+  top: 24px;
   right: -1px;
   z-index: 1000;
   float: left;

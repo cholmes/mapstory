@@ -51,7 +51,7 @@
         </div>
         <div id="login-form-pop">
             <div class="drop-pointer"></div>
-            <form action="{% url geonode.views.ajax_login %}" method="POST">
+            <form action="{% url geonode.views.ajax_login %}" method="POST" class="clearfix">
                 <label for="username">Username:</label>
                 <input name="username" type="text" />
                 <label for="password">Password:</label>
@@ -60,8 +60,9 @@
                     <input type="checkbox" />
                     Remember me
                 </label>
+                <p class="loginmsg alert"></p>
                 <button type="submit" class="btn">Sign In</button>
-                <p>Don't have an account yet? <a href="#">Register now</a></p>
+                {# <p>Don't have an account yet? <a href="#">Register now</a></p> #}
             </form>
         </div>
       </div><!-- /.wrap -->

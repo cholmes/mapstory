@@ -58,12 +58,17 @@ $(function () {
         var form = $("#login-form-pop form");
         e.preventDefault();
         $.post(form.attr('action'),form.serialize(),function(data,status,xhr) {
+            $('.loginmsg').hide();
             if (status == 'success') {
                 window.location.reload();
             } else {
                 alert(data);
             }
             $("#login-form-pop").toggle();
+        }).error(function(data,status,xhr) {
+            if (status == 'error') {
+                $('.loginmsg').text('Invalid login').slideDown();
+            }
         });
     })
 });
