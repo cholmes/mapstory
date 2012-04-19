@@ -5,7 +5,10 @@ div.gx-overlay-playback .x-btn-icon .x-btn-large .x-btn-text, .x-btn-noicon .x-b
 .x-btn-icon .x-btn-medium .x-btn-text, .x-btn-noicon .x-btn-medium .x-btn-text {
     width: 34px;
 }
-
+/*** Embedded Map Adjustments ***/
+div.olMapViewport{
+	top:-35px;
+}
 /*** Playback toolbar positioning ***/
 div.gx-playback-wrap div.gx-overlay-playback{
     position:relative;
