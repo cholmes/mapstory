@@ -74,6 +74,7 @@
 
 {% has_obj_perm user layer "maps.change_layer_permissions" as can_change_permissions %}
 {% if can_change_permissions %}
+{% comment %}
 //            new GeoNode.PermissionsEditor({
 //                renderTo: "permissions_form",
 //                userLookup: "{% url geonode.views.ajax_lookup %}",
@@ -91,6 +92,7 @@
 //                    }
 //                }
 //            });
+{% endcomment %}
             var hasThumb = {% if layer.get_thumbnail %}true{% else %}false{% endif %};
             var thumbURL = "{% url layer_thumbnail layer.typename %}";
             {% include "maps/thumbnail_help.js" %}
@@ -210,6 +212,7 @@
                             {% endif %}
                         </div>
                         <div class="tab-pane" id="actions6">
+                            {% if user.is_authenticated %}
                             <h4>Download this data:</h4>
                             <div class="btn-group">
                                 <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
@@ -223,6 +226,9 @@
                                 </ul>
                             </div>
                             <iframe id="dlframe" style="display:none"></iframe>
+                            {% else %}
+                            <p>You must be logged in to download.</p>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
