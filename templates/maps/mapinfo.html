@@ -99,17 +99,22 @@ Ext.onReady(function() {
                             </form>
                             <script type="text/javascript">
                                 $(function() {
+                                $(function() {
                                     $("#submit").click(function(ev) {
-                                        ev.preventDefault();
-                                        var form = $(this).closest('form');
-                                        $.post(
-                                            form.attr('action'),
-                                            form.serialize(),
-                                            function() {
-                                                alert('updated');
-                                            }
-                                        );
-                                    });
+                                            ev.preventDefault();
+                                            var form = $(this).closest('form');
+                                            form.find('.errorlist').fadeOut();
+                                            $.post(
+                                                form.attr('action'),
+                                                form.serialize(),
+                                                function() {
+                                                    alert('Updated');
+                                                }
+                                            ).error(function(ev) {
+                                                $(ev.responseText).appendTo(form);
+                                            });
+                                        });
+                                    })
                                     $("#publish_status").click(function(ev) {
                                         ev.preventDefault();
                                         $.post(

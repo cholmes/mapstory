@@ -119,12 +119,15 @@ def layer_metadata(request, layername):
                 _("You are not permitted to modify this layer's metadata")})), status=401)
     if request.method == "POST":
         form = LayerDescriptionForm(request.POST, prefix="layer")
-        form.is_valid()
-        layer.title = form.cleaned_data['title']
-        layer.keywords = form.cleaned_data['keywords']
-        layer.abstract = form.cleaned_data['abstract']
-        layer.save()
-        return HttpResponse('OK')
+        if form.is_valid():
+            layer.title = form.cleaned_data['title']
+            layer.keywords = form.cleaned_data['keywords']
+            layer.abstract = form.cleaned_data['abstract']
+            layer.save()
+            return HttpResponse('OK')
+        else:
+            errors = "<div class='errorlist'><p class='alert alert-error'>There were errors in the data provided:</p>%s</div>" % form.errors.as_ul()
+            return HttpResponse(errors, status=400)
     
 @login_required
 def favorite(req, layer_or_map, id):
