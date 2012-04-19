@@ -46,7 +46,7 @@
             <form id="quicksearch" action="{% url new_search %}" method="POST">
             {% csrf_token %}
             <label for="q">Quick Search</label>
-            <input name="q" />
+            <input name="q" value="" autocomplete="off"/>
             </form>
         </div>
         <div id="login-form-pop">
@@ -105,10 +105,10 @@
           {% cache cache_time page_layout_sections request.path %}
           {% for sec in page.sections.value %}
               {% with sec.get_absolute_url as url %}
-              <li><a rel="category" class="{% active_sub_nav request url %}" href="{{ url }}">{{ sec.name }}</a></li>
+              <li><a rel="category" class="{% active_sub_nav request url %} hide" href="{{ url }}">{{ sec.name }}</a></li>
               {% endwith %}
           {% endfor %}
-          {% url search as search_layers %}
+          {% url search_layers as search_layers %}
           {% url search_maps as search_maps %}
           <li><a rel="search" href="{% url search_layers %}" class="subtab-search-layers {% active_sub_nav request search_layers %}">Search StoryLayers</a></li>
           <li><a rel="search" href="{% url search_maps %}" class="subtab-search-stories {% active_sub_nav request search_maps %}">Search MapStories</a></li>
