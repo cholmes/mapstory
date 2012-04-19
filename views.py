@@ -73,6 +73,7 @@ def get_map_carousel_maps():
     # get all Map thumbnails
     thumb_type = ContentType.objects.get_for_model(Map)
     thumbs = Thumbnail.objects.filter(content_type__pk=thumb_type.id)
+    thumbs = thumbs.filter(object_id__in = Map.objects.filter(publish__status='Public'))
     # trim this down to a smaller set
     thumbs = random.sample(thumbs, min(10,len(thumbs)))
     # and make sure they have a valid file path
