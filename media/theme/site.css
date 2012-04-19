@@ -37,12 +37,15 @@ section {
     display: block;
 }
 
-#login-area .user a {
-    color:white;
-    font-size:1em;
+#login-area .user {
     line-height:1.5em;
     clear:both;
     padding-top: .5em;
+}
+
+#login-area .user a {
+    color:white;
+    font-size:1em;
 }
 #login-area .user a:hover {
     background: none;
@@ -145,6 +148,13 @@ body.home #top-crossbar a.tab-sections,
 body.home #top-crossbar a.tab-sections:hover {
   background-color:#f47a20;
   text-decoration:none;
+}
+
+.hide {
+    display: none;
+}
+.invis {
+    visibility: hidden;
 }
 
 #sitenav {
