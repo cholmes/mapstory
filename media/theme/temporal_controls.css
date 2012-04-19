@@ -6,7 +6,7 @@ div.gx-overlay-playback .x-btn-icon .x-btn-large .x-btn-text, .x-btn-noicon .x-b
     width: 34px;
 }
 /*** Embedded Map Adjustments ***/
-div.olMapViewport{
+div.full-mapview .olMapViewport{
 	top:-35px;
 }
 /*** Playback toolbar positioning ***/
@@ -79,7 +79,7 @@ div.gx-playback-wrap .x-btn-pressed td button:hover{
 }
 
 .x-btn button.gxp-icon-smallScreen{
-    background-image:url('img/icons/large/smallscreen.png')
+    background-image:url('img/icons/large/small_screen.png')
 }
 
 .x-btn button.gxp-icon-legend{
