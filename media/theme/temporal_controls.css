@@ -6,7 +6,7 @@ div.gx-overlay-playback .x-btn-icon .x-btn-large .x-btn-text, .x-btn-noicon .x-b
     width: 34px;
 }
 /*** Embedded Map Adjustments ***/
-div.olMapViewport{
+div.full-mapview .olMapViewport{
 	top:-35px;
 }
 /*** Playback toolbar positioning ***/
