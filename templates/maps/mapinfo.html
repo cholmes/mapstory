@@ -20,6 +20,7 @@ Ext.onReady(function() {
     app = new mapstory.Viewer({{config}});
 {% has_obj_perm user map "maps.change_map_permissions" as can_change_permissions %}
 {% if can_change_permissions %}
+{% comment %}
 //    new GeoNode.PermissionsEditor({
 //        levels: {
 //            'admin': 'map_admin',
@@ -37,6 +38,7 @@ Ext.onReady(function() {
 //            }
 //        }
 //    });
+{% endcomment %}
     var hasThumb = {% if map.get_thumbnail %}true{% else %}false{% endif %};
     var thumbURL = "{% url geonode.maps.views.map_controller map.id %}?thumbnail";
     {% include "maps/thumbnail_help.js" %}
@@ -99,7 +101,6 @@ Ext.onReady(function() {
                             </form>
                             <script type="text/javascript">
                                 $(function() {
-                                $(function() {
                                     $("#submit").click(function(ev) {
                                             ev.preventDefault();
                                             var form = $(this).closest('form');
@@ -124,7 +125,7 @@ Ext.onReady(function() {
                                             }
                                         )
                                     });
-                                })
+                                });
                             </script>
                             <div id="publish_info">
                             <p>Publish this map (or not):</p>
