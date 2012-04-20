@@ -21,17 +21,16 @@
                 authorizedRoles: "{{ user.is_authenticated|yesno:"ROLE_ADMINISTRATOR,ROLE_ANONYMOUS" }}",
                 portalConfig: {
                     renderTo: "preview_map", //belongs in template as it references a specific page element id
-                    height: 450
+                    //height: 450
                 },
                 // The rest of this config could be moved to the application's viewer class
-                
+
                 /* The URL to a REST map configuration service.  This service 
                  * provides listing and, with an authenticated user, saving of 
                  * maps on the server for sharing and editing.
                  */
                 rest: "/maps/",
                 proxy: "/proxy/?url=",
-                
                 listeners: {
                     "ready": function() {
                         var map = app.mapPanel.map;
@@ -50,7 +49,7 @@
             if (config.map.zoom === null) {
                 config.map.zoom = 1;
             }
-            app = new GeoExplorer.Viewer(config);
+            app = new mapstory.LayerViewer(config);
             
             //Are these next 2 element click handlers relevant anymore?
             Ext.get(Ext.DomQuery.select("input[@name='style']")).on("click", function(evt, elem) {
@@ -174,16 +173,13 @@
                                     $("#submit").click(function(ev) {
                                         ev.preventDefault();
                                         var form = $(this).closest('form');
-                                        form.find('.errorlist').fadeOut();
                                         $.post(
                                             form.attr('action'),
                                             form.serialize(),
                                             function() {
-                                                alert('Updated');
+                                                alert('updated');
                                             }
-                                        ).error(function(ev) {
-                                            $(ev.responseText).appendTo(form);
-                                        });
+                                        );
                                     });
                                 });
                             </script>
