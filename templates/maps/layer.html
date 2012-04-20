@@ -260,10 +260,10 @@
                         {% endfor %}
                         </div>
                     {% else %}
-                    <p>No Maps are using this StoryLayer. Be the first!</p>
+                    <p>No MapStories are using this StoryLayer. Be the first!</p>
                     {% endif %}
                 {% endwith %}
-                <a class="btn" href="{% url geonode.maps.views.newmap %}?layer={{layer.typename}}">Create A Map</a>
+                <a class="button orange" href="{% url geonode.maps.views.newmap %}?layer={{layer.typename}}">Create A MapStory</a>
             </section>
 
             {% include "mapstory/_widget_social.html" %}
