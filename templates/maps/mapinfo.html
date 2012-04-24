@@ -102,20 +102,19 @@ Ext.onReady(function() {
                             <script type="text/javascript">
                                 $(function() {
                                     $("#submit").click(function(ev) {
-                                            ev.preventDefault();
-                                            var form = $(this).closest('form');
-                                            form.find('.errorlist').fadeOut();
-                                            $.post(
-                                                form.attr('action'),
-                                                form.serialize(),
-                                                function() {
-                                                    alert('Updated');
-                                                }
-                                            ).error(function(ev) {
-                                                $(ev.responseText).appendTo(form);
-                                            });
+                                        ev.preventDefault();
+                                        var form = $(this).closest('form');
+                                        form.find('.errorlist').fadeOut();
+                                        $.post(
+                                            form.attr('action'),
+                                            form.serialize(),
+                                            function() {
+                                                alert('Updated');
+                                            }
+                                        ).error(function(ev) {
+                                            $(ev.responseText).appendTo(form);
                                         });
-                                    })
+                                    });
                                     $("#publish_status").click(function(ev) {
                                         ev.preventDefault();
                                         $.post(
