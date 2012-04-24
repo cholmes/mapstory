@@ -20,7 +20,8 @@
                 localGeoServerBaseUrl: "{{GEOSERVER_BASE_URL}}",
                 authorizedRoles: "{{ user.is_authenticated|yesno:"ROLE_ADMINISTRATOR,ROLE_ANONYMOUS" }}",
                 portalConfig: {
-                    renderTo: "preview_map" //belongs in template as it references a specific page element id
+                    renderTo: "preview_map", //belongs in template as it references a specific page element id
+                    height: 450
                 },
                 // The rest of this config could be moved to the application's viewer class
                 
