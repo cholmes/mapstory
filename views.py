@@ -162,7 +162,7 @@ def publish_status(req,id,status):
     if req.method != 'POST':
         return HttpResponse('POST required',status=400)
     mapobj = get_object_or_404(Map, id=id)
-    if mapobj.owner != req.user or not req.user.has_perm('mapstory.change_section'):
+    if mapobj.owner != req.user and not req.user.has_perm('mapstory.change_section', mapobj):
         return HttpResponse('Not sufficient permissions',status=401)
     pubobj, _ = PublishingStatus.objects.get_or_create(map = mapobj)
     pubobj.status = status
@@ -173,7 +173,7 @@ def add_to_map(req,id,typename):
     if req.method != 'POST':
         return HttpResponse('POST required',status=400)
     mapobj = get_object_or_404(Map, id=id)
-    if mapobj.owner != req.user or not req.user.has_perm('mapstory.change_section'):
+    if mapobj.owner != req.user and not req.user.has_perm('mapstory.change_section', mapobj):
         return HttpResponse('Not sufficient permissions',status=401)
     layer = get_object_or_404(Layer, typename=typename)
     existing = MapLayer.objects.filter(map = mapobj)
@@ -202,8 +202,7 @@ def topics_api(req, layer_or_map, layer_or_map_id):
     else:
         obj = get_object_or_404(Layer, pk = layer_or_map_id)
         perm = 'maps.change_layer'
-        
-    if obj.owner != req.user or not req.user.has_perm(perm, obj):
+    if obj.owner != req.user and not req.user.has_perm(perm, obj):
         return HttpResponse('Not sufficient permissions',status=401)
         
     if req.method == 'GET':
