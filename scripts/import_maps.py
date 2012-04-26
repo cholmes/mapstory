@@ -46,6 +46,7 @@ def import_maps(gs_data_dir, conn, zipfile,
             return models
 
     print 'importing maps'
+    import_models(temppath('maps.json'), add_owner=True)
     print 'importing map layers'
     maplayer_models = import_models(temppath('maplayers.json'))
 
