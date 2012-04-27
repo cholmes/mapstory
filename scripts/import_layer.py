@@ -6,6 +6,7 @@ from django.core import serializers
 from geonode.maps.models import Layer
 
 from optparse import OptionParser
+import json
 import psycopg2
 import os
 import tempfile
@@ -69,8 +70,8 @@ def import_layer(gs_data_dir, conn, layer_tempdir, layer_name,
     if do_django_layer_save:
         # now we can create the django model - must be done last when gscatalog is ready
         with open(temppath("model.json")) as fp:
-            json = fp.read()
-            layer = serializers.deserialize("json", json).next()
+            model_json = fp.read()
+            layer = serializers.deserialize("json", model_json).next()
             owner = User.objects.filter(pk=layer.object.owner_id)
             if not owner:
                 layer.object.owner = User.objects.get(pk=1)
