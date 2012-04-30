@@ -17,7 +17,12 @@
 var app;
 Ext.onReady(function() {
 {% autoescape off %}
-    app = new mapstory.Viewer({{config}});
+    var config = Ext.apply({{config}}, {
+    	portalConfig : {
+    		renderTo: 'embedded_map'
+    	}
+    });
+    app = new mapstory.Viewer(config);
 {% has_obj_perm user map "maps.change_map_permissions" as can_change_permissions %}
 {% if can_change_permissions %}
 {% comment %}
