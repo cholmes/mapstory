@@ -3,7 +3,8 @@
 from django.core import serializers
 from django.conf import settings
 
-from geonode.maps.models import *
+from geonode.maps.models import Layer
+from geonode.maps.models import Map
 
 from optparse import OptionParser
 import json
