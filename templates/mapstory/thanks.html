@@ -1,0 +1,33 @@
+{% extends "page_layout.html" %}
+{% load i18n %}
+
+{% block title %} {% trans "Donate" %} - {{ block.super }} {% endblock %}
+{% block indexclass %} class="here" {% endblock %}
+
+{% block extra_head %} 
+<style>
+    /* argh ext stylesheet wiping these out */
+    .content p {
+        margin-top: 1em;
+    }
+    .content strong {
+        font-weight: bold;
+    }
+</style>
+{% endblock %}
+
+{% block main %} 
+<div class="row content mrg-top mrg-btm">
+
+    <div class="span8 offset2">
+        <div class="box">
+            <h4>Thanks for your donation</h4>
+            <p>Any other thoughts go here.
+            </p>
+            <p>Happy Story Telling,</p>
+            <strong>Chris Tucker</strong>
+        </div>
+    </div>
+</div>
+    
+{% endblock %}

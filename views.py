@@ -42,11 +42,7 @@ def index(req):
         "users" : users
     }))
 
-def donate(req):
-    return render_to_response('mapstory/donate.html', RequestContext(req))
-
 def how_to(req):
-    'direct_to_template',{"template":""}
     return render_to_response('mapstory/how_to.html', RequestContext(req,{
         'videos' : VideoLink.objects.how_to_videos()
     }))
