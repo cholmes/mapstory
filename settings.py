@@ -310,6 +310,8 @@ USERS_TO_EXCLUDE_IN_LISTINGS = []
 
 DESIGN_MODE = False
 
+ENABLE_ANALYTICS = False
+
 try:
     from local_settings import *
 except ImportError:

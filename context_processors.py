@@ -18,6 +18,8 @@ def page(req):
         'sections' : _sections(),
         'resources' : _resources(),
         #@todo temp for design work
-        'design_mode' : settings.DESIGN_MODE
+        'design_mode' : settings.DESIGN_MODE,
+        # we could do this through debug but it's nicer to have finer grained control
+        'enable_analytics' : settings.ENABLE_ANALYTICS
     }
     return {'page':page,'cache_time':60}

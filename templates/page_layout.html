@@ -26,6 +26,7 @@
     {% include "geonode/ext_header.html" %}
     {% block extra_head %}{% endblock %}
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}theme/site.css" media="screen" />
+    {% if enable_analytics %}{% include 'ga.html' %}{% endif %}
 {% endblock %}
 
 {% block topbar_base %}
