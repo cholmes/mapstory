@@ -3,7 +3,8 @@
 from django.core import serializers
 from django.conf import settings
 
-from geonode.maps.models import *
+from geonode.maps.models import Layer
+from geonode.maps.models import Map
 
 from optparse import OptionParser
 import json
@@ -87,6 +88,13 @@ def layers_from_map(m):
             layers.append(layer)
         except Layer.DoesNotExist:
             pass
+    # also include the annotations layer if it exists
+    annotation_layer_typename = "geonode:_map_%s_annotations" % m.id
+    try:
+        annotation_layer = Layer.objects.get(typename=annotation_layer_typename)
+        layers.append(annotation_layer)
+    except Layer.DoesNotExist:
+        pass
     return layers
 
 # get a list of all layers to export
