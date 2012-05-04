@@ -13,6 +13,7 @@
 {% block head_title %}MapStory{% endblock %}
 
 {% block extra_head_base %}
+    <meta http-equiv=“X-UA-Compatible” content=“IE=8” />
     <link rel="shortcut icon" href="{{ STATIC_URL }}theme/img/favicon.ico"/>
     <script type="text/javascript" src="{% url django.views.i18n.javascript_catalog %}"></script>
     <script type="text/javascript" src="{% url lang %}"></script>
@@ -123,6 +124,31 @@
 
       </div><!-- /.wrap -->
     </div><!-- /#crossbar -->
+    
+    {# browser compat msgs #}
+    <div id="noscript" class="errmsg-overlay">
+        <h2>It looks like your browser doesn't support javascript.</h2>
+        <h4>Why is this important?</h4>
+        <p>MapStory relies on javascript for map display and animation. Without javascript, there's not much to see here. Sorry.</p>
+    </div>
+    <script type="text/javascript">
+        document.getElementById("noscript").style.display = 'none';
+    </script>
+    {% if page.old_browser %}
+    <script type="text/javascript">
+        function iunderstand() {
+            document.cookie = "iunderstand=true; path=/";
+            document.getElementById("oldbrowser").style.display = 'none';
+        }
+    </script>
+    <div id="oldbrowser" class="errmsg-overlay">
+        <h2>It looks like your browser is getting along in age.</h2>
+        <h4>Why is this important?</h4>
+        <p>MapStory relies on features found in more modern browsers. You can continue, but you have been warned - the look and function (or lack thereof) of many features of MapStory may be unintended.</p>
+        <button onclick="iunderstand()">I understand</button>
+        <p>By pressing this, we'll do our best to accommodate you.</p>
+    </div>
+    {% endif %}
 {% endblock %}
 
 {% block body_base %}
