@@ -246,8 +246,12 @@ class ByStoryTellerNode(template.Node):
         layers = user.layer_set.all()
         for e in settings.LAYER_EXCLUSIONS:
             layers = layers.exclude(name__regex=e)
+        maps = set(PublishingStatus.objects.get_public(user))
+        #@todo could make query more efficient/explicit to exclude map
+        if obj in maps:
+            maps.remove(obj)
         return loader.render_to_string(template_name,{
             'user':user,
-            'maps':PublishingStatus.objects.get_public(user),
+            'maps':maps,
             'layers':layers
         })
