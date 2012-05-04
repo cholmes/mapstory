@@ -178,14 +178,14 @@ Ext.onReady(function() {
         queryItems = init_search;
     }
     fetch();
-    var scrollEl = Ext.isIE ? document.body : document;
+    var scrollEl = Ext.isIE ? window : document;
     Ext.fly(scrollEl).on('scroll',function() {
         if (start < 0) return;
-        var list = Ext.get('search_results');
-        var scroll = Ext.fly(document).getScroll().top;
-        var height = list.getHeight() + list.getTop();
-        var windowHeight = Ext.isIE ? document.body.clientHeight : window.innerHeight;
-        if (scroll + windowHeight > height) {
+        var list = Ext.get('search_results').parent('.box'),
+            scroll = Ext.fly(document).getScroll().top,
+            view = 'innerHeight' in window ? window.innerHeight : document.documentElement.clientHeight,
+            bottom = list.getBottom();
+        if (scroll + view > bottom) {
             fetch();
         }
     });
