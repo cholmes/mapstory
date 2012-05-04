@@ -42,7 +42,7 @@
                 <div class="user"><a href="{% url about_storyteller user.username %}">Welcome {{ user.username }}</a></div>
             {% else %}
                 <a id="login-link" href="#login-form-pop">{% trans "Log in" %}</a>
-                <div class="user">&nbsp;</div>
+                <div class="user"><a href="http://wiki.mapstory.org">Learn More</a></div>
                 {% if REGISTRATION_OPEN %} or <a href="{% url registration_register %}">{% trans "Register" %}</a>{% endif %}
             {% endif %}
             <form id="quicksearch" action="{% url new_search %}" method="POST">
