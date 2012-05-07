@@ -19,9 +19,11 @@
        appropriate shapefiles (.shp,.dbf,.prj) in the top-level directory.
     </p>
     {% if enough_storage %}
+    {% if display_storage_stats %}
     <p class="alert alert-error">There are currently {{ storage_remaining }} of space left on this server.
     Please ensure that your data is not too much bigger than this. During processing, at least 3 times
     the storage is required.</p>
+    {% endif %}
     {% else %}
     There is not enough space on the server to handle uploads at the moment.
     {% endif %}
