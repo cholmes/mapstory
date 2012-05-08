@@ -123,7 +123,7 @@
 ul.x-menu-list {
     margin: 0;
 }
-#search_results li {
+#search_results li.tile {
     float: left;
     display: block;
     width: 219px;
