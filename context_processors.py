@@ -30,7 +30,6 @@ def page(req):
             except:
                 pass
         if old_browser:
-            print req.COOKIES
             # the user has understood
             if 'iunderstand' in req.COOKIES:
                 old_browser = False
