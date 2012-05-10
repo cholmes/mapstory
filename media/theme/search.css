@@ -20,6 +20,12 @@
     cursor: pointer;
     border: 1px solid none;
 }
+#search_results .thumb.owner {
+    width: 80px;
+    height: 80px;
+    cursor: pointer;
+    border: 1px solid none;
+}
 #search_results .thumb selected {
     border: 1px solid #454238;
 }
