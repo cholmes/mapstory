@@ -84,11 +84,11 @@ def map_tiles(req):
     return HttpResponse(''.join( [ _render_map_tile(m) for m in maps] ))
 
 def _render_map_tile(obj,req=None):
-        
     template = 'mapstory/_story_tile.html'
+    ctx = {'map':obj,'when':obj.last_modified}
     if req:
-        return render_to_response(template, RequestContext(req,{'map':obj}))
-    return loader.render_to_string(template,{'map':obj})
+        return render_to_response(template, RequestContext(req,ctx))
+    return loader.render_to_string(template,ctx)
 
 def map_tile(req, mapid):
     obj = get_object_or_404(Map,pk=mapid)

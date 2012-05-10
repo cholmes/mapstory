@@ -63,7 +63,8 @@ class MapInfoTileNode(template.Node):
         obj = context[self.obj_name]
         position = self.template == 'left' and '_left' or ''
         template_name = "mapstory/_story_tile%s.html" % position
-        return loader.render_to_string(template_name,{'map':obj})
+        when = hasattr(obj,'last_modified') and obj.last_modified or obj.date
+        return loader.render_to_string(template_name,{'map':obj,'when':when})
     
 @register.tag
 def about_storyteller(parse, token):

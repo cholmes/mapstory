@@ -8,7 +8,7 @@
         <div class="title">{{ map.title }}</div>
         <div class="">
             <span><a rel="author" href="{% url about_storyteller map.owner %}">{{ map|user_name }}</a></span>
-            <time pubdate datetime="{{ map.last_modified|date:"Y-m-d" }}">on {{ map.last_modified|date:"N j Y" }}</time>
+            <time pubdate datetime="{{ when|date:"Y-m-d" }}">on {{ when|date:"N j Y" }}</time>
         </div>
     </div>
     <footer>
