@@ -327,8 +327,8 @@ Ext.onReady(function() {
             reset();
         }
     });
-    Ext.get('sortForm').on('click',function(ev) {
-        queryItems['sort'] = this.dom.sortby.value;
+    Ext.select('#sortForm select').on('change',function(ev) {
+        queryItems['sort'] = this.value;
         reset();
     });
 
