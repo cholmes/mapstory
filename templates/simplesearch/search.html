@@ -1,6 +1,7 @@
 {% extends "page_layout.html" %}
 {% load i18n %}
 {% load mapstory_tags %}
+{% load staticfiles %}
 
 {% block head_title %}Search{% endblock %}
 {% block body_class %}search{% endblock %}
@@ -22,8 +23,11 @@
     
     {% endautoescape %}
 </script>
-<script type="text/javascript" src="{{ STATIC_URL}}script/search.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL}}script/favorites.js"></script>
+{% include "geonode/geo_header.html" %}
+{% include "geonode/app_header.html" %}
+<script type="text/javascript" src="{% static "script/search.js" %}"></script>
+<script type="text/javascript" src="{% static "script/favorites.js" %}"></script>
+<script src="{% static "bootstrap/js/bootstrap-modal.js" %}"></script>
 {% endblock %}
 
 {% block extra_head %}
@@ -91,6 +95,17 @@
                 <li><a href="#{{ kw }}">{{ kw }}</a></li>
                 {% endfor %}
             </ul>
+        </div>
+        
+        <button id="spatialSearch" class="btn">Map Bounding Box</button>
+        <div class="modal" id="searchModal" style="display:none; max-height: none; width: 573px;">
+            <div class="modal-header">
+                <button class="close" data-dismiss="modal">×</button>
+                <h2>Select an Area of Interest</h2>
+            </div>
+            <div class="modal-body">
+                <div id="searchMap"></div>
+            </div>
         </div>
             
         </div>

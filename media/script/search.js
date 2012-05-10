@@ -189,6 +189,73 @@ Ext.onReady(function() {
             fetch();
         }
     });
+    
+    //var searchWidget;
+    window.searchWidget = null;
+    SearchExtentControl = OpenLayers.Class(OpenLayers.Control, {
+        type: OpenLayers.Control.TYPE_TOOL,
+        draw: function() {
+            this.handler = new OpenLayers.Handler.Box( this, {
+                "done": this.notice});
+            this.handler.activate();
+        },
+        notice: function(bounds) {  },
+        CLASS_NAME: "SearchExtentControl"
+    });
+    SearchExtentTool = Ext.extend(gxp.plugins.Tool, {
+        ptype: "search_extent",
+        constructor: function(config) {
+            SearchExtentTool.superclass.constructor.apply(this, arguments);
+        },
+        destroy: function() {
+            SearchExtentTool.superclass.destroy.apply(this, arguments);
+        },
+        addActions: function() {
+            var control = new SearchExtentControl();
+            control.deactivate();
+            var actions = [new GeoExt.Action({
+                tooltip: "Tooltip",
+                text: "Draw Area of Interest",
+                iconCls: "gxp-icon-measure-area",
+                enableToggle: true,
+                pressed: false,
+                allowDepress: true,
+                control: control,
+                map: this.target.mapPanel.map,
+                toggleGroup: this.toggleGroup
+            })];
+            return SearchExtentTool.superclass.addActions.apply(this, [actions]);
+        }
+    });
+    Ext.preg(SearchExtentTool.prototype.ptype, SearchExtentTool);
+    function spatialSearch() {
+        if (searchWidget == null) {
+            var viewerConfig = {
+                proxy: "/proxy/?url=",
+                useCapabilities: false,
+                useBackgroundCapabilities: false,
+                useToolbar: false,
+                useMapOverlay: false,
+                portalConfig: {
+                    border: false,
+                    height: 512,
+                    width: 512,
+                    renderTo: "searchMap"
+                },
+                tools : [
+                    {
+                        ptype: "search_extent",
+                        actionTarget: "map.tbar"
+                    }
+                ]
+            }
+            viewer_config.map.bbar = null;
+            viewerConfig = Ext.apply(viewerConfig, viewer_config);
+
+            searchWidget = new GeoExplorer.Viewer(viewerConfig);
+        }
+        $('#searchModal').modal();
+    }
 
     function toggleSection(el) {
         var expand = el.hasClass('collapsed');
@@ -313,6 +380,8 @@ Ext.onReady(function() {
     enableSearchLink('#bytype a','bytype',false);
     enableSearchLink('#bykeyword a','bykw',false);
     enableSearchLink('#bysection a','bysection',false);
+    
+    Ext.get('spatialSearch').on('click',spatialSearch);
     
     new Ext.ToolTip({
         target: 'filter-tip'
