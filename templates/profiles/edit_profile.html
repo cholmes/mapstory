@@ -26,7 +26,7 @@
   </form>
 
   <hr/>
-  {% if not form.cleaned_data %}
+  {% if form.errors %}
   <p class="alert alert-error">
       <b>One or more fields is invalid</b>. Please check and try again.
   </p>
