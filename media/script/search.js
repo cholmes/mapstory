@@ -8,7 +8,9 @@ Ext.onReady(function() {
     "<div class='itemAbstract'>Abstract: {abstract}</div>"+
     "<div class='rating'>{rating} stars</div>"+
     "<div class='actions' id='{_type}-{id}'></div>"+
-    "<div></li>",
+    "</li>",
+    ownerTemplate = "<li class='tile' id='item{iid}'><img class='thumb {thumbclass}' src='{thumb}'></img>" +
+    "</li>" ,
     filterTemplate = "<div class='removeFilter {typeclass}'><img height='8' src='/static/theme/img/silk/delete.png' class='removeFilter' href='#removeFilter'> </a><strong>{type}</strong> {value}</div>",
     fetching = false,
     list = Ext.get(Ext.query('#search_results ul')[0]),
@@ -27,6 +29,8 @@ Ext.onReady(function() {
 
     itemTemplate = new Ext.DomHelper.createTemplate(itemTemplate);
     itemTemplate.compile();
+    ownerTemplate = new Ext.DomHelper.createTemplate(ownerTemplate);
+    ownerTemplate.compile();
     filterTemplate = new Ext.DomHelper.createTemplate(filterTemplate);
     filterTemplate.compile();
 
@@ -85,17 +89,22 @@ Ext.onReady(function() {
             click: handleSave
         };
         Ext.each(results.rows,function(r,i) {
+            var item;
             if (r.thumb == null) {
                 r.thumb = static_url + "theme/img/silk/map.png";
                 r.thumbclass = "missing";
             } else {
                 r.thumbclass = "";
             }
-            var item = itemTemplate.append(list,r,true);
-            new Ext.ToolTip({
-                target: 'item' + r.iid,
-                html: r['abstract']
-            });
+            if (r._type != 'owner') {
+                item = itemTemplate.append(list,r,true);
+                new Ext.ToolTip({
+                    target: 'item' + r.iid,
+                    html: r['abstract']
+                });
+            } else {
+                item = ownerTemplate.append(list,r,true);
+            }
             item.select('.thumb').item(0).on('click',function(ev) {
                 expandTile(this.parent());
             });
