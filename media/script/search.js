@@ -190,16 +190,32 @@ Ext.onReady(function() {
         }
     });
     
-    //var searchWidget;
-    window.searchWidget = null;
+    var searchWidget;
     SearchExtentControl = OpenLayers.Class(OpenLayers.Control, {
         type: OpenLayers.Control.TYPE_TOOL,
+        layer: null,
         draw: function() {
             this.handler = new OpenLayers.Handler.Box( this, {
                 "done": this.notice});
             this.handler.activate();
         },
-        notice: function(bounds) {  },
+        notice: function(bounds) {
+            var proj = new OpenLayers.Projection('EPSG:4326'), box,
+            ll = this.map.getLonLatFromPixel(new OpenLayers.Pixel(bounds.left, bounds.bottom)),
+            ur = this.map.getLonLatFromPixel(new OpenLayers.Pixel(bounds.right, bounds.top));
+            if (this.layer == null) {
+                this.layer = new OpenLayers.Layer.Vector('boxes');
+                this.map.addLayer(this.layer);
+            }
+            bounds = new OpenLayers.Bounds();
+            bounds.extend(ll);
+            bounds.extend(ur);
+            box = new OpenLayers.Feature.Vector(bounds.toGeometry());
+            this.layer.removeAllFeatures();
+            this.layer.addFeatures(box);
+            bounds = bounds.transform(this.map.getProjectionObject(),proj);
+            searchByExtent(bounds);
+        },
         CLASS_NAME: "SearchExtentControl"
     });
     SearchExtentTool = Ext.extend(gxp.plugins.Tool, {
@@ -255,6 +271,28 @@ Ext.onReady(function() {
             searchWidget = new GeoExplorer.Viewer(viewerConfig);
         }
         $('#searchModal').modal();
+    }
+    function searchByExtent(bounds) {
+        var key = "byextent", type="By Extent";
+        queryItems[key] = bounds.toString();
+        Ext.select('#refineSummary .' + type.replace(' ','_')).remove();
+        addActiveFilter(type,key,'',bounds.toString(),false);
+        reset();
+        $('#searchModal').modal('hide');
+    }
+    
+    function searchByPeriod(ev) {
+        var keycode = (ev.keyCode ? ev.keyCode : ev.which);
+        if (keycode == '13') {
+            var key = "byperiod", type="By Period",
+            start = Ext.get('time_start').getValue(),
+            end =  Ext.get('time_end').getValue(),
+            value = start + "," + end;
+            queryItems[key] =  start + "," + end;
+            Ext.select('#refineSummary .' + type.replace(' ','_')).remove();
+            addActiveFilter(type,key,start + " to " + end,value,false);
+            reset();
+        }
     }
 
     function toggleSection(el) {
@@ -380,6 +418,10 @@ Ext.onReady(function() {
     enableSearchLink('#bytype a','bytype',false);
     enableSearchLink('#bykeyword a','bykw',false);
     enableSearchLink('#bysection a','bysection',false);
+    enableSearchLink('#byadded a','byadded',false);
+    
+    Ext.get('time_start').on('keypress',searchByPeriod);
+    Ext.get('time_end').on('keypress',searchByPeriod);
     
     Ext.get('spatialSearch').on('click',spatialSearch);
     

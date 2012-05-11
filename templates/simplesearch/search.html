@@ -107,6 +107,24 @@
                 <div id="searchMap"></div>
             </div>
         </div>
+        
+        <div class="refineSection">
+            <h5>Temporal Extent</h5>
+            <p>Format in yyyy-mm-dd. Omit days or months if desired. Press enter to search.</p>
+            <label for="time_start">Events begin after</label>
+            <input id="time_start" type="text" style="width:175px;">
+            <label for="time_end">Events end before</label>
+            <input id="time_end" type="text" style="width:175px;">
+        </div>
+        
+        <div class="refineSection expand">
+            <h5>Date Added</h5>
+            <ul id="byadded" class="searchLinks refineControls">
+                <li><a href="#today">Today</a>
+                <li><a href="#week">This Week</a>
+                <li><a href="#month">This Month</a>
+            </ul>
+        </div>
             
         </div>
     </div>
