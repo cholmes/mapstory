@@ -17,10 +17,6 @@ display: inline-block; /* IE 7 */
 display: block;
 }
 
-* html .selfclear {
-zoom: 1; /* IE < 7 */
-}
-
 .nodisplay { 
 display: none;
 }
@@ -28,9 +24,6 @@ display: none;
 /*-----------------------
 General Styles
 -----------------------*/
-html {
-font-size: 100%;
-}
 
 body {
 margin: 0;
@@ -221,10 +214,6 @@ display: inline-block; /* IE 7 */
 
 #topPanel {
 display: block;
-}
-
-* html #topPanel {
-zoom: 1; /* IE < 7 */
 }
 
 #topPanel * {
@@ -604,8 +593,6 @@ color: #fff;
 	color: #fff;
 	}
 	
-table 
-/* UTILITY CLASSES */
 
 .selfclear:after {
 content: " ";
