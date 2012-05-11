@@ -66,14 +66,6 @@ urlpatterns += patterns('mapstory.views',
 
     # ugh, overrides
     url(r'^(?P<layername>[^/]*)/metadata$', 'layer_metadata', name="layer_metadata"),
-
-    # temp urls
-    url(r"^mapstory/story/", direct_to_template, {"template": "mapstory/story_detail.html"}, name="story"),
-    url(r"^mapstory/manage/", direct_to_template, {"template": "mapstory/story_manage.html"}, name="story_manage"),
-    url(r"^mapstory/storyteller/", direct_to_template, {"template": "mapstory/storyteller_detail.html"}, name="storyteller"),
-    url(r"^search/search-mapstories/", direct_to_template, {"template": "search/search_mapstories.html"}, name="search_mapstories"),
-    url(r"^layer/manage/", direct_to_template, {"template": "mapstory/layer_manage.html"}, name="layer_manage"),
-    url(r"^map/", direct_to_template, {"template": "maps/map_detail.html"}, name="map_detail"),
 )
 
 urlpatterns += proxy_urlpatterns

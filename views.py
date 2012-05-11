@@ -99,7 +99,7 @@ def favoriteslinks(req):
     else:
         obj = get_object_or_404(Layer, pk = id)
         maps = None
-    return render_to_response("search/_widget_search_favorites.html",{
+    return render_to_response("simplesearch/_widget_search_favorites.html",{
         layer_or_map : obj,
         "maps" : maps,
         "user" : req.user
