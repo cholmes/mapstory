@@ -8,7 +8,14 @@ Ext.onReady(function() {
     "<div class='itemAbstract'>Abstract: {abstract}</div>"+
     "<div class='rating'>{rating} stars</div>"+
     "<div class='actions' id='{_type}-{id}'></div>"+
-    "<div></li>",
+    "</li>",
+    ownerTemplate = "<li class='tile' id='item{iid}'><img class='thumb {thumbclass}' src='{thumb}'></img>" +
+    "<div class='infoBox'><div class='itemTitle'><a href='{detail}'>{title} {organization}</a></div>" +
+    "<div class='itemInfo'>{_display_type}, joined on {last_modified}</div>" +
+    "<div class='itemInfo'>{map_cnt} MapStories, {layer_cnt} StoryLayers</div>"+
+    "<div class='itemAbstract'>{abstract}</div>"+
+    "<div class='actions' id='{_type}-{id}'></div>"+
+    "</li>" ,
     filterTemplate = "<div class='removeFilter {typeclass}'><img height='8' src='/static/theme/img/silk/delete.png' class='removeFilter' href='#removeFilter'> </a><strong>{type}</strong> {value}</div>",
     fetching = false,
     list = Ext.get(Ext.query('#search_results ul')[0]),
@@ -27,6 +34,8 @@ Ext.onReady(function() {
 
     itemTemplate = new Ext.DomHelper.createTemplate(itemTemplate);
     itemTemplate.compile();
+    ownerTemplate = new Ext.DomHelper.createTemplate(ownerTemplate);
+    ownerTemplate.compile();
     filterTemplate = new Ext.DomHelper.createTemplate(filterTemplate);
     filterTemplate.compile();
 
@@ -85,13 +94,19 @@ Ext.onReady(function() {
             click: handleSave
         };
         Ext.each(results.rows,function(r,i) {
+            var item;
             if (r.thumb == null) {
                 r.thumb = static_url + "theme/img/silk/map.png";
                 r.thumbclass = "missing";
             } else {
                 r.thumbclass = "";
             }
-            var item = itemTemplate.append(list,r,true);
+            if (r._type != 'owner') {
+                item = itemTemplate.append(list,r,true);
+            } else {
+                r.thumbclass = "owner";
+                item = ownerTemplate.append(list,r,true);
+            }
             new Ext.ToolTip({
                 target: 'item' + r.iid,
                 html: r['abstract']
@@ -336,14 +351,16 @@ Ext.onReady(function() {
             collapseSection(e);
         }
         var h = e.first('h5');
-        if (e.hasClass('refine')) {
-            h.on('click',function() {
-                bbox.enable();
+        if (h) {
+            if (e.hasClass('refine')) {
+                h.on('click',function() {
+                    bbox.enable();
+                });
+            }
+            h.on('click',function(ev) {
+                toggleSection(Ext.get(this).parent());
             });
         }
-        h.on('click',function(ev) {
-            toggleSection(Ext.get(this).parent());
-        });
     });
 
     // fake the grid selection model
@@ -381,7 +398,7 @@ Ext.onReady(function() {
         }
     }
 
-    function addActiveFilter(typename,querykey,value,queryValue,multiple) {
+    function addActiveFilter(typename,querykey,value,queryValue,multiple,callback) {
         var el = filterTemplate.append("refineSummary",{typeclass:typename.replace(' ','_'),type:typename,value:value},true);
         el.on('click',function(ev) {
            ev.preventDefault();
@@ -396,6 +413,9 @@ Ext.onReady(function() {
            }
            reset();
            updateAciveFilterHeader();
+           if (typeof callback != 'undefined') {
+               callback();
+           }
         });
         updateAciveFilterHeader();
     }
@@ -437,6 +457,41 @@ Ext.onReady(function() {
     Ext.get('time_end').on('keypress',searchByPeriod);
     
     Ext.get('spatialSearch').on('click',spatialSearch);
+    
+    var authorStore = new Ext.data.JsonStore({
+        url: author_api,
+        root: 'names',
+        totalProperty: 'totalCount',
+        id: 'authorNames',
+        idProperty: 'name',
+        fields : [
+            {name: 'name', mapping: 'name'}
+        ]
+    });
+
+    function searchByAuthor(value) {
+        queryItems['byowner'] = value;
+        Ext.select('#refineSummary .By_StoryTeller').remove();
+        addActiveFilter('By StoryTeller','byowner',value,value,false,function() {
+            search.setValue('');
+        });
+        reset();
+    }
+    var search = new Ext.form.ComboBox({
+        store        : authorStore,
+        fieldLabel   : 'Author Name',
+        displayField : 'name',
+        typeAhead    : true,
+        loadingText  : 'Searching...',
+        minChars     : 3,
+        width        : 175,
+        renderTo     : 'who',
+        onSelect     : function(record) {
+            this.setValue(record.data.name);
+            searchByAuthor(record.data.name);
+            this.collapse();
+        }
+    });
     
     new Ext.ToolTip({
         target: 'filter-tip'
