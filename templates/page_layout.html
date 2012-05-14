@@ -54,6 +54,7 @@
         <div id="login-form-pop">
             <div class="drop-pointer"></div>
             <form action="{% url geonode.views.ajax_login %}" method="POST" class="clearfix">
+                {% csrf_token %}
                 <label for="username">Username:</label>
                 <input name="username" type="text" />
                 <label for="password">Password:</label>
