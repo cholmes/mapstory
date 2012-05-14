@@ -16,6 +16,7 @@
     var search_url = "{% url new_search_api %}";
     {% if user.is_authenticated %}
     var favorites_links_url = "{% url favoriteslinks %}";
+    var favorites_list_url = "{% url favoriteslist %}";
     {% else %}
     var favorites_links_url = null;
     {% endif %}

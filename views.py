@@ -104,6 +104,14 @@ def favoriteslinks(req):
         "maps" : maps,
         "user" : req.user
     });
+    
+@login_required
+def favoriteslist(req):
+    ctx = {
+        "favorites" : Favorite.objects.favorites_for_user(req.user),
+        "in_progress" : Map.objects.filter(owner=req.user, publish__status='In Progress')
+    }
+    return render_to_response("mapstory/_widget_favorites.html",ctx)
 
 @login_required
 def layer_metadata(request, layername):
@@ -165,6 +173,7 @@ def publish_status(req,id,status):
     pubobj.save()
     return HttpResponse('OK', status=200)
 
+@login_required
 def add_to_map(req,id,typename):
     if req.method != 'POST':
         return HttpResponse('POST required',status=400)

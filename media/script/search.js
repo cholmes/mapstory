@@ -126,20 +126,33 @@ Ext.onReady(function() {
                 method: 'GET',
                 success: function(results) {
                     newTile.query('.actions')[0].innerHTML = results.responseText;
-                    enablePostButton('.add-to-favorites');
-                    enablePostButton('.add-to-map');
+                    enablePostButton('.add-to-favorites',updateFavorites);
+                    enablePostButton('.add-to-map',updateFavorites);
                 }
             });
         }
         newTile.show().frame();
     }
     
-    function enablePostButton(selector) {
-        Ext.select(selector).item(0).on('click',function(ev) {
+    function updateFavorites(resp, opts) {
+        Ext.Ajax.request({
+            url: favorites_list_url,
+            success: function(resp, opts) {
+                Ext.get('favorites').dom.innerHTML = resp.responseText;
+            }
+        })
+    }
+    
+    function enablePostButton(selector, callback) {
+        Ext.select(selector).on('click',function(ev) {
             ev.preventDefault();
             Ext.Ajax.request({
                 url: this.getAttribute('href'),
-                method: 'POST'
+                method: 'POST',
+                defaultHeaders : {
+                    "X-CSRFToken" : Ext.util.Cookies.get('csrftoken')
+                },
+                success: callback
             })
         });
     }

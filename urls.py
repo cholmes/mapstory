@@ -53,6 +53,7 @@ urlpatterns += patterns('mapstory.views',
     url(r'^mapstory/public/(?P<id>\d+)/(?P<status>[ \w]+)','publish_status',name='publish_status'),
     url(r'^mapstory/add-to-map/(?P<id>\d+)/(?P<typename>[:\w]+)','add_to_map',name='add_to_map'),
     url(r'^search/favoriteslinks$','favoriteslinks',name='favoriteslinks'),
+    url(r'^search/favoriteslist$','favoriteslist',name='favoriteslist'),
     
     # for now, direct-to-template but should be in database
     url(r"^mapstory/thoughts/jonathan-marino", direct_to_template, {"template": "mapstory/thoughts.html",
