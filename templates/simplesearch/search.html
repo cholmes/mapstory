@@ -1,6 +1,7 @@
 {% extends "page_layout.html" %}
 {% load i18n %}
 {% load mapstory_tags %}
+{% load staticfiles %}
 
 {% block head_title %}Search{% endblock %}
 {% block body_class %}search{% endblock %}
@@ -23,8 +24,11 @@
     
     {% endautoescape %}
 </script>
-<script type="text/javascript" src="{{ STATIC_URL}}script/search.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL}}script/favorites.js"></script>
+{% include "geonode/geo_header.html" %}
+{% include "geonode/app_header.html" %}
+<script type="text/javascript" src="{% static "script/search.js" %}"></script>
+<script type="text/javascript" src="{% static "script/favorites.js" %}"></script>
+<script src="{% static "bootstrap/js/bootstrap-modal.js" %}"></script>
 {% endblock %}
 
 {% block extra_head %}
@@ -91,6 +95,35 @@
                 {% for kw,cnt in keywords.items %}
                 <li><a href="#{{ kw }}">{{ kw }}</a></li>
                 {% endfor %}
+            </ul>
+        </div>
+        
+        <button id="spatialSearch" class="btn">Map Bounding Box</button>
+        <div class="modal" id="searchModal" style="display:none; max-height: none; width: 573px;">
+            <div class="modal-header">
+                <button class="close" data-dismiss="modal">×</button>
+                <h2>Select an Area of Interest</h2>
+            </div>
+            <div class="modal-body">
+                <div id="searchMap"></div>
+            </div>
+        </div>
+        
+        <div class="refineSection">
+            <h5>Temporal Extent</h5>
+            <p>Format in yyyy-mm-dd. Omit days or months if desired. Press enter to search.</p>
+            <label for="time_start">Events begin after</label>
+            <input id="time_start" type="text" style="width:175px;">
+            <label for="time_end">Events end before</label>
+            <input id="time_end" type="text" style="width:175px;">
+        </div>
+        
+        <div class="refineSection expand">
+            <h5>Date Added</h5>
+            <ul id="byadded" class="searchLinks refineControls">
+                <li><a href="#today">Today</a>
+                <li><a href="#week">This Week</a>
+                <li><a href="#month">This Month</a>
             </ul>
         </div>
             

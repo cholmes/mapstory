@@ -202,6 +202,111 @@ Ext.onReady(function() {
             fetch();
         }
     });
+    
+    var searchWidget;
+    SearchExtentControl = OpenLayers.Class(OpenLayers.Control, {
+        type: OpenLayers.Control.TYPE_TOOL,
+        layer: null,
+        draw: function() {
+            this.handler = new OpenLayers.Handler.Box( this, {
+                "done": this.notice});
+            this.handler.activate();
+        },
+        notice: function(bounds) {
+            var proj = new OpenLayers.Projection('EPSG:4326'), box,
+            ll = this.map.getLonLatFromPixel(new OpenLayers.Pixel(bounds.left, bounds.bottom)),
+            ur = this.map.getLonLatFromPixel(new OpenLayers.Pixel(bounds.right, bounds.top));
+            if (this.layer == null) {
+                this.layer = new OpenLayers.Layer.Vector('boxes');
+                this.map.addLayer(this.layer);
+            }
+            bounds = new OpenLayers.Bounds();
+            bounds.extend(ll);
+            bounds.extend(ur);
+            box = new OpenLayers.Feature.Vector(bounds.toGeometry());
+            this.layer.removeAllFeatures();
+            this.layer.addFeatures(box);
+            bounds = bounds.transform(this.map.getProjectionObject(),proj);
+            searchByExtent(bounds);
+        },
+        CLASS_NAME: "SearchExtentControl"
+    });
+    SearchExtentTool = Ext.extend(gxp.plugins.Tool, {
+        ptype: "search_extent",
+        constructor: function(config) {
+            SearchExtentTool.superclass.constructor.apply(this, arguments);
+        },
+        destroy: function() {
+            SearchExtentTool.superclass.destroy.apply(this, arguments);
+        },
+        addActions: function() {
+            var control = new SearchExtentControl();
+            control.deactivate();
+            var actions = [new GeoExt.Action({
+                tooltip: "Tooltip",
+                text: "Draw Area of Interest",
+                iconCls: "gxp-icon-measure-area",
+                enableToggle: true,
+                pressed: false,
+                allowDepress: true,
+                control: control,
+                map: this.target.mapPanel.map,
+                toggleGroup: this.toggleGroup
+            })];
+            return SearchExtentTool.superclass.addActions.apply(this, [actions]);
+        }
+    });
+    Ext.preg(SearchExtentTool.prototype.ptype, SearchExtentTool);
+    function spatialSearch() {
+        if (searchWidget == null) {
+            var viewerConfig = {
+                proxy: "/proxy/?url=",
+                useCapabilities: false,
+                useBackgroundCapabilities: false,
+                useToolbar: false,
+                useMapOverlay: false,
+                portalConfig: {
+                    border: false,
+                    height: 512,
+                    width: 512,
+                    renderTo: "searchMap"
+                },
+                tools : [
+                    {
+                        ptype: "search_extent",
+                        actionTarget: "map.tbar"
+                    }
+                ]
+            }
+            viewer_config.map.bbar = null;
+            viewerConfig = Ext.apply(viewerConfig, viewer_config);
+
+            searchWidget = new GeoExplorer.Viewer(viewerConfig);
+        }
+        $('#searchModal').modal();
+    }
+    function searchByExtent(bounds) {
+        var key = "byextent", type="By Extent";
+        queryItems[key] = bounds.toString();
+        Ext.select('#refineSummary .' + type.replace(' ','_')).remove();
+        addActiveFilter(type,key,'',bounds.toString(),false);
+        reset();
+        $('#searchModal').modal('hide');
+    }
+    
+    function searchByPeriod(ev) {
+        var keycode = (ev.keyCode ? ev.keyCode : ev.which);
+        if (keycode == '13') {
+            var key = "byperiod", type="By Period",
+            start = Ext.get('time_start').getValue(),
+            end =  Ext.get('time_end').getValue(),
+            value = start + "," + end;
+            queryItems[key] =  start + "," + end;
+            Ext.select('#refineSummary .' + type.replace(' ','_')).remove();
+            addActiveFilter(type,key,start + " to " + end,value,false);
+            reset();
+        }
+    }
 
     function toggleSection(el) {
         var expand = el.hasClass('collapsed');
@@ -326,6 +431,12 @@ Ext.onReady(function() {
     enableSearchLink('#bytype a','bytype',false);
     enableSearchLink('#bykeyword a','bykw',false);
     enableSearchLink('#bysection a','bysection',false);
+    enableSearchLink('#byadded a','byadded',false);
+    
+    Ext.get('time_start').on('keypress',searchByPeriod);
+    Ext.get('time_end').on('keypress',searchByPeriod);
+    
+    Ext.get('spatialSearch').on('click',spatialSearch);
     
     new Ext.ToolTip({
         target: 'filter-tip'
