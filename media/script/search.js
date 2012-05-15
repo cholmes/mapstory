@@ -192,6 +192,16 @@ Ext.onReady(function() {
             url: search_url,
             method: 'GET',
             success: appendResults,
+            failure: function(resp) {
+                var msg, body;
+                try {
+                    body = Ext.util.JSON.decode(resp.responseText);
+                    msg = 'Error in search<br/>' + body.errors.join('<br/>');
+                } catch (ex) {
+                    msg = 'Unhandled error : <br>' + resp.responseText;
+                }
+                Ext.MessageBox.alert(msg);
+            },
             params: params
         });
     }
@@ -238,6 +248,9 @@ Ext.onReady(function() {
             bounds = new OpenLayers.Bounds();
             bounds.extend(ll);
             bounds.extend(ur);
+            if (isNaN(bounds.getWidth()) || isNaN(bounds.getHeight())) {
+                return;
+            }
             box = new OpenLayers.Feature.Vector(bounds.toGeometry());
             this.layer.removeAllFeatures();
             this.layer.addFeatures(box);
