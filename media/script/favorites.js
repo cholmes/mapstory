@@ -32,7 +32,6 @@ $(function() {
         return cookieValue;
     }
     $(document).ajaxSend(function(event, xhr, settings) {
-        console.log('settins CSRFToken');
         xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken')); 
     });
 });
