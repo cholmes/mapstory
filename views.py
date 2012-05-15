@@ -96,9 +96,11 @@ def favoriteslinks(req):
     if layer_or_map == 'map':
         obj = get_object_or_404(Map, pk = id)
         maps = PublishingStatus.objects.get_in_progress(req.user)
-    else:
+    elif layer_or_map == 'layer':
         obj = get_object_or_404(Layer, pk = id)
         maps = None
+    else:
+        return HttpResponse('')
     return render_to_response("simplesearch/_widget_search_favorites.html",{
         layer_or_map : obj,
         "maps" : maps,
