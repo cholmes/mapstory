@@ -116,6 +116,7 @@
           {% endfor %}
           {% url search_layers as search_layers %}
           {% url search_maps as search_maps %}
+          {% url search_owners as search_owners %}
           <li><a rel="search" href="{% url search_layers %}" class="subtab-search-layers {% active_sub_nav request search_layers %}">Search StoryLayers</a></li>
           <li><a rel="search" href="{% url search_maps %}" class="subtab-search-stories {% active_sub_nav request search_maps %}">Search MapStories</a></li>
           <li><a rel="search" href="{% url search_owners %}" class="subtab-search-tellers {% active_sub_nav request search_owners %}">Search StoryTellers</a></li>

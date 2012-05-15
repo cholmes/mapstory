@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 # Django settings for GeoNode project.
+from parser import STType
 from urllib import urlencode
 import os
 import geonode
@@ -309,6 +310,8 @@ USERS_TO_EXCLUDE_IN_LISTINGS = []
 DESIGN_MODE = False
 
 ENABLE_ANALYTICS = False
+
+AVATAR_DEFAULT_URL = "theme/img/storyteller.png"
 
 try:
     from local_settings import *

@@ -107,10 +107,12 @@ Ext.onReady(function() {
                 r.thumbclass = "owner";
                 item = ownerTemplate.append(list,r,true);
             }
-            new Ext.ToolTip({
-                target: 'item' + r.iid,
-                html: r['abstract']
-            });
+            if (r['abstract']) {
+                new Ext.ToolTip({
+                    target: 'item' + r.iid,
+                    html: r['abstract']
+                });
+            }
             item.select('.thumb').item(0).on('click',function(ev) {
                 expandTile(this.parent());
             });
@@ -235,7 +237,7 @@ Ext.onReady(function() {
         draw: function() {
             this.handler = new OpenLayers.Handler.Box( this, {
                 "done": this.notice});
-            this.handler.activate();
+            //this.handler.activate();
         },
         notice: function(bounds) {
             var proj = new OpenLayers.Projection('EPSG:4326'), box,
@@ -466,6 +468,10 @@ Ext.onReady(function() {
     enableSearchLink('#bysection a','bysection',false);
     enableSearchLink('#byadded a','byadded',false);
     
+    new Ext.ToolTip({
+        target:'temporalExtent',
+        html:'Format in yyyy-mm-dd. Omit days or months if desired. Press enter to search.'
+    });
     Ext.get('time_start').on('keypress',searchByPeriod);
     Ext.get('time_end').on('keypress',searchByPeriod);
     
@@ -473,6 +479,9 @@ Ext.onReady(function() {
     
     var authorStore = new Ext.data.JsonStore({
         url: author_api,
+        baseParams: {
+            'csrfmiddlewaretoken' : Ext.select('[name=csrfmiddlewaretoken]').item(0).getValue()
+        },
         root: 'names',
         totalProperty: 'totalCount',
         id: 'authorNames',

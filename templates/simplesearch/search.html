@@ -104,29 +104,40 @@
         
         <h3>Where</h3>
         
-        <button id="spatialSearch" class="btn">Map Bounding Box</button>
+        <div class="refineSection">
+            <ul class="searchLinks refineControls">
+                <li><a id="spatialSearch" href="#spatialSearch">Map Bounding Box</a></li>
+            </ul>
+        </div>
         <div class="modal" id="searchModal" style="display:none; max-height: none; width: 573px;">
             <div class="modal-header">
                 <button class="close" data-dismiss="modal">×</button>
                 <h2>Select an Area of Interest</h2>
             </div>
             <div class="modal-body">
+                <p>Pan and zoom using the mouse and wheel. Toggle the 
+                    <i>Draw Area of Interest</i> button to digitize an extent.</p>
                 <div id="searchMap"></div>
             </div>
         </div>
         
         <h3>When</h3>
         
-        <div class="refineSection">
+        <div id="temporalExtent" class="refineSection collapsed">
             <h5>Temporal Extent</h5>
-            <p>Format in yyyy-mm-dd. Omit days or months if desired. Press enter to search.</p>
-            <label for="time_start">Events begin after</label>
-            <input id="time_start" type="text" style="width:175px;">
-            <label for="time_end">Events end before</label>
-            <input id="time_end" type="text" style="width:175px;">
+            <ul class="searchLinks refineControls">
+                <li>
+                    <label for="time_start">Events begin after</label>
+                    <input id="time_start" type="text" style="width:175px;">
+                </li>
+                <li>
+                    <label for="time_end">Events end before</label>
+                    <input id="time_end" type="text" style="width:175px;">
+                </li>
+            </ul>
         </div>
         
-        <div class="refineSection expand">
+        <div class="refineSection collapsed">
             <h5>Date Added</h5>
             <ul id="byadded" class="searchLinks refineControls">
                 <li><a href="#today">Today</a>

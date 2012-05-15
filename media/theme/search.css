@@ -129,6 +129,10 @@
 ul.x-menu-list {
     margin: 0;
 }
+/* geoexplorer.css breaks this */
+.x-tip {
+    white-space: normal;
+}
 #search_results li.tile {
     float: left;
     display: block;
