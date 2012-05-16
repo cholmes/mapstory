@@ -10,8 +10,8 @@ Ext.onReady(function() {
     "<div class='actions' id='{_type}-{id}'></div>"+
     "</li>",
     ownerTemplate = "<li class='tile' id='item{iid}'><img class='thumb {thumbclass}' src='{thumb}'></img>" +
-    "<div class='infoBox'><div class='itemTitle'><a href='{detail}'>{title} {organization}</a></div>" +
-    "<div class='itemInfo'>{_display_type}, joined on {last_modified}</div>" +
+    "<div class='infoBox'><div class='itemTitle'><a href='{detail}'>{title}</a> <span class='org'>{organization}</span></div>" +
+    "<div class='itemInfo'>Joined on {last_modified}</div>" +
     "<div class='itemInfo'>{map_cnt} MapStories, {layer_cnt} StoryLayers</div>"+
     "<div class='itemAbstract'>{abstract}</div>"+
     "<div class='actions' id='{_type}-{id}'></div>"+
@@ -467,7 +467,7 @@ Ext.onReady(function() {
     
     new Ext.ToolTip({
         target:'temporalExtent',
-        html:'Format in yyyy-mm-dd. Omit days or months if desired. Press enter to search.'
+        html:'Format in yyyy-mm-dd. Omit days or months if desired. To specify dates BCE, specify a negative year. Press enter to search.'
     });
     Ext.get('time_start').on('keypress',searchByPeriod);
     Ext.get('time_end').on('keypress',searchByPeriod);
@@ -497,6 +497,7 @@ Ext.onReady(function() {
         reset();
     }
     var search = new Ext.form.ComboBox({
+        id           : 'ownerSearch',
         store        : authorStore,
         fieldLabel   : 'Author Name',
         displayField : 'name',

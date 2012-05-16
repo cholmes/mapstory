@@ -14,6 +14,9 @@
 #search_results li .itemAbstract {
     display: none;
 }
+#search_results .org {
+    color: #454238;
+}
 #search_results .thumb {
     width: 219px;
     height: 110px;
@@ -131,7 +134,7 @@ ul.x-menu-list {
 }
 /* geoexplorer.css breaks this */
 .x-tip {
-    white-space: normal;
+    white-space: normal !important;
 }
 #search_results li.tile {
     float: left;
@@ -186,6 +189,14 @@ ul.x-menu-list {
 }
 .refineSection.expand h5 {
     background: url('/static/static/externals/ext/resources/images/default/grid/group-collapse.gif') no-repeat 0 50%;
+}
+.refineSection label {
+    color: #F46817;
+    font-weight: bold;
+    font-size: 10.5px;
+}
+.refineSection input {
+    margin-bottom: 5px;
 }
 .pdf {        /* @todo */
 
