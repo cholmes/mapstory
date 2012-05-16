@@ -66,6 +66,11 @@ def get_map_carousel_maps():
     3. any map that has a thumbnail (current)
     '''
     
+    favorites = Favorite.objects.favorite_maps_for_user(User.objects.get(username='admin'))
+    if favorites.count():
+        favorites = random.sample(favorites, min(10,favorites.count()))
+        return [ f.content_object for f in favorites ]
+    
     # get all Map thumbnails
     thumb_type = ContentType.objects.get_for_model(Map)
     thumbs = Thumbnail.objects.filter(content_type__pk=thumb_type.id)

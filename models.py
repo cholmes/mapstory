@@ -148,6 +148,10 @@ class FavoriteManager(models.Manager):
     def favorites_for_user(self, user):
         return self.filter(user=user)
     
+    def favorite_maps_for_user(self, user):
+        content_type = ContentType.objects.get_for_model(Map)
+        return self.favorites_for_user(user).filter(content_type=content_type)
+    
     def create_favorite(self, content_object, user):
         content_type = ContentType.objects.get_for_model(type(content_object))
         favorite = Favorite(
