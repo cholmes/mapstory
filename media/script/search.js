@@ -166,9 +166,6 @@ Ext.onReady(function() {
             Ext.Ajax.request({
                 url: this.getAttribute('href'),
                 method: 'POST',
-                defaultHeaders : {
-                    "X-CSRFToken" : Ext.util.Cookies.get('csrftoken')
-                },
                 success: callback
             })
         });
