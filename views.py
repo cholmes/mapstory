@@ -67,7 +67,7 @@ def get_map_carousel_maps():
     '''
     
     favorites = Favorite.objects.favorite_maps_for_user(User.objects.get(username='admin'))
-    if favorites.count():
+    if favorites.count() > 3:
         favorites = random.sample(favorites, min(10,favorites.count()))
         return [ f.content_object for f in favorites ]
     
