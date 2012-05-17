@@ -34,6 +34,7 @@ $(function () {
             quicksearch.find('input').focus();
             quicksearch.unbind('keypress',nixSearchLabel);
         }
+        quicksearch.find('label').click(nixSearchLabel);
         quicksearch.keypress(nixSearchLabel);
         quicksearch.keypress(nixSearchLabel);
     }
