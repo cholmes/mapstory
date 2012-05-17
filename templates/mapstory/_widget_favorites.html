@@ -1,8 +1,9 @@
-{% if not favorites and not in_progress %}
+{% if not favorites and not in_progress_maps or not in_progress_layers %}
 You have not selected any favorites.
 {% endif %}
 
 {% if favorites %}
+<h4>Favorites</h4>
 <ul>
 {% for f in favorites %}
     <li>
@@ -13,10 +14,21 @@ You have not selected any favorites.
 </ul>
 {% endif %}
 
-{% if in_progress %}
+{% if in_progress_maps %}
 <h4>MapStories In Progress</h4>
 <ul>
-{% for f in in_progress %}
+{% for f in in_progress_maps %}
+    <li>
+        <a href="{{ f.get_absolute_url }}">{{ f.title }}</a>
+    </li>
+{% endfor %}
+</ul>
+{% endif %}
+
+{% if in_progress_layers %}
+<h4>StoryLayers In Progress</h4>
+<ul>
+{% for f in in_progress_layers %}
     <li>
         <a href="{{ f.get_absolute_url }}">{{ f.title }}</a>
     </li>

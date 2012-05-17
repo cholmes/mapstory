@@ -34,7 +34,8 @@ def index(req):
     # 1) don't specify publish and one will randomly be chosen
     # 2) specify one or more publish links and one will be chosen
     
-    users = User.objects.exclude(username__in=settings.USERS_TO_EXCLUDE_IN_LISTINGS)
+    #users = User.objects.exclude(username__in=settings.USERS_TO_EXCLUDE_IN_LISTINGS)
+    users = []
     
     return render_to_response('index.html', RequestContext(req,{
         "video" : VideoLink.objects.front_page_video(),
@@ -100,7 +101,7 @@ def favoriteslinks(req):
     layer_or_map, id = ident.split('-')
     if layer_or_map == 'map':
         obj = get_object_or_404(Map, pk = id)
-        maps = PublishingStatus.objects.get_in_progress(req.user)
+        maps = PublishingStatus.objects.get_in_progress(req.user,Map)
     elif layer_or_map == 'layer':
         obj = get_object_or_404(Layer, pk = id)
         maps = None
@@ -169,15 +170,16 @@ def set_section(req):
     return HttpResponse('OK', status=200)
 
 @login_required
-def publish_status(req,id,status):
+def publish_status(req, layer_or_map, layer_or_map_id):
     if req.method != 'POST':
         return HttpResponse('POST required',status=400)
-    mapobj = get_object_or_404(Map, id=id)
-    if mapobj.owner != req.user and not req.user.has_perm('mapstory.change_section', mapobj):
+    if layer_or_map == 'map':
+        obj = get_object_or_404(Map, pk = layer_or_map_id)
+    else:
+        obj = get_object_or_404(Layer, pk = layer_or_map_id)
+    if obj.owner != req.user and not req.user.has_perm('mapstory.change_publishingstatus', obj):
         return HttpResponse('Not sufficient permissions',status=401)
-    pubobj, _ = PublishingStatus.objects.get_or_create(map = mapobj)
-    pubobj.status = status
-    pubobj.save()
+    PublishingStatus.objects.set_status(obj, req.POST['status'])
     return HttpResponse('OK', status=200)
 
 @login_required
@@ -185,7 +187,7 @@ def add_to_map(req,id,typename):
     if req.method != 'POST':
         return HttpResponse('POST required',status=400)
     mapobj = get_object_or_404(Map, id=id)
-    if mapobj.owner != req.user and not req.user.has_perm('mapstory.change_section', mapobj):
+    if mapobj.owner != req.user and not req.user.has_perm('maps.change_map', mapobj):
         return HttpResponse('Not sufficient permissions',status=401)
     layer = get_object_or_404(Layer, typename=typename)
     existing = MapLayer.objects.filter(map = mapobj)
