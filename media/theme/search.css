@@ -126,7 +126,7 @@
     height: 32px;
     /* ha-ha */
     text-decoration: blink;
-    background: url('/static/static/externals/ext/resources/images/default/shared/blue-loading.gif') no-repeat 50% 0;
+    background: url('/static/geonode/externals/ext/resources/images/default/shared/blue-loading.gif') no-repeat 50% 0;
 }
 /* work around boilerplate setting of margin */
 ul.x-menu-list {
@@ -185,10 +185,10 @@ ul.x-menu-list {
     cursor: pointer;
 }
 .refineSection.collapsed h5 {
-    background: url('/static/static/externals/ext/resources/images/default/grid/group-expand.gif') no-repeat 0 50%;
+    background: url('/static/geonode/externals/ext/resources/images/default/grid/group-expand.gif') no-repeat 0 50%;
 }
 .refineSection.expand h5 {
-    background: url('/static/static/externals/ext/resources/images/default/grid/group-collapse.gif') no-repeat 0 50%;
+    background: url('/static/geonode/externals/ext/resources/images/default/grid/group-collapse.gif') no-repeat 0 50%;
 }
 .refineSection label {
     color: #F46817;
