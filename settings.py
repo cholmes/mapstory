@@ -80,7 +80,7 @@ USE_I18N = True
 MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'uploaded')
 
 MEDIA_URL = '/media/'
-STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
+STATIC_ROOT = os.path.join(PROJECT_ROOT, 'sitestatic')
 STATIC_URL = '/static/'
 GEONODE_UPLOAD_PATH = MEDIA_ROOT + 'geonode'
 GEONODE_CLIENT_LOCATION = STATIC_URL + 'static/'
@@ -94,7 +94,6 @@ STATICFILES_STORAGE = 'staticfiles.storage.StaticFilesStorage'
 STATICFILES_DIRS = [
     os.path.join(PROJECT_ROOT, 'media'),
     os.path.join(GEONODE_ROOT, "media"),
-    THUMBNAIL_STORAGE
 ]
 
 # Make this unique, and don't share it with anybody.
