@@ -83,7 +83,7 @@ MEDIA_URL = '/media/'
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'sitestatic')
 STATIC_URL = '/static/'
 GEONODE_UPLOAD_PATH = MEDIA_ROOT + 'geonode'
-GEONODE_CLIENT_LOCATION = STATIC_URL + 'static/'
+GEONODE_CLIENT_LOCATION = STATIC_URL + 'geonode/'
 THUMBNAIL_STORAGE = os.path.join(PROJECT_ROOT, 'thumbs')
 THUMBNAIL_URL = '/thumbs/'
 DEFAULT_MAP_THUMBNAIL = '%stheme/img/img_95x65.png' % STATIC_URL
@@ -93,7 +93,6 @@ STATICFILES_STORAGE = 'staticfiles.storage.StaticFilesStorage'
 # Additional directories which hold static files
 STATICFILES_DIRS = [
     os.path.join(PROJECT_ROOT, 'media'),
-    os.path.join(GEONODE_ROOT, "media"),
 ]
 
 # Make this unique, and don't share it with anybody.
