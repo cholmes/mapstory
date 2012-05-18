@@ -1,0 +1,16 @@
+<p>Publishing Status : <span style="font-weight: bold" id="current_publish_status">{{ current_status }}</span></p>
+<div class="btn-group" id="publish-dropdown">
+    <button class="btn dropdown-toggle" data-toggle="dropdown">
+        Change Status<span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu">
+        {% for s in publish_options %}
+        <li class="{% if current_status == s.value %}active{% endif %}"><a href="#{{s.key}}">{{s.value}}</a></li>
+        {% endfor %}
+    </ul>
+</div>
+<script type="text/javascript">
+{% autoescape off %}
+var publishing_url = "{% url publish_status publish_object_type publish_object.pk %}";
+{% endautoescape %}
+</script>

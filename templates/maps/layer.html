@@ -11,6 +11,7 @@
 {% include "geonode/app_header.html" %}
 {% include "geonode/geo_header.html" %}
 <script type="text/javascript" src="{{ STATIC_URL}}script/favorites.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL}}script/info.js"></script>
     <script type="text/javascript">
 {% autoescape off %}
         var styleEditor, modified = false;
@@ -167,24 +168,13 @@
                             </div>
                             {% csrf_token %}
                             </form>
+                            <hr/>
                             {% topic_selection layer %}
-                            <script type="text/javascript">
-                                $(function() {
-                                    $("#submit").click(function(ev) {
-                                        ev.preventDefault();
-                                        var form = $(this).closest('form');
-                                        $.post(
-                                            form.attr('action'),
-                                            form.serialize(),
-                                            function() {
-                                                alert('updated');
-                                            }
-                                        );
-                                    });
-                                });
-                            </script>
+                            <hr/>
                             <p>Generate a thumbnail for this map</p>
                             <a id="set_thumbnail" class="btn" href="#thumbnail">{% trans "Set thumbnail" %}</a>
+                            <hr/>
+                            {% publish_status layer %}
                             {% else %}
                             <label>Title:</label>
                             <p>{{ layer.title }}</p>
