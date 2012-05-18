@@ -110,6 +110,16 @@
 {% block extra_body %}
 <script type="text/javascript">
     var carouselTileURL = "{% url map_tiles %}";
+    $(function() {
+        var left = $(".span8 .box"),
+        padding = left.outerHeight(true) - left.height(),
+        target = $(".span4").height() - padding, 
+        other = $("#sections").children().first().outerHeight(true);
+        left.children().not("#sections").each(function(i,e) {
+            other += $(e).outerHeight(true);
+        });
+        $("#sections .tab-content").height(target - other);
+    });
 </script>
 <script type="text/javascript" src="{{ STATIC_URL }}script/carousel_jquery.js"></script>
 {% endblock %}

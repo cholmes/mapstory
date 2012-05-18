@@ -669,7 +669,6 @@ p.center {
 
 #sections .tab-content {
   overflow: auto;
-  height: 450px;
 }
 
 /** section tabs **/
@@ -742,7 +741,6 @@ section.hr-tabs .nav-tabs a:hover {
 }
 
 .author-list {
-    height: 450px;
     overflow: auto;
 }
 
@@ -925,11 +923,14 @@ h2.icn-storylayers, h2.icn-mapstories, h2.icn-storytellers {
 
 .storyteller img {
   float:left;
-  margin-right: 1em;
-  width: 100px;
+  margin-right: 10px;
+  height: 100px;
+  padding: 0 10px 15px 10px;
+}
+.storyteller > div {
+    padding-bottom:10px;
 }
 .storyteller {
-  padding: 0 1em 15px 1em;
   border-bottom: 1px solid #999;
   overflow:hidden;
   margin-bottom:15px;
