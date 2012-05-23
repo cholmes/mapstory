@@ -7,7 +7,8 @@ import functools
 import inspect
 
 _default_config = {
-    'LOG_DIR': tempfile.gettempdir()
+    'LOG_DIR': tempfile.gettempdir(),
+    'CONSOLE': True,
 }
 _config = {}
 
@@ -101,9 +102,9 @@ def _run_check(func, *args, **kw):
         func()
         logger.info('Check "%s" passed. Elapsed %.3f', func.__name__, time.time() - t)
     except CheckFailed, ex:
-        logger.warning('Check "%s" failed: \n%s', func.__name__, ex)
+        logger.warning('Check "%s" failed:\n%s', func.__name__, ex)
     except Exception, ex:
-        logger.warning('Check "%s" failed: \n%s', func.__name__, ex)
+        logger.warning('Check "%s" failed:\n%s', func.__name__, ex)
         logger.exception('Exception')
     if ex and 'restart_on_error' in kw:
         raise RestartRequired()
@@ -173,10 +174,16 @@ def _send_mail():
 def _run_suite(func):
     log_file = '%s/%s-watchdog.log' % (_config['LOG_DIR'], func.__module__)
     _log_files.append(log_file)
+
     _file_handler = logging.FileHandler(log_file)
     _file_handler.setLevel(logging.INFO)
-
     logger.handlers.append(_file_handler)
+
+    if _config['CONSOLE']:
+        console = logging.StreamHandler()
+        console.setLevel(logging.INFO)
+        logger.handlers.append(console)
+
     try:
         parts = func()
         for p in parts:
@@ -185,7 +192,7 @@ def _run_suite(func):
     except Exception, ex:
         if isinstance(ex, RestartRequired):
             raise ex
-        logger.exception('watchdog funtion error')
+        logger.exception('watchdog function error')
     finally:
         _file_handler.close()
         logger.handlers.remove(_file_handler)
