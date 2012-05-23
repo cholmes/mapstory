@@ -1,11 +1,13 @@
 from watchdog.core import *
 from geonode.maps.models import Layer
 from django.conf import settings
-import functools
 from urllib import urlopen
 
 def suite():
-    return get_capabilities, get_layer_capabilities
+    return (
+        #get_capabilities, 
+        get_layer_capabilities,
+    )
     
 @check
 def get_capabilities():
@@ -13,12 +15,22 @@ def get_capabilities():
     
 @check_many
 def get_layer_capabilities():
-    for l in Layer.objects.all().iterator():
-        func = functools.partial(_check_layer, l)
-        func.__name__ = l.typename
-        yield func
+    return (
+        subcheck(_check_layer_capabilities,l.typename,l) 
+        for l in Layer.objects.all().iterator()
+    )
+    
+@check_many
+def get_layer_has_latlon_bbox():
+    return (
+        subcheck(_check_layer,l.typename,l) for l in Layer.objects.all().iterator()
+    )
+    
+def _check_layer_latlon_bbox(layer):
+    if layer.resource.latlon_bbox is None:
+        raise CheckFailed('missing bbox')
             
-def _check_layer(layer):
+def _check_layer_capabilities(layer):
     try:
         layer.metadata()
         return
