@@ -52,14 +52,13 @@ def decorator(func):
     return func_wrapper
 
 
-@decorator
 def subcheck(func, name, *args, **kw):
     '''Create a subcheck function. When using `check_many`, return a sequence
     of `subcheck` functions'''
     # for now, just a wrapper around partial that assigns a check provided name
-    func = functools.partial(func, *args, **kw)
-    func.__subcheck__ = name
-    return func
+    fn = functools.partial(func, *args, **kw)
+    fn.__subcheck__ = name
+    return fn
 
 
 @decorator
@@ -72,7 +71,7 @@ def check(func, **kw):
 def check_many(func, **kw):
     '''Decorator to enable running multiple checks. The function must return
     a sequence of `subcheck` functions.'''
-    def outer(func):
+    def outer():
         many = func()
         for f in many:
             f.__name__ = '%s_%s' % (func.__name__, f.__subcheck__)

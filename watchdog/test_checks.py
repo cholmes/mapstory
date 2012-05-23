@@ -1,4 +1,5 @@
 from watchdog.core import check
+from watchdog.core import check_many
 from watchdog.core import subcheck
 
 
@@ -22,13 +23,12 @@ def test_single_fail():
     raise Exception('dang')
 
 
-@check
+@check_many
 def test_many():
     print 'test_many'
 
     def test(i):
         print 'test_many %s' % i
-        pass
 
     for i in range(5):
         yield subcheck(test, 'subtest', i)
