@@ -2,8 +2,11 @@ from itertools import chain
 import random
 import operator
 import re
+import logging
+import time
 
 from django.conf import settings
+from django.core.cache import cache
 from django.db import models
 from django.db.models import Count
 from django.db.models import signals
@@ -21,6 +24,15 @@ from geonode.maps.models import Contact
 from geonode.maps.models import Map
 from geonode.maps.models import Layer
 
+from hitcount.models import HitCount
+from agon_ratings.models import OverallRating
+from agon_ratings.categories import RATING_CATEGORY_LOOKUP
+
+_logger = logging.getLogger('mapstory.models')
+def _debug(msg,*args):
+    _logger.debug(msg,*args)
+_debug_enabled = _logger.isEnabledFor(logging.DEBUG)
+
 '''Settings API - allow regular expressions to filter our layer name results'''
 if hasattr(settings,'SIMPLE_SEARCH_EXCLUSIONS'):
     _exclude_patterns = settings.SIMPLE_SEARCH_EXCLUSIONS
@@ -30,6 +42,53 @@ _layer_name_filter = reduce(operator.or_,[ Q(name__regex=f) for f in _exclude_pa
 def filtered_layers():
     return Layer.objects.exclude(_layer_name_filter)
 Layer.objects.filtered = filtered_layers
+
+def get_view_cnt_for(obj):
+    '''Provide cached access to view cnts'''
+    return get_view_cnts(type(obj)).get(obj.id,0)
+
+def get_view_cnts(model):
+    '''Provide cached access to view counts for a given model.
+    The current approach is to cache all values. An alternate approach, should
+    there be too many, is to partition by 'id mod some bucket size'.
+    '''
+    key = 'view_cnt_%s' % model.__name__
+    cached = cache.get(key)
+    hit = True
+    if _debug_enabled:
+        ts = time.time()
+    if not cached:
+        hit = False
+        ctype = ContentType.objects.get_for_model(model)
+        hits = HitCount.objects.filter(content_type=ctype)
+        cached = dict([ (int(h.object_pk),h.hits) for h in hits])
+        cache.set(key,cached)
+    if _debug_enabled:
+        _debug('view cnts for %s in %s, cached: %s',model.__name__,time.time() - ts,hit)
+    return cached
+
+def get_ratings(model):
+    '''cached results for an objects rating'''
+    key = 'overall_rating_%s' % model.__name__
+    results = cache.get(key)
+    if not results:
+        # this next big is some hacky stuff related to rankings
+        choice = model.__name__.lower()
+        category = RATING_CATEGORY_LOOKUP.get(
+            "%s.%s-%s" % (model._meta.app_label, model._meta.object_name, choice)
+        ) 
+        try:
+            ct = ContentType.objects.get_for_model(model)
+            ratings = OverallRating.objects.filter(
+                content_type = ct,
+                category = category
+            )
+            results = dict([ (r.object_id, r.rating) or 0 for r in ratings])
+            cache.set(key, results)
+        except OverallRating.DoesNotExist:
+            return {}
+    return results
+
 
 class SectionManager(models.Manager):
     def sections_with_maps(self):

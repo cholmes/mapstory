@@ -260,9 +260,10 @@ form#quicksearch {
   font-size:13px;
 }
 
-#carousel .tile .views {
-  font-weight:bold;
+.viewcnt i {
+  font-style: normal;
 }
+
 #carousel .arrow {
   cursor: pointer;
   top: 40%;
@@ -1046,6 +1047,8 @@ article h3 {
 .video-actions.tabbable {
   overflow:hidden;
   margin-top: 10px;
+  clear: both;
+
 }
 
 .video-actions.tab-content {
@@ -1100,19 +1103,20 @@ article h3 {
   color:#e26a13;
 }
 
-.video-actions .metrics {
+.story-detail .metrics {
   width:95px;
   float:right;
   text-align:right;
+  height:26px;
 }
 
-.video-actions .metrics .views {
+.story-detail .metrics .viewcnt {
   display:block;
   font-size:9px;
   font-weight:bold;
 }
 
-.video-actions .metrics .views i {
+.story-detail .metrics .viewcnt i {
   font-size:17px;
   font-style:normal;
 }

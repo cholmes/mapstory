@@ -69,7 +69,11 @@ Ext.onReady(function() {
             <div class="box mrg-btm describe-object">
                 <div class="story-detail">
                     <div id="embedded_map"></div>
-
+                    <div class="metrics">
+                        {% map_view_hitcount map %}
+                        {% overall_rating map "map" as map_rating %}
+                        <span class="overall_rating" data-rating="{{ map_rating }}"></span>
+                    </div>
                     <div class="video-actions tabbable">
                         <ul class="actions-links nav nav-tabs fancyfont">
                             <li><a href="#describemap" class="icn info active" data-toggle="pill">Info</a></li>
@@ -79,10 +83,7 @@ Ext.onReady(function() {
                             <li><a href="#actions4" class="icn flag" data-toggle="pill">Flag</a></li>
                             <li><a href="#actions5" class="icn add" data-toggle="pill">Add</a></li>
                         </ul>
-                        <div class="metrics">
-                            {% overall_rating map "map" as map_rating %}
-                            <span class="overall_rating" data-rating="{{ map_rating }}"></span>
-                        </div>
+                        
                     </div>
                     <div class="video-actions tab-content">
                         <div class="tab-pane" id="describemap">
@@ -197,4 +198,5 @@ $(function() {
 })();
 </script>
 {% include "_fb_include.html" %}
+{% map_view_hitcount_tracker request map %}
 {% endblock %}

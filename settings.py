@@ -231,6 +231,7 @@ INSTALLED_APPS = (
     'django.contrib.webdesign',
     'django.contrib.staticfiles',
     'django_extensions',
+    'hitcount',
     'registration',
     'profiles',
     'avatar',
@@ -298,6 +299,10 @@ DESIGN_MODE = False
 ENABLE_ANALYTICS = False
 
 AVATAR_DEFAULT_URL = "theme/img/storyteller.png"
+
+HITCOUNT_KEEP_HIT_ACTIVE = { 'days': 1 }
+HITCOUNT_HITS_PER_IP_LIMIT = 0
+HITCOUNT_EXCLUDE_USER_GROUP = ( 'Editor', )
 
 try:
     from local_settings import *
