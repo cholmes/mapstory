@@ -1,6 +1,6 @@
-from watchdog.core import check
-from watchdog.core import check_many
-from watchdog.core import subcheck
+from mapstory.watchdog.core import check
+from mapstory.watchdog.core import check_many
+from mapstory.watchdog.core import subcheck
 
 
 def suite():

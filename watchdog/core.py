@@ -119,12 +119,18 @@ def _run_watchdog_suites(*suites):
 
     _config.update(_conf)
 
+    if _config['CONSOLE']:
+        root = logging.getLogger("")
+        if not any([isinstance(h, logging.StreamHandler) for h in root.handlers]):
+            console = logging.StreamHandler()
+            root.handlers.append(console)
+
     # resulve suite module
     suite_funcs = []
     for s in suites:
-        module_name = 'watchdog.%s' % s
+        module_name = 'mapstory.watchdog.%s' % s
         try:
-            module = __import__(module_name, fromlist=['*'])
+            module = __import__(module_name, fromlist=['*'], level=0)
         except ImportError:
             logger.exception('error importing')
             raise Exception('no suite found for: %s' % s)
@@ -177,11 +183,6 @@ def _run_suite(func):
     _file_handler = logging.FileHandler(log_file)
     _file_handler.setLevel(logging.INFO)
     logger.handlers.append(_file_handler)
-
-    if _config['CONSOLE']:
-        console = logging.StreamHandler()
-        console.setLevel(logging.INFO)
-        logger.handlers.append(console)
 
     try:
         parts = func()
