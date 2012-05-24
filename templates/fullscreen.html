@@ -1,6 +1,14 @@
 {% extends 'geonode/templates/fullscreen.html' %}
+{% load mapstory_tags %}
 
 {% block head %}
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}theme/geonode.css" />
 {{ block.super }}
+<script type="text/javascript">
+{# hitcount library uses jquery, but core.js is not loaded for this page, so... #}
+$(document).ajaxSend(function(event, xhr, settings) {
+    xhr.setRequestHeader("X-CSRFToken", Ext.util.Cookies.get('csrftoken')); 
+});
+</script>
+{% map_view_hitcount_tracker request map %}
 {% endblock %}

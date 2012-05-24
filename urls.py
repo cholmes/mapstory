@@ -6,7 +6,7 @@ from geonode.sitemap import LayerSitemap, MapSitemap
 from geonode.proxy.urls import urlpatterns as proxy_urlpatterns
 from mapstory.models import *
 from mapstory.forms import ProfileForm
-from geonode.maps.models import *
+from hitcount.views import update_hit_count_ajax
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
@@ -54,7 +54,9 @@ urlpatterns += patterns('mapstory.views',
     url(r'^mapstory/add-to-map/(?P<id>\d+)/(?P<typename>[:\w]+)','add_to_map',name='add_to_map'),
     url(r'^search/favoriteslinks$','favoriteslinks',name='favoriteslinks'),
     url(r'^search/favoriteslist$','favoriteslist',name='favoriteslist'),
-    
+
+    url(r'^ajax/hitcount/$', update_hit_count_ajax, name='hitcount_update_ajax'),
+
     # for now, direct-to-template but should be in database
     url(r"^mapstory/thoughts/jonathan-marino", direct_to_template, {"template": "mapstory/thoughts.html",
         "extra_context" : {'html':'mapstory/thoughts/jm.html'}}, name="thoughts-jm"),

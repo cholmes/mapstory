@@ -2,11 +2,11 @@ Ext.onReady(function() {
     var start = 0,
     limit = 10,
     loadnotify = Ext.get('loading'),
-    itemTemplate = "<li class='tile' id='item{iid}'><img class='thumb {thumbclass}' src='{thumb}'></img>" +
+    itemTemplate = "<li class='tile' id='item{iid}'><a href='{detail}'><img class='thumb {thumbclass}' src='{thumb}'></img></a>" +
     "<div class='infoBox'><div class='itemTitle'><a href='{detail}'>{title}</a></div>" +
     "<div class='itemInfo'>{_display_type}, by <a href='{owner_detail}'>{owner}</a> on {last_modified}</div>" +
     "<div class='itemAbstract'>Abstract: {abstract}</div>"+
-    "<div class='rating'>{rating} stars</div>"+
+    "<div class='rating'>{views} Views | {rating} stars <span class='more'>More &#9656;</span></div>"+
     "<div class='actions' id='{_type}-{id}'></div>"+
     "</li>",
     ownerTemplate = "<li class='tile' id='item{iid}'><img class='thumb {thumbclass}' src='{thumb}'></img>" +
@@ -94,7 +94,7 @@ Ext.onReady(function() {
             click: handleSave
         };
         Ext.each(results.rows,function(r,i) {
-            var item;
+            var item, more;
             if (r.thumb == null) {
                 r.thumb = static_url + "theme/img/silk/map.png";
                 r.thumbclass = "missing";
@@ -113,9 +113,12 @@ Ext.onReady(function() {
                     html: r['abstract']
                 });
             }
-            item.select('.thumb').item(0).on('click',function(ev) {
-                expandTile(this.parent());
-            });
+            more = item.select('.more');
+            if (more.getCount()) {
+                more.item(0).on('click',function(ev) {
+                    expandTile(this.parent('.tile'));
+                });
+            }
         });
     }
     

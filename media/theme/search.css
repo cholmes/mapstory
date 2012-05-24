@@ -56,6 +56,9 @@
     height: 173px;
     width: auto;
 }
+#bigtile .more {
+    display: none;
+}
 #search_results #bigtile .infoBox {
     float: right;
     width: 333px;
@@ -72,11 +75,11 @@
     background: #454238;
     padding: 10px;
 }
-#favorites-container #searchForm {
+#searchForm {
     margin: 0;
     padding: 0;
 }
-#favorites-container #searchForm input {
+#searchForm input {
     margin: 0;
     padding: 0;
     background: url("/static/theme/img/icons/search.png") no-repeat scroll 194px center #FFFFFF;
@@ -96,6 +99,11 @@
 }
 #favorites li btn {
     margin-right: 5px;
+}
+.more {
+    float: right;
+    margin-right: 1em;
+    cursor: pointer;
 }
 .searchLinks li {
     list-style: none;

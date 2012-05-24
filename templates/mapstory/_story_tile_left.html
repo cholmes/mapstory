@@ -12,7 +12,7 @@
         <time pubdate datetime="{{ when|date:"Y-m-d" }}">on {{ when|date:"N j Y" }}</time>
         <footer>
             {% overall_rating map "map" as map_rating %}
-            <span class="rating">{{ map_rating }} stars</span>
+            {% map_view_hitcount map %}&nbsp;|&nbsp;<span class="rating">{{ map_rating }} stars</span>
         </footer>
     </div>
 </article>
