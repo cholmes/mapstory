@@ -37,4 +37,4 @@ def test_many():
 @check(restart_on_error=True)
 def test_restart():
     print 'test_restart'
-    raise Exception('failure')
+    raise Exception('test restart failure')

@@ -106,7 +106,7 @@ def _run_check(func, *args, **kw):
         logger.warning('Check "%s" failed:\n%s', func.__name__, ex)
         logger.exception('Exception')
     if ex and 'restart_on_error' in kw:
-        raise RestartRequired()
+        raise RestartRequired(ex)
 
 
 def _run_watchdog_suites(*suites):
