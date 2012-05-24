@@ -6,7 +6,7 @@ Ext.onReady(function() {
     "<div class='infoBox'><div class='itemTitle'><a href='{detail}'>{title}</a></div>" +
     "<div class='itemInfo'>{_display_type}, by <a href='{owner_detail}'>{owner}</a> on {last_modified}</div>" +
     "<div class='itemAbstract'>Abstract: {abstract}</div>"+
-    "<div class='rating'>{views} Views | {rating} stars <span class='more'>More &#9656;</span></div>"+
+    "<div class='rating'>{views} Views | {rating} stars <span class='more'>More &#9660;</span></div>"+
     "<div class='actions' id='{_type}-{id}'></div>"+
     "</li>",
     ownerTemplate = "<li class='tile' id='item{iid}'><img class='thumb {thumbclass}' src='{thumb}'></img>" +
@@ -138,7 +138,7 @@ Ext.onReady(function() {
         } else if (col == 2) {
             cls = cls + ' three';
         }
-        Ext.DomHelper.append(newTile,{tag:'span',html:'&#9651;',cls:cls});
+        Ext.DomHelper.append(newTile,{tag:'span',html:'&#9650;',cls:cls});
         if (favorites_links_url) {
             ident = newTile.query('.actions')[0].id;
             Ext.Ajax.request({
