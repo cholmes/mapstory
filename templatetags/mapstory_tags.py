@@ -51,6 +51,9 @@ def active_sub_nav(request, pattern):
 def map_view_hitcount_tracker(req, obj):
     #obj may be an empty string as the newmap view also calls this but
     #with no map object
+    if req.session.session_key is None:
+        req.session.save()
+    print 'sessionkey',req.session.session_key
     if obj and req.user is not obj.owner:
         return loader.render_to_string("maps/_widget_hitcount.html",{'obj': obj})
    
