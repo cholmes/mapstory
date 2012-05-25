@@ -9,6 +9,46 @@
 $(document).ajaxSend(function(event, xhr, settings) {
     xhr.setRequestHeader("X-CSRFToken", Ext.util.Cookies.get('csrftoken')); 
 });
+$(function() {
+    {# some good old workarounds #}
+    $("#login-form-pop form").addClass('selfclear').parent().css('position','fixed');
+
+    $('#login-area a').click(function(e) {
+        e.preventDefault();
+        $("#login-form-pop").toggle();
+    });
+    $("#login-form-pop button").click(function(e) {
+        var form = $("#login-form-pop form");
+        e.preventDefault();
+        {# timeline comes with it's on jquery library embedded ATM, use older pre-1.5 ajax #}
+        $.ajax({
+            url : form.attr('action'),
+            type : 'POST',
+            data : form.serialize(),
+            success: function(data,status,xhr) {
+                $('.loginmsg').hide();
+                if (status == 'success') {
+                    $('#login-area a').html('Signed in');
+                    //window.location.reload();
+                } else {
+                    alert(data);
+                }
+                $("#login-form-pop").toggle();
+            },
+            error: function(data,status,xhr) {
+                if (status == 'error') {
+                    $('.loginmsg').text('Invalid login').slideDown();
+                }
+            }
+        })
+    })
+})
+
 </script>
 {% map_view_hitcount_tracker request map %}
+{% endblock %}
+
+{% block body %}
+{{ block.super }}
+{% include "_login_form.html" %}
 {% endblock %}
