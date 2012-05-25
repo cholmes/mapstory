@@ -1,10 +1,33 @@
-{% extends 'geonode/templates/fullscreen.html' %}
+{% load i18n %}
 {% load mapstory_tags %}
+<html>
+<head>
 
-{% block head %}
-<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}theme/geonode.css" />
-{{ block.super }}
-<script type="text/javascript">
+    <title>{% block title %}MapStory{% endblock %}</title>
+    <link rel="shortcut icon" href="{{ STATIC_URL }}theme/img/favicon.ico"/>
+    {% block head %}
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}theme/geonode.css" />
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}theme/site.css" />
+    <style type="text/css">
+#header .wrap {
+    width: 100%;
+}
+#login-area a {
+    display: inline;
+}
+#login-link {
+    margin-right: 1em;
+}
+#login-area {
+    color: white;
+}
+#login-area {
+    width: 20em;
+}
+    </style>
+    <script type="text/javascript" src="{% url django.views.i18n.javascript_catalog %}"></script>
+    <script type="text/javascript" src="{% url lang %}"></script>
+    <script type="text/javascript">
 {# hitcount library uses jquery, but core.js is not loaded for this page, so... #}
 $(document).ajaxSend(function(event, xhr, settings) {
     xhr.setRequestHeader("X-CSRFToken", Ext.util.Cookies.get('csrftoken')); 
@@ -13,9 +36,16 @@ $(function() {
     {# some good old workarounds #}
     $("#login-form-pop form").addClass('selfclear').parent().css('position','fixed');
 
-    $('#login-area a').click(function(e) {
+    $('#login-link').click(function(e) {
         e.preventDefault();
-        $("#login-form-pop").toggle();
+        var href = $(this).attr('href');
+        if (href[0] == '/') {
+            $.post(href,{},function(d,s,x) {
+                window.location.reload();
+            })
+        } else {
+            $(href).toggle();
+        }
     });
     $("#login-form-pop button").click(function(e) {
         var form = $("#login-form-pop form");
@@ -28,8 +58,7 @@ $(function() {
             success: function(data,status,xhr) {
                 $('.loginmsg').hide();
                 if (status == 'success') {
-                    $('#login-area a').html('Signed in');
-                    //window.location.reload();
+                    $('#login-area a').replaceWith('<span id="login-link">Signed in</span>');
                 } else {
                     alert(data);
                 }
@@ -43,12 +72,27 @@ $(function() {
         })
     })
 })
-
-</script>
-{% map_view_hitcount_tracker request map %}
-{% endblock %}
-
-{% block body %}
-{{ block.super }}
-{% include "_login_form.html" %}
-{% endblock %}
+    </script>
+    {% map_view_hitcount_tracker request map %}
+    {% endblock %}
+</head>
+<body>
+    {% block body %} 
+    <div id="header">
+      <div class="wrap selfclear">
+        <a id="logo" href="{% url geonode.views.index %}">MapStory</a>
+        <div id="login-area">
+          {% if user.is_authenticated %}
+          <a id="login-link" href="{% url auth_logout %}">{% trans "Log out" %}</a>
+          <div class="user"><a href="{% url about_storyteller user.username %}">Welcome {{ user.username }}</a></div>
+          {% else %}
+          <!-- this should be updated to a url var --><a id="login-link" href="#login-form-pop">{% trans "Sign in" %}</a>
+          {% if REGISTRATION_OPEN %} {% trans "or" %} <a href="{% url registration_register %}">{% trans "Register" %}</a>{% endif %}
+          {% endif %}
+        </div>
+        {% include "_login_form.html" %}
+      </div><!-- /.wrap -->
+    </div><!-- /#header -->
+    {% endblock %}
+</body>
+</html>

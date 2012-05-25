@@ -60,17 +60,6 @@ section {
   visibility: hidden;
 }
 
-/* fix map viewer page */
-html.x-viewport #header .wrap {
-    width: 100%;
-}
-html.x-viewport #login-area a {
-    display: inline;
-}
-html.x-viewport #login-area {
-    width: 20em;
-}
-
 #login-link {
   -moz-border-radius: .5em;
   -webkit-border-radius: .5em;

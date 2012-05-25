@@ -27,9 +27,6 @@
     <script type="text/javascript" src="{{ GEONODE_CLIENT_LOCATION }}externals/ext/adapter/ext/ext-base.js"></script>
     <script type="text/javascript" src="{{ GEONODE_CLIENT_LOCATION }}externals/ext/ext-all.js"></script>
     <!--<link rel="stylesheet" type="text/css" href="{{ GEONODE_CLIENT_LOCATION }}externals/ext/resources/css/xtheme-access.css" />-->
-    <script type="text/javascript">
-    Ext.BLANK_IMAGE_URL = "{{ GEONODE_CLIENT_LOCATION }}externals/ext/resources/images/default/s.gif";
-    </script>
     <script type="text/javascript" src="{% url django.views.i18n.javascript_catalog %}"></script>
     <script type="text/javascript" src="{% url lang %}"></script>
     {% block extra_head %}{% endblock %}
@@ -57,26 +54,7 @@
             <input name="q" value="" autocomplete="off"/>
             </form>
         </div>
-        <div id="login-form-pop">
-            <div class="drop-pointer"></div>
-            <form action="{% url geonode.views.ajax_login %}" method="POST" class="clearfix">
-                {% csrf_token %}
-                <label for="username">Username:</label>
-                <input name="username" type="text" />
-                <label for="password">Password:</label>
-                <input name="password" type="password" />
-                <div></div>
-                {% comment %}
-                <label for="remember" class="checkbox">
-                    <input name="remember" type="checkbox" />
-                    Remember me
-                </label>
-                {% endcomment %}
-                <p class="loginmsg alert"></p>
-                <button type="submit" class="btn">Sign In</button>
-                {# <p>Don't have an account yet? <a href="#">Register now</a></p> #}
-            </form>
-        </div>
+        {% include "_login_form.html" %}
       </div><!-- /.wrap -->
     </div><!-- /#header -->
     <div id="top-crossbar">
