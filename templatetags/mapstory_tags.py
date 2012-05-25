@@ -4,7 +4,6 @@ from django.template import RequestContext
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from django.conf import settings
-from django.contrib.contenttypes.models import ContentType
 from geonode.maps.models import Map
 from geonode.maps.models import Layer
 from mapstory.models import Section
@@ -13,7 +12,6 @@ from mapstory.models import PublishingStatus
 from mapstory.models import PUBLISHING_STATUS_PRIVATE
 from mapstory.models import PUBLISHING_STATUS_LINK
 from mapstory.models import PUBLISHING_STATUS_PUBLIC
-from hitcount.models import HitCount
 from mapstory.models import get_view_cnt_for
 
 import re
@@ -52,6 +50,7 @@ def map_view_hitcount_tracker(req, obj):
     #obj may be an empty string as the newmap view also calls this but
     #with no map object
     if req.session.session_key is None:
+        req.session['__created'] = True
         req.session.save()
     if obj and req.user is not obj.owner:
         return loader.render_to_string("maps/_widget_hitcount.html",{'obj': obj})
