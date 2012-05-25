@@ -73,11 +73,12 @@ Ext.onReady(function() {
     }
 
     function appendResults(results) {
+        var read, saveListeners, i;
         fetching = false;
         loadnotify.hide();
         results = Ext.util.JSON.decode(results.responseText);
         totalQueryCount = results.total;
-        var read = store.reader.readRecords(results);
+        read = store.reader.readRecords(results);
         if (read.records.length == 0) {
             if (start == 0) {
                 Ext.DomHelper.append(list,'<li class="noresults"><h4 class="center">No Results</h4></li>');
@@ -90,7 +91,7 @@ Ext.onReady(function() {
         }
         store.add(read.records);
         updateDisplaying();
-        var saveListeners = {
+        saveListeners = {
             click: handleSave
         };
         Ext.each(results.rows,function(r,i) {
@@ -120,6 +121,10 @@ Ext.onReady(function() {
                 });
             }
         });
+        i = 3 - read.records.length;
+        while (i-- > 0) {
+            Ext.DomHelper.append(list,'<li class="tile"></li>')
+        }
     }
     
     function expandTile(tile) {
@@ -362,12 +367,17 @@ Ext.onReady(function() {
     function expandSection(el) {
         el.select('.refineControls').slideIn('t',{useDisplay:true});
     }
-    function collapseSection(el) {
-        el.select('.refineControls').slideOut('t',{useDisplay:true});
+    function collapseSection(el, hide) {
+        var controls = el.select('.refineControls');
+        if (hide) {
+            controls.setVisibilityMode(Ext.Element.DISPLAY).hide()
+        } else {
+            controls.slideOut('t',{useDisplay:true});
+        }
     }
     Ext.select('.refineSection').each(function(e,i) {
         if (e.hasClass('collapsed')) {
-            collapseSection(e);
+            collapseSection(e,true);
         }
         var h = e.first('h5');
         if (h) {
