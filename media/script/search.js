@@ -331,9 +331,13 @@ Ext.onReady(function() {
             start = Ext.get('time_start').getValue(),
             end =  Ext.get('time_end').getValue(),
             value = start + "," + end;
-            queryItems[key] =  start + "," + end;
             Ext.select('#refineSummary .' + type.replace(' ','_')).remove();
-            addActiveFilter(type,key,start + " to " + end,value,false);
+            if (start || end) {
+                queryItems[key] =  start + "," + end;
+                addActiveFilter(type,key,start + " to " + end,value,false);
+            } else {
+                delete queryItems[key];
+            }
             reset();
         }
     }
