@@ -49,7 +49,9 @@ def active_sub_nav(request, pattern):
 
 @register.simple_tag
 def map_view_hitcount_tracker(req, obj):
-    if req.user is not obj.owner:
+    #obj may be an empty string as the newmap view also calls this but
+    #with no map object
+    if obj and req.user is not obj.owner:
         return loader.render_to_string("maps/_widget_hitcount.html",{'obj': obj})
    
     
