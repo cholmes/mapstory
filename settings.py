@@ -243,6 +243,7 @@ INSTALLED_APPS = (
     'geonode.proxy',
     'geonode.simplesearch',
     'geonode',
+    'mapstory.watchdog',
 )
 
 def get_user_url(u):

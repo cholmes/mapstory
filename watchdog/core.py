@@ -1,6 +1,8 @@
 from django.conf import settings
 from django.core.mail import EmailMessage
 from mapstory.watchdog.handlers import MemoryHandler
+from mapstory.watchdog.models import Run
+from mapstory.watchdog.models import get_current_state
 import functools
 import inspect
 import logging
@@ -32,6 +34,9 @@ _messages = []
 
 # log files to email
 _log_files = []
+
+# keep track of errors as they come in from check function
+_errors = []
 
 
 # swiped from http://wiki.python.org/moin/PythonDecoratorLibrary#Creating_Well-Behaved_Decorators_.2BAC8_.22Decorator_decorator.22
@@ -113,9 +118,11 @@ def _run_check(func, *args, **kw):
         logger.info('Check "%s" passed. Elapsed %.3f', func.__name__, time.time() - t)
     except CheckFailed, ex:
         logger.warning('Check "%s" failed:\n%s', func.__name__, ex)
+        _errors.append(ex)
     except Exception, ex:
         logger.warning('Check "%s" failed:\n%s', func.__name__, ex)
-        logger.exception('Exception: %s -> %s' (type(ex), ex))
+        logger.exception('Exception: %s -> %s' % (type(ex).__name__, ex))
+        _errors.append(ex)
     if ex and 'restart_on_error' in kw:
         raise RestartRequired(ex)
 
@@ -165,6 +172,26 @@ def _run_watchdog_suites(*suites):
 
     if _config['SEND_EMAILS']():
         _send_mails()
+
+    # keep track of state from runs in database
+
+    current_log = memory_handler.contents()
+    is_error = bool(_errors)
+    if is_error:
+        separator = '\n\n%s\n\n' % ('=' * 80)
+        errors = separator.join([str(error) for error in _errors])
+    else:
+        errors = None
+
+    current_state = get_current_state()
+    current_state.is_error = is_error
+    current_state.save()
+
+    run = Run(suites='\n'.join(suites),
+              log=current_log,
+              is_error=is_error,
+              errors=errors)
+    run.save()
 
 
 def _message(msg):
