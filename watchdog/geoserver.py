@@ -10,7 +10,7 @@ from xml.etree.ElementTree import fromstring
 
 def suite():
     return (
-        #get_capabilities,
+        get_capabilities,
         get_layer_capabilities,
     )
 
