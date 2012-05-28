@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.core.mail import EmailMessage
+from mapstory.watchdog.handlers import MemoryHandler
 import functools
 import inspect
 import logging
@@ -19,6 +20,10 @@ _config = {}
 logger = logging.getLogger('watchdog')
 logger.setLevel(logging.INFO)
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+
+memory_handler = MemoryHandler()
+memory_handler.setFormatter(formatter)
+logger.handlers.append(memory_handler)
 
 _file_handler = None
 
