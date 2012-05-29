@@ -59,6 +59,14 @@
 #bigtile .more {
     display: none;
 }
+#bigtile-close {
+    color: #8E9184;
+    float: right;
+    font-size: 32px;
+    font-weight: bold;
+    padding-right: 0.5em;
+    cursor: pointer;
+}
 #search_results #bigtile .infoBox {
     float: right;
     width: 333px;

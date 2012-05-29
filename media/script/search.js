@@ -143,6 +143,10 @@ Ext.onReady(function() {
         } else if (col == 2) {
             cls = cls + ' three';
         }
+        Ext.DomHelper.append(newTile.query('.itemTitle')[0],{tag:'span',html:'x',id:'bigtile-close'});
+        Ext.get('bigtile-close').on('click',function() {
+            Ext.get('bigtile').remove();
+        });
         Ext.DomHelper.append(newTile,{tag:'span',html:'&#9650;',cls:cls});
         if (favorites_links_url) {
             ident = newTile.query('.actions')[0].id;
