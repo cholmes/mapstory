@@ -99,6 +99,7 @@ STATICFILES_DIRS = [
 SECRET_KEY = 'myv-y4#7j-d*p-__@j#*3z@!y24fz8%^z2v6atuy4bo9vqr1_a'
 
 TEMPLATE_CONTEXT_PROCESSORS = (
+    "django.contrib.messages.context_processors.messages",
     "django.contrib.auth.context_processors.auth",
     "django.core.context_processors.debug",
     "django.core.context_processors.i18n",
@@ -110,7 +111,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',    
+    'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -230,6 +232,7 @@ INSTALLED_APPS = (
     'django.contrib.sitemaps',
     'django.contrib.webdesign',
     'django.contrib.staticfiles',
+    'django.contrib.messages',
     'django_extensions',
     'hitcount',
     'registration',
