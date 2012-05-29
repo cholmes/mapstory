@@ -215,9 +215,9 @@ class RelatedStoriesNode(template.Node):
             maps = sec.get_maps()
             if isinstance(obj, Map) and obj in maps:
                 maps.remove(obj)
-            result = "\n".join([
-                loader.render_to_string(template_name,{"map": m}) for m in maps
-            ])
+            result = "\n".join((
+                loader.render_to_string(template_name,{"map": m,"when":m.last_modified}) for m in maps
+            ))
         return result
     
 @register.tag
