@@ -318,7 +318,16 @@ def create_profile(instance, sender, **kw):
 def create_publishing_status(instance, sender, **kw):
     if kw['created']:
         PublishingStatus.objects.get_or_create_for(instance)
+        
+def create_hitcount(instance, sender, **kw):
+    if kw['created']:
+        content_type = ContentType.objects.get_for_model(instance)
+        HitCount.objects.create(content_type=content_type, object_pk=instance.pk)
 
 signals.post_save.connect(create_profile, sender=User)
 signals.post_save.connect(create_publishing_status, sender=Map)
 signals.post_save.connect(create_publishing_status, sender=Layer)
+
+# ensure hit count records are created up-front
+signals.post_save.connect(create_hitcount, sender=Map)
+signals.post_save.connect(create_hitcount, sender=Layer)
