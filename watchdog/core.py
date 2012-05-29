@@ -13,7 +13,7 @@ _default_config = {
     'CONSOLE': True,
     'FROM': 'watchdog@example.com',
     'TO': ['rob@example.com'],
-    'SEND_EMAILS': lambda: True,
+    'SEND_EMAILS': lambda: False,
 }
 _config = {}
 
