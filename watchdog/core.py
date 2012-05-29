@@ -171,7 +171,10 @@ def _run_watchdog_suites(*suites):
     if restart:
         _message('A restart was required: %s' % re)
         _restart()
-        _run_suites(suite_funcs)
+        try:
+            _run_suites(suite_funcs, after_restart=True)
+        except RestartRequired, re:
+            _message('Restarted geoserver, but check did not recover: %s' % re)
 
     if _config['SEND_EMAILS']():
         _send_mails()
@@ -202,9 +205,9 @@ def _message(msg):
     _messages.append(msg)
 
 
-def _run_suites(suite_funcs):
+def _run_suites(suite_funcs, after_restart=False):
     for s in suite_funcs:
-        _run_suite(s)
+        _run_suite(s, after_restart)
 
 
 def _restart():
@@ -250,8 +253,10 @@ def _send_mails():
             )
 
 
-def _run_suite(func):
-    log_file = '%s/%s-watchdog.log' % (_config['LOG_DIR'], func.__module__)
+def _run_suite(func, after_restart):
+    log_file = ('%s/%s-watchdog%s.log' %
+                (_config['LOG_DIR'], func.__module__,
+                 after_restart and '-after-restart' or ''))
     _log_files.append(log_file)
 
     _file_handler = logging.FileHandler(log_file)
