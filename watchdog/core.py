@@ -16,6 +16,7 @@ _default_config = {
     'FROM': 'watchdog@example.com',
     'TO': ['rob@example.com'],
     'SEND_EMAILS': lambda: False,
+    'GEOSERVER_LOG': '/var/lib/tomcat6/logs/geoserver.log',
 }
 _config = {}
 
@@ -123,6 +124,8 @@ def _run_check(func, *args, **kw):
         logger.warning('Check "%s" failed:\n%s', func.__name__, ex)
         logger.exception('Exception: %s -> %s' % (type(ex).__name__, ex))
         _errors.append(ex)
+        if isinstance(ex, RestartRequired):
+            raise ex
     if ex and 'restart_on_error' in kw:
         raise RestartRequired(ex)
 

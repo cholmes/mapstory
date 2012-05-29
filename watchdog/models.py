@@ -28,6 +28,17 @@ class Run(models.Model):
         return u'%s - %s' % (error_state, format_datestring(self.time))
 
 
+class Logfile(models.Model):
+    filepath = models.TextField(null=False, unique=True)
+    offset_start = models.IntegerField(null=False)
+    offset_end = models.IntegerField(null=False)
+    checksum = models.TextField(null=False)
+
+    def __unicode__(self):
+        return u'%s (%s, %s) -> %s' % (
+            self.filepath, self.offset_start, self.offset_end, self.checksum)
+
+
 def format_datestring(dateobject):
     # trim milliseconds off date
     return str(dateobject)[:19]
@@ -39,6 +50,16 @@ def create_initial_state():
     return state
 
 
+def create_logfile_model(filepath):
+    return Logfile(
+        filepath=filepath, offset_start=0, offset_end=0, checksum='')
+
+
 def get_current_state():
     states = CurrentState.objects.all().order_by('id')[:1]
     return states[0] if states else create_initial_state()
+
+
+def get_logfile_model(filepath):
+    logfiles = Logfile.objects.filter(filepath=filepath)
+    return logfiles[0] if logfiles else create_logfile_model(filepath)
