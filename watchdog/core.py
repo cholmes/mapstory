@@ -1,19 +1,30 @@
 from django.conf import settings
-
-import tempfile
-import logging
-import time
+from django.core.mail import EmailMessage
+from mapstory.watchdog.handlers import MemoryHandler
 import functools
 import inspect
+import logging
+import os
+import tempfile
+import time
 
 _default_config = {
     'LOG_DIR': tempfile.gettempdir(),
     'CONSOLE': True,
+    'FROM': 'watchdog@example.com',
+    'TO': ['rob@example.com'],
+    'SEND_EMAILS': lambda: False,
 }
 _config = {}
 
 logger = logging.getLogger('watchdog')
 logger.setLevel(logging.INFO)
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+
+memory_handler = MemoryHandler()
+memory_handler.setFormatter(formatter)
+logger.handlers.append(memory_handler)
+
 _file_handler = None
 
 # collect messages to email
@@ -104,7 +115,7 @@ def _run_check(func, *args, **kw):
         logger.warning('Check "%s" failed:\n%s', func.__name__, ex)
     except Exception, ex:
         logger.warning('Check "%s" failed:\n%s', func.__name__, ex)
-        logger.exception('Exception')
+        logger.exception('Exception: %s -> %s' (type(ex), ex))
     if ex and 'restart_on_error' in kw:
         raise RestartRequired(ex)
 
@@ -123,6 +134,7 @@ def _run_watchdog_suites(*suites):
         root = logging.getLogger("")
         if not any([isinstance(h, logging.StreamHandler) for h in root.handlers]):
             console = logging.StreamHandler()
+            console.setFormatter(formatter)
             root.handlers.append(console)
 
     # resulve suite module
@@ -151,6 +163,9 @@ def _run_watchdog_suites(*suites):
         _restart()
         _run_suites(suite_funcs)
 
+    if _config['SEND_EMAILS']():
+        _send_mails()
+
 
 def _message(msg):
     logger.info(msg)
@@ -171,9 +186,38 @@ def _restart():
     pass
 
 
-def _send_mail():
-    # todo
-    pass
+def _format_watchdog_subject(s):
+    return '[Watchdog] %s' % s
+
+
+def _send_with_attachments(subject, body):
+    msg = EmailMessage(
+        subject,
+        body,
+        _config['FROM'],
+        _config['TO'],
+        )
+    for filename in _log_files:
+        if os.path.exists(filename):
+            msg.attach_file(filename)
+        else:
+            logger.warn('Log file to attach not found: %s' % filename)
+    msg.send()
+
+
+def _send_mails():
+    # send out _messages and _log_files
+    if _messages:
+        for msg in _messages:
+            _send_with_attachments(
+                _format_watchdog_subject(msg),
+                msg,
+                )
+    else:
+        _send_with_attachments(
+            _format_watchdog_subject('Log files'),
+            'Log files',
+            )
 
 
 def _run_suite(func):
@@ -182,6 +226,7 @@ def _run_suite(func):
 
     _file_handler = logging.FileHandler(log_file)
     _file_handler.setLevel(logging.INFO)
+    _file_handler.setFormatter(formatter)
     logger.handlers.append(_file_handler)
 
     try:

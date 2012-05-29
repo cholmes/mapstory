@@ -1,16 +1,16 @@
 from django.conf import settings
 from geonode.maps.models import Layer
 from urllib import urlopen
-from watchdog.core import check
-from watchdog.core import check_many
-from watchdog.core import subcheck
-from watchdog.core import CheckFailed
+from mapstory.watchdog.core import check
+from mapstory.watchdog.core import check_many
+from mapstory.watchdog.core import subcheck
+from mapstory.watchdog.core import CheckFailed
 from xml.etree.ElementTree import fromstring
 
 
 def suite():
     return (
-        #get_capabilities,
+        get_capabilities,
         get_layer_capabilities,
     )
 
