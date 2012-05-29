@@ -3,7 +3,7 @@ import logging
 import time
 
 logger = logging.getLogger('mapstory.watchdog.watchmonkey')
-logger.setLevel(logging.INFO)
+logger.setLevel(logging.DEBUG)
 logger.handlers.append(logging.StreamHandler())
 
 
