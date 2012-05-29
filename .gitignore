@@ -6,6 +6,7 @@ local_settings.py
 *.pyc
 *.db
 .DS_Store
-static
+/static
+/sitestatic
 /thumbs/
 /uploaded/
