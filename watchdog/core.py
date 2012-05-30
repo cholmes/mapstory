@@ -1,6 +1,8 @@
 from django.conf import settings
 from django.core.mail import EmailMessage
 from mapstory.watchdog.handlers import MemoryHandler
+from mapstory.watchdog.models import Run
+from mapstory.watchdog.models import get_current_state
 import functools
 import inspect
 import logging
@@ -14,6 +16,7 @@ _default_config = {
     'FROM': 'watchdog@example.com',
     'TO': ['rob@example.com'],
     'SEND_EMAILS': lambda: False,
+    'GEOSERVER_LOG': '/var/lib/tomcat6/logs/geoserver.log',
 }
 _config = {}
 
@@ -32,6 +35,9 @@ _messages = []
 
 # log files to email
 _log_files = []
+
+# keep track of errors as they come in from check function
+_errors = []
 
 
 # swiped from http://wiki.python.org/moin/PythonDecoratorLibrary#Creating_Well-Behaved_Decorators_.2BAC8_.22Decorator_decorator.22
@@ -113,9 +119,13 @@ def _run_check(func, *args, **kw):
         logger.info('Check "%s" passed. Elapsed %.3f', func.__name__, time.time() - t)
     except CheckFailed, ex:
         logger.warning('Check "%s" failed:\n%s', func.__name__, ex)
+        _errors.append(ex)
     except Exception, ex:
         logger.warning('Check "%s" failed:\n%s', func.__name__, ex)
-        logger.exception('Exception: %s -> %s' (type(ex), ex))
+        logger.exception('Exception: %s -> %s' % (type(ex).__name__, ex))
+        _errors.append(ex)
+        if isinstance(ex, RestartRequired):
+            raise ex
     if ex and 'restart_on_error' in kw:
         raise RestartRequired(ex)
 
@@ -161,10 +171,33 @@ def _run_watchdog_suites(*suites):
     if restart:
         _message('A restart was required: %s' % re)
         _restart()
-        _run_suites(suite_funcs)
+        try:
+            _run_suites(suite_funcs, after_restart=True)
+        except RestartRequired, re:
+            _message('Restarted geoserver, but check did not recover: %s' % re)
 
     if _config['SEND_EMAILS']():
         _send_mails()
+
+    # keep track of state from runs in database
+
+    current_log = memory_handler.contents()
+    is_error = bool(_errors)
+    if is_error:
+        separator = '\n\n%s\n\n' % ('=' * 80)
+        errors = separator.join([str(error) for error in _errors])
+    else:
+        errors = None
+
+    current_state = get_current_state()
+    current_state.is_error = is_error
+    current_state.save()
+
+    run = Run(suites='\n'.join(suites),
+              log=current_log,
+              is_error=is_error,
+              errors=errors)
+    run.save()
 
 
 def _message(msg):
@@ -172,9 +205,9 @@ def _message(msg):
     _messages.append(msg)
 
 
-def _run_suites(suite_funcs):
+def _run_suites(suite_funcs, after_restart=False):
     for s in suite_funcs:
-        _run_suite(s)
+        _run_suite(s, after_restart)
 
 
 def _restart():
@@ -220,8 +253,10 @@ def _send_mails():
             )
 
 
-def _run_suite(func):
-    log_file = '%s/%s-watchdog.log' % (_config['LOG_DIR'], func.__module__)
+def _run_suite(func, after_restart):
+    log_file = ('%s/%s-watchdog%s.log' %
+                (_config['LOG_DIR'], func.__module__,
+                 after_restart and '-after-restart' or ''))
     _log_files.append(log_file)
 
     _file_handler = logging.FileHandler(log_file)
