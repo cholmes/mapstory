@@ -237,7 +237,12 @@ def _restart():
     cmd = _config['RESTART_COMMAND']
     logger.warn('Restarting using command: %s'
                 % ' '.join(cmd))
-    subprocess.call(cmd)
+    return_code = subprocess.call(cmd)
+    if return_code != 0:
+        logger.error('Failure executing restart command: %s'
+                     % ' '.join(cmd))
+        logger.error('Received error response code: %s' % return_code)
+        return False
 
     # instead of trying to detect whether tomcat shut down correctly,
     # sleep for a few seconds
