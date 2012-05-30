@@ -271,11 +271,11 @@ def _send_mails():
         for msg in _messages:
             _send_with_attachments(
                 _format_watchdog_subject(msg),
-                msg,
+                memory_handler.contents(),
                 )
     else:
         _send_with_attachments(
-            _format_watchdog_subject('Log files'),
+            _format_watchdog_subject('Log files of suite runs'),
             'Log files',
             )
 
