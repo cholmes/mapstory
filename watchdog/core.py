@@ -7,8 +7,10 @@ import functools
 import inspect
 import logging
 import os
+import subprocess
 import tempfile
 import time
+import urllib2
 
 _default_config = {
     'LOG_DIR': tempfile.gettempdir(),
@@ -17,6 +19,8 @@ _default_config = {
     'TO': ['rob@example.com'],
     'SEND_EMAILS': lambda: False,
     'GEOSERVER_LOG': '/var/lib/tomcat6/logs/geoserver.log',
+    'RESTART_COMMAND': ['/etc/init.d/tomcat6', 'restart'],
+    'GEOSERVER_BASE_URL': settings.GEOSERVER_BASE_URL,
 }
 _config = {}
 
@@ -170,11 +174,15 @@ def _run_watchdog_suites(*suites):
     # no restart in loop
     if restart:
         _message('A restart was required: %s' % re)
-        _restart()
-        try:
-            _run_suites(suite_funcs, after_restart=True)
-        except RestartRequired, re:
-            _message('Restarted geoserver, but check did not recover: %s' % re)
+        if _restart():
+            logger.info('Geoserver restart successful, rerunning suites')
+            try:
+                _run_suites(suite_funcs, after_restart=True)
+            except RestartRequired, re:
+                _message('Restarted geoserver, but check did not recover: %s' % re)
+        else:
+            logger.error('Failure Restarting Geoserver')
+            _message('Failure Restarting Geoserver')
 
     if _config['SEND_EMAILS']():
         _send_mails()
@@ -210,13 +218,32 @@ def _run_suites(suite_funcs, after_restart=False):
         _run_suite(s, after_restart)
 
 
-def _restart():
-    # use something defined in settings, like:
-    # tomcat_restart = 'service tomcat6 restart'
+def verify_geoserver_running(attempt=1):
+    if attempt > 5:
+        return False
+    try:
+        logger.info('Attempt %d at checking if geoserver is running' % attempt)
+        result = urllib2.urlopen(_config['GEOSERVER_BASE_URL'])
+        if result.getcode() != 200:
+            time.sleep(10)
+            return verify_geoserver_running(attempt=attempt + 1)
+    except Exception:
+        time.sleep(10)
+        return verify_geoserver_running(attempt=attempt + 1)
+    return True
 
-    # if restart fails - send email immediately
-    # todo
-    pass
+
+def _restart():
+    cmd = _config['RESTART_COMMAND']
+    logger.warn('Restarting using command: %s'
+                % ' '.join(cmd))
+    subprocess.call(cmd)
+
+    # instead of trying to detect whether tomcat shut down correctly,
+    # sleep for a few seconds
+    time.sleep(10)
+
+    return verify_geoserver_running(attempt=1)
 
 
 def _format_watchdog_subject(s):
