@@ -28,8 +28,8 @@
                         {% avatar storyteller %}
                         <section>
                             <ul>
-                                {% if p.email %}
-                                <li><a href="mailto:{{user.contact.email}}">{{ p.email }}</a></li>
+                                {% if p.blurb %}
+                                <li>{{ p.blurb }}</li>
                                 {% endif %}
                                 {% if p.voice %}
                                 <li>{{ p.voice }}</li>
