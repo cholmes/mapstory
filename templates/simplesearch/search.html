@@ -1,6 +1,7 @@
 {% extends "page_layout.html" %}
 {% load i18n %}
 {% load mapstory_tags %}
+{% load staticfiles %}
 
 {% block head_title %}Search{% endblock %}
 {% block body_class %}search{% endblock %}
@@ -14,16 +15,21 @@
     var init_search = {{ init_search }};
     var static_url = "{{ STATIC_URL }}";
     var search_url = "{% url new_search_api %}";
+    var author_api = "{% url search_api_author_list %}";
     {% if user.is_authenticated %}
     var favorites_links_url = "{% url favoriteslinks %}";
+    var favorites_list_url = "{% url favoriteslist %}";
     {% else %}
     var favorites_links_url = null;
     {% endif %}
     
     {% endautoescape %}
 </script>
-<script type="text/javascript" src="{{ STATIC_URL}}script/search.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL}}script/favorites.js"></script>
+{% include "geonode/app_header.html" %}
+{% include "geonode/geo_header.html" %}
+<script type="text/javascript" src="{% static "script/search.js" %}"></script>
+<script type="text/javascript" src="{% static "script/favorites.js" %}"></script>
+<script src="{% static "bootstrap/js/bootstrap-modal.js" %}"></script>
 {% endblock %}
 
 {% block extra_head %}
@@ -45,7 +51,6 @@
                 <input id="searchField" name="search">
             </form>
             {% if user.is_authenticated %}
-            <h5 style="color:#F46817">Favorites</h5>
             <div id="favorites">
                 {% favorites %}
             </div>
@@ -58,12 +63,15 @@
         <div id="refineSummary" title="Click to remove a filter">
             <h5 style="display:none">Current Filters</h5>
         </div>
+        
+        <h3>What</h3>
             
         <div class="refineSection expand">
             <h5>Type</h5>
             <ul id="bytype" class="searchLinks refineControls">
                 <li><a href="#map">MapStories</a></li>
                 <li><a href="#layer">StoryLayers</a>
+                <li><a href="#owner">StoryTellers</a>
                     <!--
                     <ul style="margin-left:.5em">
                         <li><a href="#dataStore">Vector</a></li>
@@ -92,6 +100,57 @@
                 {% endfor %}
             </ul>
         </div>
+        
+        <h3>Where</h3>
+        
+        <div class="refineSection">
+            <ul class="searchLinks refineControls">
+                <li><a id="spatialSearch" href="#spatialSearch">Map Bounding Box</a></li>
+            </ul>
+        </div>
+        <div class="modal" id="searchModal" style="display:none; max-height: none; width: 573px;">
+            <div class="modal-header">
+                <button class="close" data-dismiss="modal">×</button>
+                <h2>Select an Area of Interest</h2>
+            </div>
+            <div class="modal-body">
+                <p>Pan and zoom using the mouse and wheel. Toggle the 
+                    <i>Draw Area of Interest</i> button to digitize an extent.</p>
+                <div id="searchMap"></div>
+            </div>
+        </div>
+        
+        <h3>When</h3>
+        
+        <div id="temporalExtent" class="refineSection collapsed">
+            <h5>Temporal Extent</h5>
+            <ul class="searchLinks refineControls">
+                <li>
+                    <label for="time_start">Events begin after</label>
+                    <input id="time_start" type="text" style="width:175px;">
+                </li>
+                <li>
+                    <label for="time_end">Events end before</label>
+                    <input id="time_end" type="text" style="width:175px;">
+                </li>
+            </ul>
+        </div>
+        
+        <div class="refineSection collapsed">
+            <h5>Date Added</h5>
+            <ul id="byadded" class="searchLinks refineControls">
+                <li><a href="#today">Today</a>
+                <li><a href="#week">This Week</a>
+                <li><a href="#month">This Month</a>
+            </ul>
+        </div>
+            
+        <h3>Who</h3>
+        
+        <div class="refineSection">
+            <label for="ownerSearch">StoryTeller</label>
+            <div id='who'></div>
+        </div>
             
         </div>
     </div>
@@ -102,12 +161,12 @@
             <form id="sortForm">
                 <strong>sort by</strong>
                 <select name="sortby">
-                    <option disabled="true" value="relevance">Relevance</option>
+<!--                    <option disabled="true" value="relevance">Relevance</option>-->
                     <option value="newest" selected="true">Newest</option>
                     <option value="oldest">Oldest</option>
                     <option value="alphaaz">Alphabetical (A-Z)</option>
                     <option value="alphaza">Alphabetical (Z-A)</option>
-                    <option disabled="true" value="popularity">Popularity</option>
+                    <option value="popularity">Popularity</option>
                 </select>
             </form>
             <div id="search_results"><ul></ul><div class="clearfix"></div></div>

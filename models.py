@@ -1,9 +1,16 @@
 from itertools import chain
 import random
+import operator
+import re
+import logging
+import time
 
+from django.conf import settings
+from django.core.cache import cache
 from django.db import models
 from django.db.models import Count
 from django.db.models import signals
+from django.db.models import Q
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.core.urlresolvers import reverse
@@ -11,9 +18,77 @@ from django.template import defaultfilters
 
 from django.contrib.auth.models import User
 
+from geonode.core.models import AUTHENTICATED_USERS
+from geonode.core.models import ANONYMOUS_USERS
 from geonode.maps.models import Contact
 from geonode.maps.models import Map
 from geonode.maps.models import Layer
+
+from hitcount.models import HitCount
+from agon_ratings.models import OverallRating
+from agon_ratings.categories import RATING_CATEGORY_LOOKUP
+
+_logger = logging.getLogger('mapstory.models')
+def _debug(msg,*args):
+    _logger.debug(msg,*args)
+_debug_enabled = _logger.isEnabledFor(logging.DEBUG)
+
+'''Settings API - allow regular expressions to filter our layer name results'''
+if hasattr(settings,'SIMPLE_SEARCH_EXCLUSIONS'):
+    _exclude_patterns = settings.SIMPLE_SEARCH_EXCLUSIONS
+    _exclude_regex = [ re.compile(e) for e in _exclude_patterns ]
+_layer_name_filter = reduce(operator.or_,[ Q(name__regex=f) for f in _exclude_patterns])
+
+def filtered_layers():
+    return Layer.objects.exclude(_layer_name_filter)
+Layer.objects.filtered = filtered_layers
+
+def get_view_cnt_for(obj):
+    '''Provide cached access to view cnts'''
+    return get_view_cnts(type(obj)).get(obj.id,0)
+
+def get_view_cnts(model):
+    '''Provide cached access to view counts for a given model.
+    The current approach is to cache all values. An alternate approach, should
+    there be too many, is to partition by 'id mod some bucket size'.
+    '''
+    key = 'view_cnt_%s' % model.__name__
+    cached = cache.get(key)
+    hit = True
+    if _debug_enabled:
+        ts = time.time()
+    if not cached:
+        hit = False
+        ctype = ContentType.objects.get_for_model(model)
+        hits = HitCount.objects.filter(content_type=ctype)
+        cached = dict([ (int(h.object_pk),h.hits) for h in hits])
+        cache.set(key,cached)
+    if _debug_enabled:
+        _debug('view cnts for %s in %s, cached: %s',model.__name__,time.time() - ts,hit)
+    return cached
+
+def get_ratings(model):
+    '''cached results for an objects rating'''
+    key = 'overall_rating_%s' % model.__name__
+    results = cache.get(key)
+    if not results:
+        # this next big is some hacky stuff related to rankings
+        choice = model.__name__.lower()
+        category = RATING_CATEGORY_LOOKUP.get(
+            "%s.%s-%s" % (model._meta.app_label, model._meta.object_name, choice)
+        ) 
+        try:
+            ct = ContentType.objects.get_for_model(model)
+            ratings = OverallRating.objects.filter(
+                content_type = ct,
+                category = category
+            )
+            results = dict([ (r.object_id, r.rating) or 0 for r in ratings])
+            cache.set(key, results)
+        except OverallRating.DoesNotExist:
+            return {}
+    return results
+
 
 class SectionManager(models.Manager):
     def sections_with_maps(self):
@@ -70,10 +145,10 @@ class Section(models.Model):
         return x
     
     def get_maps(self):
-        return self._children('maps', publish__status='Public')
+        return self._children('maps', publish__status=PUBLISHING_STATUS_PUBLIC)
         
     def get_layers(self):
-        return self._children('layers')
+        return self._children('layers', publish__status=PUBLISHING_STATUS_PUBLIC)
     
     def save(self,*args,**kw):
         slugtext = self.name.replace('&','and')
@@ -181,45 +256,78 @@ class Favorite(models.Model):
     def __unicode__(self):
         return "%s likes %s" % (self.user, self.content_object)
     
-_MAP_PUBLISHING_IN_PROGRESS = "In Progress"
-_MAP_PUBLISHING_PUBLIC = "Public"
-_MAP_PUBLISHING_CHOICES = [
-    (_MAP_PUBLISHING_IN_PROGRESS,_MAP_PUBLISHING_IN_PROGRESS),
-    (_MAP_PUBLISHING_PUBLIC,_MAP_PUBLISHING_PUBLIC),
+PUBLISHING_STATUS_PRIVATE = "Private"
+PUBLISHING_STATUS_LINK = "Link"
+PUBLISHING_STATUS_PUBLIC = "Public"
+PUBLISHING_STATUS_CHOICES = [
+    (PUBLISHING_STATUS_PRIVATE,PUBLISHING_STATUS_PRIVATE),
+    (PUBLISHING_STATUS_LINK,PUBLISHING_STATUS_LINK),
+    (PUBLISHING_STATUS_PUBLIC,PUBLISHING_STATUS_PUBLIC)
 ]
 
 class PublishingStatusMananger(models.Manager):
-    def get_public(self, user):
-        return Map.objects.filter(owner=user, publish__status=_MAP_PUBLISHING_PUBLIC)
-    def get_in_progress(self, user):
-        return Map.objects.filter(owner=user, publish__status=_MAP_PUBLISHING_IN_PROGRESS)
-    def set_status(self, mapobj, status):
-        status = self.get_or_create(map_obj)
-        status.status = status
-        status.save()
-    def set_public(self,map_obj):
-        self.set_status(_MAP_PUBLISHING_PUBLIC)
-    def set_in_progress(self,map_obj):
-        self.set_status(_MAP_PUBLISHING_IN_PROGRESS)
+    def get_public(self, user, model):
+        return model.objects.filter(owner=user, publish__status=PUBLISHING_STATUS_PUBLIC)
+    def get_in_progress(self, user, model):
+        if model == Layer:
+            # don't show annotations
+            q = model.objects.filtered()
+        else:
+            q = model.objects.all()
+        q = q.filter(owner=user)
+        return q.exclude(publish__status=PUBLISHING_STATUS_PUBLIC)
+    def get_or_create_for(self, obj):
+        if isinstance(obj, Map):
+            status, _ = self.get_or_create(map=obj)
+        else:
+            status, _ = self.get_or_create(layer=obj)
+        return status
+    def set_status(self, obj, status):
+        stat = self.get_or_create_for(obj)
+        stat.status = status
+        stat.save()
 
 class PublishingStatus(models.Model):
+    '''This is a denormalized model - could have gone with a content-type
+    but it seemed to make the queries much more complex than needed.
+    
+    Each entry should either have a map or a layer.
+    '''
+    
     objects = PublishingStatusMananger()
     
-    map = models.OneToOneField(Map,related_name='publish')
-    status = models.CharField(max_length=16,choices=_MAP_PUBLISHING_CHOICES,default=_MAP_PUBLISHING_IN_PROGRESS)
+    map = models.OneToOneField(Map,related_name='publish',null=True)
+    layer = models.OneToOneField(Layer,related_name='publish',null=True)
+    status = models.CharField(max_length=8,choices=PUBLISHING_STATUS_CHOICES,default=PUBLISHING_STATUS_PRIVATE)
     
-    def get_toggle_value(self):
-        if self.status == _MAP_PUBLISHING_IN_PROGRESS: 
-            return _MAP_PUBLISHING_PUBLIC
-        return _MAP_PUBLISHING_IN_PROGRESS
+    def save(self,*args,**kw):
+        obj = self.layer or self.map
+        level = obj.LEVEL_READ
+        if self.status == PUBLISHING_STATUS_PRIVATE:
+            level = obj.LEVEL_NONE
+        obj.set_gen_level(ANONYMOUS_USERS, level)
+        obj.set_gen_level(AUTHENTICATED_USERS, level)
+        obj.set_user_level(obj.owner, obj.LEVEL_ADMIN)
+        models.Model.save(self,*args)
+
     
 def create_profile(instance, sender, **kw):
     if kw['created']:
         ContactDetail.objects.create(user = instance)
-        
+
 def create_publishing_status(instance, sender, **kw):
     if kw['created']:
-        PublishingStatus.objects.create(map = instance)
+        PublishingStatus.objects.get_or_create_for(instance)
         
+def create_hitcount(instance, sender, **kw):
+    if kw['created']:
+        content_type = ContentType.objects.get_for_model(instance)
+        HitCount.objects.create(content_type=content_type, object_pk=instance.pk)
+
 signals.post_save.connect(create_profile, sender=User)
 signals.post_save.connect(create_publishing_status, sender=Map)
+signals.post_save.connect(create_publishing_status, sender=Layer)
+
+# ensure hit count records are created up-front
+signals.post_save.connect(create_hitcount, sender=Map)
+signals.post_save.connect(create_hitcount, sender=Layer)

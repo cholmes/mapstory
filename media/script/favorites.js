@@ -1,5 +1,5 @@
 $(function() {
-    $(".rm-favorite").click(function(ev) {
+    $(document).on('click',".rm-favorite",function(ev) {
         var el = $(this);
         ev.preventDefault();
         $.post(el.attr('href'),function() {

@@ -4,12 +4,15 @@ from django.template import RequestContext
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from django.conf import settings
-
 from geonode.maps.models import Map
 from geonode.maps.models import Layer
 from mapstory.models import Section
 from mapstory.models import Favorite
 from mapstory.models import PublishingStatus
+from mapstory.models import PUBLISHING_STATUS_PRIVATE
+from mapstory.models import PUBLISHING_STATUS_LINK
+from mapstory.models import PUBLISHING_STATUS_PUBLIC
+from mapstory.models import get_view_cnt_for
 
 import re
 
@@ -41,6 +44,32 @@ def active_sub_nav(request, pattern):
     if pattern and re.match(pattern, request.path):
         return 'active_nav'
     return ''
+
+@register.simple_tag
+def map_view_hitcount_tracker(req, obj):
+    #obj may be an empty string as the newmap view also calls this but
+    #with no map object
+    if req.session.session_key is None:
+        req.session['__created'] = True
+        req.session.save()
+    if obj and req.user is not obj.owner:
+        return loader.render_to_string("maps/_widget_hitcount.html",{'obj': obj})
+   
+    
+@register.simple_tag
+def map_view_hitcount(obj):
+    hits = get_view_cnt_for(obj)
+    return "<span class='viewcnt'><i>%s</i> Views</span>" % _group(hits)
+
+def _group(number):
+    '''this could be replaced by '{:,}'.format but this is 2.6 compatible'''
+    s = '%d' % number
+    groups = []
+    while s and s[-1].isdigit():
+        groups.append(s[-3:])
+        s = s[:-3]
+    return s + ','.join(reversed(groups))
+
 
 @register.tag
 def map_info_tile(parser, token):
@@ -83,6 +112,36 @@ class AboutStoryTellerNode(template.Node):
         obj = context[self.obj_name]
         template_name = "maps/_widget_about_storyteller.html"
         return loader.render_to_string(template_name,{'map':obj})
+    
+@register.tag
+def publish_status(parse, token):
+    try:
+        tokens = token.split_contents()
+        tag_name = tokens.pop(0)
+        obj_name = tokens.pop(0)
+    except ValueError:
+        raise template.TemplateSyntaxError, "%r tag requires a single argument" % token.contents.split()[0]
+    return PublishStatusNode(obj_name)
+
+class PublishStatusNode(template.Node):
+    def __init__(self, obj_name):
+        self.obj_name = obj_name
+        options = [
+            (PUBLISHING_STATUS_PRIVATE,"Only visible to me"),
+            (PUBLISHING_STATUS_LINK,"Anyone with a link can view"),
+            (PUBLISHING_STATUS_PUBLIC,"Anyone can search for and view"),
+        ]
+        self.options = [ dict(key=o[0],value=o[1]) for o in options ]
+    def render(self, context):
+        obj = context[self.obj_name]
+        template_name = "maps/_widget_publish_status.html"
+        current_status = [ o['value'] for o in self.options if o['key'] == obj.publish.status ][0]
+        return loader.render_to_string(template_name,{
+            'publish_object': obj,
+            'publish_options' : self.options,
+            'current_status' : current_status,
+            'publish_object_type': isinstance(obj, Map) and 'map' or 'layer'
+        })
     
 @register.tag
 def topic_selection(parse, token):
@@ -156,9 +215,9 @@ class RelatedStoriesNode(template.Node):
             maps = sec.get_maps()
             if isinstance(obj, Map) and obj in maps:
                 maps.remove(obj)
-            result = "\n".join([
-                loader.render_to_string(template_name,{"map": m}) for m in maps
-            ])
+            result = "\n".join((
+                loader.render_to_string(template_name,{"map": m,"when":m.last_modified}) for m in maps
+            ))
         return result
     
 @register.tag
@@ -174,9 +233,12 @@ class FavoritesNode(template.Node):
     def render(self, context):
         template_name = "mapstory/_widget_favorites.html"
         user = context['user']
+        maps = PublishingStatus.objects.get_in_progress(user,Map)
+        layers = PublishingStatus.objects.get_in_progress(user,Layer)
         ctx = {
             "favorites" : Favorite.objects.favorites_for_user(user),
-            "in_progress" : Map.objects.filter(owner=user, publish__status='In Progress')
+            "in_progress_maps" : maps,
+            "in_progress_layers" : layers
         }
         return loader.render_to_string(template_name,ctx)
     
@@ -220,7 +282,7 @@ class AddToMapNode(template.Node):
         user = context['user']
         template_name = 'mapstory/_widget_add_to_map.html'
         return loader.render_to_string(template_name,{
-            'maps' : PublishingStatus.objects.get_in_progress(user), # user.map_set.all()
+            'maps' : PublishingStatus.objects.get_in_progress(user,Map), # user.map_set.all()
             'layer' : layer
         })
 
@@ -244,10 +306,10 @@ class ByStoryTellerNode(template.Node):
         else:
             user = obj.owner
         template_name = "maps/_widget_by_storyteller.html"
-        layers = user.layer_set.all()
+        layers = PublishingStatus.objects.get_public(user, Layer)
         for e in settings.LAYER_EXCLUSIONS:
             layers = layers.exclude(name__regex=e)
-        maps = set(PublishingStatus.objects.get_public(user))
+        maps = set(PublishingStatus.objects.get_public(user, Map))
         #@todo could make query more efficient/explicit to exclude map
         if obj in maps:
             maps.remove(obj)

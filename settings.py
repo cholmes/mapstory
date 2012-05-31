@@ -80,42 +80,27 @@ USE_I18N = True
 MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'uploaded')
 
 MEDIA_URL = '/media/'
-STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
+STATIC_ROOT = os.path.join(PROJECT_ROOT, 'sitestatic')
 STATIC_URL = '/static/'
 GEONODE_UPLOAD_PATH = MEDIA_ROOT + 'geonode'
-GEONODE_CLIENT_LOCATION = STATIC_URL + 'static/'
+GEONODE_CLIENT_LOCATION = STATIC_URL + 'geonode/'
 THUMBNAIL_STORAGE = os.path.join(PROJECT_ROOT, 'thumbs')
 THUMBNAIL_URL = '/thumbs/'
 DEFAULT_MAP_THUMBNAIL = '%stheme/img/img_95x65.png' % STATIC_URL
-ADMIN_MEDIA_PREFIX = STATIC_URL + 'admin/'
 
 STATICFILES_STORAGE = 'staticfiles.storage.StaticFilesStorage'
 
 # Additional directories which hold static files
 STATICFILES_DIRS = [
     os.path.join(PROJECT_ROOT, 'media'),
-    os.path.join(GEONODE_ROOT, "media"),
-    THUMBNAIL_STORAGE
 ]
-
-# URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
-# trailing slash.
-# Examples: "http://foo.com/media/", "/media/".
-ADMIN_MEDIA_PREFIX = os.path.join(STATIC_URL, "admin/")
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 'myv-y4#7j-d*p-__@j#*3z@!y24fz8%^z2v6atuy4bo9vqr1_a'
 
-# List of callables that know how to import templates from various sources.
-TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.load_template_source',
-    'django.template.loaders.app_directories.load_template_source',
-    #'django.template.loaders.eggs.load_template_source',
-    'django.template.loaders.app_directories.Loader',
-)
-
 TEMPLATE_CONTEXT_PROCESSORS = (
-    "django.core.context_processors.auth",
+    "django.contrib.messages.context_processors.messages",
+    "django.contrib.auth.context_processors.auth",
     "django.core.context_processors.debug",
     "django.core.context_processors.i18n",
     "django.core.context_processors.media",
@@ -126,7 +111,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',    
+    'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -245,18 +231,22 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.sitemaps',
     'django.contrib.webdesign',
-    'staticfiles',
+    'django.contrib.staticfiles',
+    'django.contrib.messages',
     'django_extensions',
+    'hitcount',
     'registration',
     'profiles',
     'avatar',
     'dialogos',
     'agon_ratings',
+    'mapstory',
     'geonode.core',
     'geonode.maps',
     'geonode.proxy',
+    'geonode.simplesearch',
     'geonode',
-    'mapstory'
+    'mapstory.watchdog',
 )
 
 def get_user_url(u):
@@ -311,6 +301,12 @@ USERS_TO_EXCLUDE_IN_LISTINGS = []
 DESIGN_MODE = False
 
 ENABLE_ANALYTICS = False
+
+AVATAR_DEFAULT_URL = "theme/img/storyteller.png"
+
+HITCOUNT_KEEP_HIT_ACTIVE = { 'days': 1 }
+HITCOUNT_HITS_PER_IP_LIMIT = 0
+HITCOUNT_EXCLUDE_USER_GROUP = ( 'Editor', )
 
 try:
     from local_settings import *

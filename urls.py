@@ -6,7 +6,7 @@ from geonode.sitemap import LayerSitemap, MapSitemap
 from geonode.proxy.urls import urlpatterns as proxy_urlpatterns
 from mapstory.models import *
 from mapstory.forms import ProfileForm
-from geonode.maps.models import *
+from hitcount.views import update_hit_count_ajax
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
@@ -50,10 +50,13 @@ urlpatterns += patterns('mapstory.views',
     url(r'^favorite/map/(?P<id>\d+)$','favorite',{'layer_or_map':'map'}, name='add_favorite_map'),
     url(r'^favorite/layer/(?P<id>\d+)$','favorite',{'layer_or_map':'layer'}, name='add_favorite_layer'),
     url(r'^favorite/(?P<id>\d+)/delete$','delete_favorite',name='delete_favorite'),
-    url(r'^mapstory/public/(?P<id>\d+)/(?P<status>[ \w]+)','publish_status',name='publish_status'),
+    url(r'^mapstory/publish/(?P<layer_or_map>\w+)/(?P<layer_or_map_id>\d+)$','publish_status',name='publish_status'),
     url(r'^mapstory/add-to-map/(?P<id>\d+)/(?P<typename>[:\w]+)','add_to_map',name='add_to_map'),
     url(r'^search/favoriteslinks$','favoriteslinks',name='favoriteslinks'),
-    
+    url(r'^search/favoriteslist$','favoriteslist',name='favoriteslist'),
+
+    url(r'^ajax/hitcount/$', update_hit_count_ajax, name='hitcount_update_ajax'),
+
     # for now, direct-to-template but should be in database
     url(r"^mapstory/thoughts/jonathan-marino", direct_to_template, {"template": "mapstory/thoughts.html",
         "extra_context" : {'html':'mapstory/thoughts/jm.html'}}, name="thoughts-jm"),
@@ -66,14 +69,6 @@ urlpatterns += patterns('mapstory.views',
 
     # ugh, overrides
     url(r'^(?P<layername>[^/]*)/metadata$', 'layer_metadata', name="layer_metadata"),
-
-    # temp urls
-    url(r"^mapstory/story/", direct_to_template, {"template": "mapstory/story_detail.html"}, name="story"),
-    url(r"^mapstory/manage/", direct_to_template, {"template": "mapstory/story_manage.html"}, name="story_manage"),
-    url(r"^mapstory/storyteller/", direct_to_template, {"template": "mapstory/storyteller_detail.html"}, name="storyteller"),
-    url(r"^search/search-mapstories/", direct_to_template, {"template": "search/search_mapstories.html"}, name="search_mapstories"),
-    url(r"^layer/manage/", direct_to_template, {"template": "mapstory/layer_manage.html"}, name="layer_manage"),
-    url(r"^map/", direct_to_template, {"template": "maps/map_detail.html"}, name="map_detail"),
 )
 
 urlpatterns += proxy_urlpatterns

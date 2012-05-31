@@ -12,6 +12,7 @@
 {% include "geonode/app_header.html" %}
 {% include "geonode/geo_header.html" %}
 <script type="text/javascript" src="{{ STATIC_URL}}script/favorites.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL}}script/info.js"></script>
 {{ block.super }}
 <script type="text/javascript">
 var app;
@@ -68,7 +69,11 @@ Ext.onReady(function() {
             <div class="box mrg-btm describe-object">
                 <div class="story-detail">
                     <div id="embedded_map"></div>
-
+                    <div class="metrics">
+                        {% map_view_hitcount map %}
+                        {% overall_rating map "map" as map_rating %}
+                        <span class="overall_rating" data-rating="{{ map_rating }}"></span>
+                    </div>
                     <div class="video-actions tabbable">
                         <ul class="actions-links nav nav-tabs fancyfont">
                             <li><a href="#describemap" class="icn info active" data-toggle="pill">Info</a></li>
@@ -78,10 +83,7 @@ Ext.onReady(function() {
                             <li><a href="#actions4" class="icn flag" data-toggle="pill">Flag</a></li>
                             <li><a href="#actions5" class="icn add" data-toggle="pill">Add</a></li>
                         </ul>
-                        <div class="metrics">
-                            {% overall_rating map "map" as map_rating %}
-                            <span class="overall_rating" data-rating="{{ map_rating }}"></span>
-                        </div>
+                        
                     </div>
                     <div class="video-actions tab-content">
                         <div class="tab-pane" id="describemap">
@@ -99,43 +101,15 @@ Ext.onReady(function() {
                             <div>
                                 <button class="btn" id="submit">Update Information</button>
                             </div>
-                            {% topic_selection map %}
                             {% csrf_token %}
+                            </form>
+                            <hr/>
+                            {% topic_selection map %}
+                            <hr/>
                             <p>Generate a thumbnail for this map</p>
                             <a id="set_thumbnail" class="btn" href="#thumbnail">{% trans "Set thumbnail" %}</a>
-                            </form>
-                            <script type="text/javascript">
-                                $(function() {
-                                    $("#submit").click(function(ev) {
-                                        ev.preventDefault();
-                                        var form = $(this).closest('form');
-                                        form.find('.errorlist').fadeOut();
-                                        $.post(
-                                            form.attr('action'),
-                                            form.serialize(),
-                                            function() {
-                                                alert('Updated');
-                                            }
-                                        ).error(function(ev) {
-                                            $(ev.responseText).appendTo(form);
-                                        });
-                                    });
-                                    $("#publish_status").click(function(ev) {
-                                        ev.preventDefault();
-                                        $.post(
-                                            $(this).attr('href'),
-                                            function() {
-                                                $("#publish_info").fadeOut();
-                                            }
-                                        )
-                                    });
-                                });
-                            </script>
-                            <div id="publish_info">
-                            <p>Publish this map (or not):</p>
-                            <p>The current status is <b>{{map.publish.status}}</b></p>
-                            <a id="publish_status" href="{% url publish_status map.id map.publish.get_toggle_value %}" class="btn">Make {{map.publish.get_toggle_value}}</a>
-                            </div>
+                            <hr/>
+                            {% publish_status map %}
                             {% else %}
                             <label>Title:</label>
                             <p>{{ map.title }}</p>
@@ -223,4 +197,6 @@ $(function() {
     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
 })();
 </script>
+{% include "_fb_include.html" %}
+{% map_view_hitcount_tracker request map %}
 {% endblock %}

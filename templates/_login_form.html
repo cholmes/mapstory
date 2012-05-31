@@ -1,0 +1,20 @@
+<div id="login-form-pop">
+    <div class="drop-pointer"></div>
+    <form action="{% url geonode.views.ajax_login %}" method="POST" class="clearfix">
+        {% csrf_token %}
+        <label for="username">Username:</label>
+        <input name="username" type="text" />
+        <label for="password">Password:</label>
+        <input name="password" type="password" />
+        <div></div>
+        {% comment %}
+        <label for="remember" class="checkbox">
+            <input name="remember" type="checkbox" />
+            Remember me
+        </label>
+        {% endcomment %}
+        <p class="loginmsg alert"></p>
+        <button type="submit" class="btn">Sign In</button>
+        {# <p>Don't have an account yet? <a href="#">Register now</a></p> #}
+    </form>
+</div>
