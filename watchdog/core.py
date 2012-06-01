@@ -17,7 +17,6 @@ _default_config = {
     'CONSOLE': True,
     'FROM': 'watchdog@example.com',
     'TO': ['rob@example.com'],
-    'SEND_EMAILS': lambda: False,
     'GEOSERVER_LOG': '/var/lib/tomcat6/logs/geoserver.log',
     'RESTART_COMMAND': ['/etc/init.d/tomcat6', 'restart'],
     'GEOSERVER_BASE_URL': settings.GEOSERVER_BASE_URL,
@@ -28,14 +27,14 @@ logger = logging.getLogger('watchdog')
 logger.setLevel(logging.INFO)
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
-memory_handler = MemoryHandler()
-memory_handler.setFormatter(formatter)
-logger.handlers.append(memory_handler)
+memory_log_handler = MemoryHandler()
+memory_log_handler.setFormatter(formatter)
+logger.handlers.append(memory_log_handler)
 
 _file_handler = None
 
 # collect messages to email
-_messages = []
+_error_messages = []
 
 # log files to email
 _log_files = []
@@ -173,23 +172,22 @@ def _run_watchdog_suites(*suites):
 
     # no restart in loop
     if restart:
-        _message('A restart was required: %s' % re)
+        error_message('A restart was required: %s' % re)
         if _restart():
             logger.info('Geoserver restart successful, rerunning suites')
             try:
                 _run_suites(suite_funcs, after_restart=True)
             except RestartRequired, re:
-                _message('Restarted geoserver, but check did not recover: %s' % re)
+                error_message('Restarted geoserver, but check did not recover: %s' % re)
         else:
-            logger.error('Failure Restarting Geoserver')
-            _message('Failure Restarting Geoserver')
+            error_message('Failure Restarting Geoserver')
 
-    if _config['SEND_EMAILS']():
-        _send_mails()
+    # send out any error messages immediately
+    _send_error_mails()
 
     # keep track of state from runs in database
 
-    current_log = memory_handler.contents()
+    current_log = memory_log_handler.contents()
     is_error = bool(_errors)
     if is_error:
         separator = '\n\n%s\n\n' % ('=' * 80)
@@ -208,9 +206,10 @@ def _run_watchdog_suites(*suites):
     run.save()
 
 
-def _message(msg):
-    logger.info(msg)
-    _messages.append(msg)
+def error_message(msg):
+    """these messages will get emailed out immediately after the run"""
+    logger.error(msg)
+    _error_messages.append(msg)
 
 
 def _run_suites(suite_funcs, after_restart=False):
@@ -270,19 +269,13 @@ def _send_with_attachments(subject, body):
     msg.send()
 
 
-def _send_mails():
-    # send out _messages and _log_files
-    if _messages:
-        for msg in _messages:
+def _send_error_mails():
+    if _error_messages:
+        for msg in _error_messages:
             _send_with_attachments(
                 _format_watchdog_subject(msg),
-                memory_handler.contents(),
+                memory_log_handler.contents(),
                 )
-    else:
-        _send_with_attachments(
-            _format_watchdog_subject('Log files of suite runs'),
-            'Log files',
-            )
 
 
 def _run_suite(func, after_restart):
