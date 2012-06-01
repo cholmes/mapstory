@@ -20,6 +20,7 @@ _default_config = {
     'GEOSERVER_LOG': '/var/lib/tomcat6/logs/geoserver.log',
     'RESTART_COMMAND': ['/etc/init.d/tomcat6', 'restart'],
     'GEOSERVER_BASE_URL': settings.GEOSERVER_BASE_URL,
+    'GEOSERVER_DATA_DIR': '/var/lib/geoserver/geonode-data',
 }
 _config = {}
 
