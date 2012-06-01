@@ -108,7 +108,7 @@ def _check(func, **kw):
 
 
 def _valid_args(**kw):
-    _kw_list = ['restart_on_error']
+    _kw_list = ['restart_on_error', 'email_on_error']
     for k in kw:
         if kw not in _kw_list:
             raise Exception('Keyword %s is not valid' % k)
@@ -131,6 +131,8 @@ def _run_check(func, *args, **kw):
             raise ex
     if ex and 'restart_on_error' in kw:
         raise RestartRequired(ex)
+    if ex and 'email_on_error' in kw:
+        error_message(ex)
 
 
 def _run_watchdog_suites(*suites):
