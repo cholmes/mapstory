@@ -239,6 +239,12 @@ def _restart():
     cmd = _config['RESTART_COMMAND']
     logger.warn('Restarting using command: %s'
                 % ' '.join(cmd))
+
+    # save restarting state in database
+    state = get_current_state()
+    state.geoserver_restarting = True
+    state.save()
+
     return_code = subprocess.call(cmd)
     if return_code != 0:
         logger.error('Failure executing restart command: %s'
@@ -250,7 +256,11 @@ def _restart():
     # sleep for a few seconds
     time.sleep(10)
 
-    return verify_geoserver_running(attempt=1)
+    if verify_geoserver_running(attempt=1):
+        state.geoserver_restarting = False
+        state.save()
+        return True
+    return False
 
 
 def _format_watchdog_subject(s):
