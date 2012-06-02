@@ -137,15 +137,20 @@ def _run_check(func, *args, **kw):
         error_message(ex)
 
 
+def set_config():
+    if not _config:
+        try:
+            _conf = getattr(settings, 'WATCHDOG')
+        except AttributeError:
+            print 'using default settings for watchdog, to override, add WATCHDOG spec to settings'
+            _conf = _default_config
+        _config.update(_conf)
+
+
 def _run_watchdog_suites(*suites):
     '''run one or more watchdog suites'''
-    try:
-        _conf = getattr(settings, 'WATCHDOG')
-    except AttributeError:
-        print 'using default settings for watchdog, to override, add WATCHDOG spec to settings'
-        _conf = _default_config
 
-    _config.update(_conf)
+    set_config()
 
     if _config['CONSOLE']:
         root = logging.getLogger("")

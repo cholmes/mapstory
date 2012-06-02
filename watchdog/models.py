@@ -1,4 +1,5 @@
 from django.db import models
+import os
 
 
 class CurrentState(models.Model):
@@ -61,5 +62,7 @@ def get_current_state():
 
 
 def get_logfile_model(filepath):
+    if not os.path.isfile(filepath):
+        raise Exception('Invalid log path: %s' % filepath)
     logfiles = Logfile.objects.filter(filepath=filepath)
     return logfiles[0] if logfiles else create_logfile_model(filepath)

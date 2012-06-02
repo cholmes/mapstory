@@ -7,11 +7,10 @@ from mapstory.watchdog.core import check_many
 from mapstory.watchdog.core import subcheck
 from mapstory.watchdog.core import CheckFailed
 from mapstory.watchdog.core import RestartRequired
-from mapstory.watchdog.models import get_logfile_model
 from mapstory.watchdog.logs import checksum
 from mapstory.watchdog.logs import read_next_sections
+from mapstory.watchdog.logs import get_logfile_model
 from xml.etree.ElementTree import fromstring
-import os
 
 
 def suite():
@@ -42,8 +41,6 @@ def get_layer_has_latlon_bbox():
 @check_many
 def check_geoserver_log():
     logpath = _config['GEOSERVER_LOG']
-    if not os.path.isfile(logpath):
-        raise CheckFailed('Invalid logpath: %s' % logpath)
     logfile_model = get_logfile_model(logpath)
     with open(logpath) as f:
         result = read_next_sections(f, logfile_model)
