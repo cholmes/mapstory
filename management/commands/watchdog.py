@@ -7,11 +7,11 @@ import sys
 
 class Command(BaseCommand):
     help = 'Watchdog functions'
-    args = '[suite...]'
+    args = 'mark_log_ok | list | [suite...]'
 
     def handle(self, *args, **opts):
         if not args:
-            print 'need one or more suites to run'
+            print 'need one or more suites to run, or "mark_log_ok" or "list"'
             sys.exit(1)
         if args[0] == 'mark_log_ok':
             set_log_state_to_end_of_file()
