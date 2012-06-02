@@ -6,6 +6,7 @@ from mapstory.watchdog.models import get_current_state
 import functools
 import inspect
 import logging
+import mapstory
 import os
 import subprocess
 import tempfile
@@ -320,6 +321,21 @@ def _run_suite(func, after_restart):
     finally:
         _file_handler.close()
         logger.handlers.remove(_file_handler)
+
+
+def list_suites():
+    suites = []
+    watchdog_import_path = mapstory.watchdog.__file__
+    watchdog_path = os.path.dirname(watchdog_import_path)
+    for f in os.listdir(watchdog_path):
+        fullpath = os.path.join(watchdog_path, f)
+        if fullpath.endswith('.py'):
+            with open(fullpath) as fileobj:
+                if 'def suite():' in fileobj.read():
+                    basename = os.path.splitext(f)[0]
+                    if basename != 'core':
+                        suites.append(basename)
+    print '\n'.join(sorted(suites))
 
 
 class CheckFailed(Exception):
