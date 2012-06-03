@@ -6,7 +6,7 @@ from mapstory.watchdog.models import get_current_state
 import functools
 import inspect
 import logging
-import mapstory
+import mapstory.watchdog.suites
 import os
 import subprocess
 import tempfile
@@ -163,7 +163,7 @@ def _run_watchdog_suites(*suites):
     # resulve suite module
     suite_funcs = []
     for s in suites:
-        module_name = 'mapstory.watchdog.%s' % s
+        module_name = 'mapstory.watchdog.suites.%s' % s
         try:
             module = __import__(module_name, fromlist=['*'], level=0)
         except ImportError:
@@ -325,7 +325,7 @@ def _run_suite(func, after_restart):
 
 def list_suites():
     suites = []
-    watchdog_import_path = mapstory.watchdog.__file__
+    watchdog_import_path = mapstory.watchdog.suites.__file__
     watchdog_path = os.path.dirname(watchdog_import_path)
     for f in os.listdir(watchdog_path):
         fullpath = os.path.join(watchdog_path, f)
