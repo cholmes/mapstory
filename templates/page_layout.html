@@ -36,7 +36,7 @@
 {% block topbar_base %}
     <div id="header">
       <div class="wrap selfclear">
-        <a id="logo" href="{% url geonode.views.index %}">Map Story</a>
+        <a id="logo" href="{% url home %}">Map Story</a>
         <div id="login-area" class="fancyfont">
             <a href="{% url donate %}" id="donate">DONATE NOW</a >
 
@@ -200,7 +200,7 @@
         <div class="onecol">
           Powered by <a href="http://geonode.org">{% trans "GeoNode" %}</a>
           | <strong>{% trans "Need Help?" %}</strong>
-          <a href="{% url geonode.views.static "help" %}">{% trans "Help" %}</a>
+          <a href="{% url help %}">{% trans "Help" %}</a>
           | <a href="http://wiki.mapstory.org/index.php?title=License_and_Copyright">License</a>
           {% comment %}
           | <a href="{% url geonode.views.developer %}">{% trans "For Developers" %}</a>

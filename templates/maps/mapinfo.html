@@ -95,7 +95,7 @@ Ext.onReady(function() {
                             <label>Author:</label>
                             <p>{{map.owner}}</p>
                             <label>Keywords:</label>
-                            <textarea name="map-keywords">{{map.keywords}}</textarea>
+                            <textarea name="map-keywords">{{map.keyword_list|join:" "}}</textarea>
                             <label>Abstract:</label>
                             <textarea name="map-abstract">{{map.abstract}}</textarea>
                             <div>
