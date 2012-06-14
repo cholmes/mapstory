@@ -54,6 +54,9 @@ def _check_layer_capabilities(layer):
     except Exception, ex:
         raise CheckFailed('error reading from url: %s, %s', url, ex)
     try:
-        fromstring(xml)
+        tree = fromstring(xml)
     except:
         raise CheckFailed('invalid xml:\n%s' % xml)
+    else:
+        if tree.find('ServiceException') is not None:
+            raise CheckFailed('Service Exception:\n%s' % xml)
