@@ -290,8 +290,12 @@ USERS_TO_EXCLUDE_IN_LISTINGS = [
 LAYER_EXCLUSIONS = [
     '_map_\d+_annotations'
 ]
-# @todo unify these?
-SIMPLE_SEARCH_EXCLUSIONS = LAYER_EXCLUSIONS
+
+SIMPLE_SEARCH_SETTINGS = {
+    'layer_exclusions' : LAYER_EXCLUSIONS,
+    'extra_query' : ['bytopic','bysection'],
+    'extension' : 'mapstory.simplesearch'
+}
 
 USERS_TO_EXCLUDE_IN_LISTINGS = []
 

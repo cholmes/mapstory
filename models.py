@@ -34,8 +34,8 @@ def _debug(msg,*args):
 _debug_enabled = _logger.isEnabledFor(logging.DEBUG)
 
 '''Settings API - allow regular expressions to filter our layer name results'''
-if hasattr(settings,'SIMPLE_SEARCH_EXCLUSIONS'):
-    _exclude_patterns = settings.SIMPLE_SEARCH_EXCLUSIONS
+if hasattr(settings,'LAYER_EXCLUSIONS'):
+    _exclude_patterns = settings.LAYER_EXCLUSIONS
     _exclude_regex = [ re.compile(e) for e in _exclude_patterns ]
 _layer_name_filter = reduce(operator.or_,[ Q(name__regex=f) for f in _exclude_patterns])
 
