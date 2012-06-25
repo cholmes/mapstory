@@ -1,5 +1,8 @@
 # logfile parsing routines
 
+from mapstory.watchdog.core import _config
+from mapstory.watchdog.core import set_config
+from mapstory.watchdog.models import get_logfile_model
 import hashlib
 
 LEVELS = set(['INFO', 'WARN', 'DEBUG', 'ERROR'])
@@ -76,3 +79,18 @@ def read_next_sections(fileobj, logfile_model):
         offset_end=offset_end,
         sections=sections,
         )
+
+
+def set_log_state_to_end_of_file():
+    """Useful to reset the state of a logfile to the end, to pick up only new errors"""
+    set_config()
+    logpath = _config['GEOSERVER_LOG']
+    logfile_model = get_logfile_model(logpath)
+    with open(logpath) as fileobj:
+        fileobj.seek(0, 2)
+        end = fileobj.tell()
+    new_checksum = checksum('', end, end)
+    logfile_model.checksum = new_checksum
+    logfile_model.offset_start = end
+    logfile_model.offset_end = end
+    logfile_model.save()
