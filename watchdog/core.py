@@ -6,6 +6,7 @@ from mapstory.watchdog.models import get_current_state
 import functools
 import inspect
 import logging
+import mapstory.watchdog.suites
 import os
 import subprocess
 import tempfile
@@ -17,10 +18,11 @@ _default_config = {
     'CONSOLE': True,
     'FROM': 'watchdog@example.com',
     'TO': ['rob@example.com'],
-    'SEND_EMAILS': lambda: False,
     'GEOSERVER_LOG': '/var/lib/tomcat6/logs/geoserver.log',
     'RESTART_COMMAND': ['/etc/init.d/tomcat6', 'restart'],
     'GEOSERVER_BASE_URL': settings.GEOSERVER_BASE_URL,
+    'GEOSERVER_DATA_DIR': '/var/lib/geoserver/geonode-data',
+    'DJANGO_URL': 'http://localhost:8000',
 }
 _config = {}
 
@@ -28,14 +30,14 @@ logger = logging.getLogger('watchdog')
 logger.setLevel(logging.INFO)
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
-memory_handler = MemoryHandler()
-memory_handler.setFormatter(formatter)
-logger.handlers.append(memory_handler)
+memory_log_handler = MemoryHandler()
+memory_log_handler.setFormatter(formatter)
+logger.handlers.append(memory_log_handler)
 
 _file_handler = None
 
 # collect messages to email
-_messages = []
+_error_messages = []
 
 # log files to email
 _log_files = []
@@ -109,7 +111,7 @@ def _check(func, **kw):
 
 
 def _valid_args(**kw):
-    _kw_list = ['restart_on_error']
+    _kw_list = ['restart_on_error', 'email_on_error']
     for k in kw:
         if kw not in _kw_list:
             raise Exception('Keyword %s is not valid' % k)
@@ -132,17 +134,24 @@ def _run_check(func, *args, **kw):
             raise ex
     if ex and 'restart_on_error' in kw:
         raise RestartRequired(ex)
+    if ex and 'email_on_error' in kw:
+        error_message(ex)
+
+
+def set_config():
+    if not _config:
+        try:
+            _conf = getattr(settings, 'WATCHDOG')
+        except AttributeError:
+            print 'using default settings for watchdog, to override, add WATCHDOG spec to settings'
+            _conf = _default_config
+        _config.update(_conf)
 
 
 def _run_watchdog_suites(*suites):
     '''run one or more watchdog suites'''
-    try:
-        _conf = getattr(settings, 'WATCHDOG')
-    except AttributeError:
-        print 'using default settings for watchdog, to override, add WATCHDOG spec to settings'
-        _conf = _default_config
 
-    _config.update(_conf)
+    set_config()
 
     if _config['CONSOLE']:
         root = logging.getLogger("")
@@ -154,7 +163,7 @@ def _run_watchdog_suites(*suites):
     # resulve suite module
     suite_funcs = []
     for s in suites:
-        module_name = 'mapstory.watchdog.%s' % s
+        module_name = 'mapstory.watchdog.suites.%s' % s
         try:
             module = __import__(module_name, fromlist=['*'], level=0)
         except ImportError:
@@ -173,23 +182,22 @@ def _run_watchdog_suites(*suites):
 
     # no restart in loop
     if restart:
-        _message('A restart was required: %s' % re)
+        error_message('A restart was required: %s' % re)
         if _restart():
             logger.info('Geoserver restart successful, rerunning suites')
             try:
                 _run_suites(suite_funcs, after_restart=True)
             except RestartRequired, re:
-                _message('Restarted geoserver, but check did not recover: %s' % re)
+                error_message('Restarted geoserver, but check did not recover: %s' % re)
         else:
-            logger.error('Failure Restarting Geoserver')
-            _message('Failure Restarting Geoserver')
+            error_message('Failure Restarting Geoserver')
 
-    if _config['SEND_EMAILS']():
-        _send_mails()
+    # send out any error messages immediately
+    _send_error_mails()
 
     # keep track of state from runs in database
 
-    current_log = memory_handler.contents()
+    current_log = memory_log_handler.contents()
     is_error = bool(_errors)
     if is_error:
         separator = '\n\n%s\n\n' % ('=' * 80)
@@ -208,9 +216,10 @@ def _run_watchdog_suites(*suites):
     run.save()
 
 
-def _message(msg):
-    logger.info(msg)
-    _messages.append(msg)
+def error_message(msg):
+    """these messages will get emailed out immediately after the run"""
+    logger.error(msg)
+    _error_messages.append(msg)
 
 
 def _run_suites(suite_funcs, after_restart=False):
@@ -237,6 +246,12 @@ def _restart():
     cmd = _config['RESTART_COMMAND']
     logger.warn('Restarting using command: %s'
                 % ' '.join(cmd))
+
+    # save restarting state in database
+    state = get_current_state()
+    state.geoserver_restarting = True
+    state.save()
+
     return_code = subprocess.call(cmd)
     if return_code != 0:
         logger.error('Failure executing restart command: %s'
@@ -248,7 +263,11 @@ def _restart():
     # sleep for a few seconds
     time.sleep(10)
 
-    return verify_geoserver_running(attempt=1)
+    if verify_geoserver_running(attempt=1):
+        state.geoserver_restarting = False
+        state.save()
+        return True
+    return False
 
 
 def _format_watchdog_subject(s):
@@ -270,19 +289,13 @@ def _send_with_attachments(subject, body):
     msg.send()
 
 
-def _send_mails():
-    # send out _messages and _log_files
-    if _messages:
-        for msg in _messages:
+def _send_error_mails():
+    if _error_messages:
+        for msg in _error_messages:
             _send_with_attachments(
                 _format_watchdog_subject(msg),
-                memory_handler.contents(),
+                memory_log_handler.contents(),
                 )
-    else:
-        _send_with_attachments(
-            _format_watchdog_subject('Log files of suite runs'),
-            'Log files',
-            )
 
 
 def _run_suite(func, after_restart):
@@ -308,6 +321,21 @@ def _run_suite(func, after_restart):
     finally:
         _file_handler.close()
         logger.handlers.remove(_file_handler)
+
+
+def list_suites():
+    suites = []
+    watchdog_import_path = mapstory.watchdog.suites.__file__
+    watchdog_path = os.path.dirname(watchdog_import_path)
+    for f in os.listdir(watchdog_path):
+        fullpath = os.path.join(watchdog_path, f)
+        if fullpath.endswith('.py'):
+            with open(fullpath) as fileobj:
+                if 'def suite():' in fileobj.read():
+                    basename = os.path.splitext(f)[0]
+                    if basename != 'core':
+                        suites.append(basename)
+    print '\n'.join(sorted(suites))
 
 
 class CheckFailed(Exception):
