@@ -134,7 +134,7 @@ def layer_metadata(request, layername):
         form = LayerDescriptionForm(request.POST, prefix="layer")
         if form.is_valid():
             layer.title = form.cleaned_data['title']
-            layer.keywords = form.cleaned_data['keywords']
+            layer.keywords.add(*form.cleaned_data['keywords'])
             layer.abstract = form.cleaned_data['abstract']
             layer.save()
             return HttpResponse('OK')

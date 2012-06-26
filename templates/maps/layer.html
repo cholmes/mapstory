@@ -161,7 +161,7 @@
                             <label>Author:</label>
                             <p>{{layer.owner}}</p>
                             <label>Keywords:</label>
-                            <textarea name="layer-keywords">{{layer.keywords}}</textarea>
+                            <textarea name="layer-keywords">{{layer.keyword_list|join:","}}</textarea>
                             <label>Abstract:</label>
                             <textarea name="layer-abstract">{{layer.abstract}}</textarea>
                             <div>
