@@ -1,0 +1,87 @@
+{% extends "fullscreen.html" %}
+{% load i18n %}
+
+{% block title %} {% trans "Map Viewer" %} - {{ block.super }} {% endblock %}
+
+{% block head %}
+{% include "geonode/ext_header.html" %}
+{% include "geonode/app_header.html" %}
+{% include "geonode/geo_header.html" %}
+<link rel="stylesheet" type="text/css" href="{{ GEONODE_CLIENT_LOCATION }}theme/ux/colorpicker/color-picker.ux.css" />
+<style type="text/css">
+    #templates { display: none; }
+</style>
+
+<script src="{{ GEONODE_CLIENT_LOCATION }}script/PrintPreview.js"></script>
+<link rel="stylesheet" type="text/css" href="{{ GEONODE_CLIENT_LOCATION }}externals/PrintPreview/resources/css/printpreview.css" />
+<script src="{{GEOSERVER_BASE_URL}}pdf/info.json?var=printCapabilities" type="text/javascript"></script>
+{{ block.super }}
+
+<script type="text/javascript">
+{% autoescape off %}
+
+var app = new GeoExplorer({
+    useToolbar: false
+});
+
+// template markup specific javascript
+(function() {
+    var titleTemplate, moreInfoTemplate, permalinkTemplate;
+    function permalink(id) {
+        return permalinkTemplate.apply({
+            protocol: window.location.protocol,
+            host: window.location.host,
+            id: id
+        }) 
+    }
+    app.on({
+        "ready": function() {
+            permalinkTemplate = new Ext.Template("{protocol}//{host}/maps/{id}");
+            moreInfoTemplate = new Ext.Template(decodeURIComponent(Ext.get("more-info-tpl").dom.innerHTML));
+            var mapInfoHtml = app.mapID ? moreInfoTemplate.apply({permalink: permalink(app.mapID)}) : "This map is currently unsaved";
+            Ext.DomHelper.overwrite(Ext.get("more-info"), mapInfoHtml)
+
+            titleTemplate = new Ext.Template(Ext.get("title-tpl").dom.innerHTML);
+            Ext.DomHelper.overwrite(Ext.get("map-title-header"), titleTemplate.apply({title: app.about.title}));
+        },
+        "saved": function(id) {
+            //reset title header
+            Ext.DomHelper.overwrite(Ext.get("map-title-header"), titleTemplate.apply({title: app.about.title}))
+
+            //reset more info link
+            Ext.DomHelper.overwrite(Ext.get("more-info"), moreInfoTemplate.apply({permalink: permalink(app.mapID)}))
+        },
+        scope: {}
+    });
+    
+    var headers = {
+        'X-CSRFToken' : Ext.util.Cookies.get('csrftoken')
+    };
+    Ext.Ajax.defaultHeaders = headers;
+    {# MONKEY PATCH #}
+    OpenLayers.Request._monkey_issue = OpenLayers.Request.issue;
+    OpenLayers.Request.issue = function(config) {
+        config.headers = config.headers || {};
+        config.headers['X-CSRFToken'] = Ext.util.Cookies.get('csrftoken');
+        return this._monkey_issue(config);
+    };
+})()
+
+{% endautoescape %}
+</script>
+
+{% endblock %}
+
+{% block body %}
+<div id="header-wrapper">
+  {{ block.super }}
+  <div id="topPanel">
+    <div id="more-info">&nbsp;</div>
+    <span id="map-title-header"></span>
+  </div>
+</div>
+<div id="templates">
+  <div id="more-info-tpl"><a class='link' href='{permalink}'>{% trans "View info" %}</a></div>
+  <div id="title-tpl"><a class='maplist' href='{% url maps_search %}'>{% trans "Maps" %}</a> / <strong>{title}</strong></div>
+</div>
+{% endblock %}
