@@ -310,6 +310,8 @@ HITCOUNT_KEEP_HIT_ACTIVE = { 'days': 1 }
 HITCOUNT_HITS_PER_IP_LIMIT = 0
 HITCOUNT_EXCLUDE_USER_GROUP = ( 'Editor', )
 
+UPLOADER_SHOW_TIME_STEP = True
+
 try:
     from local_settings import *
 except ImportError:
