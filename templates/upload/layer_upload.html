@@ -45,7 +45,7 @@
 {% autoescape off %}
 setup({
     csrf_token : "{{ csrf_token }}",
-    form_target : "{% url geonode.maps.views.upload_layer %}",
+    form_target : "{% url data_upload %}",
     userLookup : "{% url geonode.views.ajax_lookup %}"
 });
 {% endautoescape %}

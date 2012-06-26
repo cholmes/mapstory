@@ -63,7 +63,7 @@
             Ext.get(Ext.DomQuery.select("select[@name='default-style']")).on("change", function(evt, elem) {
                 Ext.Ajax.request({
                     method: "post",
-                    url: "{% url layer_style layer.typename %}",
+                    url: "{% url data_style layer.typename %}",
                     params: {"defaultStyle" : elem.value}
                 });
             });
@@ -127,7 +127,7 @@
             <h2 class="icn-storylayers">{{ layer.title }}</h2>
         </div>
         <div class="span4 top-detail-actions">
-            <a href="{% url map_new %}?layer={{layer.typename}}" target="_">Create a Story using this StoryLayer</a>
+            <a href="{% url maps_new %}?layer={{layer.typename}}" target="_">Create a Story using this StoryLayer</a>
         </div>
     </div>
     <div class="row">
