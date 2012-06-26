@@ -117,7 +117,8 @@ def favoriteslinks(req):
 def favoriteslist(req):
     ctx = {
         "favorites" : Favorite.objects.favorites_for_user(req.user),
-        "in_progress" : Map.objects.filter(owner=req.user, publish__status='In Progress')
+        "in_progress_maps" : Map.objects.filter(owner=req.user).exclude(publish__status='Public'),
+        "in_progress_layers" : Layer.objects.filtered().filter(owner=req.user).exclude(publish__status='Public')
     }
     return render_to_response("mapstory/_widget_favorites.html",ctx)
 
