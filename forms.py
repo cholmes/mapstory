@@ -1,5 +1,6 @@
-from django.db import models
 from django import forms
+
+from registration.forms import RegistrationForm
 
 from mapstory.models import ContactDetail
 
@@ -13,3 +14,19 @@ class ProfileForm(forms.ModelForm):
     class Meta:
         model = ContactDetail
         exclude = ('user','fax','delivery','zipcode','area','links')
+        
+
+class CheckRegistrationForm(RegistrationForm):
+    '''add a honey pot field and verification of a hidden client generated field'''
+    
+    not_human = forms.BooleanField(
+                widget=forms.HiddenInput,
+                required = False)
+    
+    def clean(self):
+        if not self.data.get('human',None):
+            raise forms.ValidationError('If you are human, ensure you say so.')
+
+    def clean_not_human(self):
+        if self.cleaned_data['not_human']:
+            raise forms.ValidationError('')

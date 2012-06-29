@@ -6,7 +6,9 @@ from geonode.sitemap import LayerSitemap, MapSitemap
 from geonode.proxy.urls import urlpatterns as proxy_urlpatterns
 from mapstory.models import *
 from mapstory.forms import ProfileForm
+from mapstory.forms import CheckRegistrationForm
 from hitcount.views import update_hit_count_ajax
+from registration.views import register
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
@@ -30,6 +32,14 @@ urlpatterns = patterns('',
 
 urlpatterns += patterns('mapstory.views',
     (r'^(?:index/?)?$', 'index'),
+    
+    url(r'^accounts/register/$',
+        register,
+        {'backend': 'registration.backends.default.DefaultBackend',
+         'form_class': CheckRegistrationForm},
+        name='registration_register'),
+            # ugh, overrides
+    url(r'^data/(?P<layername>[^/]*)/metadata$', 'layer_metadata', name="layer_metadata"),
 
     (r'', include('geonode.simplesearch.urls')), # put this first to ensure search urls priority
     (r'', include('geonode.urls')),
@@ -67,8 +77,6 @@ urlpatterns += patterns('mapstory.views',
     url(r"^mapstory/thoughts/r-siva-kumar", direct_to_template, {"template": "mapstory/thoughts.html",
         "extra_context" : {'html':'mapstory/thoughts/sk.html'}}, name="thoughts-sk"),
 
-    # ugh, overrides
-    url(r'^(?P<layername>[^/]*)/metadata$', 'layer_metadata', name="layer_metadata"),
 )
 
 urlpatterns += proxy_urlpatterns
