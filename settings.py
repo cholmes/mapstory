@@ -314,3 +314,7 @@ try:
 except ImportError:
     pass
 
+try:
+    import monkey_patch_avatar
+except ImportError,e:
+    print 'monkey patch failed!', e
