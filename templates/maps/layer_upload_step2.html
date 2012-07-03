@@ -5,14 +5,17 @@
 
 {% block extra_head %}
 <style>
-    /* bootstrap workaround */
-    #timeForm label {
+    /* bootstrap workarounds */
+    #timeForm label, #timeForm input, #timeForm select {
         display: inline;
     }
+    #timeForm input, #timeForm select {
+        width: auto;
+    }
+    /* end bootstrap workarounds */
     .formSection {
         margin-bottom: 1em;
-    }
-    .right input, .right select {
+        border-bottom: 1px solid white;
     }
     .left input {
         line-height: 2em;
@@ -40,7 +43,7 @@
       display: block;
     }
     #format_input input {
-        width:8em;
+        width:16em;
     }
     #timehelp p {
         color: black !important;
@@ -72,6 +75,7 @@
   <h3>Time Options</h3>
     {% csrf_token %}
     
+    <section class="palebg">
     <h4>Choose time attribute:</h4>
     <div class="formSection clearfix" title="Map animations will not be enabled">
         <input type="radio" name="timetype" checked="checked" id="notime">
@@ -87,13 +91,13 @@
     <div class="formSection clearfix right" title="Convert text in the data to a timestamp using standard date/time representation or a custom format">
         <input type="radio" name="timetype" id="textattribute">
         <label for="textattribute">{% trans "Convert Text Attribute" %}  :</label>{{ time_form.text_attribute }}
-        <label for="format_select">{% trans "Date Format" %}  :
+        <label for="format_select">{% trans "Date Format" %}  :</label>
         <select id="format_select">
             <option selected="true" value="0">Best Guess</option>
             <option value="1">Custom</option>
         </select>
         <div id="format_input" style="display: inline; visibility: hidden;" class="clearfix">
-            {{ time_form.text_attribute_format }}
+            <label for="id_text_attribute_format">Custom Format:</label> {{ time_form.text_attribute_format }}
         </div>
     </div>
     {% endif %}
@@ -103,7 +107,9 @@
         <label for="convertnumber">{% trans "Convert Number (As Year)" %}  :</label>{{ time_form.year_attribute }}
     </div>
     {% endif %}
+    </section>
     
+    <section class="palebg">
     <h4>Choose optional end time attribute:</h4>
     {% if time_form.time_attribute %}
     <div class="formSection clearfix right" title="Use an existing timestamp attribute in the data">
@@ -115,13 +121,13 @@
     <div class="formSection clearfix right" title="Convert text in the data to a timestamp using standard date/time representation or a custom format">
         <input type="radio" name="end_timetype" id="textattribute">
         <label for="end_textattribute">{% trans "Convert Text Attribute" %}  :</label>{{ time_form.end_text_attribute }}
-        <label for="end_format_select">{% trans "Date Format" %}  :
+        <label for="end_format_select">{% trans "Date Format" %}  :</label>
         <select id="end_format_select">
             <option selected="true" value="0">Best Guess</option>
             <option value="1">Custom</option>
         </select>
-        <div id="format_input" style="display: inline; visibility: hidden;" class="clearfix">
-            {{ time_form.end_text_attribute_format }}
+        <div id="end_format_input" style="display: inline; visibility: hidden;" class="clearfix">
+            <label for="id_end_text_attribute_format">Custom Format:</label> {{ time_form.end_text_attribute_format }}
         </div>
     </div>
     {% endif %}
@@ -131,8 +137,9 @@
         <label for="end_convertnumber">{% trans "Convert Number (As Year)" %}  :</label>{{ time_form.end_year_attribute }}
     </div>
     {% endif %}
+    </section>
 
-    <div id="presentation" class="formSection left">
+    <div id="presentation" class="formSection left palebg">
         <h4>Present time attribute as:</h4>
         <div>
             <input id="LIST" type='radio' value='LIST' checked='checked' name='presentation_strategy'/>
@@ -148,13 +155,13 @@
         </div>
         
         <div id="precision" style="display:none">
-            <p><strong>Resolution of time attribute: <input type="text" name="precision_value" size="3"/>
+            <label>Resolution of time attribute:</label> <input type="text" name="precision_value" size="3"/>
             {{ time_form.precision_step }}
             </p>
         </div>
     </div>
     
-    <input type="submit" value="{% trans "Next" %}"/>
+    <input class="btn btn-primary" type="submit" value="{% trans "Next" %}"/>
   </form>
 </div>
 <div id="timehelp" class="threecol">
@@ -262,16 +269,20 @@ Ext.onReady(function() {
 
     // show custom format field if needed
     if (format) {
-        Ext.get('format_select').on('change',function() {
-            var input = Ext.get("id_text_attribute_format");
-            if (this.getAttribute('value') == '0') {
-                format.hide();
-                input.dom.value = '';
-            } else {
-                format.fadeIn();
-                input.focus();
-            }
-        });
+        function enableCustom(selectID, inputID, formatEl) {
+            Ext.get(selectID).on('change',function() {
+                var input = Ext.get(inputID);
+                if (this.getAttribute('value') == '0') {
+                    formatEl.hide();
+                    input.dom.value = '';
+                } else {
+                    formatEl.fadeIn();
+                    input.focus();
+                }
+            });
+        }
+        enableCustom('format_select','id_text_attribute_format',format);
+        enableCustom('end_format_select','id_end_text_attribute_format',Ext.get('end_format_input'));
     }
     
     var progressEndpoint = "{{ progress_endpoint }}";
