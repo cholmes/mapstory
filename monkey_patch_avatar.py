@@ -1,6 +1,4 @@
 from functools import wraps
-from django.contrib import messages
-from avatar import views
 
 class MessageSet(object):
     def __init__(self, req):
@@ -16,6 +14,10 @@ def monkey_patch(func):
         return func(*args, **kwargs)
     return wrapper
 
-views.add = monkey_patch(views.add)
-views.change = monkey_patch(views.change)
-views.delete = monkey_patch(views.delete)
+import sys
+if not 'manage.py' in sys.argv:
+    from avatar import views
+
+    views.add = monkey_patch(views.add)
+    views.change = monkey_patch(views.change)
+    views.delete = monkey_patch(views.delete)
