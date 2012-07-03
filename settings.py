@@ -107,6 +107,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.request",
     "geonode.maps.context_processors.resource_urls",
     "mapstory.context_processors.page",
+    "account.context_processors.account",
 )
 
 MIDDLEWARE_CLASSES = (
@@ -232,7 +233,8 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django_extensions',
     'hitcount',
-    'registration',
+    'account',
+    'kaleo',
     'profiles',
     'avatar',
     'dialogos',
@@ -317,5 +319,5 @@ except ImportError:
 
 try:
     import monkey_patch_avatar
-except ImportError,e:
+except Exception,e:
     print 'monkey patch failed!', e

@@ -6,9 +6,9 @@ from geonode.sitemap import LayerSitemap, MapSitemap
 from geonode.proxy.urls import urlpatterns as proxy_urlpatterns
 from mapstory.models import *
 from mapstory.forms import ProfileForm
-from mapstory.forms import CheckRegistrationForm
+from mapstory.views import SignupView
 from hitcount.views import update_hit_count_ajax
-from registration.views import register
+from account.views import ConfirmEmailView
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
@@ -36,20 +36,23 @@ urlpatterns = patterns('',
 
 urlpatterns += patterns('mapstory.views',
     (r'^(?:index/?)?$', 'index'),
-    
-    url(r'^accounts/register/$',
-        register,
-        {'backend': 'registration.backends.default.DefaultBackend',
-         'form_class': CheckRegistrationForm},
-        name='registration_register'),
-            # ugh, overrides
+
+    # ugh, overrides
+    # for the account views - we are only using these
+    url(r"^account/confirm_email/(?P<key>\w+)/$", ConfirmEmailView.as_view(), name="account_confirm_email"),
+    url(r"^account/signup/$", SignupView.as_view(), name="account_signup"),
+    # and this from geonode
     url(r'^data/(?P<layername>[^/]*)/metadata$', 'layer_metadata', name="layer_metadata"),
+    
 
     (r'', include('geonode.simplesearch.urls')), # put this first to ensure search urls priority
     (r'', include('geonode.urls')),
+    url(r"^invites/", include("kaleo.urls")),
+    
     (r'^data/create_annotations_layer/(?P<mapid>\d+)$','create_annotations_layer'),
     url(r'^mapstory/donate$',direct_to_template, {"template":"mapstory/donate.html"},name='donate'),
     url(r'^mapstory/thanks$',direct_to_template, {"template":"mapstory/thanks.html"}),
+    url(r'^mapstory/invites$',direct_to_template, {"template":"mapstory/invites.html"}, name='invites_page'),
     url(r'^mapstory/alerts$','alerts',name='alerts'),
     url(r'^mapstory/tile/(?P<mapid>\d+)$','map_tile',name='map_tile'),
     url(r'^mapstory/tiles$','map_tiles',name='map_tiles'),

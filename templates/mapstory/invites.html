@@ -1,0 +1,62 @@
+{% extends "page_layout.html" %}
+
+{% load kaleo_tags %}
+
+{% block title %} MapStory Invites {% endblock %}
+{% block main %}
+<div class="row mrg-top minsize">
+    <div class="span12">
+        <h2>Invite Your MapStory Telling Friends</h2>
+    </div>
+</div>
+<div class="row mrg-top mrg-btm">
+    <div class="span4 offset2">
+        <div class="box">
+            <p>You have <span id="invites-remaining">{% remaining_invites user %}</span> invitation(s) with which you can
+            invite someone you know to tell a MapStory or two. Enter the email
+            of your StoryTelling someone and they will receive a signup mail.
+            </p>
+        </div>
+        <div class="box">
+            {% invite_form user %}
+        </div>
+    </div>
+    <div class="span4">
+        <div class="box">
+        <h3>Invitations Sent</h3>
+        {% invites_sent user %}
+        </div>
+    </div>
+
+</div>
+<div id="fillheight"></div>
+{% endblock %}
+
+{% block extra_body %}
+<script type="text/javascript">
+    
+$(function () {
+    $(".invitation_form form .btn-primary").click(function(ev) {
+       ev.preventDefault();
+       var form = $(".invitation_form form");
+       form.find('.alert').hide();
+       $.post(form.attr('action'),form.serialize(),function(data,status,xhr) {
+            if (data.status == 'OK') {
+                form.find('.alert-success').html('Invitation Sent!').slideDown();
+                $('.empty-invites').remove();
+                $('.invite-list').append("<li>" + data.email + "</li>");
+                $('.invites form input[type=text]').val("");
+                $('#invites-remaining').html(data.invitations_remaining);
+                if (data.invitations_remaining == 0) {
+                    $('.invitation_form form').hide();
+                }
+            } else {
+                form.find('.alert-error').html(data.errors).slideDown();
+            }
+        }).error(function(data,status,xhr) {
+            alert('An error has occurred' + data);
+        });
+    });
+});
+</script>
+{% endblock %}

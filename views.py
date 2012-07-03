@@ -5,6 +5,8 @@ from geonode.maps.models import Thumbnail
 
 from mapstory.models import *
 from mapstory.util import lazy_context
+from mapstory.forms import CheckRegistrationForm
+import account.views
 
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
@@ -230,6 +232,9 @@ def topics_api(req, layer_or_map, layer_or_map_id):
     
     return HttpResponse('OK', status=200)
 
+class SignupView(account.views.SignupView):
+
+   form_class = CheckRegistrationForm
 
 @login_required
 def create_annotations_layer(req, mapid):
