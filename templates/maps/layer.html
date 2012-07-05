@@ -230,7 +230,7 @@
                     {% endif %}
                 </div>
                 <cite>Uploaded by {{ layer.owner.username }} on {{ layer.date|date:"N j Y" }}</cite>
-                <article class="abstract"><p>Abstract:</p> {{ layer.abstract|linebreaks }}</article>
+                <article class="abstract"><p>Abstract:</p> {{ layer.abstract|escape|urlize|linebreaks|safe }}</article>
                 
                 {% comments_section layer %}
 

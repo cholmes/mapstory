@@ -154,7 +154,7 @@ Ext.onReady(function() {
                         </div>
                         {% endif %}
                     <cite>Uploaded by {{ map.owner.username }} on {{ map.last_modified|date:"N j Y" }}</cite>
-                    <article class="abstract"><p>Abstract:</p>{{ map.abstract|linebreaks }}</article>
+                    <article class="abstract"><p>Abstract:</p>{{ map.abstract|escape|urlize|linebreaks|safe }}</article>
                 </div>
                 {% comments_section map %}
 
