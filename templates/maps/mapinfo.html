@@ -9,8 +9,10 @@
 
 
 {% block extra_head %}
+<link rel="stylesheet" type="text/css" href="/static/theme/comments.css" media="screen" />
 {% include "geonode/app_header.html" %}
 {% include "geonode/geo_header.html" %}
+<script type="text/javascript" src="{{ STATIC_URL}}script/comments.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL}}script/favorites.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL}}script/info.js"></script>
 {{ block.super }}
@@ -197,6 +199,7 @@ $(function() {
     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
 })();
 </script>
+<script type="text/javascript" src="{{ STATIC_URL}}bootstrap/js/bootstrap-modal.js"></script>
 {% include "_fb_include.html" %}
 {% map_view_hitcount_tracker request map %}
 {% endblock %}
