@@ -13,7 +13,7 @@
         <li>
             <div class="comment">
                 <div class="comment_content">
-                    {{ node.comment|escape|urlize|safe }} 
+                    {{ node.comment|escape|urlize|linebreaks|safe }} 
                 </div>
                 <cite rel="author"><a href="{{node.author.get_absolute_url}}">{{ node.author.get_full_name|default:node.author|capfirst }}</a></cite> &mdash; 
                 <span class="comment_ago">
