@@ -1,31 +1,47 @@
 {% load dialogos_tags %}
+{% load mptt_tags %}
 {% load geonode_auth %}
 {% load i18n %}
 
 <h3>{% trans "Comments" %}</h3>
 <div class="comments_container">
-    {% comments comment_object as comments %}
     {% if not comments %}
     <p>No Comments. Be the first!</p>
     {% endif %}
-    {% for comment in comments %}
-        <div class="comment">
-            <div class="comment_content">
-                {{ comment.comment|escape|urlize|safe }} &mdash; 
+    <ul class="comments_tree">
+    {% recursetree comments %}
+        <li>
+            <div class="comment">
+                <div class="comment_content">
+                    {{ node.comment|escape|urlize|safe }} 
+                </div>
+                <cite rel="author"><a href="{{node.author.get_absolute_url}}">{{ node.author.get_full_name|default:node.author|capfirst }}</a></cite> &mdash; 
                 <span class="comment_ago">
-                {% blocktrans with comment.submit_date|timesince as age %}
+                {% blocktrans with node.submit_date|timesince as age %}
                 {{ age }} ago
                 {% endblocktrans %}
                 </span>
+                <span class="actions">
+                {% if node.author == request.user %}
+                <a href="{% url delete_comment node.id %}" class="d btn btn-mini"><i class="icon-trash"></i>Delete</a>
+                {% endif %}
+                {% if user_can_post %}
+                <a href="{{ node.reply_url }}" class="r btn btn-mini">Reply</a>
+                {% endif %}
+                </span>
             </div>
-            <cite rel="author"><a href="{{comment.author.get_absolute_url}}">{{ comment.author.get_full_name|default:comment.author|capfirst }}</a></cite>
-            {% if comment.author == request.user %}
-            <a href="{% url delete_comment comment.id %}" class="btn"><i class="icon-trash"></i>Delete</a>
+            {% if not node.is_leaf_node %}
+            <ul class="comments_children">
+            {{ children }}
+            </ul>
             {% endif %}
-        </div>
-    {% endfor %}
+        </li>
+    {% endrecursetree %}
+    </ul>
 
-    {% if request.user.is_authenticated %}
+    {% if why_cant_user_post %}
+    <p class="alert">{{ why_cant_user_post }}</p>
+    {% else %}
         <h3>{% trans "Post a comment" %}</h3>
         {% comment_form comment_object as comment_form %}
         <form method="POST" action="{% comment_target comment_object %}">
@@ -38,18 +54,13 @@
             </div>
             <input type="hidden" name="next" value="{{ request.path }}" />
         </form>
-    {% else %}
-        <p><a href="{% url auth_login %}">{% trans "Login to add a comment" %}</a></p>
+        <div class="modal" id="comment_modal" style="display:none;">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+                <h3>Reply to Comment</h3>
+            </div>
+            <div class="modal-body">
+            </div>
+        </div>
     {% endif %}
 </div>
-<script type="text/javascript">
-$(function() {
-    $(".comment .btn").click(function(ev) {
-        var el = $(this);
-        ev.preventDefault();
-        $.post(el.attr('href'),function() {
-            el.closest('.comment').fadeOut();
-        });
-    });
-});  
-</script>

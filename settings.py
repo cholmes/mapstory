@@ -236,6 +236,7 @@ INSTALLED_APPS = (
     'profiles',
     'avatar',
     'dialogos',
+    'mptt',
     'agon_ratings',
     'mapstory',
     'geonode.core',

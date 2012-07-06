@@ -13,6 +13,7 @@ from mapstory.models import PUBLISHING_STATUS_PRIVATE
 from mapstory.models import PUBLISHING_STATUS_LINK
 from mapstory.models import PUBLISHING_STATUS_PUBLIC
 from mapstory.models import get_view_cnt_for
+from dialogos.templatetags import dialogos_tags
 
 import re
 
@@ -167,24 +168,11 @@ class TopicSelectionNode(template.Node):
 
 @register.tag
 def comments_section(parse, token):
-    try:
-        tokens = token.split_contents()
-        tag_name = tokens.pop(0)
-        obj_name = tokens.pop(0)
-    except ValueError:
-        raise template.TemplateSyntaxError, "%r tag requires a single argument" % token.contents.split()[0]
-    return CommentsSectionNode(obj_name)
+    return CommentsSectionNode.handle_token(parse, token)
 
-class CommentsSectionNode(template.Node):
-    def __init__(self, obj_name):
-        self.obj_name = obj_name
-    def render(self, context):
-        obj = context[self.obj_name]
-        template_name = "maps/_widget_comments.html"
-        r = loader.render_to_string(template_name,RequestContext(context['request'],{
-            'comment_object' : obj
-        }))
-        return r
+class CommentsSectionNode(dialogos_tags.ThreadedCommentsNode):
+    template_name = 'maps/_widget_comments.html'
+
 
 @register.tag
 def related_mapstories(parse, token):

@@ -1,0 +1,10 @@
+.comments_children li {
+    margin-left: 2em;
+}
+.comments_tree .comment {
+    padding-bottom: 1em;
+}
+.comments_tree .comment .actions {
+    display: none;
+    float: right;
+}
