@@ -544,6 +544,7 @@ Ext.onReady(function() {
         if (keycode == '13') {
             ev.preventDefault();
             queryItems['q'] = this.dom.search.value;
+            Ext.select('#sortForm select').item(0).dom.selectedIndex = 5;
             reset();
         }
     });
