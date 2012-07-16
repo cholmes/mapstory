@@ -243,6 +243,7 @@ INSTALLED_APPS = (
     'geonode.maps',
     'geonode.proxy',
     'geonode.simplesearch',
+    'geonode.upload',
     'geonode',
     'mapstory.watchdog',
 )
