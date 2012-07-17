@@ -28,6 +28,10 @@ urlpatterns = patterns('',
     # inject our form into these views
     ('^profiles/edit', 'profiles.views.edit_profile', {'form_class': ProfileForm,}),
     ('^profiles/create', 'profiles.views.create_profile', {'form_class': ProfileForm,}),
+    # and override the detail view to add our filtered layers
+    url(r'^profiles/(?P<username>\w+)/$', 'profiles.views.profile_detail',{'extra_context' : {
+        'layers' : filtered_layers
+    }}, name='profiles_profile_detail')
 )
 
 urlpatterns += patterns('mapstory.views',
