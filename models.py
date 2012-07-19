@@ -323,6 +323,13 @@ def create_hitcount(instance, sender, **kw):
     if kw['created']:
         content_type = ContentType.objects.get_for_model(instance)
         HitCount.objects.create(content_type=content_type, object_pk=instance.pk)
+        
+def clear_acl_cache(instance, sender, **kw):
+    if kw['created']:
+        # this will only handle the owner's cached acls - other users will be
+        # out of luck for the timeout period - likely not to be an issue
+        key = 'layer_acls_%s' % instance.owner.id
+        cache.delete(key)
 
 signals.post_save.connect(create_profile, sender=User)
 signals.post_save.connect(create_publishing_status, sender=Map)
@@ -331,3 +338,6 @@ signals.post_save.connect(create_publishing_status, sender=Layer)
 # ensure hit count records are created up-front
 signals.post_save.connect(create_hitcount, sender=Map)
 signals.post_save.connect(create_hitcount, sender=Layer)
+
+# @todo hackity hack - throw out acl cache on Layer addition
+signals.post_save.connect(clear_acl_cache, sender=Layer)
