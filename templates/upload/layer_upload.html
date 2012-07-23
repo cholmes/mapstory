@@ -18,11 +18,11 @@
     <h3>Incomplete Uploads</h3>
     <p>You have the following incomplete uploads:</p>
     {% for u in incomplete %}
-    <div>
-        <div>{{ u.name }}, last updated on {{ u.date }}</div>
-        <div class="upload_actions">
-            <a class="btn btn-mini">Resume</a>
-            <a class="btn btn-mini">Delete</a>
+    <div class="clearfix" style="border: 1px solid gray; padding: .5em; margin: .5em">
+        <div style="float:left">{{ u.name }}, last updated on {{ u.date }}</div>
+        <div class="upload_actions" style="float:right">
+            <a class="btn btn-mini" href="{{ u.get_resume_url }}">Resume</a>
+            <a class="btn btn-mini" href="{{ u.get_delete_url }}">Delete</a>
         </div>
     </div>
     {% endfor %}
