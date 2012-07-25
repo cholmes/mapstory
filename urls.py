@@ -23,22 +23,12 @@ sitemaps = {
     "layer": LayerSitemap,
     "map": MapSitemap
 }
-
-def profile_detail_wrapper(*args, **kwargs):
-    from profiles.views import profile_detail
-    req = args[0]
-    kwargs['extra_context'] = {
-        'layers' : filtered_layers().filter(owner = req.user)
-    }
-    return profile_detail(*args,**kwargs)
     
 
 urlpatterns = patterns('',
     # inject our form into these views
     ('^profiles/edit', 'profiles.views.edit_profile', {'form_class': ProfileForm,}),
     ('^profiles/create', 'profiles.views.create_profile', {'form_class': ProfileForm,}),
-    # and override the detail view to add our filtered layers
-    url(r'^profiles/(?P<username>\w+)/$', profile_detail_wrapper, name='profiles_profile_detail')
 )
 
 urlpatterns += patterns('mapstory.views',

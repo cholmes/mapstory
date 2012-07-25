@@ -23,6 +23,7 @@ from geonode.core.models import ANONYMOUS_USERS
 from geonode.maps.models import Contact
 from geonode.maps.models import Map
 from geonode.maps.models import Layer
+from geonode.maps.models import LayerManager
 from geonode.maps.models import upload_complete
 
 from hitcount.models import HitCount
@@ -40,9 +41,9 @@ if hasattr(settings,'LAYER_EXCLUSIONS'):
     _exclude_regex = [ re.compile(e) for e in _exclude_patterns ]
 _layer_name_filter = reduce(operator.or_,[ Q(name__regex=f) for f in _exclude_patterns])
 
-def filtered_layers():
-    return Layer.objects.exclude(_layer_name_filter)
-Layer.objects.filtered = filtered_layers
+def filtered_layers_query(self):
+    return self.get_query_set().exclude(_layer_name_filter)
+LayerManager.filtered = filtered_layers_query
 
 def get_view_cnt_for(obj):
     '''Provide cached access to view cnts'''
