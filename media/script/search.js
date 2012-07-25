@@ -197,7 +197,8 @@ Ext.onReady(function() {
         fetching = true;
         var params = Ext.apply({
                 start: start,
-                limit: limit
+                limit: limit,
+                exclude: 'bbox,download_links'
             },queryItems);
         Ext.Ajax.request({
             url: search_url,

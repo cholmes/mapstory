@@ -34,10 +34,17 @@ def owner_query(query, kw):
     q = ContactDetail.objects.select_related().filter(user__isnull=False)
     q = q.defer('blurb', 'biography')
     return q
+
+def _initial_query(model, kw):
+    q = model.objects.filter(publish__status='Public')
+    user = kw['user']
+    if user:
+        q = q | model.objects.filter(owner=user)
+    return q
     
 
 def layer_query(query, kw):
-    q = Layer.objects.filter(publish__status='Public')
+    q = _initial_query(Layer, kw)
     q = q.only('title','date')
     bysection = kw.get('bysection')
     if bysection:
@@ -50,7 +57,7 @@ def layer_query(query, kw):
 
 
 def map_query(query, kw):
-    q = Map.objects.filter(publish__status='Public')
+    q = _initial_query(Map, kw)
     q = q.only('title','last_modified')
 
     bysection = kw.get('bysection')
