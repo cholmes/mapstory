@@ -23,6 +23,7 @@ from geonode.core.models import ANONYMOUS_USERS
 from geonode.maps.models import Contact
 from geonode.maps.models import Map
 from geonode.maps.models import Layer
+from geonode.maps.models import upload_complete
 
 from hitcount.models import HitCount
 from agon_ratings.models import OverallRating
@@ -319,6 +320,10 @@ def create_publishing_status(instance, sender, **kw):
     if kw['created']:
         PublishingStatus.objects.get_or_create_for(instance)
         
+def set_publishing_private(**kw):
+    instance = kw.get('layer')
+    PublishingStatus.objects.set_status(instance, PUBLISHING_STATUS_PRIVATE)
+        
 def create_hitcount(instance, sender, **kw):
     if kw['created']:
         content_type = ContentType.objects.get_for_model(instance)
@@ -334,6 +339,10 @@ def clear_acl_cache(instance, sender, **kw):
 signals.post_save.connect(create_profile, sender=User)
 signals.post_save.connect(create_publishing_status, sender=Map)
 signals.post_save.connect(create_publishing_status, sender=Layer)
+# @annoyatron - core upload sets permissions after saving the layer
+# this signal allows layering the publishing status behavior on top
+# this is not needed for maps
+upload_complete.connect(set_publishing_private, sender=None)
 
 # ensure hit count records are created up-front
 signals.post_save.connect(create_hitcount, sender=Map)
