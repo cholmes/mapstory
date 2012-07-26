@@ -5,6 +5,8 @@ from geonode.maps.models import Thumbnail
 
 from mapstory.models import *
 from mapstory.util import lazy_context
+from mapstory.forms import CheckRegistrationForm
+import account.views
 
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
@@ -117,7 +119,8 @@ def favoriteslinks(req):
 def favoriteslist(req):
     ctx = {
         "favorites" : Favorite.objects.favorites_for_user(req.user),
-        "in_progress" : Map.objects.filter(owner=req.user, publish__status='In Progress')
+        "in_progress_maps" : Map.objects.filter(owner=req.user).exclude(publish__status='Public'),
+        "in_progress_layers" : Layer.objects.filtered().filter(owner=req.user).exclude(publish__status='Public')
     }
     return render_to_response("mapstory/_widget_favorites.html",ctx)
 
@@ -229,6 +232,9 @@ def topics_api(req, layer_or_map, layer_or_map_id):
     
     return HttpResponse('OK', status=200)
 
+class SignupView(account.views.SignupView):
+
+   form_class = CheckRegistrationForm
 
 @login_required
 def create_annotations_layer(req, mapid):

@@ -23,6 +23,8 @@ from geonode.core.models import ANONYMOUS_USERS
 from geonode.maps.models import Contact
 from geonode.maps.models import Map
 from geonode.maps.models import Layer
+from geonode.maps.models import LayerManager
+from geonode.maps.models import upload_complete
 
 from hitcount.models import HitCount
 from agon_ratings.models import OverallRating
@@ -39,9 +41,9 @@ if hasattr(settings,'LAYER_EXCLUSIONS'):
     _exclude_regex = [ re.compile(e) for e in _exclude_patterns ]
 _layer_name_filter = reduce(operator.or_,[ Q(name__regex=f) for f in _exclude_patterns])
 
-def filtered_layers():
-    return Layer.objects.exclude(_layer_name_filter)
-Layer.objects.filtered = filtered_layers
+def filtered_layers_query(self):
+    return self.get_query_set().exclude(_layer_name_filter)
+LayerManager.filtered = filtered_layers_query
 
 def get_view_cnt_for(obj):
     '''Provide cached access to view cnts'''
@@ -319,15 +321,33 @@ def create_publishing_status(instance, sender, **kw):
     if kw['created']:
         PublishingStatus.objects.get_or_create_for(instance)
         
+def set_publishing_private(**kw):
+    instance = kw.get('layer')
+    PublishingStatus.objects.set_status(instance, PUBLISHING_STATUS_PRIVATE)
+        
 def create_hitcount(instance, sender, **kw):
     if kw['created']:
         content_type = ContentType.objects.get_for_model(instance)
         HitCount.objects.create(content_type=content_type, object_pk=instance.pk)
+        
+def clear_acl_cache(instance, sender, **kw):
+    if kw['created']:
+        # this will only handle the owner's cached acls - other users will be
+        # out of luck for the timeout period - likely not to be an issue
+        key = 'layer_acls_%s' % instance.owner.id
+        cache.delete(key)
 
 signals.post_save.connect(create_profile, sender=User)
 signals.post_save.connect(create_publishing_status, sender=Map)
 signals.post_save.connect(create_publishing_status, sender=Layer)
+# @annoyatron - core upload sets permissions after saving the layer
+# this signal allows layering the publishing status behavior on top
+# this is not needed for maps
+upload_complete.connect(set_publishing_private, sender=None)
 
 # ensure hit count records are created up-front
 signals.post_save.connect(create_hitcount, sender=Map)
 signals.post_save.connect(create_hitcount, sender=Layer)
+
+# @todo hackity hack - throw out acl cache on Layer addition
+signals.post_save.connect(clear_acl_cache, sender=Layer)

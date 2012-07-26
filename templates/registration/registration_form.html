@@ -1,0 +1,14 @@
+{% extends "geonode/templates/registration/registration_form.html" %}
+{% load i18n %}
+
+{% block main %}
+{{ block.super }}
+{% endblock %}
+
+{% block extra_body %}
+<script type="text/javascript">
+    $(function() {
+       $("li input[type=submit]").parent().prepend('<li><label for="human">I am a human</label><input id="human" name="human" type="checkbox"/>')
+    })
+</script>
+{% endblock %}

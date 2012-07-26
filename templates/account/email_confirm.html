@@ -1,0 +1,17 @@
+{% extends "page_layout.html" %}
+
+{% block main %}
+<div class="row mrg-top">
+    <div class="span4 offset4">
+        <h2>Account Activation</h2>
+        <form method="POST" action=".">
+            {% csrf_token %}
+            <ul class="form">
+                <li>
+                    <input class="btn" type="submit" value="Activate My Account">
+                </li>
+            </ul>
+        </form>
+    </div>
+</div>
+{% endblock %}

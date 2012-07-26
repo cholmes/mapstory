@@ -1,0 +1,3 @@
+This email is to let you know that {{ signup_code.inviter }} at {{ current_site }}
+has invited you to join {{ current_site }}. Just visit {{ signup_url }} to get
+started with {{ current_site }}.

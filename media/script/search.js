@@ -197,7 +197,8 @@ Ext.onReady(function() {
         fetching = true;
         var params = Ext.apply({
                 start: start,
-                limit: limit
+                limit: limit,
+                exclude: 'bbox,download_links'
             },queryItems);
         Ext.Ajax.request({
             url: search_url,
@@ -544,6 +545,7 @@ Ext.onReady(function() {
         if (keycode == '13') {
             ev.preventDefault();
             queryItems['q'] = this.dom.search.value;
+            Ext.select('#sortForm select').item(0).dom.selectedIndex = 5;
             reset();
         }
     });
