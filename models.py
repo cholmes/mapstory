@@ -24,7 +24,7 @@ from geonode.maps.models import Contact
 from geonode.maps.models import Map
 from geonode.maps.models import Layer
 from geonode.maps.models import LayerManager
-from geonode.maps.models import upload_complete
+from geonode.upload.signals import upload_complete
 
 from hitcount.models import HitCount
 from agon_ratings.models import OverallRating
