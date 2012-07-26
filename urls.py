@@ -4,7 +4,6 @@ from django.views.generic.simple import direct_to_template
 from staticfiles.urls import staticfiles_urlpatterns
 from geonode.sitemap import LayerSitemap, MapSitemap
 from geonode.proxy.urls import urlpatterns as proxy_urlpatterns
-from mapstory.models import *
 from mapstory.forms import ProfileForm
 from mapstory.views import SignupView
 from hitcount.views import update_hit_count_ajax
