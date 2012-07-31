@@ -35,6 +35,11 @@ def owner_query(query, kw):
     q = q.defer('blurb', 'biography')
     return q
 
+def owner_rank_rules():
+    return (ContactDetail,
+           ['blurb', 5, 2],
+           ['biography', 5, 2])
+
 def _initial_query(model, kw):
     q = model.objects.filter(publish__status='Public')
     user = kw['user']
