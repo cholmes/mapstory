@@ -1,3 +1,5 @@
+from datetime import datetime
+from datetime import timedelta
 from django.conf import settings
 from django.core.mail import EmailMessage
 from mapstory.watchdog.handlers import MemoryHandler
@@ -336,6 +338,15 @@ def list_suites():
                     if basename != 'core':
                         suites.append(basename)
     print '\n'.join(sorted(suites))
+
+
+def clean_runs(ndays):
+    now = datetime.now()
+    delta = timedelta(days=ndays)
+    cutoff = now - delta
+    old_runs = Run.objects.filter(time__lte=cutoff, is_error=False)
+    for run in old_runs:
+        run.delete()
 
 
 class CheckFailed(Exception):
