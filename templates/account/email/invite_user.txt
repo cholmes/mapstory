@@ -1,3 +1,7 @@
-This email is to let you know that {{ signup_code.inviter }} at {{ current_site }}
-has invited you to join {{ current_site }}. Just visit {{ signup_url }} to get
-started with {{ current_site }}.
+{{ signup_code.inviter }} has invited you to join MapStory ( http://{{ current_site.domain }} )!
+
+Just click the following link to get started:
+{{ signup_url }}
+
+To learn more about MapStory:
+http://wiki.mapstory.org/index.php?title=Main_Page
