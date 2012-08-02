@@ -3,13 +3,13 @@ from geonode.maps.models import Layer
 from geonode.maps.models import MapLayer
 from geonode.maps.models import Thumbnail
 
-from mapstory.models import *
+from mapstory import models
 from mapstory.util import lazy_context
 from mapstory.forms import CheckRegistrationForm
 import account.views
 
 from django.contrib.auth.models import User
-from django.core.urlresolvers import reverse
+from django.core.cache import cache
 from django.conf import settings
 from django.db.models import signals
 from django.shortcuts import get_object_or_404
@@ -19,6 +19,7 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.template import loader
 from django.contrib.contenttypes.models import ContentType
+from django.contrib.markup.templatetags import markup
 
 import os
 import random
@@ -40,24 +41,34 @@ def index(req):
     users = []
     
     return render_to_response('index.html', RequestContext(req,{
-        "video" : VideoLink.objects.front_page_video(),
+        "video" : models.VideoLink.objects.front_page_video(),
         "tiles" : lazy_tiles(),
         "users" : users
     }))
 
 def how_to(req):
     return render_to_response('mapstory/how_to.html', RequestContext(req,{
-        'videos' : VideoLink.objects.how_to_videos()
+        'videos' : models.VideoLink.objects.how_to_videos()
+    }))
+    
+def manual(req):
+    manual = cache.get('mapstory_manual')
+    if not manual or settings.DEBUG:
+        with open(settings.PROJECT_ROOT + "/manual/manual.rst") as fp:
+            manual = markup.restructuredtext(fp.read())
+        cache.set('mapstory_manual', manual, 60000)
+    return render_to_response('mapstory/manual.html', RequestContext(req,{
+        'content' : manual
     }))
 
 def section_detail(req, section):
-    sec = get_object_or_404(Section, slug=section)
+    sec = get_object_or_404(models.Section, slug=section)
     return render_to_response('mapstory/section_detail.html', RequestContext(req,{
         'section' : sec
     }))
     
 def resource_detail(req, resource):
-    res = get_object_or_404(Resource, slug=resource)
+    res = get_object_or_404(models.Resource, slug=resource)
     return render_to_response('mapstory/resource.html', RequestContext(req,{
         'resource' : res
     }))
@@ -69,7 +80,7 @@ def get_map_carousel_maps():
     3. any map that has a thumbnail (current)
     '''
     
-    favorites = Favorite.objects.favorite_maps_for_user(User.objects.get(username='admin'))
+    favorites = models.Favorite.objects.favorite_maps_for_user(User.objects.get(username='admin'))
     if favorites.count() > 3:
         favorites = random.sample(favorites, min(10,favorites.count()))
         return [ f.content_object for f in favorites ]
@@ -103,7 +114,7 @@ def favoriteslinks(req):
     layer_or_map, id = ident.split('-')
     if layer_or_map == 'map':
         obj = get_object_or_404(Map, pk = id)
-        maps = PublishingStatus.objects.get_in_progress(req.user,Map)
+        maps = models.PublishingStatus.objects.get_in_progress(req.user,Map)
     elif layer_or_map == 'layer':
         obj = get_object_or_404(Layer, pk = id)
         maps = None
@@ -118,7 +129,7 @@ def favoriteslinks(req):
 @login_required
 def favoriteslist(req):
     ctx = {
-        "favorites" : Favorite.objects.favorites_for_user(req.user),
+        "favorites" : models.Favorite.objects.favorites_for_user(req.user),
         "in_progress_maps" : Map.objects.filter(owner=req.user).exclude(publish__status='Public'),
         "in_progress_layers" : Layer.objects.filtered().filter(owner=req.user).exclude(publish__status='Public')
     }
@@ -132,7 +143,7 @@ def layer_metadata(request, layername):
     if not request.user.has_perm('maps.change_layer', obj=layer):
         return HttpResponse(loader.render_to_string('401.html', 
             RequestContext(request, {'error_message': 
-                _("You are not permitted to modify this layer's metadata")})), status=401)
+                "You are not permitted to modify this layer's metadata"})), status=401)
     if request.method == "POST":
         form = LayerDescriptionForm(request.POST, prefix="layer")
         if form.is_valid():
@@ -151,12 +162,12 @@ def favorite(req, layer_or_map, id):
         obj = get_object_or_404(Map, pk = id)
     else:
         obj = get_object_or_404(Layer, pk = id)
-    Favorite.objects.create_favorite(obj, req.user)
+    models.Favorite.objects.create_favorite(obj, req.user)
     return HttpResponse('OK', status=200)
 
 @login_required
 def delete_favorite(req, id):
-    Favorite.objects.get(user=req.user, pk=id).delete()
+    models.Favorite.objects.get(user=req.user, pk=id).delete()
     return HttpResponse('OK', status=200)
 
 @login_required
@@ -168,8 +179,8 @@ def set_section(req):
     if mapobj.owner != req.user or not req.user.has_perm('mapstory.change_section'):
         return HttpResponse('Not sufficient permissions',status=401)
     sectionid = req.POST['section']
-    get_object_or_404(Section, pk=sectionid)
-    Section.objects.add_to_section(sectionid, mapobj)
+    get_object_or_404(models.Section, pk=sectionid)
+    models.Section.objects.add_to_section(sectionid, mapobj)
     return HttpResponse('OK', status=200)
 
 @login_required
@@ -182,7 +193,7 @@ def publish_status(req, layer_or_map, layer_or_map_id):
         obj = get_object_or_404(Layer, pk = layer_or_map_id)
     if obj.owner != req.user and not req.user.has_perm('mapstory.change_publishingstatus', obj):
         return HttpResponse('Not sufficient permissions',status=401)
-    PublishingStatus.objects.set_status(obj, req.POST['status'])
+    models.PublishingStatus.objects.set_status(obj, req.POST['status'])
     return HttpResponse('OK', status=200)
 
 @login_required
@@ -226,7 +237,7 @@ def topics_api(req, layer_or_map, layer_or_map_id):
         pass
     elif req.method == 'POST':
         topics = req.POST['topics']
-        Topic.objects.tag(obj,topics)
+        models.Topic.objects.tag(obj,topics)
     if req.method != 'POST':
         return HttpResponse(status=400)
     
