@@ -321,7 +321,3 @@ try:
 except ImportError:
     pass
 
-try:
-    import monkey_patch_avatar
-except Exception,e:
-    print 'monkey patch failed!', e
