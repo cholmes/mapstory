@@ -26,6 +26,8 @@ from geonode.maps.models import Layer
 from geonode.maps.models import LayerManager
 from geonode.upload.signals import upload_complete
 
+from mapstory import gwc_config
+
 from hitcount.models import HitCount
 from agon_ratings.models import OverallRating
 from agon_ratings.categories import RATING_CATEGORY_LOOKUP
@@ -324,6 +326,10 @@ def create_publishing_status(instance, sender, **kw):
 def set_publishing_private(**kw):
     instance = kw.get('layer')
     PublishingStatus.objects.set_status(instance, PUBLISHING_STATUS_PRIVATE)
+    
+def configure_gwc(**kw):
+    instance = kw.get('layer')
+    gwc_config.configure_layer(instance.typename)
         
 def create_hitcount(instance, sender, **kw):
     if kw['created']:
@@ -344,6 +350,7 @@ signals.post_save.connect(create_publishing_status, sender=Layer)
 # this signal allows layering the publishing status behavior on top
 # this is not needed for maps
 upload_complete.connect(set_publishing_private, sender=None)
+upload_complete.connect(configure_gwc, sender=None)
 
 # ensure hit count records are created up-front
 signals.post_save.connect(create_hitcount, sender=Map)
