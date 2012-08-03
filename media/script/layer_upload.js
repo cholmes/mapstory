@@ -35,7 +35,7 @@ function init(options) {
             cmp.setValue(value.split(/[/\\]/).pop());
         }
     };
-    var form_fields = [layer_title,{
+    var form_fields = [{
             xtype: "hidden",
             name: "csrfmiddlewaretoken",
             value: options.csrf_token
@@ -117,26 +117,48 @@ function init(options) {
     var permissionsField = new Ext.form.Hidden({
         name: "permissions"
     });
+    
+    function containerFromDom(id) {
+        return new Ext.Container({
+            contentEl : id
+        });
+    }
+    
+    var zipMsg = containerFromDom('zip-msg').hide();
 
     form_fields.push(base_file);
-
+    form_fields.push(zipMsg);
+    form_fields.push(sld_file);
+    
     if (options.is_featuretype) {
         form_fields = form_fields.concat(dbf_file, shx_file, prj_file);
     }
-
+    
+    form_fields.push(containerFromDom('notes'));
+    form_fields.push(containerFromDom('about-data'));
+    
+    form_fields.push(layer_title);
     if (!options.layer_name) {
-        form_fields = form_fields.concat(sld_file,abstractField,permissionsField);
+        form_fields = form_fields.concat(abstractField,permissionsField);
+    }
+    
+    function errorHandler(fp, o) {
+        var html = '', msgs = Ext.get('form-messages');
+        for (var i = 0; i < o.result.errors.length; i++) {
+            html += '<li>' + o.result.errors[i] + '</li>'
+        }
+        msgs.query('ul')[0].innerHTML = html;
+        msgs.slideIn('t');
     }
 
     var fp = new Ext.FormPanel({
         renderTo: 'upload_form',
         fileUpload: true,
-        width: 500,
+        width: 600,
         frame: true,
         autoHeight: true,
         unstyled: true,
         labelWidth: 50,
-        bodyStyle: 'padding: 10px 10px 0 10px;',
         defaults: {
             anchor: '95%',
             msgTarget: 'side'
@@ -152,22 +174,7 @@ function init(options) {
                         success: function(fp, o) {
                             document.location = o.result.redirect_to;
                         },
-                        failure: function(fp, o) {
-                            error_message = '<ul>';
-                            for (var i = 0; i < o.result.errors.length; i++) {
-                                error_message += '<li>' + o.result.errors[i] + '</li>'
-                            }
-                            error_message += '</ul>'
-
-                            Ext.Msg.show({
-                                title: gettext("Error"),
-                                msg: error_message,
-                                minWidth: 200,
-                                modal: true,
-                                icon: Ext.Msg.ERROR,
-                                buttons: Ext.Msg.OK
-                            });
-                        }
+                        failure: errorHandler
                     });
                 }
             }
@@ -186,16 +193,21 @@ function init(options) {
         prj_file.show();
     };
 
-    var check_shapefile = function() {
+    var checkFileType = function() {
         if ((/\.shp$/i).test(base_file.getValue())) {
             enable_shapefile_inputs();
         } else {
             disable_shapefile_inputs();
         }
+        if ((/\.zip$/i).test(base_file.getValue())) {
+            zipMsg.show();
+        } else {
+            zipMsg.hide();
+        }
     };
 
     base_file.addListener('fileselected', function(cmp, value) {
-        check_shapefile();
+        checkFileType();
     });
     
     if (options.layer_name) {
@@ -238,7 +250,7 @@ function init(options) {
             // this is the single file drop - it may be a tiff or a shp file or a zip
             if (files.length == 1 && !dbf_file.isVisible()) {
                 base_file.setValue(files[i].name);
-                check_shapefile();
+                checkFileType();
                 dropped_files.base_file = files[i];
             } else {
                 // multiple file drop
@@ -261,30 +273,17 @@ function init(options) {
             }
         };
 
-        // drop target w/ drag over/exit effects
-        var dropPanel = new Ext.Container({
-            html: "Drop Files Here",
-            cls: 'x-panel-body',
-            style: { borderWidth: '1px', borderStyle: 'solid', textAlign: 'center'},
-            listeners: {
-                render: function(p) {
-                    var el = p.getEl().dom;
-                    function t() {p.getEl().toggleClass('x-grid3-cell-selected');}
-                    el.addEventListener("dragover", function(ev) {
-                        ev.stopPropagation();
-                        ev.preventDefault();
-                    }, true);
-                    el.addEventListener("drop", function(ev) {
-                        p.getEl().removeClass('x-grid3-cell-selected');
-                        drop(ev);
-                    },false);
-                    el.addEventListener("dragexit",t);
-                    el.addEventListener("dragenter",t);
-                }
-            }
-        });
-        fp.add(dropPanel);
-        fp.doLayout();
+        var dropTarget = Ext.get("drop-target");
+        function t() {
+            dropTarget.toggleClass('drop-hover');
+        }
+        Ext.get("drop-target").addListener("dragover", function(ev) {
+            ev.stopPropagation();
+            ev.preventDefault();
+        }).addListener("drop", function(ev) {
+            dropTarget.removeClass('drop-hover');
+            drop(ev.browserEvent);
+        }).addListener("dragexit",t).addListener("dragenter",t).setStyle('display','block');
         
         function createDragFormData() {
             var data = new FormData(), id, value, fields = fp.getForm().getFieldValues(), size = 0;
@@ -320,24 +319,11 @@ function init(options) {
 
             function error(ev,result) {
                 var error_message;
-                if (typeof result != 'undefined') {
-                    error_message = '<ul>';
-                    for (var i = 0; i < result.errors.length; i++) {
-                        error_message += '<li>' + result.errors[i] + '</li>'
-                    }
-                    error_message += '</ul>'
-                } else {
-                    error_message = "Unexpected Error:<p>" + xhr.responseText;
+                if (typeof result == 'undefined') {
+                    result = ["Unexpected Error: " + xhr.responseText];
                 }
-
-                Ext.Msg.show({
-                    title: gettext("Error"),
-                    msg: error_message,
-                    minWidth: 200,
-                    modal: true,
-                    icon: Ext.Msg.ERROR,
-                    buttons: Ext.Msg.OK
-                });
+                progress.hide();
+                errorHandler(ev, {result:result});
             }
             xhr.addEventListener('load', function(ev) {
                 try {
@@ -368,4 +354,18 @@ function init(options) {
             }
         }
     }
+    
+    Ext.select('.uip .icon-trash').on('click',function(ev) {
+        ev.preventDefault();
+        var a = new Ext.Element(this);
+        Ext.Ajax.request({
+            url : a.getAttribute('href'),
+            success : function() {
+                a.parent('.uip').slideOut('t',{useDisplay:true})
+            },
+            failure : function() {
+                alert('Uh oh. An error occurred.')
+            }
+        })
+    });
 }

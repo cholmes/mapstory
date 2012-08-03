@@ -1,4 +1,5 @@
 {% extends "no_bottom_layout.html" %}
+{% load mapstory_tags %}
 {% load i18n %}
 
 {% block title %} {% trans "Upload Layer"  %} - {{ block.super }} {% endblock %}
@@ -8,31 +9,69 @@
 {% include "geonode/geo_header.html" %}
 <link rel="stylesheet" type="text/css" href="{{ GEONODE_CLIENT_LOCATION }}theme/ux/fileuploadfield/fileuploadfield.css"/>
 {{ block.super }}
+<style type="text/css">
+    .threecol p {
+        margin: 1em 0;
+    }
+    .threecol .uip {
+        border-bottom: 1px solid #F3F2F2; 
+        padding: .5em 0; 
+        margin: .5em 0;
+    }
+    #permissions_form {
+        display: none;
+    }
+    .filetypes li {
+        list-style: disc outside;
+        font-size: 13px;
+    }
+    .filetypes {
+        margin-left: 3em;
+    }
+    .mrg {
+        margin: 1em 0;
+    }
+    #drop-target {
+        border: 1px solid #F5C09A; background: #FCFCFC; color: #888;
+        display: none;
+        padding: 2em;
+        text-align: center;
+        font-size: larger;
+    }
+    #drop-target.drop-hover {
+        border: 1px solid #F56600; background: #FCF7F7; color: #333;
+    }
+</style>
 {% endblock %}
 
 {% block main %}
 <div class="twocol">
     <h2>{% trans "Add data" %}</h2>
     
-    {% if incomplete %}
-    <h3>Incomplete Uploads</h3>
-    <p>You have the following incomplete uploads:</p>
-    {% for u in incomplete %}
-    <div class="clearfix" style="border: 1px solid gray; padding: .5em; margin: .5em">
-        <div style="float:left">{{ u.name }}, last updated on {{ u.date }}</div>
-        <div class="upload_actions" style="float:right">
-            <a class="btn btn-mini" href="{{ u.get_resume_url }}">Resume</a>
-            <a class="btn btn-mini" href="{{ u.get_delete_url }}">Delete</a>
-        </div>
-    </div>
-    {% endfor %}
-    {% endif %}
-    
-    <p class="alert alert-error">Note that time support in MapStory is currently limited to everything from 1AD 
-       until the reasonable future (5,874,897 AD).</p>
-    <p class="alert alert-error">Uploading of zip files is also supported. The zip file must contain the
-       appropriate shapefiles (.shp,.dbf,.prj) in the top-level directory.
+    <p style="margin-bottom:1em;">To get started, upload some data.
+       {% if incomplete %}
+       Note: you also have some uploads in progress. For a full list, look under
+       "Uploads in Progress" at right.
+       {% endif %}
     </p>
+    <p>MapStory currently supports the data formats listed below
+        ({% manual_link "upload-support" "tell me more about these formats" %}):
+    </p>
+    <ul class="filetypes">
+        <li>ESRI Shapefile (.shp)</li>
+        <li>CSV (.csv) with latitude and longitude columns.</li>
+        <li>Zip (.zip) file containing all files in the top-level directory</li>
+    </ul>
+    <p>
+    Optional: You may provide an SLD file.
+    </p>
+    
+    <div id="form-messages" class="mrg alert alert-error hide">
+        <p>We weren't able to process your upload :</p>
+        <ul>
+        </ul>
+    </div>
+    <div id="drop-target" class="mrg">Drag and Drop Files Here</div>
     {% if enough_storage %}
     {% if display_storage_stats %}
     <p class="alert alert-error">There are currently {{ storage_remaining }} of space left on this server.
@@ -53,6 +92,19 @@
 {% if enough_storage %}
 
   <div id="upload_form">
+      <p id="zip-msg" class="alert alert-warn">Just a reminder: for MapStory to process a ZIP file, 
+          all required files must be in the top-level directory of the ZIP file. Feedback cannot be
+          given until the file is uploaded.
+          {% manual_link "upload-zip" "Learn More &#187;" %}
+      </p>
+      <p id="notes">
+          <strong>Note:</strong> time support in MapStory is currently limited to everything from 1AD 
+          until the reasonable future (5,874,897 AD).
+      </p>
+      <div id="about-data">
+          <hr>
+          <h3>About the Data</h3>
+      </div>
   </div>
 </div>
 <script type="text/javascript" src="{{ STATIC_URL }}script/layer_upload.js"></script>
@@ -74,9 +126,33 @@ setup({
 {% block sidebar %}
 <div class="threecol">
     
+{% if incomplete %}
+<h3>Uploads In Progress</h3>
+{% for u in incomplete %}
+<div class="clearfix uip">
+    <div style="float:left">
+        <a href="{{ u.get_resume_url }}">{{ u.name }}</a><br/>
+        {{ u.date|date:"N j,Y"}}
+    </div>
+    <div class="upload_actions" style="float:right">
+        <a class="icon-trash" href="{{ u.get_delete_url }}" title="Delete"></a>
+    </div>
+</div>
+{% endfor %}
+{% endif %}
+
+<h3>Tips</h3>
+<p>To upload a StoryLayer, the following files are required: *.shp, *.dbf, and
+*.shx. A *.prj is strongly suggested and an optional *.sld file may be provided.
+</p>
+<p>You can also upload all the required files as a ZIP file.
+</p>
+<p>For more help, see the {% manual_link "uploads" "manual" %}</p>
+    
 {% if enough_storage %}
-<h3>{%trans "Permissions"  %}</h3>
+<!--<h3>{%trans "Permissions"  %}</h3>-->
 
 <div id="permissions_form"></div>
 {% endif %}
+
 {% endblock %}
