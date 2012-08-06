@@ -16,10 +16,11 @@
     display: inline;
 }
 #login-link {
-    margin-right: 1em;
 }
 #login-area {
     color: white;
+    padding-right: 1em;
+    position: static;
 }
 #login-area {
     width: 20em;
@@ -80,14 +81,16 @@ $(function() {
     {% block body %} 
     <div id="header">
       <div class="wrap selfclear">
-        <a id="logo" href="{% url geonode.views.index %}">MapStory</a>
+        <a id="logo" href="{% url home %}">MapStory</a>
         <div id="login-area">
           {% if user.is_authenticated %}
           <a id="login-link" href="{% url auth_logout %}">{% trans "Log out" %}</a>
           <div class="user"><a href="{% url about_storyteller user.username %}">Welcome {{ user.username }}</a></div>
           {% else %}
           <!-- this should be updated to a url var --><a id="login-link" href="#login-form-pop">{% trans "Sign in" %}</a>
+          <div class="user">
           {% if REGISTRATION_OPEN %} {% trans "or" %} <a href="{% url registration_register %}">{% trans "Register" %}</a>{% endif %}
+          </div>
           {% endif %}
         </div>
         {% include "_login_form.html" %}
