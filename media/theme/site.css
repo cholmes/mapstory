@@ -73,6 +73,7 @@ section {
   font-size:11px;
   position: relative;
   top: 11px;
+  width: 40px;
 }
 
 .loginmsg {
