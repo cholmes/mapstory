@@ -1,0 +1,265 @@
+{% extends "no_bottom_layout.html" %}
+{% load i18n %}
+
+{% block title %} {% trans "Upload StoryLayer" %} - {{ block.super }} {% endblock %}
+
+{% block extra_head %}
+<style>
+    /* bootstrap workarounds */
+    #timeForm label, #timeForm input, #timeForm select {
+        display: inline;
+    }
+    #timeForm input, #timeForm select {
+        width: auto;
+    }
+    #timeForm .hide {
+        display: none;
+    }
+    /* end bootstrap workarounds */
+    .formSection {
+        margin-bottom: 1em;
+        border-bottom: 1px solid white;
+    }
+    .left input {
+        line-height: 2em;
+    }
+    form input, form select {
+        font-size: small;
+    }
+    form label {
+        line-height: 2em;
+    }
+    .clearfix:after {
+      content: ".";
+      display: block;
+      height: 0;
+      clear: both;
+      visibility: hidden;
+    }
+    .clearfix {
+      display: inline-block;
+    }
+    * html .clearfix {
+      height: 1%;
+    } /* Hides from IE-mac \*/
+    .clearfix {
+      display: block;
+    }
+    #format_input input {
+        width:16em;
+    }
+    #timehelp p {
+        color: black !important;
+    }
+    #timehelp code {
+        background: lightgray;
+    }
+    .yesno {
+        font-size: larger;
+    }
+    .yesno input {
+        
+    }
+    #precision_value {
+        height: 26px;
+        margin-bottom: 9px;
+    }
+</style>
+{{ block.super }}
+{% endblock %}
+{% block main %}
+<div class="twocol">
+    <h2> {% trans "Upload StoryLayer > Time Options for " %} "{{ layer_name }}" </h2>
+      
+    <form method="POST" id="timeForm" action="time">
+        {% csrf_token %}
+          
+        <p>Does this data have date/time attributes?</p>
+        <div id="hastime" class="yesno">
+            <input name="hastime" type="radio" class="hide">
+            <input id="yestime" type="radio" name="hastime" ><label for="yestime">Yes</label>
+            <input id="notime" type="radio" name="hastime"><label for="notime">No</label>
+        </div>
+          
+        <div id="hasint" class="hide">
+            <p>Was the data collected at regular intervals? (e.g., every 8 hours, every 2 months)</p>
+            <div class="yesno">
+                <input name="hasint" type="radio" class="hide">
+                <input id="yesint" type="radio" name="hasint" ><label for="yesint">Yes</label>
+                <input id="noint" type="radio" name="hasint"><label for="noint">No</label>
+            </div>
+            <input type="hidden" name="presentation_strategy" id="presentation_strategy" value="LIST">
+            
+            <div id="interval" class="hide">
+                <label for="precision_value">Every</label>
+                <input id="precision_value" type="text" name="precision_value" size="3"/>
+                {{ time_form.precision_step }}
+            </div>
+        </div>
+          
+        <hr>
+          
+        <div id="starttime" class="formSection hide">
+            <h4>Start Date/Time</h4>
+            <div>
+                <label for="start_type">Type</label>
+                <select id="start_type">
+                    <option selected="true" value="none"></option>
+                    {% if time_form.time_attribute %}
+                    <option value="time">Date/Time</option>
+                    {% endif %}
+                    {% if time_form.text_attribute %}
+                    <option value="text">Text</option>
+                    {% endif %}
+                    {% if time_form.year_attribute %}
+                    <option value="year">Year Number</option>
+                    {% endif %}
+                </select>
+            </div>
+            <div id="start_att" class="hide">
+                <label for="">Attribute</label>
+                {{ time_form.time_attribute }}
+                {{ time_form.text_attribute }}
+                {{ time_form.year_attribute }}
+            </div>
+            <div id="startformat" class="hide">
+                <label for="format_select">Date Format</label>
+                <select id="format_select">
+                    <option selected="true" value="0">Best Guess</option>
+                    <option value="1">Custom</option>
+                </select>
+                <div id="format_input" style="display: inline; visibility: hidden;" class="clearfix">
+                    <label for="id_text_attribute_format">Custom Format:</label> {{ time_form.text_attribute_format }}
+                </div>
+            </div>
+        </div>
+          
+        <div id="endtime" class="formSection hide">
+            <h4>End Date/Time</h4>
+            <div id="hasend" class="yesno">
+                <p>Does this data have an end date/time attribute?</p>
+                <input name="hasend" type="radio" class="hide">
+                <input id="yesend" type="radio" name="hasend" ><label for="yesend">Yes</label>
+                <input id="noend" type="radio" name="hasend"><label for="noend">No</label>
+            </div>
+            <div id="endtimeopts" class="hide">
+                <label for="end_type">Type</label>
+                <select id="end_type">
+                    <option selected="true" value="none"></option>
+                    {% if time_form.time_attribute %}
+                    <option value="date">Date/Time</option>
+                    {% endif %}
+                    {% if time_form.text_attribute %}
+                    <option value="text">Text</option>
+                    {% endif %}
+                    {% if time_form.year_attribute %}
+                    <option value="number">Number</option>
+                    {% endif %}
+                </select>
+                <div id="end_att" class="hide">
+                    <label for="">Attribute</label>
+                    {{ time_form.end_time_attribute }}
+                    {{ time_form.end_text_attribute }}
+                    {{ time_form.end_year_attribute }}
+                </div>
+                <div id="endformat" class="hide">
+                    <label for="end_format_select">Date Format</label>
+                    <select id="end_format_select">
+                        <option selected="true" value="0">Best Guess</option>
+                        <option value="1">Custom</option>
+                    </select>
+                    <div id="end_format_input" style="display: inline; visibility: hidden;" class="clearfix">
+                        <label for="id_end_text_attribute_format">Custom Format:</label> {{ time_form.end_text_attribute_format }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="feedback" class="alert alert-error">
+            <div id="no-time">
+                Please indicate whether your data have a date/time attributes.
+            </div>
+            <div id="no-int">
+                Please indicate whether the data were collected at regular intervals or not.
+            </div>
+            <div id="no-int-mult">
+                Please indicate how often the data was collected in the text field using whole numbers (e.g., 3, 7, etc.).
+            </div>
+            <div id="no-int-base">
+                Please indicate the interval at which your data were uploaded (every month, year, etc.).
+            </div>
+            <div id="no-end">
+                Please indicate whether the data has an end date.
+            </div>
+            <div id="no-type">
+                Please indicate what kind of date the start/end date is.
+            </div>
+            <div id="no-att">
+                Please select which attribute contains the start/end date.
+            </div>
+            <div id="no-format-type">
+                Please indicate whether we should guess the format of the start/end or if you would like to specify the format.
+            </div>
+            <div id="no-format">
+                Please specify the exact format of the start/end date.
+            </div>
+        </div>
+          
+        <input class="btn btn-primary" type="submit" value="{% trans "Next" %}">
+    </form>
+</div>
+<div id="timehelp" class="threecol">
+    <h3>Need Help?</h3>
+    <h4>Enabling Time</h4>
+    <p>A feature can currently support one or two time attributes. If a single
+    attribute is used, the feature is considered relevant at that single point in time. If two
+    attributes are used, the second attribute represents the end of a valid period for the
+    feature.</p>
+    <h4>Selecting an Attribute</h4>
+    <p>A time attribute can be one of:</p>
+    <ul>
+        <li>An existing date</li>
+        <li>Text that can be converted to a timestamp</li>
+        <li>A number representing a year</li>
+    </ul>
+    <p>
+    For text attributes, one can specify a custom format or use the 'best guess' approach.
+    The most common formatting flags are:
+    </p>
+    <ul>
+        <li><code>y</code> year</li>
+        <li><code>M</code> month</li>
+        <li><code>d</code> day of month</li>
+        <li><code>H</code> hour of day (0-23)</li>
+        <li><code>k</code> hour of day (1-24)</li>
+        <li><code>m</code> minute in hour</li>
+        <li><code>s</code> second in minute</li>
+    </ul>
+    
+    <p class="alert alert-info">Note that single quotes represent a literal character.</p>
+    <p class="alert alert-info">To remove ambiguity, repeat a code to represent the maximum number of digits - for example yyyy</p>
+    
+    The 'best guess' will handle date and optional time variants of <a href="http://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>.
+    In terms of the formatting flags noted above, these are:
+    <pre>
+    yyyy-MM-dd'T'HH:mm:ss.SSS'Z'
+    yyyy-MM-dd'T'HH:mm:sss'Z'
+    yyyy-MM-dd'T'HH:mm:ss'Z'
+    yyyy-MM-dd'T'HH:mm'Z'
+    yyyy-MM-dd'T'HH'Z'
+    yyyy-MM-dd
+    yyyy-MM
+    yyyy
+    </pre>
+    </p>
+</div>
+<script type="text/javascript" src="{{ STATIC_URL }}script/layer_upload_time.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}script/upload_common.js"></script>
+<script type="text/javascript">
+{% autoescape off %}
+{% if async_upload %}
+enableUploadProgress('timeForm');
+{% endif %}
+{% endautoescape %}
+</script>
+{% endblock %}
