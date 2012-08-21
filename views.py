@@ -5,6 +5,7 @@ from geonode.maps.models import Thumbnail
 
 from mapstory import models
 from mapstory.util import lazy_context
+from mapstory.util import render_manual
 from mapstory.forms import CheckRegistrationForm
 import account.views
 
@@ -52,13 +53,11 @@ def how_to(req):
     }))
     
 def manual(req):
-    manual = cache.get('mapstory_manual')
-    if not manual or settings.DEBUG:
-        with open(settings.PROJECT_ROOT + "/manual/manual.rst") as fp:
-            manual = markup.restructuredtext(fp.read())
-        cache.set('mapstory_manual', manual, 60000)
+    html = render_manual('manual.rst')
+    if 'test' in req.GET:
+        return HttpResponse(html)
     return render_to_response('mapstory/manual.html', RequestContext(req,{
-        'content' : manual
+        'content' : html
     }))
 
 def section_detail(req, section):

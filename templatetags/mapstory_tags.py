@@ -1,6 +1,5 @@
 from django import template
 from django.template import loader
-from django.template import RequestContext
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from django.conf import settings
@@ -13,6 +12,7 @@ from mapstory.models import PUBLISHING_STATUS_PRIVATE
 from mapstory.models import PUBLISHING_STATUS_LINK
 from mapstory.models import PUBLISHING_STATUS_PUBLIC
 from mapstory.models import get_view_cnt_for
+from mapstory.util import render_manual
 from dialogos.templatetags import dialogos_tags
 
 import re
@@ -311,3 +311,7 @@ class ByStoryTellerNode(template.Node):
 def manual_link(target, name):
     url = reverse('mapstory_manual') + "#" + target
     return "<a href='%s' target='manual'>%s</a>" % (url, name)
+
+@register.simple_tag
+def manual_include(path):
+    return render_manual(path)

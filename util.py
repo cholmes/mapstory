@@ -1,3 +1,9 @@
+from django.contrib.markup.templatetags import markup
+from django.core.cache import cache
+from django.conf import settings
+from django.utils.encoding import smart_str, force_unicode
+from django.utils.safestring import mark_safe
+
 import hotshot
 import os
 import time
@@ -7,6 +13,39 @@ try:
     PROFILE_LOG_BASE = settings.PROFILE_LOG_BASE
 except:
     PROFILE_LOG_BASE = "/tmp"
+    
+
+def render_manual(*path):
+    paths = [settings.PROJECT_ROOT,'manual']
+    paths.extend(path)
+    cache_key = 'mapstory_manual_%s' % ('_'.join(paths))
+    html = cache.get(cache_key)
+    if not html or settings.DEBUG:
+        html = markup(os.path.join(*paths))
+        cache.set(cache_key, html, 60000)
+    return html
+
+
+def markup(path):
+    '''this is borrowed from core django but adds stuff to allow inclusion
+    of other fragments
+    '''
+    with open(path) as fp: value = fp.read()
+    try:
+        from docutils.core import publish_parts
+    except ImportError:
+        if settings.DEBUG:
+            raise Exception("The Python docutils library isn't installed.")
+    else:
+        overrides = {
+            'file_insertion_enabled' : True
+        }
+        parts = publish_parts(source=smart_str(value),
+                              source_path=path,
+                              writer_name="html4css1", 
+                              settings_overrides=overrides)
+        return mark_safe(force_unicode(parts["fragment"]))
+
 
 
 def profile(log_file=None):
