@@ -25,7 +25,17 @@ function init(options) {
         layer_title =  new Ext.form.TextField({
             id: 'layer_title',
             fieldLabel: gettext('Title'),
-            name: 'layer_title'
+            name: 'layer_title',
+            allowBlank: false,
+            listeners: {
+                render: function(c) {
+                    c.getEl().on('change', checkFormValid);
+                    Ext.QuickTips.register({
+                        target: c.getEl(),
+                        text: "Provide a nice, descriptive title."
+                    });
+                }
+            }
         });
     }
 
@@ -125,9 +135,15 @@ function init(options) {
     }
     
     var zipMsg = containerFromDom('zip-msg').hide();
+    var shpMsg = containerFromDom('shp-msg').hide();
+    var csvMsg = containerFromDom('csv-msg').hide();
+    var unknownMsg = containerFromDom('unknown-msg').hide();
 
     form_fields.push(base_file);
     form_fields.push(zipMsg);
+    form_fields.push(shpMsg);
+    form_fields.push(csvMsg);
+    form_fields.push(unknownMsg);
     form_fields.push(sld_file);
     
     if (options.is_featuretype) {
@@ -164,10 +180,19 @@ function init(options) {
             msgTarget: 'side'
         },
         items: form_fields,
+        monitorValid: true,
+        monitorPoll: 500,
+        listeners: {
+            clientvalidation: function() {
+                if (true) {
+                    checkFormValid();
+                }
+            }
+        },
         buttons: [{
             text: gettext('Upload'),
             handler: function(){
-                if (fp.getForm().isValid()) {
+                if (checkFormValid(true)) {
                     fp.getForm().submit({
                         url: options.form_target,
                         waitMsg: gettext('Uploading your data...'),
@@ -194,17 +219,44 @@ function init(options) {
     };
 
     var checkFileType = function() {
-        if ((/\.shp$/i).test(base_file.getValue())) {
-            enable_shapefile_inputs();
-        } else {
-            disable_shapefile_inputs();
+        var fname = base_file.getValue(), 
+            idx = fname.lastIndexOf('.'),
+            ext = idx > 0 ? fname.substr(idx + 1) : '';
+        disable_shapefile_inputs();
+        shpMsg.hide();
+        csvMsg.hide();
+        zipMsg.hide();
+        unknownMsg.hide();
+        switch (ext) {
+            case 'shp':
+                enable_shapefile_inputs();
+                shpMsg.show();
+                break;
+            case 'csv':
+                csvMsg.show();
+                break;
+            case 'zip':
+                zipMsg.show();
+                break;
+            default:
+                unknownMsg.show();
         }
-        if ((/\.zip$/i).test(base_file.getValue())) {
-            zipMsg.show();
-        } else {
-            zipMsg.hide();
-        }
+        checkFormValid();
     };
+    
+    function checkFormValid(notify) {
+        var validation = Ext.get('form-validation'), valid = fp.getForm().isValid();
+        if ( valid ) {
+            validation.enableDisplayMode().hide();
+        } else {
+            if (!validation.isVisible()) {
+                validation.slideIn('t');
+            } else if (notify == true) {
+                validation.frame();
+            }
+        }
+        return valid;
+    }
 
     base_file.addListener('fileselected', function(cmp, value) {
         checkFileType();
@@ -239,6 +291,20 @@ function init(options) {
         fi.type = 'file';
         return 'files' in fi;
     }
+    
+    function getExtension(name) {
+        var parts = name.split('.');
+        return parts[parts.length - 1];
+    }
+    
+    function isMainFile(name) {
+        var ext = getExtension(name);
+        return /^(csv|zip|shp)$/i.test(ext);
+    }
+    
+    function isShapefileComponent(ext) {
+        return /^(shp|dbf|prj|shx)$/.text(ext);
+    }
 
     if (test_file_api()) {
         // track dropped files separately from values of input fields
@@ -247,10 +313,9 @@ function init(options) {
         var drop = function(ev) {
             ev.preventDefault();
             var dt = ev.dataTransfer, files = dt.files, i = 0, ext, key, w;
-            // this is the single file drop - it may be a tiff or a shp file or a zip
-            if (files.length == 1 && !dbf_file.isVisible()) {
+            // this is the single file drop of a 'main' file
+            if (files.length == 1 && isMainFile(files[i].name)) {
                 base_file.setValue(files[i].name);
-                checkFileType();
                 dropped_files.base_file = files[i];
             } else {
                 // multiple file drop
@@ -271,6 +336,7 @@ function init(options) {
                     }
                 }
             }
+            checkFileType();
         };
 
         var dropTarget = Ext.get("drop-target");
@@ -346,7 +412,7 @@ function init(options) {
 
         var originalHandler = fp.buttons[0].handler;
         fp.buttons[0].handler = function() {
-            if (!fp.getForm().isValid()) return;
+            if (!checkFormValid(true)) return;
             if ('base_file' in dropped_files) {
                 upload(createDragFormData());
             } else {
@@ -355,9 +421,10 @@ function init(options) {
         }
     }
     
-    Ext.select('.uip .icon-trash').on('click',function(ev) {
-        ev.preventDefault();
-        var a = new Ext.Element(this);
+    var confirmDelete = true;
+    var activeDelete = null;
+    function deleteUpload(el) {
+        var a = new Ext.Element(el);
         Ext.Ajax.request({
             url : a.getAttribute('href'),
             success : function() {
@@ -366,6 +433,29 @@ function init(options) {
             failure : function() {
                 alert('Uh oh. An error occurred.')
             }
-        })
+        });
+        Ext.get('confirm-delete').hide();
+    }
+    Ext.select('#confirm-delete a').on('click',function(ev) {
+        var resp = Ext.get(this).getAttribute('href');
+        ev.preventDefault();
+        if (/n/.test(resp)) {
+            Ext.get('confirm-delete').hide();
+        } else {
+            if (/yy/.test(resp)) {
+                confirmDelete = false;
+            }
+            deleteUpload(activeDelete);
+        }
+        
+    });
+    Ext.select('.uip .icon-trash').on('click',function(ev) {
+        ev.preventDefault();
+        if (confirmDelete) {
+            activeDelete = this;
+            Ext.get('confirm-delete').slideIn('t').enableDisplayMode();
+        } else {
+            deleteUpload(this);
+        }
     });
 }

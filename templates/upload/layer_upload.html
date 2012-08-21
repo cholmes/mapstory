@@ -46,7 +46,7 @@
 
 {% block main %}
 <div class="twocol">
-    <h2>{% trans "Add data" %}</h2>
+    <h2>{% trans "Upload StoryLayer" %}</h2>
     
     <p style="margin-bottom:1em;">To get started, upload some data.
        {% if incomplete %}
@@ -71,6 +71,9 @@
         <ul>
         </ul>
     </div>
+    <div id="form-validation" class="mrg alert alert-error hide">
+        Please ensure the required fields are completed.
+    </div>
     <div id="drop-target" class="mrg">Drag and Drop Files Here</div>
     {% if enough_storage %}
     {% if display_storage_stats %}
@@ -93,9 +96,20 @@
 
   <div id="upload_form">
       <p id="zip-msg" class="alert alert-warn">Just a reminder: for MapStory to process a ZIP file, 
-          all required files must be in the top-level directory of the ZIP file. Feedback cannot be
-          given until the file is uploaded.
+          all required files must be in the top-level directory of the ZIP file. MapStory will check
+          the data in the ZIP file after it's uploaded and will notify you of any problems then.
           {% manual_link "upload-zip" "Learn More &#187;" %}
+      </p>
+      <p id="shp-msg" class="alert alert-warn">You can also drag and drop the the files 
+          you’d like to upload to the box above, and they will be automatically populated into the fields below.
+      </p>
+      <p id="csv-msg" class="alert alert-warn">MapStory will automatically look for spatial data 
+          in columns titled latitude, lat, longtitude, lon, and long.  You will also be able to pick 
+          the columns later if the spatial data are contained in other columns.
+          {% manual_link "upload-csv" "Learn More &#187;" %}
+      </p>
+      <p id="unknown-msg" class="alert alert-warn">
+          Please select a .zip, .shp, or .csv file as the data file.  Other file types can be added after selecting a data file.
       </p>
       <p id="notes">
           <strong>Note:</strong> time support in MapStory is currently limited to everything from 1AD 
@@ -127,7 +141,8 @@ setup({
 <div class="threecol">
     
 {% if incomplete %}
-<h3>Uploads In Progress</h3>
+<h3>Resume Uploads</h3>
+<span id="no-uip" class="hide">You don't have any uploads to resume.</span>
 {% for u in incomplete %}
 <div class="clearfix uip">
     <div style="float:left">
@@ -139,6 +154,13 @@ setup({
     </div>
 </div>
 {% endfor %}
+<div id="confirm-delete" class="hide alert alert-warn">
+    Are you sure you want to delete this upload?
+    <a href="#n" class="btn btn-info">No</a>
+    <hr>
+    <a href="#y" class="btn btn-danger">Yes</a>
+    <a href="#yy" class="btn btn-danger">Yes, don't ask again</a>
+</div>
 {% endif %}
 
 <h3>Tips</h3>
