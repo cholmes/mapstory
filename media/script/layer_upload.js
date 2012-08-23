@@ -407,6 +407,7 @@ function init(options) {
             xhr.addEventListener('error', error, false);
 
             xhr.open("POST",options.form_target, true);
+            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
             xhr.send(formData);
         }
 
