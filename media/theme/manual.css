@@ -1,0 +1,54 @@
+#manual h1 {
+    font-size: 22px;
+}
+#manual h2 {
+    font-size: 20px;
+}
+#manual h3 {
+    font-size: 18px;
+}
+#manual {
+    font-size: 12px;
+}
+#manual ul.simple {
+    margin-left: 20px;
+}
+#manual ol {
+    list-style-type: decimal;
+}
+#manual ul {
+    list-style: disc outside;
+}
+#manual p {
+    margin: .5em 0;
+}
+#manual table {
+    width: 100%;
+}
+#manual table td, #manual table th {
+    padding: .5em;
+}
+#manual th {
+    background: #F5F5F5;
+}
+#manual .toc-backref {
+    cursor: default;
+}
+.admonition-title {
+    display: none;
+}
+#contents {
+    font-size: large;
+}
+#contents ul {
+    list-style: none outside;
+}
+#contents-holder {
+    position: fixed;
+}
+#contents .simple {
+    font-size: 12px;
+}
+#contents .simple ul {
+    margin-left: 1em;
+}

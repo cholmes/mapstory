@@ -15,6 +15,9 @@ A time attribute can be one of:
 * Text that can be converted to a timestamp
 * A number representing a year
 
+Time Formats
+............
+
 For text attributes, one can specify a custom format or use the 'best guess' approach.
 The most common formatting flags are:
 
@@ -26,12 +29,12 @@ The most common formatting flags are:
 * ``m`` minute in hour
 * ``s`` second in minute
 
-.. note::
+.. tip::
    :class: alert alert-info
    
    Note that single quotes represent a literal character.
 
-.. note::
+.. tip::
    :class: alert alert-info
    
    To remove ambiguity, repeat a code to represent the maximum number of digits - for example yyyy
@@ -48,3 +51,18 @@ In terms of the formatting flags noted above, these are: ::
     yyyy-MM-dd
     yyyy-MM
     yyyy
+
+
+Some common custom examples follow:
+
+.. list-table:: Custom Format Examples
+   :header-rows: 1
+   
+   * - Value
+     - Format
+   * - Jun 2012
+     - MMM-y
+   * - May/15/2012
+     - MMM/d/yyyy
+   * - 11/1/2012
+     - M/d/y

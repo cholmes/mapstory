@@ -314,4 +314,4 @@ def manual_link(target, name):
 
 @register.simple_tag
 def manual_include(path):
-    return render_manual(path)
+    return "<div id='manual'>%s</div>" % render_manual(path)

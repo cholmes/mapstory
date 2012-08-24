@@ -1,47 +1,8 @@
 {% extends "no_bottom_layout.html" %}
+{% load staticfiles %}
 
 {% block extra_head %}
-<style type="text/css">
-    #manual h1 {
-        font-size: 22px;
-    }
-    #manual h2 {
-        font-size: 20px;
-    }
-    #manual h3 {
-        font-size: 18px;
-    }
-    #manual {
-        font-size: 12px;
-    }
-    #manual ul.simple {
-        margin-left: 20px;
-    }
-    #manual ol {
-        list-style-type: decimal;
-    }
-    #manual ul {
-        list-style: disc outside;
-    }
-    #manual p {
-        margin: .5em 0;
-    }
-    #contents {
-        font-size: large;
-    }
-    #contents ul {
-        list-style: none outside;
-    }
-    #contents-holder {
-        position: fixed;
-    }
-    #contents .simple {
-        font-size: 12px;
-    }
-    #contents .simple ul {
-        margin-left: 1em;
-    }
-</style>
+<link rel="stylesheet" type="text/css" href="{% static "theme/manual.css" %}"/>
 {% endblock %}
 
 {% block content %}
