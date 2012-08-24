@@ -16,6 +16,9 @@ latitude and longitude coordinates, but please confirm that the correct
 attributes are selected below.</p>
 {% endif %}
 <form method="POST" id="csvForm">
+  {% if error %}
+  <div class="msg alert alert-error">{{ error }}</div>
+  {% endif %}
   {% csrf_token %}
   <div>
     <label for="lat" style="display: inline-block; width: 75px">Latitude</label>
@@ -23,7 +26,7 @@ attributes are selected below.</p>
       <option value="None">Select an attribute</option>
       {% for option in point_candidates %}
       <option value="{{ option }}"
-      {% if lat_candidate and lat_candidate == option %}
+      {% if selected_lat and selected_lat == option %}
       selected="selected"
       {% endif %}
       >{{ option }}</option>
@@ -36,7 +39,7 @@ attributes are selected below.</p>
       <option value="None">Select an attribute</option>
       {% for option in point_candidates %}
       <option value="{{ option }}"
-      {% if lng_candidate and lng_candidate == option %}
+      {% if selected_lng and selected_lng == option %}
       selected="selected"
       {% endif %}
       >{{ option }}</option>
