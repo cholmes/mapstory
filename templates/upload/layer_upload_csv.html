@@ -20,26 +20,26 @@ attributes are selected below.</p>
   <div>
     <label for="lat" style="display: inline-block; width: 75px">Latitude</label>
     <select id="lat" name="lat">
-      {% if lat_candidate %}
-      <option value="{{ lat_candidate }}">{{ lat_candidate }}</option>
-      {% else %}
       <option value="None">Select an attribute</option>
-      {% endif %}
       {% for option in point_candidates %}
-      <option value="{{ option }}">{{ option }}</option>
+      <option value="{{ option }}"
+      {% if lat_candidate and lat_candidate == option %}
+      selected="selected"
+      {% endif %}
+      >{{ option }}</option>
       {% endfor %}
     </select>
   </div>
   <div style="margin: 10px 0">
     <label for="lat" style="display: inline-block; width: 75px">Longitude</label>
     <select id="lng" name="lng">
-      {% if lng_candidate %}
-      <option value="{{ lng_candidate }}">{{ lng_candidate }}</option>
-      {% else %}
       <option value="None">Select an attribute</option>
-      {% endif %}
       {% for option in point_candidates %}
-      <option value="{{ option }}">{{ option }}</option>
+      <option value="{{ option }}"
+      {% if lng_candidate and lng_candidate == option %}
+      selected="selected"
+      {% endif %}
+      >{{ option }}</option>
       {% endfor %}
     </select>
   </div>
