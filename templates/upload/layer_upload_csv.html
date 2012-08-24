@@ -1,7 +1,16 @@
 {% extends "no_bottom_layout.html" %}
 {% load i18n %}
 
-{% block title %} {% trans "Upload Layer" %} - {{ block.super }} {% endblock %}
+{% block title %} {% trans "Upload StoryLayer" %} - {{ block.super }} {% endblock %}
+
+{% block extra_head %}
+<style>
+    #csvhelp p {
+        margin: 1em 0 0 0;
+    }
+</style>
+{{ block.super }}
+{% endblock %}
 
 {% block main %}
 <div class="twocol">
@@ -61,5 +70,13 @@ enableUploadProgress('csvForm');
 Please verify that you have two columns in your csv file that can be used for
 the latitude and longitude.</p>
 {% endif %}
+</div>
+<div id="csvhelp" class="threecol">
+  <h3>Tip</h3>
+  <p>MapStory will guess which attributes contain latitude and longitude
+  coordinate data based on attribute names.</p>
+  <p>When uploading data next time, try naming the attributes that contain the
+  coordinate data "latitude" (or "lat") and "longitude" (or "lon", "long"), and
+  MapStory will pre-select attributes for you at this step.</p>
 </div>
 {% endblock %}
