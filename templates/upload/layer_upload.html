@@ -144,22 +144,25 @@ setup({
 <h3>Resume Uploads</h3>
 <span id="no-uip" class="hide">You don't have any uploads to resume.</span>
 {% for u in incomplete %}
-<div class="clearfix uip">
-    <div style="float:left">
-        <a href="{{ u.get_resume_url }}">{{ u.name }}</a><br/>
-        {{ u.date|date:"N j,Y"}}
-    </div>
-    <div class="upload_actions" style="float:right">
-        <a class="icon-trash" href="{{ u.get_delete_url }}" title="Delete"></a>
+<div class="uip">
+    <div class="clearfix">
+        <div style="float:left">
+            <a href="{{ u.get_resume_url }}">{{ u.name }}</a><br/>
+            {{ u.date|date:"N j, Y"}}
+        </div>
+        <div class="upload_actions" style="float:right">
+            <a class="icon-trash" href="{{ u.get_delete_url }}" title="Delete"></a>
+        </div>
     </div>
 </div>
 {% endfor %}
-<div id="confirm-delete" class="hide alert alert-warn">
+<div id="confirm-delete" class="hide alert alert-warn" style="padding:10px; margin: 10px 0;">
     Are you sure you want to delete this upload?
-    <a href="#n" class="btn btn-info">No</a>
-    <hr>
-    <a href="#y" class="btn btn-danger">Yes</a>
-    <a href="#yy" class="btn btn-danger">Yes, don't ask again</a>
+    <div style="margin: 5px 0">
+    <a href="#y" class="btn btn-danger">Delete</a>
+    <a href="#n" class="btn">Cancel</a>
+    </div>
+    <a href="#yy" style="font-weight:normal">Delete, and don't ask me again.</a>
 </div>
 {% endif %}
 

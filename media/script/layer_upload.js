@@ -183,15 +183,15 @@ function init(options) {
         monitorValid: true,
         monitorPoll: 500,
         listeners: {
-            clientvalidation: function() {
-                if (true) {
+            clientvalidation: function(form, valid) {
+                if (form.submitted)
                     checkFormValid();
-                }
             }
         },
         buttons: [{
             text: gettext('Upload'),
             handler: function(){
+                fp.submitted = true;
                 if (checkFormValid(true)) {
                     fp.getForm().submit({
                         url: options.form_target,
@@ -245,6 +245,7 @@ function init(options) {
     };
     
     function checkFormValid(notify) {
+        if (! fp.submitted) return;
         var validation = Ext.get('form-validation'), valid = fp.getForm().isValid();
         if ( valid ) {
             validation.enableDisplayMode().hide();
@@ -413,6 +414,7 @@ function init(options) {
 
         var originalHandler = fp.buttons[0].handler;
         fp.buttons[0].handler = function() {
+            fp.submitted = true;
             if (!checkFormValid(true)) return;
             if ('base_file' in dropped_files) {
                 upload(createDragFormData());
@@ -429,7 +431,10 @@ function init(options) {
         Ext.Ajax.request({
             url : a.getAttribute('href'),
             success : function() {
-                a.parent('.uip').slideOut('t',{useDisplay:true})
+                a.parent('.uip').remove();
+                if (Ext.select('.uip').getCount() == 0) {
+                    Ext.get('no-uip').removeClass('hide').fadeIn();
+                }
             },
             failure : function() {
                 alert('Uh oh. An error occurred.')
@@ -454,7 +459,7 @@ function init(options) {
         ev.preventDefault();
         if (confirmDelete) {
             activeDelete = this;
-            Ext.get('confirm-delete').slideIn('t').enableDisplayMode();
+            Ext.get('confirm-delete').appendTo(Ext.get(this).parent('.uip')).slideIn('t').enableDisplayMode();
         } else {
             deleteUpload(this);
         }
