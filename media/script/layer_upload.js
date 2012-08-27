@@ -431,7 +431,9 @@ function init(options) {
         Ext.Ajax.request({
             url : a.getAttribute('href'),
             success : function() {
-                a.parent('.uip').remove();
+                var uip = a.parent('.uip');
+                Ext.get('confirm-delete').hide().appendTo(uip.parent());
+                uip.remove();
                 if (Ext.select('.uip').getCount() == 0) {
                     Ext.get('no-uip').removeClass('hide').fadeIn();
                 }
@@ -459,7 +461,7 @@ function init(options) {
         ev.preventDefault();
         if (confirmDelete) {
             activeDelete = this;
-            Ext.get('confirm-delete').appendTo(Ext.get(this).parent('.uip')).slideIn('t').enableDisplayMode();
+            Ext.get('confirm-delete').removeClass('hide').appendTo(Ext.get(this).parent('.uip')).enableDisplayMode().show();
         } else {
             deleteUpload(this);
         }
