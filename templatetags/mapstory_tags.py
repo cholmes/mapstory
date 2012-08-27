@@ -2,6 +2,7 @@ from django import template
 from django.template import loader
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
+from django.contrib.staticfiles.templatetags import staticfiles
 from django.conf import settings
 from geonode.maps.models import Map
 from geonode.maps.models import Layer
@@ -315,3 +316,9 @@ def manual_link(target, name):
 @register.simple_tag
 def manual_include(path):
     return "<div id='manual'>%s</div>" % render_manual(path)
+
+# @todo - make geonode location play better
+geonode_static_prefix = settings.GEONODE_CLIENT_LOCATION.replace(settings.STATIC_URL,"")
+@register.simple_tag
+def geonode_static(path):
+    return staticfiles.static(geonode_static_prefix + path)
