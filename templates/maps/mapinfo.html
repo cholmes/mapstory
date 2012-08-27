@@ -1,5 +1,6 @@
 {% extends "page_layout.html" %}
 {% load i18n %}
+{% load staticfiles %}
 {% load geonode_auth %}
 {% load mapstory_tags %}
 {% load dialogos_tags %}
@@ -9,12 +10,12 @@
 
 
 {% block extra_head %}
-<link rel="stylesheet" type="text/css" href="/static/theme/comments.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="{% static "theme/comments.css" %}" media="screen" />
 {% include "geonode/app_header.html" %}
 {% include "geonode/geo_header.html" %}
-<script type="text/javascript" src="{{ STATIC_URL}}script/comments.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL}}script/favorites.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL}}script/info.js"></script>
+<script type="text/javascript" src="{% static "script/comments.js" %}"></script>
+<script type="text/javascript" src="{% static "script/favorites.js" %}"></script>
+<script type="text/javascript" src="{% static "script/info.js" %}"></script>
 {{ block.super }}
 <script type="text/javascript">
 var app;
@@ -182,7 +183,7 @@ Ext.onReady(function() {
 {% if request.user.is_authenticated %}
 	{% user_rating_js request.user map "map" %}
 {% else %}
-	<script src="{{ STATIC_URL }}agon_ratings/js/jquery.raty.js"></script>
+	<script src="{% static "agon_ratings/js/jquery.raty.js" %}"></script>
 {% endif %}
 <script type="text/javascript">
 $(function() {
@@ -190,7 +191,7 @@ $(function() {
         half: true,
         readOnly: true,
         start: $('span.overall_rating').data('rating'),
-        path: "{{ STATIC_URL }}agon_ratings/img/"
+        path: "{% static "agon_ratings/img/" %}"
     });
 });
 (function() {
@@ -199,7 +200,7 @@ $(function() {
     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
 })();
 </script>
-<script type="text/javascript" src="{{ STATIC_URL}}bootstrap/js/bootstrap-modal.js"></script>
+<script type="text/javascript" src="{% static "bootstrap/js/bootstrap-modal.js" %}"></script>
 {% include "_fb_include.html" %}
 {% map_view_hitcount_tracker request map %}
 {% endblock %}

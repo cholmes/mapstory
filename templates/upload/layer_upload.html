@@ -1,5 +1,6 @@
 {% extends "no_bottom_layout.html" %}
 {% load mapstory_tags %}
+{% load staticfiles %}
 {% load i18n %}
 
 {% block title %} {% trans "Upload Layer"  %} - {{ block.super }} {% endblock %}
@@ -121,7 +122,7 @@
       </div>
   </div>
 </div>
-<script type="text/javascript" src="{{ STATIC_URL }}script/layer_upload.js"></script>
+<script type="text/javascript" src="{% static "script/layer_upload.js" %}"></script>
 <script type="text/javascript">
 {% autoescape off %}
 setup({

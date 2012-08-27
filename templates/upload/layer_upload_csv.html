@@ -1,5 +1,6 @@
 {% extends "no_bottom_layout.html" %}
 {% load i18n %}
+{% load staticfiles %}
 
 {% block title %} {% trans "Upload Layer" %} - {{ block.super }} {% endblock %}
 
@@ -45,7 +46,7 @@ attributes are selected below.</p>
   </div>
   <input type="submit" value="Next" class="btn btn-primary"/>
 </form>
-<script type="text/javascript" src="{{ STATIC_URL }}script/upload_common.js"></script>
+<script type="text/javascript" src="{% static "script/upload_common.js" %}"></script>
 <script type="text/javascript">
 {% autoescape off %}
 {% if async_upload %}

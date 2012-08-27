@@ -231,8 +231,8 @@
     <h3>Need Help?</h3>
     {% manual_include "time.rst" %}
 </div>
-<script type="text/javascript" src="{{ STATIC_URL }}script/layer_upload_time.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}script/upload_common.js"></script>
+<script type="text/javascript" src="{% static "script/layer_upload_time.js" %}"></script>
+<script type="text/javascript" src="{% static "script/upload_common.js" %}"></script>
 <script type="text/javascript">
 {% autoescape off %}
 {% if async_upload %}

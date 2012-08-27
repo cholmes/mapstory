@@ -1,5 +1,6 @@
 {% extends "no_bottom_layout.html" %}
 {% load i18n %}
+{% load staticfiles %}
 
 {% block title %} {% trans "Upload Layer" %} - {{ block.super }} {% endblock %}
 
@@ -32,7 +33,7 @@
     <p>We apologize for the inconvenience</p>
     {% endif %}
   </form>
-  <script type="text/javascript" src="{{ STATIC_URL }}script/upload_common.js"></script>
+  <script type="text/javascript" src="{% static "script/upload_common.js" %}"></script>
   <script type="text/javascript">
       enableUploadProgress('crsForm');
   </script>

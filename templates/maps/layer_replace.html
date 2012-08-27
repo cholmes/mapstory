@@ -1,5 +1,6 @@
 {% extends "page_layout.html" %}
 {% load i18n %}
+{% load staticfiles %}
 
 {% block title %} {% trans "Update Layer"  %} - {{ block.super }} {% endblock %}
 
@@ -20,7 +21,7 @@
 
   <div id="upload_form">
   </div>
-<script type="text/javascript" src="{{ STATIC_URL }}script/layer_upload.js"></script>
+<script type="text/javascript" src="{% static "script/layer_upload.js" %}"></script>
 <script type="text/javascript">
 {% autoescape off %}
 setup({

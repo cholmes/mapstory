@@ -2,6 +2,7 @@
 {% load webdesign %}
 {% load i18n %}
 {% load mapstory_tags %}
+{% load staticfiles %}
 {% load cache %}
 
 {% block title %} {% trans "Welcome!" %} - {{ block.super }} {% endblock %}
@@ -57,7 +58,7 @@
             </div>
             <div class="description">
                 <h2><a href="#">{{ video.name }}</a></h2>
-                <p>{{ video.text}} {#<a href="#"><img src="{{ STATIC_URL }}theme/img/arrow_right.png" width="6" height="11" alt="" /></a>#}</p>
+                <p>{{ video.text}} {#<a href="#"><img src="{% static "theme/img/arrow_right.png" %}" width="6" height="11" alt="" /></a>#}</p>
             </div>
         </div>
         <hr/>
@@ -121,5 +122,5 @@
         $("#sections .tab-content").height(target - other);
     });
 </script>
-<script type="text/javascript" src="{{ STATIC_URL }}script/carousel_jquery.js"></script>
+<script type="text/javascript" src="{% static "script/carousel_jquery.js" %}"></script>
 {% endblock %}

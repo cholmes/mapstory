@@ -1,2 +1,4 @@
-<script src="{{ GEONODE_CLIENT_LOCATION }}script/ux.js"></script>
-<script src="{{ GEONODE_CLIENT_LOCATION }}script/GeoNode.js"></script>
+{% load mapstory_tags %}
+
+<script src="{% geonode_static "script/ux.js" %}"></script>
+<script src="{% geonode_static "script/GeoNode.js" %}"></script>

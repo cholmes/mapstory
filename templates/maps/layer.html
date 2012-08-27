@@ -4,6 +4,7 @@
 {% load mapstory_tags %}
 {% load dialogos_tags %}
 {% load agon_ratings_tags %}
+{% load staticfiles %}
 
 {% block head_title %}{{layer.title}}{% endblock %}
 
@@ -11,9 +12,9 @@
 <link rel="stylesheet" type="text/css" href="/static/theme/comments.css" media="screen" />
 {% include "geonode/app_header.html" %}
 {% include "geonode/geo_header.html" %}
-<script type="text/javascript" src="{{ STATIC_URL}}script/comments.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL}}script/favorites.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL}}script/info.js"></script>
+<script type="text/javascript" src="{% static "script/comments.js" %}"></script>
+<script type="text/javascript" src="{% static "script/favorites.js" %}"></script>
+<script type="text/javascript" src="{% static "script/info.js" %}"></script>
     <script type="text/javascript">
 {% autoescape off %}
         var styleEditor, modified = false;
@@ -266,7 +267,7 @@
 {% if request.user.is_authenticated %}
 	{% user_rating_js request.user layer "layer" %}
 {% else %}
-	<script src="{{ STATIC_URL }}agon_ratings/js/jquery.raty.js"></script>
+	<script src="{% static "agon_ratings/js/jquery.raty.js" %}"></script>
 {% endif %}
 <script type="text/javascript">
 $(function() {
@@ -274,7 +275,7 @@ $(function() {
         half: true,
         readOnly: true,
         start: $('span.overall_rating').data('rating'),
-        path: "{{ STATIC_URL }}agon_ratings/img/"
+        path: "{% static "agon_ratings/img/" %}"
     });
 });
 (function() {

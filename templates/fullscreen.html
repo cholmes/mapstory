@@ -1,13 +1,14 @@
 {% load i18n %}
 {% load mapstory_tags %}
+{% load staticfiles %}
 <html>
 <head>
 
     <title>{% block title %}MapStory{% endblock %}</title>
-    <link rel="shortcut icon" href="{{ STATIC_URL }}theme/img/favicon.ico"/>
+    <link rel="shortcut icon" href="{% static "theme/img/favicon.ico" %}"/>
     {% block head %}
-    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}theme/geonode.css" />
-    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}theme/site.css" />
+    <link rel="stylesheet" type="text/css" href="{% static "theme/geonode.css" %}" />
+    <link rel="stylesheet" type="text/css" href="{% static "theme/site.css" %}" />
     <style type="text/css">
 #header .wrap {
     width: 100%;
