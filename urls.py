@@ -1,6 +1,8 @@
 from django.conf.urls.defaults import *
 from django.conf import settings
+from django.core.urlresolvers import reverse
 from django.views.generic.simple import direct_to_template
+from django.views.generic import RedirectView
 from geonode.sitemap import LayerSitemap, MapSitemap
 from geonode.proxy.urls import urlpatterns as proxy_urlpatterns
 from mapstory.forms import ProfileForm
@@ -21,6 +23,15 @@ sitemaps = {
     "layer": LayerSitemap,
     "map": MapSitemap
 }
+
+class NamedRedirect(RedirectView):
+    name = None
+    permanent = False
+    '''this will only work for no-args reverses'''
+    def get_redirect_url(self, **kwargs):
+        if not self.url:
+            self.url = reverse(self.name)
+        return RedirectView.get_redirect_url(self, **kwargs)
     
 
 urlpatterns = patterns('',
@@ -39,6 +50,9 @@ urlpatterns += patterns('mapstory.views',
     # and this from geonode
     url(r'^data/(?P<layername>[^/]*)/metadata$', 'layer_metadata', name="layer_metadata"),
     
+    # redirect some common geonode stuff
+    url(r'^data/$', NamedRedirect.as_view(name='search_layers'), name='data_home'),
+    url(r'^maps/$', NamedRedirect.as_view(name='search_maps'), name='maps_home'),
 
     (r'', include('geonode.simplesearch.urls')), # put this first to ensure search urls priority
     (r'', include('geonode.urls')),
