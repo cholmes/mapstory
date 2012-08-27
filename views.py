@@ -170,19 +170,6 @@ def delete_favorite(req, id):
     return HttpResponse('OK', status=200)
 
 @login_required
-def set_section(req):
-    if req.method != 'POST':
-        return HttpResponse('POST required',status=400)
-    mapid = req.POST['map']
-    mapobj = get_object_or_404(Map, id=mapid)
-    if mapobj.owner != req.user or not req.user.has_perm('mapstory.change_section'):
-        return HttpResponse('Not sufficient permissions',status=401)
-    sectionid = req.POST['section']
-    get_object_or_404(models.Section, pk=sectionid)
-    models.Section.objects.add_to_section(sectionid, mapobj)
-    return HttpResponse('OK', status=200)
-
-@login_required
 def publish_status(req, layer_or_map, layer_or_map_id):
     if req.method != 'POST':
         return HttpResponse('POST required',status=400)

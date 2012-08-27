@@ -98,15 +98,8 @@ class SectionManager(models.Manager):
     def sections_with_maps(self):
         '''@todo this is broken - Get only those sections that have maps'''
         return self.all().annotate(num_maps=Count('maps')).filter(num_maps__gt=0)
-    def add_to_section(self, sid, amap):
-        '''business logic for being in a section - exclusive for the moment'''
-        for s in self.filter(maps__id = amap.id):
-            s.maps.remove(amap)
-            s.save()
-        s = self.get(id = sid)
-        s.maps.add(amap)
-        s.save()
-        
+
+
 class TopicManager(models.Manager):
     def tag(self, obj, topic, allow_create=False):
         if allow_create:
