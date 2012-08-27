@@ -34,6 +34,10 @@
 #manual .toc-backref {
     cursor: default;
 }
+#manual .toc-backref:hover {
+    cursor: default;
+    color: #F46817;
+}
 .admonition-title {
     display: none;
 }
