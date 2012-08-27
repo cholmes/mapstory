@@ -336,6 +336,16 @@ def clear_acl_cache(instance, sender, **kw):
         key = 'layer_acls_%s' % instance.owner.id
         cache.delete(key)
 
+
+def remove_favorites(instance, sender, **kw):
+    ct = ContentType.objects.get_for_model(instance)
+    Favorite.objects.filter(content_type=ct, object_id=instance.id).delete()
+
+
+# make sure any favorites are also deleted
+signals.pre_delete.connect(remove_favorites, sender=Map)
+signals.pre_delete.connect(remove_favorites, sender=Layer)
+
 signals.post_save.connect(create_profile, sender=User)
 signals.post_save.connect(create_publishing_status, sender=Map)
 signals.post_save.connect(create_publishing_status, sender=Layer)
