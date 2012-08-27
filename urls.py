@@ -1,7 +1,6 @@
 from django.conf.urls.defaults import *
 from django.conf import settings
 from django.views.generic.simple import direct_to_template
-from staticfiles.urls import staticfiles_urlpatterns
 from geonode.sitemap import LayerSitemap, MapSitemap
 from geonode.proxy.urls import urlpatterns as proxy_urlpatterns
 from mapstory.forms import ProfileForm
@@ -91,9 +90,11 @@ if settings.SERVE_MEDIA:
         url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {
             'document_root': settings.MEDIA_ROOT,
         }),
+        url(r'^static/(?P<path>.*)$', 'django.views.static.serve', {
+            'document_root': settings.STATIC_ROOT,
+        }),
         url(r'^thumbs/(?P<path>.*)$','django.views.static.serve',{
             'document_root' : settings.THUMBNAIL_STORAGE,
         })
     )
-    urlpatterns += staticfiles_urlpatterns()
     
