@@ -1,6 +1,6 @@
 from django.conf.urls.defaults import *
 from django.conf import settings
-from django.core.urlresolvers import reverse
+from django.core import urlresolvers
 from django.views.generic.simple import direct_to_template
 from django.views.generic import RedirectView
 from geonode.sitemap import LayerSitemap, MapSitemap
@@ -27,11 +27,20 @@ sitemaps = {
 class NamedRedirect(RedirectView):
     name = None
     permanent = False
+    not_post = False
     '''this will only work for no-args reverses'''
     def get_redirect_url(self, **kwargs):
         if not self.url:
-            self.url = reverse(self.name)
+            self.url = urlresolvers.reverse(self.name)
         return RedirectView.get_redirect_url(self, **kwargs)
+    def post(self, req, *args, **kw):
+        # @ugh - the /maps/ endpoint is used one way for get, another for post
+        # we want post to pass through to the original...
+        if self.not_post:
+            match =  urlresolvers.get_resolver('geonode.urls').resolve(req.path)
+            return match.func(req, *args, **kw)
+        else:
+            return RedirectView.post(req, *args, **kw)
     
 
 urlpatterns = patterns('',
@@ -52,7 +61,7 @@ urlpatterns += patterns('mapstory.views',
     
     # redirect some common geonode stuff
     url(r'^data/$', NamedRedirect.as_view(name='search_layers'), name='data_home'),
-    url(r'^maps/$', NamedRedirect.as_view(name='search_maps'), name='maps_home'),
+    url(r'^maps/$', NamedRedirect.as_view(name='search_maps', not_post=True), name='maps_home'),
     # and allow missing slash for uploads
     url(r'^data/upload$', NamedRedirect.as_view(name='data_upload')),
 
