@@ -53,6 +53,8 @@ urlpatterns += patterns('mapstory.views',
     # redirect some common geonode stuff
     url(r'^data/$', NamedRedirect.as_view(name='search_layers'), name='data_home'),
     url(r'^maps/$', NamedRedirect.as_view(name='search_maps'), name='maps_home'),
+    # and allow missing slash for uploads
+    url(r'^data/upload$', NamedRedirect.as_view(name='data_upload')),
 
     (r'', include('geonode.simplesearch.urls')), # put this first to ensure search urls priority
     (r'', include('geonode.urls')),
