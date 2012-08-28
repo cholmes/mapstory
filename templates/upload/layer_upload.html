@@ -8,7 +8,7 @@
 {% block extra_head %}
 {% include "geonode/app_header.html" %}
 {% include "geonode/geo_header.html" %}
-<link rel="stylesheet" type="text/css" href="{{ GEONODE_CLIENT_LOCATION }}theme/ux/fileuploadfield/fileuploadfield.css"/>
+<link rel="stylesheet" type="text/css" href="{% geonode_static "theme/ux/fileuploadfield/fileuploadfield.css" %}"/>
 {{ block.super }}
 <style type="text/css">
     .threecol p {
