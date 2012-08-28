@@ -20,8 +20,9 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.template import loader
 from django.contrib.contenttypes.models import ContentType
-from django.contrib.markup.templatetags import markup
+from django.views.decorators.cache import cache_page
 
+import math
 import os
 import random
 
@@ -52,6 +53,7 @@ def how_to(req):
         'videos' : models.VideoLink.objects.how_to_videos()
     }))
     
+@cache_page(600)
 def manual(req):
     html = render_manual('manual.rst')
     if 'test' in req.GET:
