@@ -86,29 +86,29 @@
         <div id="no-int-base">
             Please indicate the interval at which your data were uploaded (every month, year, etc.).
         </div>
-        <div id="no-end">
-            Please indicate whether the data has an end date.
-        </div>
         <div id="no-type-start">
             Please indicate what kind of date the start date is.
-        </div>
-        <div id="no-type-end">
-            Please indicate what kind of date the end date is.
         </div>
         <div id="no-startatt">
             Please select which attribute contains the start date.
         </div>
-        <div id="no-endatt">
-            Please select which attribute contains the end date.
+        <div id="no-startformat">
+            Please specify the exact format of the start date.
         </div>
         <div id="no-format-type-start">
             Please indicate whether we should guess the format of the start or if you would like to specify the format.
         </div>
+        <div id="no-end">
+            Please indicate whether the data has an end date.
+        </div>
+        <div id="no-type-end">
+            Please indicate what kind of date the end date is.
+        </div>
+        <div id="no-endatt">
+            Please select which attribute contains the end date.
+        </div>
         <div id="no-format-type-end">
             Please indicate whether we should guess the format of the end or if you would like to specify the format.
-        </div>
-        <div id="no-startformat">
-            Please specify the exact format of the start date.
         </div>
         <div id="no-endformat">
             Please specify the exact format of the end date.
@@ -175,7 +175,7 @@
                 </select>
                 <span id="format_input" style="visibility: hidden;" title="See sidebar for help">
                     <label for="id_text_attribute_format">Custom Format:</label> {{ time_form.text_attribute_format }}
-                    {% manual_link "time-formats" "tell me more" %}
+                    {% manual_link "time-formats" "View Guide" %}
                 </span>
             </div>
         </div>
@@ -217,7 +217,7 @@
                     </select>
                     <span id="end_format_input" style="visibility: hidden;" title="See sidebar for help">
                         <label for="id_end_text_attribute_format">Custom Format:</label> {{ time_form.end_text_attribute_format }}
-                        {% manual_link "time-formats" "tell me more" %}
+                        {% manual_link "time-formats" "View Guide" %}
                     </span>
                 </div>
             </div>

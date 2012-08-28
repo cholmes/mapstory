@@ -17,13 +17,13 @@
 <div class="twocol">
 {% if present_choices %}
 <h2>Specify Geometry Columns for "{{ layer_name }}"</h2>
-<p>Please indicate which attributes contain the latitude and longitude
+<p>Please indicate which columns contain the latitude and longitude
 coordinates in the CSV data.</p>
 {% if guessed_lat_or_lng %}
 <hr>
-<p style="margin-bottom: 1em">With this data, MapStory was able to guess which attributes contain the
+<p style="margin-bottom: 1em">With this data, MapStory was able to guess which columns contain the
 latitude and longitude coordinates, but please confirm that the correct
-attributes are selected below.</p>
+columns are selected below.</p>
 {% endif %}
 <form method="POST" id="csvForm">
   {% if error %}
@@ -33,7 +33,7 @@ attributes are selected below.</p>
   <div>
     <label for="lat" style="display: inline-block; width: 75px">Latitude</label>
     <select id="lat" name="lat">
-      <option value="None">Select an attribute</option>
+      <option value="None">Select a column</option>
       {% for option in point_candidates %}
       <option value="{{ option }}"
       {% if selected_lat and selected_lat == option %}
@@ -46,7 +46,7 @@ attributes are selected below.</p>
   <div style="margin: 10px 0">
     <label for="lat" style="display: inline-block; width: 75px">Longitude</label>
     <select id="lng" name="lng">
-      <option value="None">Select an attribute</option>
+      <option value="None">Select a column</option>
       {% for option in point_candidates %}
       <option value="{{ option }}"
       {% if selected_lng and selected_lng == option %}
@@ -74,10 +74,10 @@ the latitude and longitude.</p>
 </div>
 <div id="csvhelp" class="threecol">
   <h3>Tip</h3>
-  <p>MapStory will guess which attributes contain latitude and longitude
-  coordinate data based on attribute names.</p>
-  <p>When uploading data next time, try naming the attributes that contain the
+  <p>MapStory will guess which columns contain latitude and longitude
+  coordinate data based on column names.</p>
+  <p>When uploading data next time, try naming the columns that contain the
   coordinate data "latitude" (or "lat") and "longitude" (or "lon", "long"), and
-  MapStory will pre-select attributes for you at this step.</p>
+  MapStory will pre-select columns for you at this step.</p>
 </div>
 {% endblock %}
