@@ -50,6 +50,20 @@ function init(options) {
             name: "csrfmiddlewaretoken",
             value: options.csrf_token
         }];
+    
+    function check_valid_ext(fname) {
+        var idx = fname.lastIndexOf('.'),
+            ext = idx > 0 ? fname.substr(idx + 1) : '';
+        switch (ext) {
+            case 'shp': 
+            case 'csv':
+            case 'zip':
+                break
+            default:
+                ext = null;
+        }
+        return ext;
+    }
 
     var base_file = new Ext.ux.form.FileUploadField({
         id: 'base_file',
@@ -57,7 +71,10 @@ function init(options) {
         fieldLabel: gettext('Data'),
         name: 'base_file',
         allowBlank: false,
-        listeners: listeners
+        listeners: listeners,
+        validator: function(name) {
+            return check_valid_ext(name) != null;
+        }
     });
 
     var dbf_file = new Ext.ux.form.FileUploadField({
@@ -184,8 +201,7 @@ function init(options) {
         monitorPoll: 500,
         listeners: {
             clientvalidation: function(form, valid) {
-                if (form.submitted)
-                    checkFormValid();
+                checkFormValid();
             }
         },
         buttons: [{
@@ -219,9 +235,7 @@ function init(options) {
     };
 
     var checkFileType = function() {
-        var fname = base_file.getValue(), 
-            idx = fname.lastIndexOf('.'),
-            ext = idx > 0 ? fname.substr(idx + 1) : '';
+        var ext = check_valid_ext(base_file.getValue());
         disable_shapefile_inputs();
         shpMsg.hide();
         csvMsg.hide();
@@ -245,7 +259,7 @@ function init(options) {
     };
     
     function checkFormValid(notify) {
-        if (! fp.submitted) return;
+        if (! fp.submitted) return false;
         var validation = Ext.get('form-validation'), valid = fp.getForm().isValid();
         if ( valid ) {
             validation.enableDisplayMode().hide();
