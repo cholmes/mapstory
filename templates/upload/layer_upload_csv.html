@@ -2,7 +2,16 @@
 {% load i18n %}
 {% load staticfiles %}
 
-{% block title %} {% trans "Upload Layer" %} - {{ block.super }} {% endblock %}
+{% block title %} {% trans "Upload StoryLayer" %} - {{ block.super }} {% endblock %}
+
+{% block extra_head %}
+<style>
+    #csvhelp p {
+        margin: 1em 0 0 0;
+    }
+</style>
+{{ block.super }}
+{% endblock %}
 
 {% block main %}
 <div class="twocol">
@@ -17,30 +26,33 @@ latitude and longitude coordinates, but please confirm that the correct
 attributes are selected below.</p>
 {% endif %}
 <form method="POST" id="csvForm">
+  {% if error %}
+  <div class="msg alert alert-error">{{ error }}</div>
+  {% endif %}
   {% csrf_token %}
   <div>
     <label for="lat" style="display: inline-block; width: 75px">Latitude</label>
     <select id="lat" name="lat">
-      {% if lat_candidate %}
-      <option value="{{ lat_candidate }}">{{ lat_candidate }}</option>
-      {% else %}
       <option value="None">Select an attribute</option>
-      {% endif %}
       {% for option in point_candidates %}
-      <option value="{{ option }}">{{ option }}</option>
+      <option value="{{ option }}"
+      {% if selected_lat and selected_lat == option %}
+      selected="selected"
+      {% endif %}
+      >{{ option }}</option>
       {% endfor %}
     </select>
   </div>
   <div style="margin: 10px 0">
     <label for="lat" style="display: inline-block; width: 75px">Longitude</label>
     <select id="lng" name="lng">
-      {% if lng_candidate %}
-      <option value="{{ lng_candidate }}">{{ lng_candidate }}</option>
-      {% else %}
       <option value="None">Select an attribute</option>
-      {% endif %}
       {% for option in point_candidates %}
-      <option value="{{ option }}">{{ option }}</option>
+      <option value="{{ option }}"
+      {% if selected_lng and selected_lng == option %}
+      selected="selected"
+      {% endif %}
+      >{{ option }}</option>
       {% endfor %}
     </select>
   </div>
@@ -59,5 +71,13 @@ enableUploadProgress('csvForm');
 Please verify that you have two columns in your csv file that can be used for
 the latitude and longitude.</p>
 {% endif %}
+</div>
+<div id="csvhelp" class="threecol">
+  <h3>Tip</h3>
+  <p>MapStory will guess which attributes contain latitude and longitude
+  coordinate data based on attribute names.</p>
+  <p>When uploading data next time, try naming the attributes that contain the
+  coordinate data "latitude" (or "lat") and "longitude" (or "lon", "long"), and
+  MapStory will pre-select attributes for you at this step.</p>
 </div>
 {% endblock %}
