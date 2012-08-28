@@ -2,6 +2,7 @@ from geonode.maps.models import Map
 from geonode.maps.models import Layer
 from geonode.maps.models import MapLayer
 from geonode.maps.models import Thumbnail
+from geonode.maps.utils import forward_mercator
 
 from mapstory import models
 from mapstory.util import lazy_context
@@ -195,8 +196,35 @@ def add_to_map(req,id,typename):
     existing = MapLayer.objects.filter(map = mapobj)
     vs_url = settings.GEOSERVER_BASE_URL + '%s/%s/wms' % tuple(layer.typename.split(':'))
     stack_order = max([l.stack_order for l in existing]) + 1
-    maplayer = MapLayer(name = layer.typename, ows_url=vs_url, map=mapobj, stack_order=stack_order)
+    # have to use local name, not full typename when using ows_url
+    maplayer = MapLayer(name = layer.name, ows_url=vs_url, map=mapobj, stack_order=stack_order)
     maplayer.save()
+    # if bounding box is equivalent to default, compute and save
+    ints = lambda t: map(int,t)
+    if ints(mapobj.center) == ints(forward_mercator(settings.DEFAULT_MAP_CENTER)):
+        bbox = layer.resource.latlon_bbox[0:4]
+        # @todo copy-paste from geonode.maps.views - extract this for reuse
+        minx, maxx, miny, maxy = [float(c) for c in bbox]
+        x = (minx + maxx) / 2
+        y = (miny + maxy) / 2
+
+        center = forward_mercator((x, y))
+        if center[1] == float('-inf'):
+            center = (center[0], 0)
+
+        if maxx == minx:
+            width_zoom = 15
+        else:
+            width_zoom = math.log(360 / (maxx - minx), 2)
+        if maxy == miny:
+            height_zoom = 15
+        else:
+            height_zoom = math.log(360 / (maxy - miny), 2)
+
+        mapobj.center_x = center[0]
+        mapobj.center_y = center[1]
+        mapobj.zoom = math.ceil(min(width_zoom, height_zoom))
+        mapobj.save()
     return HttpResponse('OK', status=200)
 
 
