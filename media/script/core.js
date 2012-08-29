@@ -56,12 +56,18 @@ $(function () {
             }
         }
         function menu(rel) {
-            $('#top-crossbar li[rel=' + rel + ']').mouseover(function() {
-                enableMenu(rel);
+            $('#top-crossbar li').hover(function() {
+                var rel = $(this).attr('rel');
+                if (rel) {
+                    enableMenu(rel);
+                } else {
+                    menus.addClass('hide');
+                }
+            }, function() {
+                enableMenu();
             });
         }
-        menu('category');
-        menu('search');
+        menu();
         enableMenu();
     }
     

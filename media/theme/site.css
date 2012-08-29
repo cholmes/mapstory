@@ -132,11 +132,11 @@ a#donate:hover {
   float: left;
   padding: 0;
   cursor:pointer;
-  margin-right:12px;
 }
 
 #top-crossbar a {
   padding:8px 10px;
+  margin-right:12px;
 }
 
 #top-crossbar a:hover,
@@ -157,6 +157,10 @@ body.home #top-crossbar a.tab-sections:hover {
 
 #sitenav {
   margin-left:0;
+}
+
+#sitenav li {
+  height:34px;
 }
 
 #sitenav li a {

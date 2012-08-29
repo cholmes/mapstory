@@ -81,6 +81,7 @@
     <div id="crossbar">
       <div class="wrap selfclear">
         {% block nav %}
+        {% comment %}
      {% get_current_language as LANGUAGE %}
       <form class="langbar" id="target" action="/i18n/setlang/" method="post">
         {% csrf_token %}
@@ -95,6 +96,8 @@
            </select>
          </div>
        </form>
+        {% endcomment %}
+
 
       <ul id="sitenav" class="selfclear">
           {% cache cache_time page_layout_sections request.path %}
