@@ -318,7 +318,12 @@ def manual_include(path):
     return "<div id='manual'>%s</div>" % render_manual(path)
 
 # @todo - make geonode location play better
-geonode_static_prefix = settings.GEONODE_CLIENT_LOCATION.replace(settings.STATIC_URL,"")
-@register.simple_tag
-def geonode_static(path):
-    return staticfiles.static(geonode_static_prefix + path)
+if settings.GEONODE_CLIENT_LOCATION.startswith("http"):
+    @register.simple_tag
+    def geonode_static(path):
+        return settings.GEONODE_CLIENT_LOCATION + path
+else:
+    geonode_static_prefix = settings.GEONODE_CLIENT_LOCATION.replace(settings.STATIC_URL,"")
+    @register.simple_tag
+    def geonode_static(path):
+        return staticfiles.static(geonode_static_prefix + path)
