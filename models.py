@@ -354,6 +354,8 @@ signals.post_save.connect(create_publishing_status, sender=Layer)
 # this is not needed for maps
 upload_complete.connect(set_publishing_private, sender=None)
 upload_complete.connect(configure_gwc, sender=None)
+# @annoyatron2 - after map is saved, set_default_permissions is called - hack this
+Map.set_default_permissions = lambda s: None
 
 # ensure hit count records are created up-front
 signals.post_save.connect(create_hitcount, sender=Map)
