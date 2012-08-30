@@ -39,7 +39,7 @@ $(function () {
         quicksearch.keypress(nixSearchLabel);
     }
     {
-        var menus = $('#sitenav li a');
+        var menus = $('#sitenav li a'), over;
         function enableMenu(rel) {
             menus.addClass('hide');
             var active;
@@ -58,13 +58,18 @@ $(function () {
         function menu(rel) {
             $('#top-crossbar li').hover(function() {
                 var rel = $(this).attr('rel');
+                if (over) over.find('a').removeClass('orangebg');
                 if (rel) {
+                    over = $(this);
+                    over.find('a').addClass('orangebg');
                     enableMenu(rel);
                 } else {
+                    over = null;
                     menus.addClass('hide');
                 }
             }, function() {
-                enableMenu();
+                var rel = over ? over.attr('rel') : null;
+                enableMenu(rel);
             });
         }
         menu();
