@@ -73,7 +73,7 @@ Ext.onReady(function() {
     }
 
     function appendResults(results) {
-        var read, saveListeners, i;
+        var read, i, mapLink, layerLink, viewLink;
         fetching = false;
         loadnotify.hide();
         results = Ext.util.JSON.decode(results.responseText);
@@ -91,9 +91,10 @@ Ext.onReady(function() {
         }
         store.add(read.records);
         updateDisplaying();
-        saveListeners = {
-            click: handleSave
-        };
+        mapLink = Ext.get('view-map').dom.cloneNode(true);
+        mapLink.id = null;
+        layerLink = Ext.get('view-layer').dom.cloneNode(true);
+        layerLink.id = null;
         Ext.each(results.rows,function(r,i) {
             var item, more;
             if (r.thumb == null) {
@@ -107,6 +108,20 @@ Ext.onReady(function() {
             } else {
                 r.thumbclass = "owner";
                 item = ownerTemplate.append(list,r,true);
+            }
+            viewLink = null;
+            if (r._type == 'layer') {
+                viewLink = Ext.get(layerLink.cloneNode(true)).set({
+                    href : "/maps/new?layer=" + r.name
+                });
+                
+            } else if (r._type == 'map') {
+                viewLink = Ext.get(mapLink.cloneNode(true)).set({
+                    href : r.detail + "/view"
+                });
+            }
+            if (viewLink) {
+                item.insertFirst(viewLink.setStyle('display',''));
             }
             if (r['abstract']) {
                 new Ext.ToolTip({

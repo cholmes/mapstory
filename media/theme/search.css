@@ -67,6 +67,14 @@
     padding-right: 0.5em;
     cursor: pointer;
 }
+.viewer-link {
+    display: block;
+    height: 40px;
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    width: 40px;
+}
 #search_results #bigtile .infoBox {
     float: right;
     width: 333px;
@@ -159,6 +167,7 @@ ul.x-menu-list {
     width: 219px;
     height: 173px;
     overflow: none;
+    position: relative;
     margin: 5px;
 }
 #search_results li.noresults {
