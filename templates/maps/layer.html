@@ -98,9 +98,6 @@
 //                }
 //            });
 {% endcomment %}
-            var hasThumb = {% if layer.get_thumbnail %}true{% else %}false{% endif %};
-            var thumbURL = "{% url layer_thumbnail layer.typename %}";
-            {% include "maps/thumbnail_help.js" %}
 {% endif %}
         });
 
@@ -119,7 +116,12 @@
             app.tools["styler"].actions[0].execute();
         }
 {% endautoescape %}
+    var hasThumb = {% if layer.get_thumbnail %}true{% else %}false{% endif %};
+    var thumbURL = "{% url layer_thumbnail layer.typename %}";
     </script>
+{% if can_change_permissions %}
+<script type="text/javascript" src="{% static "script/thumbnail_help.js" %}"></script>
+{% endif %}
 {% endblock %}
 
 {% block body_class %}manage-layer-page{% endblock %}

@@ -48,13 +48,16 @@ Ext.onReady(function() {
 //        }
 //    });
 {% endcomment %}
-    var hasThumb = {% if map.get_thumbnail %}true{% else %}false{% endif %};
-    var thumbURL = "{% url geonode.maps.views.map_controller map.id %}?thumbnail";
-    {% include "maps/thumbnail_help.js" %}
 {% endif %}
 {% endautoescape %}
 });
+
+var hasThumb = {% if map.get_thumbnail %}true{% else %}false{% endif %};
+var thumbURL = "{% url geonode.maps.views.map_controller map.id %}?thumbnail";
 </script>
+{% if can_change_permissions %}
+<script type="text/javascript" src="{% static "script/thumbnail_help.js" %}"></script>
+{% endif %}
 {% endblock %}
 {% block body_class %}search-mapstories{% endblock body_class %}
 
