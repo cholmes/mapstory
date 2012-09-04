@@ -41,10 +41,13 @@ def owner_rank_rules():
            ['biography', 5, 2])
 
 def _initial_query(model, kw):
-    q = model.objects.filter(publish__status='Public')
     user = kw['user']
-    if user:
-        q = q | model.objects.filter(owner=user)
+    if user and user.is_superuser:
+        q = model.objects.all()
+    else:
+        q = model.objects.filter(publish__status='Public')
+        if user:
+            q = q | model.objects.filter(owner=user)
     return q
     
 
