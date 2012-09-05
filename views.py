@@ -3,6 +3,7 @@ from geonode.maps.models import Layer
 from geonode.maps.models import MapLayer
 from geonode.maps.models import Thumbnail
 from geonode.maps.utils import forward_mercator
+from geonode.maps.views import json_response
 
 from mapstory import models
 from mapstory.util import lazy_context
@@ -12,9 +13,11 @@ import account.views
 
 from django.contrib.auth.models import User
 from django.core.cache import cache
+from django.core.exceptions import PermissionDenied
 from django.conf import settings
 from django.db.models import signals
 from django.shortcuts import get_object_or_404
+from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
@@ -173,16 +176,18 @@ def delete_favorite(req, id):
     return HttpResponse('OK', status=200)
 
 @login_required
+@require_POST
 def publish_status(req, layer_or_map, layer_or_map_id):
     if req.method != 'POST':
         return HttpResponse('POST required',status=400)
-    if layer_or_map == 'map':
-        obj = get_object_or_404(Map, pk = layer_or_map_id)
-    else:
-        obj = get_object_or_404(Layer, pk = layer_or_map_id)
-    if obj.owner != req.user and not req.user.has_perm('mapstory.change_publishingstatus', obj):
-        return HttpResponse('Not sufficient permissions',status=401)
+    model = Map if layer_or_map == 'map' else Layer
+    obj = _resolve_object(req, model, 'mapstory.change_publishingstatus',
+                          allow_owner=True, id=layer_or_map_id)
     models.PublishingStatus.objects.set_status(obj, req.POST['status'])
+    related = obj.publish.check_related()
+    if related:
+        obj.publish.update_related()
+        return HttpResponse('WARN', status=200)
     return HttpResponse('OK', status=200)
 
 @login_required
@@ -301,6 +306,21 @@ def create_annotations_layer(req, mapid):
         attributes = atts,
         skip_style = True
     )
+
+
+def _resolve_object(req, model, perm, perm_required=False,
+                    allow_owner=False, **kw):
+    obj = get_object_or_404(model,**kw)
+    allowed = True
+    if perm:
+        if perm_required or req.method != 'GET':
+            if allow_owner:
+                allowed = req.user == obj.owner
+            if not allowed:
+                allowed = req.user.has_perm(perm, obj=obj)
+    if not allowed:
+        raise PermissionDenied("You do not have adequate permissions")
+    return obj
     
 def _remove_annotation_layer(sender, instance, **kw):
     try:

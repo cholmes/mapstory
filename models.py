@@ -297,6 +297,20 @@ class PublishingStatus(models.Model):
     layer = models.OneToOneField(Layer,related_name='publish',null=True)
     status = models.CharField(max_length=8,choices=PUBLISHING_STATUS_CHOICES,default=PUBLISHING_STATUS_PRIVATE)
     
+    def check_related(self):
+        if self.map:
+            layers = self.map.local_layers
+            owner = self.map.owner
+            if len(set([owner]) | set([l.owner for l in layers])) > 1:
+                return [ l for l in layers if l.owner == owner]
+
+    def update_related(self):
+        if self.map:
+            for l in self.map.local_layers:
+                if l.owner == self.map.owner:
+                    l.publish.status = self.status
+                    l.publish.save()
+
     def save(self,*args,**kw):
         obj = self.layer or self.map
         level = obj.LEVEL_READ
