@@ -122,7 +122,7 @@ var thumbURL = "{% url geonode.maps.views.map_controller map.id %}?thumbnail";
                             <label>Author:</label>
                             <p>{{map.owner}}</p>
                             <label>Keywords:</label>
-                            <p>{{map.keywords}}</p>
+                            <p>{{map.keyword_list|join:" "}}</p>
                             {% endif %}
                         </div>
                         <div class="tab-pane" id="actions2">
@@ -160,7 +160,7 @@ var thumbURL = "{% url geonode.maps.views.map_controller map.id %}?thumbnail";
                         </div>
                         {% endif %}
                     <cite>Uploaded by {{ map.owner.username }} on {{ map.last_modified|date:"N j Y" }}</cite>
-                    <article class="abstract"><p>Abstract:</p>{{ map.abstract|escape|urlize|linebreaks|safe }}</article>
+                    <article class="abstract"><label>Abstract:</label>{{ map.abstract|escape|urlize|linebreaks|safe }}</article>
                 </div>
                 {% comments_section map %}
 

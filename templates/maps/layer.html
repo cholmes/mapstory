@@ -187,7 +187,7 @@
                             <label>Author:</label>
                             <p>{{layer.owner}}</p>
                             <label>Keywords:</label>
-                            <p>{{layer.keywords}}</p>
+                            <p>{{layer.keyword_list|join:","}}</p>
                             {% endif %}
                         </div>
                         <div class="tab-pane" id="actions3">
@@ -235,7 +235,7 @@
                     {% endif %}
                 </div>
                 <cite>Uploaded by {{ layer.owner.username }} on {{ layer.date|date:"N j Y" }}</cite>
-                <article class="abstract"><p>Abstract:</p> {{ layer.abstract|escape|urlize|linebreaks|safe }}</article>
+                <article class="abstract"><label>Abstract:</label> {{ layer.abstract|escape|urlize|linebreaks|safe }}</article>
                 
                 {% comments_section layer %}
 
