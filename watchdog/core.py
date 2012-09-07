@@ -1,8 +1,12 @@
+from datetime import datetime
+from datetime import timedelta
 from django.conf import settings
+from django.core import urlresolvers
 from django.core.mail import EmailMessage
 from mapstory.watchdog.handlers import MemoryHandler
-from mapstory.watchdog.models import Run
 from mapstory.watchdog.models import get_current_state
+from mapstory.watchdog.models import format_datestring
+from mapstory.watchdog.models import Run
 import functools
 import inspect
 import logging
@@ -336,6 +340,47 @@ def list_suites():
                     if basename != 'core':
                         suites.append(basename)
     print '\n'.join(sorted(suites))
+
+
+def clean_runs(ndays):
+    now = datetime.now()
+    delta = timedelta(days=ndays)
+    cutoff = now - delta
+    old_runs = Run.objects.filter(time__lte=cutoff, is_error=False)
+    for run in old_runs:
+        run.delete()
+
+
+def summarize(start_time, end_time):
+    set_config()
+    base_url = _config['DJANGO_URL']
+    runs = Run.objects.filter(time__range=(start_time, end_time))
+    total = 0
+    success = 0
+    failure = 0
+    failures = []
+    for run in runs:
+        total += 1
+        if run.is_error:
+            failure += 1
+            failures.append(run)
+        else:
+            success += 1
+    print "Watchdog runs between %s and %s" % (start_time.strftime('%m/%d'),
+                                               end_time.strftime('%m/%d'))
+    print '=' * 37
+    print "%s total\n%s succeeded\n%s failed" % (total, success, failure)
+    if failures:
+        def admin_url(run_id):
+            path = urlresolvers.reverse('admin:watchdog_run_change',
+                                        args=(run_id,))
+            return base_url + path
+        print
+        print 'Failures'
+        print '========'
+        print '\n'.join([
+            '%s @ %s' % (admin_url(run.id), format_datestring(run.time))
+            for run in failures])
 
 
 class CheckFailed(Exception):
