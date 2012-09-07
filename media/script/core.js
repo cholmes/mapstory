@@ -13,6 +13,10 @@ $(function () {
     $("#login-form-pop button").click(function(e) {
         var form = $("#login-form-pop form");
         e.preventDefault();
+        if (!navigator.cookieEnabled) {
+            alert('MapStory requires cookies to be enabled.');
+            return;
+        }
         $.post(form.attr('action'),form.serialize(),function(data,status,xhr) {
             $('.loginmsg').hide();
             if (status == 'success') {
