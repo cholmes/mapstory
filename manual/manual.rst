@@ -76,3 +76,33 @@ Other Tips
 * Know your data - if there are attributes that you don't understand or are a
   remnant from some processing algorithm, remove them as they take up space and
   don't contribute to understanding the story.
+
+
+Styling Your StoryLayer
+=======================
+.. _stlying:
+
+When your StoryLayer is uploaded, a style is created for it unless you have
+provided one during upload. A style dictates how a StoryLayer will look when
+it is displayed either in a map or on it's own. A StoryLayer has a default
+style and zero or more optional styles that it can be displayed with. The
+default style is how the StoryLayer will be displayed on the info page and
+will also be the default when added to a StoryMap. When in a StoryMap, a
+StoryLayer may appear multiple times with different styles applied.
+
+One can manage the default style, upload additional styles, or download styles 
+for a StoryLayer on the info page under the `Style` tab. If the StoryLayer has
+optional styles, they can be previewed here, too.
+
+You must be the owner of a StoryLayer for this functionality to be available.
+
+
+Editing Styles
+--------------
+
+At the moment, MapStory provides some support for editing styles when a 
+StoryLayer is part of a StoryMap. Styles in MapStory are stored in an open text 
+format known as
+`SLD <http://docs.geoserver.org/stable/en/user/styling/sld-introduction.html>`_ .
+This means they can be edited by hand or in other tools, such as
+`QGIS <http://qgis.org/>`_ .

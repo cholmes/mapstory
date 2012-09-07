@@ -13,7 +13,7 @@
         </div>
     </div>
     <div class="offset4 span8">
-        <div class="box">
+        <div class="box contents">
             <h1>MapStory Manual</h1>
             {{ content }}
         </div>
@@ -26,6 +26,16 @@
 $(function() {
     var x = $('#contents').remove();
     x.appendTo($("#contents-holder"));
+    
+    $("#manual .contents a.reference.external").attr('target','_');
+        
+    $(".section").hover(function() {
+        var ref = $(this).find('.toc-backref').attr('href');
+        $('#contents-holder .hover').removeClass('hover');
+        if (ref) {
+            $(ref).addClass('hover');
+        }
+    });
 })
 </script>
 {% endblock %}

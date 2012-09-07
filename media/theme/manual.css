@@ -41,6 +41,9 @@
 .admonition-title {
     display: none;
 }
+#contents .hover {
+    color: #4A4A4A;
+}
 #contents {
     font-size: large;
 }
