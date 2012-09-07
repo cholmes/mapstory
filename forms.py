@@ -4,6 +4,16 @@ from account.forms import SignupForm
 
 from mapstory.models import ContactDetail
 
+
+class StyleUploadForm(forms.Form):
+    
+    layerid = forms.IntegerField()
+    name = forms.CharField(required=False)
+    update = forms.BooleanField(required=False)
+    sld = forms.FileField()
+    
+
+
 class ProfileForm(forms.ModelForm):
     
     blurb = forms.CharField(widget=forms.Textarea)

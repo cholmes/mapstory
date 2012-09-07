@@ -81,6 +81,7 @@ urlpatterns += patterns('mapstory.views',
     url(r'^mapstory/resource/(?P<resource>[-\w]+)$','resource_detail',name='mapstory_resource'),
     url(r'^mapstory/how-to$','how_to',name='how_to'),
     url(r'^mapstory/manual$','manual',name='mapstory_manual'),
+    url(r'^data/style/upload$','upload_style',name='upload_style'),
     
     # semi-temp urls
     url(r'^mapstory/topics/(?P<layer_or_map>\w+)/(?P<layer_or_map_id>\d+)$','topics_api',name='topics_api'),

@@ -56,7 +56,7 @@
             app = new mapstory.LayerViewer(config);
             
             //Are these next 2 element click handlers relevant anymore?
-            Ext.get(Ext.DomQuery.select("input[@name='style']")).on("click", function(evt, elem) {
+            Ext.get(Ext.DomQuery.select(".styles-list input[@name='style']")).on("click", function(evt, elem) {
                 app.selectedLayer.getLayer().mergeNewParams({
                     "STYLES": elem.value,
                     "_dc": Math.random()
@@ -72,8 +72,51 @@
             });
 {% has_obj_perm user layer "maps.change_layer" as can_change %}
 {% if can_change %}
-            Ext.get(Ext.DomQuery.select(".style-title")).on("click", function(evt, elem) {
-                showStyle(Ext.get(elem).prev("input").getAttribute("value"));
+            /** @hack - work around global hack in geoexplorer **/
+            Ext.data.Connection.on({beforerequest:function(con,options){
+                if ('form' in options) {
+                    options.url = options.form.action;
+                }
+            }});
+            Ext.select("#upload-style a").on("click", function(ev, el) {
+                var extForm = new Ext.form.BasicForm(Ext.get(el).parent('form')),
+                    msg = Ext.get('upload-style-msg');
+                ev.preventDefault();
+                extForm.on('actioncomplete',function(form,xhrlike) {
+                    var resp = xhrlike.result;
+                    msg.removeClass('hide');
+                    msg.replaceClass('alert-error','alert-info');
+                    msg.dom.innerHTML = resp.style + (resp.updated ? " Updated" : " Uploaded");
+                    msg.frame();
+                    if (!resp.updated) {
+                        Ext.DomHelper.append('style-preview',{
+                            tag : 'input',
+                            type : 'radio',
+                            name : 'style',
+                            id : resp.style,
+                            value: resp.style
+                        });
+                        Ext.DomHelper.append('style-preview',{
+                            tag : 'label',
+                            'for' : resp.style,
+                            cls : 'style-title',
+                            html : resp.style
+                        });
+                        Ext.DomHelper.append(Ext.select("select[@name='default-style']"), {
+                            tag : 'option',
+                            value : resp.style,
+                            html : resp.style
+                        });
+                    }
+                });
+                extForm.on('actionfailed',function(form,xhrlike) {
+                    var resp = xhrlike.result;
+                    msg.removeClass('hide');
+                    msg.replaceClass('alert-info','alert-error');
+                    msg.dom.innerHTML = resp.errors.join("<br>");
+                    msg.frame();
+                });
+                extForm.submit();
             });
 {% endif %}
 
@@ -101,20 +144,6 @@
 {% endif %}
         });
 
-        function showStyle(styleName) {
-            
-            if (!styleName) {
-                Ext.ComponentMgr.all.on("add", function(index, object) {
-                    if (object instanceof gxp.WMSStylesDialog) {
-                        Ext.ComponentMgr.all.un("add", arguments.callee);
-                        object.on("ready", function() {
-                            object.addStyle();
-                        }, this, {single: true});
-                    }
-                });
-            }
-            app.tools["styler"].actions[0].execute();
-        }
 {% endautoescape %}
     var hasThumb = {% if layer.get_thumbnail %}true{% else %}false{% endif %};
     var thumbURL = "{% url layer_thumbnail layer.typename %}";
@@ -129,6 +158,7 @@
 {% block main %}
     <div class="row mrg-top">
         <div class="span8">
+            {% warn_status request layer %}
             <h2 class="icn-storylayers">{{ layer.title }}</h2>
         </div>
         <div class="span4 top-detail-actions">
@@ -145,9 +175,14 @@
                         {% overall_rating layer "layer" as layer_rating %}
                         <span class="overall_rating" data-rating="{{ layer_rating }}"></span>
                     </div>
+                    
+                    {% has_obj_perm user layer "maps.change_layer" as can_change %}
                     <div class="video-actions tabbable">
                         <ul class="actions-links nav nav-tabs fancyfont">
                             <li><a href="#describemap" class="icn info active" data-toggle="pill">Info</a></li>
+                            {% if can_change %}
+                            <li><a href="#actions7" class="icn layers" data-toggle="pill">Style</a></li>
+                            {% endif %}
 <!--                            <a href="#" class="icn favorites">Add to Favorites</a>-->
                             <li><a href="#actions3" class="icn share" data-toggle="pill">Share</a></li>
                             <li><a href="#actions4" class="icn flag" data-toggle="pill">Flag</a></li>
@@ -158,7 +193,6 @@
                     </div>
                     <div class="video-actions tab-content">
                         <div class="tab-pane" id="describemap">
-                            {% has_obj_perm user layer "maps.change_layer" as can_change %}
                             {% if can_change %}
                             <form id="info-form" method="POST" action="{% url layer_metadata layer.typename %}">
                             <label>Title:</label>
@@ -207,7 +241,7 @@
                         </div>
                         <div class="tab-pane" id="actions6">
                             {% if user.is_authenticated %}
-                            <h4>Download this data:</h4>
+                            <h4>Download this StoryLayer:</h4>
                             <div class="btn-group">
                                 <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
                                     Available Formats
@@ -219,11 +253,76 @@
                                     {% endfor %}
                                 </ul>
                             </div>
+                            <hr>
+                            <h4>Or The Styles This StoryLayer Uses:</h4>
+                            <span class="styles-list">
+                                <a target="dlframe" href="{{ GEOSERVER_BASE_URL }}styles/{{ layer.default_style.name }}.sld">Download {{layer.publishing.default_style.name}}</a><br/>
+                                {% for style in layer.styles %} 
+                                    <a target="dlframe" href="{{ GEOSERVER_BASE_URL }}styles/{{ style.name }}.sld">Download
+                                    {% if style.sld_title %}
+                                        {{ style.sld_title }}
+                                     {% else %}
+                                        {{ style.name|title }}
+                                     {% endif %}
+                                    </a><br/>
+                                {% endfor %}
+                            </span>
                             <iframe id="dlframe" style="display:none"></iframe>
                             {% else %}
                             <p>You must be logged in to download.</p>
                             {% endif %}
                         </div>
+                        {% if can_change %}
+                        <div class="tab-pane" id="actions7">
+                            <span style="float:right">
+                                {% manual_link "styling" "Style Help?" %}
+                            </span>
+                            <div id="style-preview" class="styles-list">
+                                <h4>Change Style (Preview)</h4>
+                                <input type="radio" name="style" id="{{layer.publishing.default_style.name}}" value="{{layer.publishing.default_style.name}}" checked="checked"/>
+                                <label for="{{layer.publishing.default_style.name}}" class="style-title">
+                                {% if layer.default_style.sld_title %}
+                                {{ layer.default_style.sld_title }}
+                                {% else %}
+                                {{ layer.default_style.name|title }}
+                                {% endif %}
+                                </label>
+                                <a target="dlframe" href="{{ GEOSERVER_BASE_URL }}styles/{{ layer.default_style.name }}.sld">SLD</a><br/>
+                                {% for style in layer.styles %} 
+                                <input type="radio" name="style" id="{{style.name}}" value="{{style.name}}"/>
+                                <label for="{{style.name}}" class="style-title">
+                                {% if style.sld_title %}
+                                {{ style.sld_title }}
+                                {% else %}
+                                {{ style.name|title }}
+                                {% endif %}
+                                </label>
+                                <a target="dlframe" href="{{ GEOSERVER_BASE_URL }}styles/{{ style.name }}.sld">Download SLD</a><br/>
+                                {% endfor %}
+                            </div>
+                            <hr>
+                            <h4>Set Default Style</h4>
+                            <select name="default-style">
+                            <option value="{{layer.publishing.default_style.name}}" selected="selected">
+                              {{layer.publishing.default_style.name|title}}
+                            </option>
+                            {% for style in layer.styles %} 
+                                <option value="{{style.name}}"> {{ style.name|title }} </option>
+                            {% endfor %}
+                            </select><br/>
+                            <hr>
+                            <h4>Upload Style</h4>
+                            <form id="upload-style" action="{% url upload_style %}" target="dlframe" method="POST" enctype="multipart/form-data">
+                                <div id="upload-style-msg" class="alert alert-error hide"></div>
+                                <label class="checkbox" for="id_update"><input type="checkbox" id="id_update" name="update"/> Update Existing Style?</label>
+                                <label for="id_name">Name (Optional):</label><input type="text" id="id_name" name="name">
+                                <label for="id_sld">SLD File (.sld):</label><input type="file" id="id_sld" name="sld">
+                                <input type="hidden" name="layerid" value="{{layer.id}}">
+                                <a href="#" class="btn">Upload</a>
+                                {% csrf_token %}
+                            </form>
+                         </div>
+                         {% endif %}
                     </div>
                 </div>
                                 

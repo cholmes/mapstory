@@ -5,10 +5,13 @@ from geonode.maps.models import Thumbnail
 from geonode.maps.utils import forward_mercator
 from geonode.maps.views import json_response
 
+from geoserver.catalog import ConflictingDataError
+
 from mapstory import models
 from mapstory.util import lazy_context
 from mapstory.util import render_manual
 from mapstory.forms import CheckRegistrationForm
+from mapstory.forms import StyleUploadForm
 import account.views
 
 from django.contrib.auth.models import User
@@ -26,6 +29,7 @@ from django.template import loader
 from django.contrib.contenttypes.models import ContentType
 from django.views.decorators.cache import cache_page
 
+from lxml import etree
 import math
 import os
 import random
@@ -57,7 +61,7 @@ def how_to(req):
         'videos' : models.VideoLink.objects.how_to_videos()
     }))
     
-@cache_page(600)
+#@cache_page(600)
 def manual(req):
     html = render_manual('manual.rst')
     if 'test' in req.GET:
@@ -176,7 +180,6 @@ def delete_favorite(req, id):
     return HttpResponse('OK', status=200)
 
 @login_required
-@require_POST
 def publish_status(req, layer_or_map, layer_or_map_id):
     if req.method != 'POST':
         return HttpResponse('POST required',status=400)
@@ -307,6 +310,49 @@ def create_annotations_layer(req, mapid):
         skip_style = True
     )
 
+
+@login_required
+def upload_style(req):
+    def respond(*args,**kw):
+        kw['content_type'] = 'text/html'
+        return json_response(*args,**kw)
+    form = StyleUploadForm(req.POST,req.FILES)
+    if not form.is_valid():
+        return respond(errors="Please provide an SLD file.")
+    
+    data = form.cleaned_data
+    layer = _resolve_object(req, Layer, "maps.change_layer", 
+                            id=data['layerid'])
+    
+    sld = req.FILES['sld'].read()
+
+    try:
+        dom = etree.XML(sld)
+    except Exception,ex:
+        return respond(errors="The uploaded SLD file is not valid XML")
+    
+    el = dom.findall("{http://www.opengis.net/sld}NamedLayer/{http://www.opengis.net/sld}Name")
+    name = data.get('name') or el[0].text
+    if data['update']:
+        match = None
+        styles = list(layer.styles) + [layer.default_style]
+        for style in styles:
+            if style.sld_name == name:
+                match = style; break
+        if match is None:
+            return respond(errors="Cannot locate style : " + name)
+        match.update_body(sld)
+    else:
+        try:
+            cat = Layer.objects.gs_catalog
+            cat.create_style(name, sld)
+            layer.styles = layer.styles + [ type('style',(object,),{'name' : name}) ]
+            cat.save(layer.publishing)
+        except ConflictingDataError,e:
+            return respond(errors="""A layer with this name exists. Select
+                                     the update option if you want to update.""")
+    return respond(body={'success':True,'style':name,'updated':data['update']})
+    
 
 def _resolve_object(req, model, perm, perm_required=False,
                     allow_owner=False, **kw):
