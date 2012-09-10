@@ -160,6 +160,7 @@ var thumbURL = "{% url geonode.maps.views.map_controller map.id %}?thumbnail";
                         </div>
                         {% endif %}
                     <cite>Uploaded by {{ map.owner.username }} on {{ map.last_modified|date:"N j Y" }}</cite>
+                    {% warn_status request map %}
                     <article class="abstract"><label>Abstract:</label>{{ map.abstract|escape|urlize|linebreaks|safe }}</article>
                 </div>
                 {% comments_section map %}

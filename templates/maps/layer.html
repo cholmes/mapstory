@@ -158,7 +158,6 @@
 {% block main %}
     <div class="row mrg-top">
         <div class="span8">
-            {% warn_status request layer %}
             <h2 class="icn-storylayers">{{ layer.title }}</h2>
         </div>
         <div class="span4 top-detail-actions">
@@ -334,6 +333,7 @@
                     {% endif %}
                 </div>
                 <cite>Uploaded by {{ layer.owner.username }} on {{ layer.date|date:"N j Y" }}</cite>
+                {% warn_status request layer %}
                 <article class="abstract"><label>Abstract:</label> {{ layer.abstract|escape|urlize|linebreaks|safe }}</article>
                 
                 {% comments_section layer %}

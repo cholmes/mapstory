@@ -106,3 +106,32 @@ format known as
 `SLD <http://docs.geoserver.org/stable/en/user/styling/sld-introduction.html>`_ .
 This means they can be edited by hand or in other tools, such as
 `QGIS <http://qgis.org/>`_ .
+
+
+Publishing Your Work
+====================
+
+When first created, a StoryLayer or StoryMap is considered `Private`. This
+means that only you can search for or view it. When you are ready, ensure that
+you choose the appropriate publishing status. This can be done on the info page
+at the bottom of the `Info` tab.
+
+.. tip::
+   :class: alert alert-info
+   
+   If you are changing the status of a StoryMap, any StoryLayers it uses that
+   you own will also be changed.
+
+The available options:
+
+.. list-table:: Publishing Status Options
+   :header-rows: 1
+   
+   * - Value
+     - Meaning
+   * - Private (Only visible to me)
+     - Only you can search for and view this.
+   * - Linkable (Anyone with a link can view)
+     - Will be hidden from search but others can view via the link.
+   * - Public (Anyone can search for and view)
+     - As implied.
