@@ -20,7 +20,7 @@ def render_manual(*path):
     paths.extend(path)
     cache_key = 'mapstory_manual_%s' % ('_'.join(paths))
     html = cache.get(cache_key)
-    if not html or settings.DEBUG:
+    if html is None or settings.DEBUG:
         html = markup(os.path.join(*paths))
         cache.set(cache_key, html, 60000)
     return html
