@@ -309,6 +309,11 @@ class ByStoryTellerNode(template.Node):
         })
         
 @register.simple_tag
+def admin_manual():
+    url = reverse('mapstory_admin_manual')
+    return "<a href='%s' target='admin_manual'>Admin Manual</a>" % (url)
+        
+@register.simple_tag
 def manual_link(target, name):
     url = reverse('mapstory_manual') + "#" + target
     return "<a href='%s' target='manual'>%s</a>" % (url, name)
