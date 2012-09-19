@@ -10,8 +10,11 @@ border-bottom: none;
 
 /** Mapstory theming on ExtJs components **/
 /* In-map Layer Manager */
-.olMap div.gxp-layermanager-tree .x-tree-node .x-tree-selected{
-    background-color: rgba(50, 50, 50, 0.70);
+.olMap div.gxp-layermanager-tree .x-tree-node .x-tree-selected {
+    background-color: transparent;
+}
+.olMap div.gxp-layermanager-tree .x-tree-node .x-tree-selected.x-tree-node-over {
+    background-color: #EEE !important;
 }
 .olMap div.gxp-layermanager-tree .x-tree-node a span, .x-dd-drag-ghost a span {
     /*color: #F46817;*/
