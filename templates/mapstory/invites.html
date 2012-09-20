@@ -13,8 +13,8 @@
     <div class="span4 offset2">
         <div class="box">
             <p>You have <span id="invites-remaining">{% remaining_invites user %}</span> invitation(s) with which you can
-            invite someone you know to tell a MapStory or two. Enter the email
-            of your StoryTelling someone and they will receive a signup mail.
+            invite someone you know to tell a MapStory or two. Enter the email address
+            of your StoryTelling someone and they will receive an invitation to signup by email.
             </p>
         </div>
         <div class="box">
@@ -27,7 +27,14 @@
         {% invites_sent user %}
         </div>
     </div>
-
+</div>
+<div class="row mrg-top">
+    <div class="span8 offset2">
+        <div id="previewContent" class="hide">
+            <h4>Your invite will look like:</h4>
+            <pre></pre>
+        </div>
+    </div>
 </div>
 <div id="fillheight"></div>
 {% endblock %}
@@ -36,11 +43,36 @@
 <script type="text/javascript">
     
 $(function () {
+    var busy = false, form = $(".invitation_form form"), preview = "{% url invite_preview %}";
+    function done() {
+        $("#loading").addClass('hide');
+        busy = false;
+    }
+    function error(msg) {
+        form.find('.alert-error').html(msg).slideDown();
+    }
+    function check() {
+        var val = $("input[name=email_address]").val();
+        if (! val) {
+            error("Please enter an email address.");
+        }
+        return ! val;
+    }
+    $("#preview").click(function(ev) {
+        ev.preventDefault();
+        if (check()) return;
+        $.post(preview, form.serialize(), function(data,status,xhr) {
+            $("#previewContent pre").html(data).parent().removeClass('hide');
+        });
+    })
     $(".invitation_form form .btn-primary").click(function(ev) {
        ev.preventDefault();
-       var form = $(".invitation_form form");
+       if (busy) return;
+       if (check()) return;
        form.find('.alert').hide();
+       $("#loading").removeClass('hide');
        $.post(form.attr('action'),form.serialize(),function(data,status,xhr) {
+            done();
             if (data.status == 'OK') {
                 form.find('.alert-success').html('Invitation Sent!').slideDown();
                 $('.empty-invites').remove();
@@ -50,11 +82,13 @@ $(function () {
                 if (data.invitations_remaining == 0) {
                     $('.invitation_form form').hide();
                 }
+                $("input[name=email_address]").val('');
             } else {
-                form.find('.alert-error').html(data.errors).slideDown();
+                error(data.errors);
             }
         }).error(function(data,status,xhr) {
             alert('An error has occurred' + data);
+            done();
         });
     });
 });

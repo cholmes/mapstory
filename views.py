@@ -15,8 +15,10 @@ from mapstory.forms import StyleUploadForm
 import account.views
 
 from django.contrib.auth.models import User
+from django.contrib.sites.models import Site
 from django.core.cache import cache
 from django.core.exceptions import PermissionDenied
+from django.core.urlresolvers import reverse
 from django.conf import settings
 from django.db.models import signals
 from django.shortcuts import get_object_or_404
@@ -352,7 +354,29 @@ def upload_style(req):
             return respond(errors="""A layer with this name exists. Select
                                      the update option if you want to update.""")
     return respond(body={'success':True,'style':name,'updated':data['update']})
-    
+
+
+@login_required
+def invite_preview(req):
+    # thanks for making this flexible, accounts app :(
+    # the email formatting is embedded in the send method... so copy-paste
+    protocol = getattr(settings, "DEFAULT_HTTP_PROTOCOL", "http")
+    current_site = Site.objects.get_current()
+    signup_url = u"%s://%s%s?%s" % (
+        protocol,
+        unicode(current_site.domain),
+        reverse("account_signup"),
+        "somerandomstringofletters"
+    )
+    ctx = {
+        "signup_code": {
+            "inviter" : req.user
+        },
+        "current_site": current_site,
+        "signup_url": signup_url,
+    }
+    return render_to_response('account/email/invite_user.txt', ctx)
+
 
 def _resolve_object(req, model, perm, perm_required=False,
                     allow_owner=False, **kw):

@@ -1,11 +1,17 @@
+{% load mapstory_tags %}
 <div id="invitation-form-messages"></div>
 <div class="invitation_form">
     {% if user.invitationstat.can_send %}
         <form action="{% url kaleo_invite %}" method="POST" accept-charset="utf-8">
             {% csrf_token %}
-            {{ form.as_ul }}
-            <div class="form-actions">
+            {{ form.as_table }}
+            <div style="margin: 10px 0;">
                 <input type="submit" value="Invite" class="btn btn-primary">
+                <button id="preview" class="btn btn-info">Preview</button>
+                <div id="loading" class="hide" style="float:right">
+                    Inviting ...
+                    <img style="vertical-align: middle;" src="{% geonode_static "externals/ext/resources/images/default/shared/blue-loading.gif" %}">
+                </div>
             </div>
             <div class="alert alert-success" style="display:none"></div>
             <div class="alert alert-error" style="display:none"></div>

@@ -1,7 +1,11 @@
-{{ signup_code.inviter }} has invited you to join MapStory ( http://{{ current_site.domain }} )!
+{{ signup_code.inviter }} ({{signup_code.inviter.email}}) has invited you to join 
+MapStory ( http://{{ current_site.domain }} )!
 
 Just click the following link to get started:
 {{ signup_url }}
 
 To learn more about MapStory:
 http://wiki.mapstory.org/index.php?title=Main_Page
+
+Please do not reply to this e-mail.  If you have questions about this invite, 
+please e-mail the person who sent it or info@mapstory.org
