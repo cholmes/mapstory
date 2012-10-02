@@ -1,9 +1,18 @@
 {% extends "admin/base.html" %}
 
+{% load mapstory_tags %}
+
 {% block title %}
 MapStory Admin
 {% endblock %}
 
 {% block branding %}
 <h1 id="site-name"><a href="/">MapStory</a> Admin</h1>
+{% endblock %}
+
+{% block nav-global %}
+<div style="padding-left:10px">
+    {% admin_manual %}
+</div>
+{{ block.super }}
 {% endblock %}

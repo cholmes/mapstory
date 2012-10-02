@@ -63,7 +63,14 @@ def how_to(req):
         'videos' : models.VideoLink.objects.how_to_videos()
     }))
     
-#@cache_page(600)
+def admin_manual(req):
+    if not req.user.is_staff:
+        return HttpResponse("Not Allowed", status=400)
+    html = render_manual('admin.rst')
+    return render_to_response('mapstory/manual.html', RequestContext(req,{
+        'content' : html
+    }))
+    
 def manual(req):
     html = render_manual('manual.rst')
     if 'test' in req.GET:
