@@ -320,7 +320,7 @@ def manual_include(path):
 
 @register.simple_tag
 def warn_status(req, obj):
-    if req.user.is_authenticated and obj.publish.status == PUBLISHING_STATUS_PRIVATE:
+    if req.user.is_authenticated() and obj.publish.status == PUBLISHING_STATUS_PRIVATE:
         return loader.render_to_string('maps/_warn_status.html',{})
     return ""
 
