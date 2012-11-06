@@ -6,6 +6,7 @@ from django.contrib.staticfiles.templatetags import staticfiles
 from django.conf import settings
 from geonode.maps.models import Map
 from geonode.maps.models import Layer
+from geonode.maps.models import ALL_LANGUAGES
 from mapstory.models import Section
 from mapstory.models import Favorite
 from mapstory.models import PublishingStatus
@@ -307,6 +308,11 @@ class ByStoryTellerNode(template.Node):
             'maps':maps,
             'layers':layers
         })
+
+@register.simple_tag
+def layer_language_selector(layer):
+    s = ("selected='selected' ",)
+    return "<select name='layer-language'>%s</select>" % "".join(['<option %svalue="%s">%s</option>' % (s + l if layer.language == l[0] else (' ',) + l) for l in ALL_LANGUAGES])
         
 @register.simple_tag
 def admin_manual():
@@ -326,7 +332,13 @@ def manual_include(path):
 @register.simple_tag
 def warn_status(req, obj):
     if req.user.is_authenticated() and obj.publish.status == PUBLISHING_STATUS_PRIVATE:
-        return loader.render_to_string('maps/_warn_status.html',{})
+        return loader.render_to_string('maps/_warn_status.html', {})
+    return ""
+
+@register.simple_tag
+def warn_missing_thumb(obj):
+    if not obj.get_thumbnail():
+        return loader.render_to_string('maps/_warn_thumbnail.html', {})
     return ""
 
 # @todo - make geonode location play better

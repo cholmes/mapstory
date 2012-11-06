@@ -302,12 +302,12 @@ class PublishingStatus(models.Model):
             layers = self.map.local_layers
             owner = self.map.owner
             if len(set([owner]) | set([l.owner for l in layers])) > 1:
-                return [ l for l in layers if l.owner == owner]
+                return [ l for l in layers if l.owner == owner ]
 
-    def update_related(self):
+    def update_related(self, ignore_owner=False):
         if self.map:
             for l in self.map.local_layers:
-                if l.owner == self.map.owner:
+                if ignore_owner or l.owner == self.map.owner:
                     l.publish.status = self.status
                     l.publish.save()
 
@@ -320,6 +320,18 @@ class PublishingStatus(models.Model):
         obj.set_gen_level(AUTHENTICATED_USERS, level)
         obj.set_user_level(obj.owner, obj.LEVEL_ADMIN)
         models.Model.save(self,*args)
+        
+        
+def audit_layer_metadata(layer):
+    '''determine if metadata is complete to allow publishing'''
+    return all([
+        layer.abstract,
+        layer.purpose,
+        layer.keywords,
+        layer.language,
+        layer.supplemental_information,
+        layer.data_quality_statement
+    ]) and layer.topic_set.count()
 
     
 def create_profile(instance, sender, **kw):

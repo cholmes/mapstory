@@ -13,15 +13,6 @@ $(function() {
             $(ev.responseText).appendTo(form);
         });
     });
-    $("#publish_status").click(function(ev) {
-        ev.preventDefault();
-        $.post(
-            $(this).attr('href'),
-            function() {
-                $("#publish_info").fadeOut();
-            }
-        )
-    });
     $("#topic-dropdown a").click(function(ev) {
         ev.preventDefault();
         $.post( topic_url, {
@@ -35,10 +26,17 @@ $(function() {
         ev.preventDefault();
         $.post( publishing_url, {
             'status' : link.attr('href').substring(1)
-        },function() {
-            $("#current_publish_status").html(link.html());
-            link.closest('ul').find('.active').removeClass('active');
-            link.closest('li').addClass('active');
+        },function(resp) {
+            $("#meta_data_status").hide();
+            if (resp == 'OK') {
+                $("#current_publish_status").html(link.html());
+                link.closest('ul').find('.active').removeClass('active');
+                link.closest('li').addClass('active');
+            } else if (resp == 'META') {
+                $("#meta_data_status").slideDown();
+            } else {
+                alert('Dang, unexpected response: ' + resp);
+            }
         })
     });
 });

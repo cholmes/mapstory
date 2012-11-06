@@ -193,27 +193,7 @@
                     <div class="video-actions tab-content">
                         <div class="tab-pane" id="describemap">
                             {% if can_change %}
-                            <form id="info-form" method="POST" action="{% url layer_metadata layer.typename %}">
-                            <label>Title:</label>
-                            <input name="layer-title" type="text" value="{{layer.title}}">
-                            <label>Author:</label>
-                            <p>{{layer.owner}}</p>
-                            <label>Keywords:</label>
-                            <textarea name="layer-keywords">{{layer.keyword_list|join:","}}</textarea>
-                            <label>Abstract:</label>
-                            <textarea name="layer-abstract">{{layer.abstract}}</textarea>
-                            <div>
-                                <button class="btn" id="submit">Update Information</button>
-                            </div>
-                            {% csrf_token %}
-                            </form>
-                            <hr/>
-                            {% topic_selection layer %}
-                            <hr/>
-                            <p>Generate a thumbnail for this map</p>
-                            <a id="set_thumbnail" class="btn" href="#thumbnail">{% trans "Set thumbnail" %}</a>
-                            <hr/>
-                            {% publish_status layer %}
+                            {% include "maps/_layer_edit_metadata.html" %}
                             {% else %}
                             <label>Title:</label>
                             <p>{{ layer.title }}</p>

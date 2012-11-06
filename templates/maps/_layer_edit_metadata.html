@@ -1,0 +1,59 @@
+{% load i18n %}
+{% load mapstory_tags %}
+
+<form id="info-form" method="POST" action="{% url layer_metadata layer.typename %}">
+    <label>Title:</label>
+    <span class="fh">Type a factually correct, snappy title here, that
+        general users will understand.</span>
+    <input name="layer-title" type="text" value="{{layer.title}}">
+
+    <label>Author:</label>
+    <p>{{layer.owner}}</p>
+
+    <label>Keywords:</label>
+    <span>Type in as many keywords, separated by commas,
+        as is appropriate.</span>
+    <textarea name="layer-keywords">{{layer.keyword_list|join:","}}</textarea>
+
+    <label>Abstract:</label>
+    <span class="fh">What is this data?  What geography does it
+        cover?  What time period does it cover?  What is its interval?  Who
+        created it?  Etc.</span>
+    <textarea name="layer-abstract">{{layer.abstract|default:""}}</textarea>
+
+    <label>Purpose:</label>
+    <span class="fh">Why was this data created?  What was its
+        primary use intended to be?</span>
+    <textarea name="layer-purpose">{{layer.purpose|default:""}}</textarea>
+
+    <label>Language:</label>
+    <span class="fh">Identify the language used in the feature types
+        and attributes.  (NOTE:  This will not matter for raster data).</span>
+    {% layer_language_selector layer %}
+
+    <label>Supplemental Information:</label>
+    <span class="fh">Add links to original data
+        source or supporting data.</span>
+    <textarea name="layer-supplemental_information">{{layer.supplemental_information|default:""}}</textarea>
+
+    <label>Data Quality Statement:</label>
+    <span class="fh">Discuss caveats surrounding this
+        StoryLayer here.</span>
+    <textarea name="layer-data_quality_statement">{{layer.data_quality_statement|default:""}}</textarea>
+
+    <div>
+        <button class="btn" id="submit">Update Information</button>
+    </div>
+    {% csrf_token %}
+</form>
+<hr/>
+{% topic_selection layer %}
+<hr/>
+<p>Generate a thumbnail for this map</p>
+<a id="set_thumbnail" class="btn" href="#thumbnail">{% trans "Set thumbnail" %}</a>
+{% warn_missing_thumb layer %}
+<hr/>
+{% publish_status layer %}
+<div id="meta_data_status" style="display:none" class="alert alert-warning">
+    In order to publish this StoryLayer, you must complete the metadata fields above.    
+</div>

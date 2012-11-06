@@ -1,8 +1,24 @@
 from django import forms
-
 from account.forms import SignupForm
-
+from geonode.maps.models import Layer
 from mapstory.models import ContactDetail
+import taggit
+
+
+class LayerForm(forms.ModelForm):
+    '''we have metadata needs/desires different from what geonode gives'''
+    
+    keywords = taggit.forms.TagField(required=False)
+    abstract = forms.CharField(required=False)
+    purpose = forms.CharField(required=False)
+    supplemental_information = forms.CharField(required=False)
+    data_quality_statement = forms.CharField(required=False)
+
+    class Meta:
+        model = Layer
+        exclude = ('contacts','workspace', 'store', 'name', 'uuid', 'storeType', 'typename') + \
+        ('temporal_extent_start', 'temporal_extent_end', 'topic_category') + \
+        ('keywords_region','geographic_bounding_box','constraints_use','date','date_type')
 
 
 class StyleUploadForm(forms.Form):

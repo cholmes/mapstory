@@ -12,6 +12,7 @@ from mapstory.util import lazy_context
 from mapstory.util import render_manual
 from mapstory.forms import CheckRegistrationForm
 from mapstory.forms import StyleUploadForm
+from mapstory.forms import LayerForm
 import account.views
 
 from django.contrib.auth.models import User
@@ -32,6 +33,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.views.decorators.cache import cache_page
 
 from lxml import etree
+from datetime import datetime
 import math
 import os
 import random
@@ -156,18 +158,22 @@ def favoriteslist(req):
 @login_required
 def layer_metadata(request, layername):
     '''ugh, override the default'''
-    from geonode.maps.views import LayerDescriptionForm
     layer = get_object_or_404(Layer, typename=layername)
     if not request.user.has_perm('maps.change_layer', obj=layer):
         return HttpResponse(loader.render_to_string('401.html', 
             RequestContext(request, {'error_message': 
                 "You are not permitted to modify this layer's metadata"})), status=401)
     if request.method == "POST":
-        form = LayerDescriptionForm(request.POST, prefix="layer")
+        form = LayerForm(request.POST, prefix="layer")
         if form.is_valid():
             layer.title = form.cleaned_data['title']
             layer.keywords.add(*form.cleaned_data['keywords'])
             layer.abstract = form.cleaned_data['abstract']
+            layer.purpose = form.cleaned_data['purpose']
+            layer.language = form.cleaned_data['language']
+            layer.supplemental_information = form.cleaned_data['supplemental_information']
+            layer.data_quality_statement = form.cleaned_data['data_quality_statement']
+            layer.date = datetime.now()
             layer.save()
             return HttpResponse('OK')
         else:
@@ -195,11 +201,21 @@ def publish_status(req, layer_or_map, layer_or_map_id):
     model = Map if layer_or_map == 'map' else Layer
     obj = _resolve_object(req, model, 'mapstory.change_publishingstatus',
                           allow_owner=True, id=layer_or_map_id)
+    
+    if not req.user.is_superuser:
+        # verify metadata is completed or reject
+        if isinstance(obj, Layer):
+            layers = [obj]
+        else:
+            layers = obj.local_layers
+        for l in layers:
+            if not models.audit_layer_metadata(l):
+                return HttpResponse('META', status=200)
+                          
     models.PublishingStatus.objects.set_status(obj, req.POST['status'])
-    related = obj.publish.check_related()
-    if related:
-        obj.publish.update_related()
-        return HttpResponse('WARN', status=200)
+    # this updates status of the current user's layers unless admin (does all)
+    obj.publish.update_related(ignore_owner=req.user.is_superuser)
+        
     return HttpResponse('OK', status=200)
 
 @login_required
