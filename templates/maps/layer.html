@@ -195,12 +195,7 @@
                             {% if can_change %}
                             {% include "maps/_layer_edit_metadata.html" %}
                             {% else %}
-                            <label>Title:</label>
-                            <p>{{ layer.title }}</p>
-                            <label>Author:</label>
-                            <p>{{layer.owner}}</p>
-                            <label>Keywords:</label>
-                            <p>{{layer.keyword_list|join:","}}</p>
+                            {% include "maps/_layer_view_metadata.html" %}
                             {% endif %}
                         </div>
                         <div class="tab-pane" id="actions3">
@@ -246,7 +241,6 @@
                                     </a><br/>
                                 {% endfor %}
                             </span>
-                            <iframe id="dlframe" style="display:none"></iframe>
                             {% else %}
                             <p>You must be logged in to download.</p>
                             {% endif %}
@@ -304,7 +298,9 @@
                          {% endif %}
                     </div>
                 </div>
-                                
+                  
+                <iframe id="dlframe" style="display:none"></iframe> 
+                
                 <div class="rating-area">
                     {% if request.user.is_authenticated %}
                         <span>{% trans "Rate this StoryLayer" %}</span>
@@ -315,7 +311,7 @@
                 <cite>Uploaded by {{ layer.owner.username }} on {{ layer.date|date:"N j Y" }}</cite>
                 {% warn_status request layer %}
                 <article class="abstract"><label>Abstract:</label> {{ layer.abstract|escape|urlize|linebreaks|safe }}</article>
-                
+                <a style="float:right" target="_" href="{% url layer_xml_metadata layer.id %}">ISO-19139 XML</a>
                 {% comments_section layer %}
 
             </div>

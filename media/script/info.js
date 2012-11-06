@@ -39,4 +39,7 @@ $(function() {
             }
         })
     });
+    $("#show_additional_meta").click(function(ev) {
+        $("#additional_meta").slideDown();
+    });
 });

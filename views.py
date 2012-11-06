@@ -166,6 +166,7 @@ def layer_metadata(request, layername):
     if request.method == "POST":
         form = LayerForm(request.POST, prefix="layer")
         if form.is_valid():
+            # @todo should we allow redacting metadata once the layer is 'published'?
             layer.title = form.cleaned_data['title']
             layer.keywords.add(*form.cleaned_data['keywords'])
             layer.abstract = form.cleaned_data['abstract']
@@ -400,6 +401,10 @@ def invite_preview(req):
     }
     return render_to_response('account/email/invite_user.txt', ctx)
 
+
+def layer_xml_metadata(req, layer_id):
+    obj = _resolve_object(req, Layer, 'maps.view_layer', perm_required=True, id=layer_id)
+    return render_to_response('mapstory/full_metadata.xml', {'layer': obj}, mimetype='text/xml')
 
 def _resolve_object(req, model, perm, perm_required=False,
                     allow_owner=False, **kw):

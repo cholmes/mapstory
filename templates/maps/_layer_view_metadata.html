@@ -1,0 +1,17 @@
+<label>Title:</label>
+<p>{{ layer.title }}</p>
+<label>Author:</label>
+<p>{{layer.owner}}</p>
+<label>Keywords:</label>
+<p>{{layer.keyword_list|join:","}}</p>
+<a id="show_additional_meta" href="#more">More...</a>
+<div id="additional_meta" style="display:none">
+    <label>Purpose:</label>
+    <p>{{layer.purpose|default:""|escape|urlize|linebreaks|safe}}</p>
+    <label>Language:</label>
+    <p>{{layer.get_language_display}}</p>
+    <label>Supplemental Information:</label>
+    <p>{{layer.supplemental_information|default:""|escape|urlize|linebreaks|safe}}</p>
+    <label>Data Quality Statement:</label>
+    <p>{{layer.data_quality_statement|default:""|escape|urlize|linebreaks|safe}}</p>
+</div>
