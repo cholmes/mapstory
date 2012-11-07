@@ -111,6 +111,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 )
 
 MIDDLEWARE_CLASSES = (
+    'mapstory.util.GlobalRequestMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',    
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -249,6 +250,8 @@ INSTALLED_APPS = (
     'geonode.upload',
     'geonode',
     'mapstory.watchdog',
+    'actstream',
+    'mailer'
 )
 
 def get_user_url(u):
@@ -315,6 +318,22 @@ HITCOUNT_HITS_PER_IP_LIMIT = 0
 HITCOUNT_EXCLUDE_USER_GROUP = ( 'Editor', )
 
 UPLOADER_SHOW_TIME_STEP = True
+
+ACTSTREAM_SETTINGS = {
+    'MODELS': (
+               'auth.user',
+               'mapstory.contactdetail',
+               'maps.layer',
+               'maps.map',
+               'dialogos.comment',
+              ),
+}
+
+ABSOLUTE_URL_OVERRIDES = {
+    'auth.user': lambda u: '/mapstory/storyteller/%s' % u.username
+}
+
+#EMAIL_BACKEND = "mailer.backend.DbBackend"
 
 try:
     from local_settings import *

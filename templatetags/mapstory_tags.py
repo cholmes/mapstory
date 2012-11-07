@@ -308,6 +308,58 @@ class ByStoryTellerNode(template.Node):
             'maps':maps,
             'layers':layers
         })
+        
+_link_template = "<a href='%s'>%s</a>"
+_pt_link_template = "%s (%s)"
+absolutize = lambda u: u if u.startswith("http:") else settings.SITEURL[:-1] + u
+def _activity_link(subject, plain_text=False):
+    object_name = subject.__class__._meta.object_name
+    if object_name == 'Layer':
+        parts = absolutize(subject.get_absolute_url()), "the StoryLayer '%s'" % subject.title
+    elif object_name == 'Map':
+        parts = absolutize(subject.get_absolute_url()), "the MapStory '%s'" % subject.title
+    else:
+        return subject
+    return (_pt_link_template if plain_text else _link_template) % parts
+
+@register.simple_tag
+def activity_item(action, show_actor_link=True, plain_text=False):
+    link_tmpl = _pt_link_template if plain_text else _link_template
+    username = action.actor.get_full_name() or action.actor.username
+    if show_actor_link:
+        username = link_tmpl % (absolutize(action.actor.get_absolute_url()), username)
+    subject = action.action_object
+    object_name = subject.__class__._meta.object_name
+    verb = action.verb
+    if object_name == 'Comment':
+        if action.target:
+            comment_link = link_tmpl % (absolutize(subject.content_object.get_absolute_url()) + "#comment-%s" % subject.id, ' a comment')
+            subject = 'to a %s on %s' % (comment_link, _activity_link(subject.content_object, plain_text))
+        else:
+            subject = 'on ' + _activity_link(subject.content_object, plain_text)
+    elif object_name == 'Rating':
+        verb = 'gave'
+        subject = '%s a rating of %s' % (_activity_link(subject.content_object,plain_text), subject.rating)
+    else:
+        subject = _activity_link(subject)
+    
+    ctx = dict(
+        verb= verb,
+        timestamp = action.timestamp,
+        ago = action.timesince,
+        user = username,
+        subject = subject
+    )
+    template = 'mapstory/_activity_item.%s' % ('txt' if plain_text else 'html')
+    # user, verb, subject, timestamp, ago
+    return loader.render_to_string(template, ctx)
+
+@register.simple_tag
+def activity_notifier(user):
+    if user.is_authenticated():
+        cnted = user.useractivity.other_actor_actions.count()
+        if cnted:
+            return '<span title="Recent Activity" class="actnot">(%s)</span>' % cnted
 
 @register.simple_tag
 def layer_language_selector(layer):
@@ -340,6 +392,10 @@ def warn_missing_thumb(obj):
     if not obj.get_thumbnail():
         return loader.render_to_string('maps/_warn_thumbnail.html', {})
     return ""
+
+@register.simple_tag
+def user_activity_email_prefs(user):
+    return loader.render_to_string('mapstory/user_activity_email_prefs.html',{'user': user})
 
 # @todo - make geonode location play better
 if settings.GEONODE_CLIENT_LOCATION.startswith("http"):

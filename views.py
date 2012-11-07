@@ -401,6 +401,15 @@ def invite_preview(req):
     return render_to_response('account/email/invite_user.txt', ctx)
 
 
+@login_required
+def user_activity_api(req):
+    user_activity = req.user.useractivity
+    if 'notification_preference' in req.REQUEST:
+        user_activity.notification_preference = req.REQUEST['notification_preference']
+        user_activity.save()
+        return HttpResponse('OK')
+
+
 def layer_xml_metadata(req, layer_id):
     obj = _resolve_object(req, Layer, 'maps.view_layer', perm_required=True, id=layer_id)
     return render_to_response('mapstory/full_metadata.xml', {'layer': obj}, mimetype='text/xml')

@@ -1,0 +1,17 @@
+{% load i18n %}
+{% load mapstory_tags %}
+
+<div id="user-activity-feed">
+    <section>
+<h3>Recent Activity:</h3>
+{% for action in storyteller.actor_actions.public %}
+    {% activity_item action show_actor_link=False %}
+{% endfor %}
+    </section>
+    <section>
+<h3>Recent Activity of Others:</h3>
+{% for action in storyteller.useractivity.other_actor_actions.all %}
+    {% activity_item action %}
+{% endfor %}
+    </section>
+</div>

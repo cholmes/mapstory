@@ -1,0 +1,1 @@
+{{ user|safe }} {{ verb }} {{ subject|safe }} [ {{ ago }} ago ]

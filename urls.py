@@ -11,6 +11,9 @@ from mapstory.views import SignupView
 from hitcount.views import update_hit_count_ajax
 from account.views import ConfirmEmailView
 
+# load our social signals
+from mapstory import social_signals
+
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
 admin.autodiscover()
@@ -87,6 +90,7 @@ urlpatterns += patterns('mapstory.views',
     url(r'^data/style/upload$','upload_style',name='upload_style'),
     
     # semi-temp urls
+    url(r'^mapstory/user_activity_api$','user_activity_api',name='user_activity_api'),
     url(r'^mapstory/metadata/(?P<layer_id>\d+)$','layer_xml_metadata',name='layer_xml_metadata'),
     url(r'^mapstory/topics/(?P<layer_or_map>\w+)/(?P<layer_or_map_id>\d+)$','topics_api',name='topics_api'),
     url(r'^mapstory/comment/(?P<layer_or_map_id>\d+)/(?P<comment_id>\d+)$','delete_story_comment',name='delete_story_comment'),

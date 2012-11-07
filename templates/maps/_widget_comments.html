@@ -11,7 +11,7 @@
     <ul class="comments_tree">
     {% recursetree comments %}
         <li>
-            <div class="comment">
+            <div class="comment" id="comment-{{node.id}}">
                 <div class="comment_content">
                     {{ node.comment|escape|urlize|linebreaks|safe }} 
                 </div>

@@ -190,7 +190,18 @@ class VideoLink(Link):
     text = models.CharField(max_length=350)
     publish = models.BooleanField(default=False)
     location = models.CharField(max_length=2, choices=_VIDEO_LOCATION_CHOICES)
-    
+
+_NOTIFICATION_PREFERENCES = [
+    ('E','Email'),
+    ('S','Daily Summary'),
+    ('N','None')
+]
+class UserActivity(models.Model):
+    user = models.OneToOneField(User)
+    # automatically tracked actions
+    other_actor_actions = models.ManyToManyField('actstream.Action')
+    notification_preference = models.CharField(max_length=1, default='N', choices=_NOTIFICATION_PREFERENCES)
+
 class ContactDetail(Contact):
     '''Additional User details'''
     blurb = models.CharField(max_length=140, null=True)
@@ -318,7 +329,8 @@ class PublishingStatus(models.Model):
             level = obj.LEVEL_NONE
         obj.set_gen_level(ANONYMOUS_USERS, level)
         obj.set_gen_level(AUTHENTICATED_USERS, level)
-        obj.set_user_level(obj.owner, obj.LEVEL_ADMIN)
+        if obj.owner: # usually won't happen except in fixture loading?
+            obj.set_user_level(obj.owner, obj.LEVEL_ADMIN)
         models.Model.save(self,*args)
         
         
@@ -356,7 +368,7 @@ def create_hitcount(instance, sender, **kw):
         HitCount.objects.create(content_type=content_type, object_pk=instance.pk)
         
 def clear_acl_cache(instance, sender, **kw):
-    if kw['created']:
+    if kw['created'] and instance.owner:
         # this will only handle the owner's cached acls - other users will be
         # out of luck for the timeout period - likely not to be an issue
         key = 'layer_acls_%s' % instance.owner.id
@@ -366,7 +378,13 @@ def clear_acl_cache(instance, sender, **kw):
 def remove_favorites(instance, sender, **kw):
     ct = ContentType.objects.get_for_model(instance)
     Favorite.objects.filter(content_type=ct, object_id=instance.id).delete()
+    
+def create_user_activity(sender, instance, created, **kw):
+    if created:
+        UserActivity.objects.create(user=instance)
+        
 
+signals.post_save.connect(create_user_activity, sender=User)
 
 # make sure any favorites are also deleted
 signals.pre_delete.connect(remove_favorites, sender=Map)

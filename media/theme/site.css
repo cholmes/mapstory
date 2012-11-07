@@ -29,14 +29,11 @@ section {
     top: 0;
 }
 
-#login-area a {
-    display: block;
-}
-
 #login-area .user {
     line-height:1.5em;
     clear:both;
     padding-top: .5em;
+    padding-bottom: 1px;
 }
 
 #login-area .user a {
@@ -45,6 +42,14 @@ section {
 }
 #login-area .user a:hover {
     background: none;
+}
+
+.actnot {
+    float: left;
+    padding-left: 20px;
+    background: url('img/mapstories_s.png') no-repeat;
+    color: white;
+    font-family: sans-serif;
 }
 
 #login-area a:hover, #login-area a:active {
