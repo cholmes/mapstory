@@ -174,7 +174,6 @@ def layer_metadata(request, layername):
             layer.language = form.cleaned_data['language']
             layer.supplemental_information = form.cleaned_data['supplemental_information']
             layer.data_quality_statement = form.cleaned_data['data_quality_statement']
-            layer.date = datetime.now()
             layer.save()
             return HttpResponse('OK')
         else:
