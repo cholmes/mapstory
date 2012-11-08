@@ -1,5 +1,6 @@
 from django import template
 from django.template import loader
+from django.core.paginator import Page
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from django.contrib.staticfiles.templatetags import staticfiles
@@ -340,6 +341,15 @@ def warn_missing_thumb(obj):
     if not obj.get_thumbnail():
         return loader.render_to_string('maps/_warn_thumbnail.html', {})
     return ""
+
+@register.simple_tag
+def pagination(pager, url_name, *args):
+    '''pager could be a page or pagination object.'''
+    url = reverse(url_name, args=args)
+    if not hasattr(pager, 'number'):
+        # we're on 'page 0' - lazy load
+        pager = Page([], 0, pager)
+    return loader.render_to_string('_pagination.html', {'page' : pager, 'url': url})
 
 # @todo - make geonode location play better
 if settings.GEONODE_CLIENT_LOCATION.startswith("http"):

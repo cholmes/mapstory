@@ -65,7 +65,6 @@
         <div id="sections" class="selfclear tabs-left">
             <h2>SECTIONS</h2>
 
-            {% cache cache_time sections %}
             <ul class="nav nav-tabs">
                 {% for sec in page.sections.value %}
                 <li {% if forloop.first %} class="active"{% endif %}>
@@ -77,18 +76,17 @@
             <div class="tab-content">
                 {% for sec in page.sections.value %}
                 <div class="tab-pane {% if forloop.first %}active{% endif %}" id="section{{ forloop.counter }}">
-                    {% with sec.all_children as items %}
-                        {% if not items %}
-                        <p>No Items in this Section</p>
-                        {% endif %}
-                        {% for i in items %}
-                            {% map_info_tile i left %}
-                        {% endfor %}
-                    {% endwith %}
+                     <div class="paginate paginate-auto" data-page-select="article">
+                        <section class="paginate-contents">
+                        </section>
+                        {% pagination sec.maps_pager 'section_tiles' sec.slug %}
+                     </div>
                 </div>
                 {% endfor %}
             </div>
-            {% endcache %}
+            <article class="noitems tmpl" style="display:none">
+                <p>No Items in this Section</p>
+            </article>
         </div>
     </div>
 </div>
@@ -111,16 +109,8 @@
 {% block extra_body %}
 <script type="text/javascript">
     var carouselTileURL = "{% url map_tiles %}";
-    $(function() {
-        var left = $(".span8 .box"),
-        padding = left.outerHeight(true) - left.height(),
-        target = $(".span4").height() - padding, 
-        other = $("#sections").children().first().outerHeight(true);
-        left.children().not("#sections").each(function(i,e) {
-            other += $(e).outerHeight(true);
-        });
-        $("#sections .tab-content").height(target - other);
-    });
 </script>
+<script type="text/javascript" src="{% static "script/index.js" %}"></script>
+<script type="text/javascript" src="{% static "script/paginate.js" %}"></script>
 <script type="text/javascript" src="{% static "script/carousel_jquery.js" %}"></script>
 {% endblock %}
