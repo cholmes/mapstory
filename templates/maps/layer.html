@@ -158,7 +158,7 @@
 {% block main %}
     <div class="row mrg-top">
         <div class="span8">
-            <h2 class="icn-storylayers">{{ layer.title }}</h2>
+            <h2 class="icn-storylayers">{{ layer.title|default:layer.name }}</h2>
         </div>
         <div class="span4 top-detail-actions">
             <a href="{% url maps_new %}?layer={{layer.typename}}" target="_">Create a Story using this StoryLayer</a>
@@ -168,6 +168,7 @@
         <div class="span8">
             <div class="box mrg-btm describe-object">
                 <div class="story-detail">
+                    {% warn_status request layer %}
                     <div id="preview_map"></div>
                     <div class="metrics">
                         {% map_view_hitcount layer %}
@@ -309,7 +310,6 @@
                     {% endif %}
                 </div>
                 <cite>Uploaded by {{ layer.owner.username }} on {{ layer.date|date:"N j Y" }}</cite>
-                {% warn_status request layer %}
                 <article class="abstract"><label>Abstract:</label> {{ layer.abstract|escape|urlize|linebreaks|safe }}</article>
                 <a style="float:right" target="_" href="{% url layer_xml_metadata layer.id %}">ISO-19139 XML</a>
                 {% comments_section layer %}

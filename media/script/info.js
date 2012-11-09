@@ -42,4 +42,7 @@ $(function() {
     $("#show_additional_meta").click(function(ev) {
         $("#additional_meta").slideDown();
     });
+    if (window.location.search.indexOf('describe') >= 0) {
+        $(".tabbable a[href=#describemap]").tab('show');
+    }
 });

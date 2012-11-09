@@ -11,33 +11,6 @@ function init(options) {
     },options);
 
     var xml_unsafe = /(^[^a-zA-Z\._]+)|([^a-zA-Z0-9\._])/g;
-    var layer_title;
-    if (options.layer_name) {
-        layer_title = new Ext.form.TextField({
-            id: 'layer_name',
-            name: 'layer_name',
-            emptyText: options.layer_name,
-            fieldLabel: gettext('Name'),
-            allowBlank: true,
-            disabled: true
-        });
-    } else {
-        layer_title =  new Ext.form.TextField({
-            id: 'layer_title',
-            fieldLabel: gettext('Title'),
-            name: 'layer_title',
-            allowBlank: false,
-            listeners: {
-                render: function(c) {
-                    c.getEl().on('change', checkFormValid);
-                    Ext.QuickTips.register({
-                        target: c.getEl(),
-                        text: "Provide a nice, descriptive title."
-                    });
-                }
-            }
-        });
-    }
 
     var listeners = {
         "fileselected": function(cmp, value) {
@@ -170,9 +143,8 @@ function init(options) {
     form_fields.push(containerFromDom('notes'));
     form_fields.push(containerFromDom('about-data'));
     
-    form_fields.push(layer_title);
     if (!options.layer_name) {
-        form_fields = form_fields.concat(abstractField,permissionsField);
+        form_fields = form_fields.concat(permissionsField);
     }
     
     function errorHandler(fp, o) {
