@@ -133,19 +133,20 @@ class Section(models.Model):
     topics = models.ManyToManyField(Topic,blank=True)
     order = models.IntegerField(null=True,blank=True)
     
-    def _children(self, att, **kw):
-        field = lambda t: getattr(t,att).filter(**kw)
-        return set(chain(*[ field(t) for t in self.topics.all()]))
+    def _children(self, model, **kw):
+        query = model.objects.filter(**kw)
+        return query.filter(topic__in=self.topics.all())
     
     def all_children(self):
-        x = self.get_maps() | self.get_layers()
-        return x
+        ch = list(self.get_maps())
+        ch.extend(self.get_layers())
+        return ch
     
     def get_maps(self):
-        return self._children('maps', publish__status=PUBLISHING_STATUS_PUBLIC)
+        return self._children(Map, publish__status=PUBLISHING_STATUS_PUBLIC)
         
     def get_layers(self):
-        return self._children('layers', publish__status=PUBLISHING_STATUS_PUBLIC)
+        return self._children(Layer, publish__status=PUBLISHING_STATUS_PUBLIC)
     
     def save(self,*args,**kw):
         slugtext = self.name.replace('&','and')

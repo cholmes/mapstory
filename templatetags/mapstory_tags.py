@@ -176,39 +176,26 @@ class CommentsSectionNode(dialogos_tags.ThreadedCommentsNode):
     template_name = 'maps/_widget_comments.html'
 
 
-@register.tag
-def related_mapstories(parse, token):
-    try:
-        tokens = token.split_contents()
-        tag_name = tokens.pop(0)
-        obj_name = tokens.pop(0)
-    except ValueError:
-        raise template.TemplateSyntaxError, "%r tag requires a single argument" % token.contents.split()[0]
-    return RelatedStoriesNode(obj_name)
+@register.simple_tag
+def related_mapstories(obj):
+    if isinstance(obj, Section):
+        topics = obj.topics.all()
+    else:
+        topics = list(obj.topic_set.all())
+    result = ""
+    template_name = "mapstory/_story_tile_left.html"
 
-class RelatedStoriesNode(template.Node):
-    def __init__(self, obj_name):
-        self.obj_name = obj_name
-    def render(self, context):
-        obj = context[self.obj_name]
-        if isinstance(obj, Section):
-            topics = obj.topics.all()
-        else:
-            topics = list(obj.topic_set.all())
-        result = ""
-        template_name = "mapstory/_story_tile_left.html"
-        
-        # @todo gather from all topics and respective sections
-        sections = topics and topics[0].section_set.all() or None
-        if topics and sections:
-            sec = sections[0]
-            maps = sec.get_maps()
-            if isinstance(obj, Map) and obj in maps:
-                maps.remove(obj)
-            result = "\n".join((
-                loader.render_to_string(template_name,{"map": m,"when":m.last_modified}) for m in maps
-            ))
-        return result
+    # @todo gather from all topics and respective sections
+    sections = topics and topics[0].section_set.all() or None
+    if topics and sections:
+        sec = sections[0]
+        maps = sec.get_maps()
+        if isinstance(obj, Map):
+            maps = maps.exclude(id=obj.id)
+        result = "\n".join((
+            loader.render_to_string(template_name,{"map": m,"when":m.last_modified}) for m in maps
+        ))
+    return result
     
 @register.tag
 def favorites(parse, token):
