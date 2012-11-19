@@ -9,7 +9,7 @@
     <div class="details">
         <h6><a href="{{ map.get_absolute_url }}">{{map.title}}</a></h6>
         <a href="{% url about_storyteller map.owner %}" rel="author">{{ map|user_name }}</a>
-        <time pubdate datetime="{{ when|date:"Y-m-d" }}">on {{ when|date:"N j Y" }}</time>
+        <time pubdate datetime="{{ when|date:"Y-m-d" }}">on {{ when }}</time>
         <footer>
             {% overall_rating map "map" as map_rating %}
             {% map_view_hitcount map %}&nbsp;|&nbsp;<span class="rating">{{ map_rating }} stars</span>

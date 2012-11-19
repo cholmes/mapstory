@@ -7,6 +7,7 @@ import time
 
 from django.conf import settings
 from django.core.cache import cache
+from django.core.paginator import Paginator
 from django.db import models
 from django.db.models import Count
 from django.db.models import signals
@@ -94,6 +95,22 @@ def get_ratings(model):
     return results
 
 
+def get_related_stories(obj):
+    if isinstance(obj, Section):
+        topics = obj.topics.all()
+    else:
+        topics = list(obj.topic_set.all())
+    maps = []
+    # @todo gather from all topics and respective sections
+    sections = topics and topics[0].section_set.all() or None
+    if topics and sections:
+        sec = sections[0]
+        maps = sec.get_maps()
+        if isinstance(obj, Map) and obj in maps:
+            maps.remove(obj)
+    return list(maps)
+
+
 class SectionManager(models.Manager):
     def sections_with_maps(self):
         '''@todo this is broken - Get only those sections that have maps'''
@@ -154,6 +171,10 @@ class Section(models.Model):
         if self.order is None:
             self.order = self.id
         models.Model.save(self)
+        
+    def maps_pager(self, page_size=6):
+        '''make it easy to get a paginator in a template'''
+        return Paginator(list(self.get_maps()), page_size)
         
     def get_absolute_url(self):
         return reverse('section_detail',args=[self.slug])

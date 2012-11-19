@@ -18,6 +18,8 @@ import account.views
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 from django.core.cache import cache
+from django.core.paginator import Paginator
+from django.core.paginator import EmptyPage
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
 from django.conf import settings
@@ -81,10 +83,34 @@ def manual(req):
         'content' : html
     }))
 
-def section_detail(req, section):
+
+def _related_stories_pager(req, section):
     sec = get_object_or_404(models.Section, slug=section)
+    related = models.get_related_stories(sec)
+    page = int(req.REQUEST.get('page',1))
+    pager = None
+    try:
+        pager = Paginator(related, 5).page(page)
+    except EmptyPage:
+        pass
+    return sec, pager
+
+
+def section_tiles(req, section):
+    sec, page = _related_stories_pager(req, section)
+    link = tiles = ''
+    if page:
+        tiles = ''.join([ loader.render_to_string("mapstory/_story_tile_left.html", 
+                        {'map':r, 'when':r.last_modified}) for r in page])
+        link = "<a href='%s?page=%s' class='next'></a>" % (req.path, page.next_page_number()) if page.has_next() else ''
+    return HttpResponse('<div>%s%s</div>' % (tiles,link))
+
+
+def section_detail(req, section):
+    sec, pager = _related_stories_pager(req, section)
     return render_to_response('mapstory/section_detail.html', RequestContext(req,{
-        'section' : sec
+        'section' : sec,
+        'pager' : pager
     }))
     
 def resource_detail(req, resource):
