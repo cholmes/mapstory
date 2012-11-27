@@ -135,3 +135,34 @@ The available options:
      - Will be hidden from search but others can view via the link.
    * - Public (Anyone can search for and view)
      - As implied.
+
+Using media in annotations
+==========================
+
+The following types of media can be embedded in an annotation popup in the description field:
+
+* YouTube
+* Flickr
+* An arbitrary hyperlink
+
+To embed a YouTube video, use the following syntax:
+
+    [youtube=http://www.youtube.com/watch?v=O_s3EryiL7M]
+
+If you want to influence the width and or height of the video iframe, add a w and/or h url parameter, e.g.:
+
+    [youtube=http://www.youtube.com/watch?v=O_s3EryiL7M&w=350] 
+
+but in keep in mind that the popups have a maximum width of 500 pixels.
+
+You can combine the YouTube video with any HTML in front or after the YouTube declaration.
+
+For Flickr use the Share button in the Flickr interface and then press the Grab HTML/BBCode hyperlink.
+Copy/paste the HTML, but make sure to change the target to _blank on the anchor:
+
+    <a target="_blank" href="http://www.flickr.com/photos/jetbluestone/8128332626/" title="48.. by jetbluestone, on Flickr"><img src="http://farm9.staticflickr.com/8472/8128332626_b231b833db.jpg" width="371" height="500" alt="48.."></a>
+
+To embed any arbitrary hyperlink in the annotation popup, just use plain old HTML, for example:
+
+    <a target="_blank" href="http://myurl" title="myhyperlink">click here to go to my url</a>
+
