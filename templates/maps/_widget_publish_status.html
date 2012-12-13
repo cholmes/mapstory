@@ -1,10 +1,10 @@
 <p>Publishing Status : <span style="font-weight: bold" id="current_publish_status">{{ current_status }}</span></p>
 {% if publish_object.publish.check_related %}
-<p class="alert alert-warn">This StoryMap is using one or more StoryLayers that you
+<p class="alert alert-warn">This MapStory is using one or more StoryLayers that you
 are not the owner of. If the owner changes the permissions, this may cause problems.</p>
 {% endif %}
 {% if publish_object_type == 'map' %}
-<p class="alert alert-warn">Changing the status of a StoryMap will cause all
+<p class="alert alert-warn">Changing the status of a MapStory will cause all
 of your StoryLayers that it uses to use the same status.</p>
 {% endif %}
 <div class="btn-group" id="publish-dropdown">

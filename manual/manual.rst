@@ -20,7 +20,7 @@ Uploading Your StoryLayers
 
 To get started with building your own stories, you must first upload some data,
 referred to as StoryLayers in MapStory. A StoryLayer might stand on it's own
-or be used as part of a StoryMap containing multiple StoryLayers.
+or be used as part of a MapStory containing multiple StoryLayers.
 
 Before uploading your StoryLayers, please read this section to understand the
 currently supported data formats and tips that will make this process easier.
@@ -87,7 +87,7 @@ provided one during upload. A style dictates how a StoryLayer will look when
 it is displayed either in a map or on it's own. A StoryLayer has a default
 style and zero or more optional styles that it can be displayed with. The
 default style is how the StoryLayer will be displayed on the info page and
-will also be the default when added to a StoryMap. When in a StoryMap, a
+will also be the default when added to a MapStory. When in a MapStory, a
 StoryLayer may appear multiple times with different styles applied.
 
 One can manage the default style, upload additional styles, or download styles 
@@ -101,7 +101,7 @@ Editing Styles
 --------------
 
 At the moment, MapStory provides some support for editing styles when a 
-StoryLayer is part of a StoryMap. Styles in MapStory are stored in an open text 
+StoryLayer is part of a MapStory. Styles in MapStory are stored in an open text
 format known as
 `SLD <http://docs.geoserver.org/stable/en/user/styling/sld-introduction.html>`_ .
 This means they can be edited by hand or in other tools, such as
@@ -111,7 +111,7 @@ This means they can be edited by hand or in other tools, such as
 Publishing Your Work
 ====================
 
-When first created, a StoryLayer or StoryMap is considered `Private`. This
+When first created, a StoryLayer or MapStory is considered `Private`. This
 means that only you can search for or view it. When you are ready, ensure that
 you choose the appropriate publishing status. This can be done on the info page
 at the bottom of the `Info` tab.
@@ -119,7 +119,7 @@ at the bottom of the `Info` tab.
 .. tip::
    :class: alert alert-info
    
-   If you are changing the status of a StoryMap, any StoryLayers it uses that
+   If you are changing the status of a MapStory, any StoryLayers it uses that
    you own will also be changed.
 
 The available options:
