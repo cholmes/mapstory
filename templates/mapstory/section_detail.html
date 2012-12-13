@@ -18,7 +18,7 @@
 <div class="row mrg-btm">
     <div class="span7">
         <h2 class="mrg-top">{{section.name}}</h2>
-        <p class="box">{{section.text}}</p>
+        <div class="box">{{section.text|escape|urlize|linebreaks|safe}}</div>
     </div>
     <div class="span5 clearfix paginate mrg-top paginate-auto" data-page-select="article">
         <h3>MapStories</h3>
