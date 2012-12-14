@@ -9,17 +9,23 @@
         </ul>
         <div class="tab-content">
             <div class="tab-pane active" id="1">
-                <div class="article-list">
-                {% for m in maps %}
-                    {% map_info_tile m left %}
-                {% endfor %}
+                <div class="paginate paginate-auto load" data-page-select="article">
+                    {% if not maps_pager.has_other_pages %}
+                    This StoryTeller has some stories yet to tell.
+                    {% endif %}
+                    <section class="paginate-contents article-list">
+                    </section>
+                    {% pagination maps_pager 'by_storyteller_pager' user.username 'maps' %}
                 </div>
             </div>
             <div class="tab-pane" id="2">
-                <div class="article-list">
-                {% for l in layers %}
-                    {% map_info_tile l left %}
-                {% endfor %}
+                <div class="paginate paginate-auto load" data-page-select="article">
+                    {% if not maps_pager.has_other_pages %}
+                    This StoryTeller has some data waiting to be shared.
+                    {% endif %}
+                    <section class="paginate-contents article-list">
+                    </section>
+                    {% pagination layers_pager 'by_storyteller_pager' user.username 'layers' %}
                 </div>
             </div>
         </div>

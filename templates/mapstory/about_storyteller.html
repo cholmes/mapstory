@@ -2,6 +2,7 @@
 {% load i18n %}
 {% load avatar_tags %}
 {% load mapstory_tags %}
+{% load staticfiles %}
 
 {% block title %}{{storyteller.username}}{% endblock %}
 
@@ -93,5 +94,5 @@
 {% endblock %}
 
 {% block extra_body %}
-
+<script type="text/javascript" src="{% static "script/paginate.js" %}"></script>
 {% endblock %}

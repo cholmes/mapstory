@@ -16,6 +16,7 @@ from mapstory.models import PUBLISHING_STATUS_LINK
 from mapstory.models import PUBLISHING_STATUS_PUBLIC
 from mapstory.models import get_view_cnt_for
 from mapstory.util import render_manual
+from mapstory.views import _by_storyteller_pager
 from dialogos.templatetags import dialogos_tags
 
 import re
@@ -264,38 +265,20 @@ class AddToMapNode(template.Node):
             'layer' : layer
         })
 
-@register.tag
-def by_storyteller(parse, token):
-    try:
-        tokens = token.split_contents()
-        tag_name = tokens.pop(0)
-        obj_name = tokens.pop(0)
-    except ValueError:
-        raise template.TemplateSyntaxError, "%r tag requires a single argument" % token.contents.split()[0]
-    return ByStoryTellerNode(obj_name)
-
-class ByStoryTellerNode(template.Node):
-    def __init__(self,obj_name):
-        self.obj_name = obj_name
-    def render(self, context):
-        obj = context[self.obj_name]
-        if isinstance(obj, User):
-            user = obj
-        else:
-            user = obj.owner
-        template_name = "maps/_widget_by_storyteller.html"
-        layers = PublishingStatus.objects.get_public(user, Layer)
-        for e in settings.LAYER_EXCLUSIONS:
-            layers = layers.exclude(name__regex=e)
-        maps = set(PublishingStatus.objects.get_public(user, Map))
-        #@todo could make query more efficient/explicit to exclude map
-        if obj in maps:
-            maps.remove(obj)
-        return loader.render_to_string(template_name,{
-            'user':user,
-            'maps':maps,
-            'layers':layers
-        })
+@register.simple_tag
+def by_storyteller(obj):
+    if isinstance(obj, User):
+        user = obj
+    else:
+        user = obj.owner
+    template_name = "maps/_widget_by_storyteller.html"
+    maps_page = Page([], 0, _by_storyteller_pager(None, user, 'maps'))
+    layers_page = Page([], 0, _by_storyteller_pager(None, user, 'layers'))
+    return loader.render_to_string(template_name,{
+        'user':user,
+        'maps_pager': maps_page,
+        'layers_pager': layers_page
+    })
         
 _link_template = "<a href='%s'>%s</a>"
 _pt_link_template = "%s (%s)"

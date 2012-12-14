@@ -287,12 +287,47 @@ def add_to_map(req,id,typename):
     return HttpResponse('OK', status=200)
 
 
+def _by_storyteller_pager(req, user, what):
+    if what == 'maps':
+        query = models.PublishingStatus.objects.get_public(user, Map)
+        exclude = req.GET.get('exclude', None) if req else None
+        if exclude:
+            query = query.exclude(id=exclude)
+    elif what == 'layers':
+        query = models.PublishingStatus.objects.get_public(user, Layer)
+        for e in settings.LAYER_EXCLUSIONS:
+            query = query.exclude(name__regex=e)
+    else:
+        return HttpResponse(status=400)
+
+    return Paginator(query, 5)
+
+
 def about_storyteller(req, username):
     user = get_object_or_404(User, username=username)
     return render_to_response('mapstory/about_storyteller.html', RequestContext(req,{
         "storyteller" : user,
     }))
-    
+
+
+def by_storyteller_pager(req, user, what):
+    user = get_object_or_404(User, username=user)
+    pager = _by_storyteller_pager(req, user, what)
+    page_num = int(req.REQUEST.get('page',1)) if req else 1
+    page = None
+    try:
+        page = pager.page(page_num)
+    except EmptyPage:
+        pass
+    link = tiles = ''
+    when = lambda o: o.last_modified if what == 'maps' else o.date
+    if pager:
+        tiles = ''.join([ loader.render_to_string("mapstory/_story_tile_left.html",
+                   {'map': r, 'when': when(r)}) for r in page])
+        link = "<a href='%s?page=%s' class='next'></a>" % (req.path, page.next_page_number()) if page.has_next() else ''
+    return HttpResponse('<div>%s%s</div>' % (tiles,link))
+
+
 def delete_story_comment(req, layer_or_map, layer_or_map_id):
     '''allow a user to delete comments attached to their layer or map'''
     pass

@@ -5,28 +5,28 @@ $(function () {
         var paginate = $(this),
             auto = paginate.hasClass("paginate-auto") ? true : false,
         hasMore = parseInt(paginate.find(".pagination .current.page").html()) < parseInt(paginate.find(".pagination .page_total").html()),
-        pages = paginate.find(".pagination");
+        pages = paginate.find(".pagination"),
+        more;
         pages.children().hide();
         if (auto || !hasMore) {
             pages.hide();
         }
         if (hasMore && !$("html.ie8").size()) {
             if (auto) {
+                more = pages.find("a.more");
                 paginate.find(".paginate-contents").scroll(function(ev) {
                     var el = $(this),
                     scroll = el.scrollTop(),
                     view = el.innerHeight(),
-                    bottom = this.scrollHeight,
-                    more;
+                    bottom = this.scrollHeight;
                     if (scroll + view == bottom) {
-                        more = pages.find("a.more");
-                        if (more.length) {
+                        if (more.parent().length) {
                             fetchMore(more);
                         }
                     }
                 });
             } else {
-                pages.prepend($("<a></a>", {
+                more = pages.prepend($("<a></a>", {
                     href: pages.find("a.more").attr("href"),
                     html: "<i class=\"icon-chevron-down\"></i> Show more",
                     "class": "more"
@@ -36,7 +36,9 @@ $(function () {
                     fetchMore(this);
                 }));
             }
-
+        }
+        if (paginate.hasClass('load')) {
+            fetchMore(more);
         }
     });
 });
@@ -47,7 +49,7 @@ function fetchMore(a, cb) {
         sel = pager.attr('data-page-select');
     $.ajax({
         url: link.attr('href') ,
-        context: link.parents(".paginate"),
+        context: pager,
         success: function(data, status, jqxhr) {
             var retval = $(data),
                 elements = retval.find(sel),
