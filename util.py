@@ -7,12 +7,23 @@ from django.utils.safestring import mark_safe
 import hotshot
 import os
 import time
-import settings
+import threading
 
 try:
     PROFILE_LOG_BASE = settings.PROFILE_LOG_BASE
 except:
     PROFILE_LOG_BASE = "/tmp"
+
+
+current_request = threading.local()
+
+def user():
+    req = getattr(current_request, 'request', None)
+    return req.user if req else None
+
+class GlobalRequestMiddleware(object):
+    def process_request(self, request):
+        current_request.request = request
     
 
 def render_manual(*path):

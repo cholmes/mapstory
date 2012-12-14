@@ -1,5 +1,21 @@
 {% extends "geonode/templates/profiles/profile_detail.html" %}
+{% load mapstory_tags %}
 
 {% block user_links %}
 <li><a href="{% url invites_page %}">Invitations</a></li>
+{% endblock %}
+
+{% block settings %}
+{% user_activity_email_prefs user %}
+{% endblock %}
+
+{% block extra_body %}
+{{block.super}}
+<script type="text/javascript">
+    $("#emailprefs .btn").click(function() {
+        $.post($(this).parent('#emailprefs').attr('data-url'),{
+            notification_preference : $(this).attr('data-code')
+        });
+    });
+</script>
 {% endblock %}

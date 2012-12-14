@@ -6,6 +6,23 @@
 {% block title %}{{storyteller.username}}{% endblock %}
 
 {% block extra_head %}
+<style>
+    #user-activity-feed time {
+        float:right;
+        width: 8em;
+        text-align: center;
+        padding: 0 .5em;
+        background: #F47A20;
+        color: white;
+    }
+    #user-activity-feed .item {
+        border-top: 1px solid #F47A20;
+    }
+    #user-activity-feed .item p {
+        margin-right: 8em;
+        padding-right: 1em;
+    }
+</style>
 {% endblock %}
 
 {% block main %}
@@ -63,6 +80,7 @@
                             <h3>Biography:</h3>
                             <p>{{ p.biography|linebreaks }}</p>
                         </section>
+                        {% include "mapstory/_activity_feed.html" %}
                     </div>
                 </div>
             </div>
