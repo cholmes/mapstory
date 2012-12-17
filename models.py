@@ -106,9 +106,9 @@ def get_related_stories(obj):
     if topics and sections:
         sec = sections[0]
         maps = sec.get_maps()
-        if isinstance(obj, Map) and obj in maps:
-            maps.remove(obj)
-    return list(maps)
+        if isinstance(obj, Map):
+            maps = maps.exclude(id=obj.id)
+    return maps
 
 
 class SectionManager(models.Manager):

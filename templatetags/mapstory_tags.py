@@ -17,6 +17,7 @@ from mapstory.models import PUBLISHING_STATUS_PUBLIC
 from mapstory.models import get_view_cnt_for
 from mapstory.util import render_manual
 from mapstory.views import _by_storyteller_pager
+from mapstory.views import _related_stories_pager
 from dialogos.templatetags import dialogos_tags
 
 import re
@@ -179,26 +180,13 @@ class CommentsSectionNode(dialogos_tags.ThreadedCommentsNode):
 
 
 @register.simple_tag
-def related_mapstories(obj):
-    if isinstance(obj, Section):
-        topics = obj.topics.all()
-    else:
-        topics = list(obj.topic_set.all())
-    result = ""
-    template_name = "mapstory/_story_tile_left.html"
+def related_mapstories(map_obj):
+    map_obj, pager = _related_stories_pager(map_obj=map_obj)
+    ctx = {'map': map_obj,
+           'pager': Page([], 0, pager)}
+    return loader.render_to_string("maps/_widget_related_mapstories.html", ctx)
 
-    # @todo gather from all topics and respective sections
-    sections = topics and topics[0].section_set.all() or None
-    if topics and sections:
-        sec = sections[0]
-        maps = sec.get_maps()
-        if isinstance(obj, Map):
-            maps = maps.exclude(id=obj.id)
-        result = "\n".join((
-            loader.render_to_string(template_name,{"map": m,"when":m.last_modified}) for m in maps
-        ))
-    return result
-    
+
 @register.tag
 def favorites(parse, token):
     try:

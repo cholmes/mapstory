@@ -172,10 +172,7 @@ var thumbURL = "{% url geonode.maps.views.map_controller map.id %}?thumbnail";
 
             {% by_storyteller map %}
 
-            <section class="box mrg-btm related-stories clearfix">
-                <h2>RELATED MAPSTORIES</h2>
-                {% related_mapstories map %}
-            </section>
+            {% related_mapstories map %}
 
             {% include "mapstory/_widget_social.html" %}
 

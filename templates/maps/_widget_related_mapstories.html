@@ -1,0 +1,12 @@
+{% load mapstory_tags %}
+
+{% if pager.has_other_pages %}
+<section class="box mrg-btm related-stories clearfix">
+    <h2>RELATED MAPSTORIES</h2>
+    <div class="paginate paginate-auto load" data-page-select="article">
+        <section class="paginate-contents article-list">
+        </section>
+        {% pagination pager 'related_mapstories_pager' map.id %}
+    </div>
+</section>
+{% endif %}

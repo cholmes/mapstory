@@ -89,6 +89,7 @@ urlpatterns += patterns('mapstory.views',
     url(r'^mapstory/manual$','manual',name='mapstory_manual'),
     url(r'^mapstory/admin-manual$','admin_manual',name='mapstory_admin_manual'),
     url(r'^mapstory/by_storyteller_pager/(?P<user>\S+)/(?P<what>\S+)$','by_storyteller_pager',name='by_storyteller_pager'),
+    url(r'^mapstory/related_mapstories_pager/(?P<map_id>\d+)$','related_mapstories_pager',name='related_mapstories_pager'),
     url(r'^data/style/upload$','upload_style',name='upload_style'),
     
     # semi-temp urls

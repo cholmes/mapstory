@@ -84,30 +84,48 @@ def manual(req):
     }))
 
 
-def _related_stories_pager(req, section):
-    sec = get_object_or_404(models.Section, slug=section)
-    related = models.get_related_stories(sec)
-    page = int(req.REQUEST.get('page',1))
-    pager = None
+def _related_stories_pager(section=None, map_obj=None):
+    if section:
+        target = get_object_or_404(models.Section, slug=section)
+    else:
+        target = map_obj
+    related = models.get_related_stories(target)
+    return target, Paginator(related, 5)
+
+
+def _related_stories_page(req, section=None, map_obj=None):
+    target, pager = _related_stories_pager(section=section, map_obj=map_obj)
+    page_num = int(req.REQUEST.get('page',1))
+    page = None
     try:
-        pager = Paginator(related, 5).page(page)
+        page = pager.page(page_num)
     except EmptyPage:
         pass
-    return sec, pager
+    return target, page
 
 
-def section_tiles(req, section):
-    sec, page = _related_stories_pager(req, section)
+def related_mapstories_pager(req, map_id):
+    map_obj = get_object_or_404(Map, id=map_id)
+    target, page = _related_stories_page(req, map_obj=map_obj)
+    return _story_tiles(req, page)
+
+
+def _story_tiles(req, page):
     link = tiles = ''
     if page:
-        tiles = ''.join([ loader.render_to_string("mapstory/_story_tile_left.html", 
+        tiles = ''.join([ loader.render_to_string("mapstory/_story_tile_left.html",
                         {'map':r, 'when':r.last_modified}) for r in page])
         link = "<a href='%s?page=%s' class='next'></a>" % (req.path, page.next_page_number()) if page.has_next() else ''
     return HttpResponse('<div>%s%s</div>' % (tiles,link))
 
 
+def section_tiles(req, section):
+    sec, page = _related_stories_page(req, section=section)
+    return _story_tiles(req, page)
+
+
 def section_detail(req, section):
-    sec, pager = _related_stories_pager(req, section)
+    sec, pager = _related_stories_page(req, section=section)
     return render_to_response('mapstory/section_detail.html', RequestContext(req,{
         'section' : sec,
         'pager' : pager
