@@ -1,6 +1,6 @@
 Ext.onReady(function() {
     var start = 0,
-    limit = 10,
+    limit = 11,
     loadnotify = Ext.get('loading'),
     itemTemplate = "<li class='tile' id='item{iid}'><a href='{detail}'><img class='thumb {thumbclass}' src='{thumb}'></img></a>" +
     "<div class='infoBox'><div class='itemTitle'><a href='{detail}'>{title}</a></div>" +
@@ -59,11 +59,11 @@ Ext.onReady(function() {
             displaying = Ext.get('displaying'),
             note = Ext.get('displayNote');
         if (cnt == 0) {
-            displaying.hide();
-            note.hide();
+            displaying.setVisibilityMode(Ext.Element.DISPLAY).hide();
+            note.setVisibilityMode(Ext.Element.DISPLAY).hide();
         } else {
             if (cnt == totalQueryCount) {
-                note.hide();
+                note.setVisibilityMode(Ext.Element.DISPLAY).hide();
             } else {
                 note.show();
             }
@@ -75,7 +75,7 @@ Ext.onReady(function() {
     function appendResults(results) {
         var read, i, mapLink, layerLink, viewLink;
         fetching = false;
-        loadnotify.hide();
+        loadnotify.setVisibilityMode(Ext.Element.DISPLAY).hide();
         results = Ext.util.JSON.decode(results.responseText);
         totalQueryCount = results.total;
         read = store.reader.readRecords(results);
@@ -136,10 +136,6 @@ Ext.onReady(function() {
                 });
             }
         });
-        i = 3 - read.records.length;
-        while (i-- > 0) {
-            Ext.DomHelper.append(list,'<li class="tile"></li>')
-        }
     }
     
     function expandTile(tile) {
@@ -150,7 +146,7 @@ Ext.onReady(function() {
         tiles = tile.parent().select('li');
         col = tiles.indexOf(tile) % 3;
         row = Math.floor(tiles.indexOf(tile) / 3) + 1;
-        insertionPoint = (row * 3) - 1;
+        insertionPoint = Math.min((row * 3) - 1, tiles.getCount() - 1);
         newTile = new Ext.Element(newTile).insertAfter(tiles.item(insertionPoint));
         cls = 'pointerthing';
         if (col == 0) {
