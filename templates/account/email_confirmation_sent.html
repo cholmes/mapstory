@@ -1,0 +1,12 @@
+{% extends "registration/base.html" %}
+{% block title %} MapStory Registration - Email Sent {% endblock %}
+{% block main %}
+<div class="row mrg-top mrg-btm">
+    <div class="span4 offset4">
+        <div class="box">
+            <p>An email was sent to : {{ email }}</p>
+            <p>The confirmation email will contain a link to activate your account.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
