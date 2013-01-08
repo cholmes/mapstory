@@ -46,7 +46,7 @@
             {% else %}
                 <a id="login-link" href="#login-form-pop">{% trans "Log in" %}</a>
                 <div class="user">
-                {% if REGISTRATION_OPEN %} 
+                {% if ACCOUNT_OPEN_SIGNUP %}
                 <a href="{% url account_signup %}">{% trans "Register" %}</a>
                 {% else %}
                 <a href="http://wiki.mapstory.org">Learn More</a>

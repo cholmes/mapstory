@@ -44,4 +44,5 @@ def page(req):
         'enable_analytics' : settings.ENABLE_ANALYTICS,
         'old_browser' : old_browser
     }
-    return {'page':page,'cache_time':60}
+    allow_signup = getattr('settings', 'ACCOUNT_OPEN_SIGNUP', False)
+    return {'page':page, 'cache_time':60, 'ACCOUNT_OPEN_SIGNUP': allow_signup}
