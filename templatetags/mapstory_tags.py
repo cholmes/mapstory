@@ -361,6 +361,7 @@ def pagination(pager, url_name, *args):
         pager = Page([], 0, pager)
     return loader.render_to_string('_pagination.html', {'page' : pager, 'url': url})
 
+@register.simple_tag
 def user_activity_email_prefs(user):
     return loader.render_to_string('mapstory/user_activity_email_prefs.html',{'user': user})
 
