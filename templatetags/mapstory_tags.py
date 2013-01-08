@@ -291,11 +291,16 @@ def activity_item(action, show_actor_link=True, plain_text=False):
     object_name = subject.__class__._meta.object_name
     verb = action.verb
     if object_name == 'Comment':
+        commented_obj = subject.content_object
+        if commented_obj is None:
+            # the map/layer the comment was made on is gone now, avoid junk in feed
+            # @todo longer term, should add means to clean comments on delete
+            return ''
         if action.target:
-            comment_link = link_tmpl % (absolutize(subject.content_object.get_absolute_url()) + "#comment-%s" % subject.id, ' a comment')
-            subject = 'to a %s on %s' % (comment_link, _activity_link(subject.content_object, plain_text))
+            comment_link = link_tmpl % (absolutize(commented_obj.get_absolute_url()) + "#comment-%s" % subject.id, ' a comment')
+            subject = 'to a %s on %s' % (comment_link, _activity_link(commented_obj, plain_text))
         else:
-            subject = 'on ' + _activity_link(subject.content_object, plain_text)
+            subject = 'on ' + _activity_link(commented_obj, plain_text)
     elif object_name == 'Rating':
         verb = 'gave'
         subject = '%s a rating of %s' % (_activity_link(subject.content_object,plain_text), subject.rating)

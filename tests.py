@@ -8,14 +8,17 @@ from geonode.maps.models import MapLayer
 from geonode.simplesearch import models as simplesearch
 import mapstory.social_signals # this just needs activating but is not used
 from mapstory.models import UserActivity
+from mapstory.templatetags import mapstory_tags
 
+from agon_ratings.models import Rating
 from actstream.models import Action
 from dialogos.models import Comment
 from mailer import engine as email_engine
 
-# these two can just get whacked
+# these can just get whacked
 simplesearch.map_updated = lambda **kw: None
 simplesearch.object_created = lambda **kw: None
+Layer.delete_from_geoserver = lambda self: None
 
 class SocialTest(TestCase):
     
@@ -82,7 +85,34 @@ class SocialTest(TestCase):
         actions = self.bobby.useractivity.other_actor_actions.all()
         self.assertEqual(1, len(actions))
         self.assertEqual('admin added layer2 Layer on map1 by admin 0 minutes ago', str(actions[0]))
-        
+
+    def test_activity_item_tag(self):
+        lyr = Layer.objects.create(owner=self.bobby, name='layer1',typename='layer1', title='example')
+        lyr.publish.status = 'Public'
+        lyr.publish.save()
+
+        comment_on(lyr, self.bobby, 'a comment')
+        expected = ("http://localhost:8000/mapstory/storyteller/bobby (bobby)"
+        " commented on http://localhost:8000/data/layer1 (the StoryLayer 'example')"
+        " [ 0 minutes ago ]")
+        actual = mapstory_tags.activity_item(self.bobby.actor_actions.all()[0], plain_text=True)
+        self.assertEqual(expected, actual)
+
+        rate(lyr, self.bobby, 4)
+        expected = ("http://localhost:8000/mapstory/storyteller/bobby (bobby)"
+        " gave http://localhost:8000/data/layer1 (the StoryLayer 'example')"
+        " a rating of 4 [ 0 minutes ago ]")
+        actual = mapstory_tags.activity_item(self.bobby.actor_actions.all()[0], plain_text=True)
+        self.assertEqual(expected, actual)
+
+        lyr.delete()
+        # it seems like comment objects are not deleted when the commented-on object
+        # is deleted - test that the tag doesn't blow up
+        # @todo is this somehow related to mptt in threaded comments?
+        self.assertEqual(1, len(self.bobby.actor_actions.all()))
+        for a in self.bobby.actor_actions.all():
+            self.assertEqual('', mapstory_tags.activity_item(a))
+
     def drain_mail_queue(self):
         # mailer doesn't play well with default mail testing
         mails = []
@@ -104,10 +134,15 @@ class SocialTest(TestCase):
         
         mail = self.drain_mail_queue()
         self.assertEqual(1, len(mail))
-        print vars(mail[0].email)
-        
+
 
 def comment_on(obj, user, comment, reply_to=None):
     ct = ContentType.objects.get_for_model(obj)
     return Comment.objects.create(author=user, content_type=ct, object_id=obj.id,
         comment=comment, parent=reply_to)
+
+
+def rate(obj, user, rating):
+    ct = ContentType.objects.get_for_model(obj)
+    return Rating.objects.create(user=user, content_type=ct, object_id=obj.id,
+        rating=rating)

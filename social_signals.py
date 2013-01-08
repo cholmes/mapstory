@@ -96,12 +96,13 @@ def register_save_handler(model, **kwargs):
 
 
 def rating_handler(sender, instance, created, **kwargs):
-    actor = user()
+    # fall back on the rating user if no request user is found (for tests)
+    actor = user() or instance.user
     target = instance.content_object
     act = action(actor, verb='rated', action_object=instance, target=target)
     if actor != target.owner:
         target.owner.useractivity.other_actor_actions.add(act)
-        
+
 
 def comment_handler(sender, instance, created, **kwargs):
     actor = instance.author
