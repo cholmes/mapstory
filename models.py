@@ -342,6 +342,7 @@ class PublishingStatus(models.Model):
             for l in self.map.local_layers:
                 if ignore_owner or l.owner == self.map.owner:
                     l.publish.status = self.status
+                    l.publish.clean_fields()
                     l.publish.save()
 
     def save(self,*args,**kw):
@@ -353,18 +354,20 @@ class PublishingStatus(models.Model):
         obj.set_gen_level(AUTHENTICATED_USERS, level)
         if obj.owner: # usually won't happen except in fixture loading?
             obj.set_user_level(obj.owner, obj.LEVEL_ADMIN)
-        models.Model.save(self,*args)
+        models.Model.save(self, *args)
         
         
 def audit_layer_metadata(layer):
     '''determine if metadata is complete to allow publishing'''
     return all([
+        layer.title,
         layer.abstract,
         layer.purpose,
-        layer.keywords,
+        layer.keyword_list(),
         layer.language,
         layer.supplemental_information,
-        layer.data_quality_statement
+        layer.data_quality_statement,
+        layer.topic_set.all()
     ]) and layer.topic_set.count()
 
     

@@ -199,6 +199,12 @@ def favoriteslist(req):
     }
     return render_to_response("mapstory/_widget_favorites.html",ctx)
 
+
+def _error_response(message, extra='', extra_class=''):
+    return ("<div class='mrg-top errorlist'><p class='alert %s'>%s</p>%s</div>" %
+        (extra_class, message, extra))
+
+
 @login_required
 def layer_metadata(request, layername):
     '''ugh, override the default'''
@@ -218,10 +224,21 @@ def layer_metadata(request, layername):
             layer.language = form.cleaned_data['language']
             layer.supplemental_information = form.cleaned_data['supplemental_information']
             layer.data_quality_statement = form.cleaned_data['data_quality_statement']
+            if not models.audit_layer_metadata(layer):
+                msg = _error_response((
+                    'The metadata was updated but is incomplete.<br>'
+                    'You will not be able to publish until completed.'
+                ))
+                # roll back to private if changes have invalidated metadata
+                models.PublishingStatus.objects.set_status(layer, 'Private')
+                resp = HttpResponse(msg, status=400)
+            else:
+                resp = HttpResponse('OK')
             layer.save()
-            return HttpResponse('OK')
+            return resp
         else:
-            errors = "<div class='errorlist'><p class='alert alert-error'>There were errors in the data provided:</p>%s</div>" % form.errors.as_ul()
+            errors = _error_response('There were errors in the data provided:',
+                                     form.errors.as_ul(), 'alert-error')
             return HttpResponse(errors, status=400)
     
 @login_required
@@ -238,6 +255,7 @@ def delete_favorite(req, id):
     models.Favorite.objects.get(user=req.user, pk=id).delete()
     return HttpResponse('OK', status=200)
 
+
 @login_required
 def publish_status(req, layer_or_map, layer_or_map_id):
     if req.method != 'POST':
@@ -245,8 +263,11 @@ def publish_status(req, layer_or_map, layer_or_map_id):
     model = Map if layer_or_map == 'map' else Layer
     obj = _resolve_object(req, model, 'mapstory.change_publishingstatus',
                           allow_owner=True, id=layer_or_map_id)
-    
-    if not req.user.is_superuser:
+
+    status = req.POST['status']
+
+    # allow superuser to fix stuff no matter and we'll allow junk in Private
+    if not req.user.is_superuser and status != 'Private':
         # verify metadata is completed or reject
         if isinstance(obj, Layer):
             layers = [obj]
@@ -255,12 +276,13 @@ def publish_status(req, layer_or_map, layer_or_map_id):
         for l in layers:
             if not models.audit_layer_metadata(l):
                 return HttpResponse('META', status=200)
-                          
-    models.PublishingStatus.objects.set_status(obj, req.POST['status'])
+
+    models.PublishingStatus.objects.set_status(obj, status)
     # this updates status of the current user's layers unless admin (does all)
     obj.publish.update_related(ignore_owner=req.user.is_superuser)
-        
+
     return HttpResponse('OK', status=200)
+
 
 @login_required
 def add_to_map(req,id,typename):

@@ -6,7 +6,9 @@ import taggit
 
 
 class LayerForm(forms.ModelForm):
-    '''we have metadata needs/desires different from what geonode gives'''
+    '''we have metadata needs/desires different from what geonode gives.
+    ignore a bunch of stuff and make sure others are optional
+    '''
     
     keywords = taggit.forms.TagField(required=False)
     abstract = forms.CharField(required=False)
