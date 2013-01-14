@@ -1,6 +1,10 @@
 {% extends "geonode/templates/profiles/profile_detail.html" %}
 {% load mapstory_tags %}
 
+{% block profile_messages %}
+{% profile_incomplete user %}
+{% endblock %}
+
 {% block user_links %}
 <li><a href="{% url invites_page %}">Invitations</a></li>
 {% endblock %}

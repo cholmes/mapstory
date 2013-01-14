@@ -229,6 +229,7 @@ class UserActivity(models.Model):
     other_actor_actions = models.ManyToManyField('actstream.Action')
     notification_preference = models.CharField(max_length=1, default='N', choices=_NOTIFICATION_PREFERENCES)
 
+
 class ContactDetail(Contact):
     '''Additional User details'''
     blurb = models.CharField(max_length=140, null=True)
@@ -236,7 +237,36 @@ class ContactDetail(Contact):
     education = models.CharField(max_length=512, null=True, blank=True)
     expertise = models.CharField(max_length=256, null=True, blank=True)
     links = models.ManyToManyField(Link)
-    
+
+    def audit(self):
+        '''return a list of what is needed to 'complete' the profile'''
+        incomplete = []
+        if self.user.avatar_set.filter(primary=True).count() == 0:
+            incomplete.append('Picture/Avatar')
+        if not all([self.user.first_name, self.user.last_name]):
+            incomplete.append('Full Name')
+        if not self.blurb:
+            incomplete.append('Blurb')
+        return incomplete
+
+    def update_audit(self):
+        incomplete = self.audit()
+        if incomplete:
+            pi, _ = ProfileIncomplete.objects.get_or_create(user=self.user)
+            pi.message = ('Please ensure the following '
+            'fields are complete: %s'
+            ) % ', '.join(incomplete)
+            pi.save()
+        else:
+            ProfileIncomplete.objects.filter(user=self.user_id).delete()
+
+
+class ProfileIncomplete(models.Model):
+    '''Track incomplete user profiles'''
+    user = models.OneToOneField(User)
+    message = models.TextField()
+
+
 class Resource(models.Model):
     name = models.CharField(max_length=64)
     slug = models.SlugField(max_length=64,blank=True)
@@ -376,7 +406,7 @@ def audit_layer_metadata(layer):
     ]) and layer.topic_set.count()
 
     
-def create_profile(instance, sender, **kw):
+def user_saved(instance, sender, **kw):
     if kw['created']:
         ContactDetail.objects.create(user = instance)
 
@@ -420,7 +450,7 @@ signals.post_save.connect(create_user_activity, sender=User)
 signals.pre_delete.connect(remove_favorites, sender=Map)
 signals.pre_delete.connect(remove_favorites, sender=Layer)
 
-signals.post_save.connect(create_profile, sender=User)
+signals.post_save.connect(user_saved, sender=User)
 signals.post_save.connect(create_publishing_status, sender=Map)
 signals.post_save.connect(create_publishing_status, sender=Layer)
 # @annoyatron - core upload sets permissions after saving the layer

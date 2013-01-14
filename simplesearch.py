@@ -3,6 +3,7 @@ from mapstory.models import get_ratings
 from mapstory.models import Topic
 from mapstory.models import Section
 from mapstory.models import ContactDetail
+from mapstory.models import ProfileIncomplete
 
 from geonode.maps.models import Layer
 from geonode.maps.models import Map
@@ -32,6 +33,7 @@ owner_query_fields = ['blurb','organization','biography']
 def owner_query(query, kw):
     if kw['bysection']: return None
     q = ContactDetail.objects.select_related().filter(user__isnull=False)
+    q = q.exclude(user__id__in=ProfileIncomplete.objects.all().values('user'))
     q = q.defer('blurb', 'biography')
     return q
 

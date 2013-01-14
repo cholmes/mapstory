@@ -28,6 +28,11 @@
 
 {% block main %}
 <div class="row mrg-top">
+    {% if storyteller == request.user %}
+    <div class="span12">
+    {% profile_incomplete request.user %}
+    </div>
+    {% endif %}
     <div class="span8">
         <h2>STORYTELLER PAGE</h2>
     </div>

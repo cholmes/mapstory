@@ -1,5 +1,6 @@
 from django import template
 from django.template import loader
+from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Page
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
@@ -343,6 +344,18 @@ def manual_link(target, name):
 @register.simple_tag
 def manual_include(path):
     return "<div id='manual'>%s</div>" % render_manual(path)
+
+
+@register.simple_tag
+def profile_incomplete(user):
+    try:
+        incomplete = getattr(user, 'profileincomplete', None)
+    except ObjectDoesNotExist:
+        incomplete = None
+    if incomplete:
+        return loader.render_to_string('mapstory/_profile_incomplete.html',
+                                   {'incomplete' : incomplete})
+    return ''
 
 
 @register.simple_tag

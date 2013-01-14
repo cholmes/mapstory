@@ -33,15 +33,42 @@ class StyleUploadForm(forms.Form):
 
 
 class ProfileForm(forms.ModelForm):
-    
+    '''Override the default with our requirements:
+    hide some fields, make some required, others not
+    allow saving some user fields here'''
+
+    first_name = forms.CharField()
+    last_name = forms.CharField()
     blurb = forms.CharField(widget=forms.Textarea)
-    biography = forms.CharField(widget=forms.Textarea)
-    education = forms.CharField(widget=forms.Textarea)
-    expertise = forms.CharField(widget=forms.Textarea)
-    
+    biography = forms.CharField(widget=forms.Textarea, required=False)
+    education = forms.CharField(widget=forms.Textarea, required=False)
+    expertise = forms.CharField(widget=forms.Textarea, required=False)
+
+    def __init__(self, *args, **kw):
+        super(ProfileForm, self).__init__(*args, **kw)
+        # change the order they appear in
+        order = ('first_name', 'last_name', 'blurb')
+        fields = self.fields
+        self.fields = type(fields)()
+        for o in order:
+            self.fields[o] = fields[o]
+        self.fields.update(fields)
+        user = self.instance.user
+        self.initial['first_name'] = user.first_name
+        self.initial['last_name'] = user.last_name
+
+    def save(self, *args, **kw):
+        super(ProfileForm, self).save(*args, **kw)
+        data = self.cleaned_data
+        user = self.instance.user
+        user.first_name = data['first_name']
+        user.last_name = data['last_name']
+        user.save(*args, **kw)
+        self.instance.update_audit()
+
     class Meta:
         model = ContactDetail
-        exclude = ('user','fax','delivery','zipcode','area','links')
+        exclude = ('user','fax','delivery','zipcode','area','links','name')
         
 
 class CheckRegistrationForm(SignupForm):
