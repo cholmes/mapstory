@@ -1,8 +1,8 @@
 <div id="emailprefs" data-url="{% url user_activity_api %}">
     <p>Notify me via email:</p>
     <div class="btn-group"  data-toggle="buttons-radio">
-        <button data-code="N" class="btn">Never</button>
-        <button data-code="S" class="btn">Once a Day</button>
-        <button data-code="E" class="btn">Immediately</button>
+        <button data-code="N" class="btn {{ nactive }}">Never</button>
+        <button data-code="S" class="btn {{ sactive }}">Once a Day</button>
+        <button data-code="E" class="btn {{ eactive }}">Immediately</button>
     </div>
 </div>

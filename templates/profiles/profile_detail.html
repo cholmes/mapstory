@@ -13,8 +13,8 @@
 {{block.super}}
 <script type="text/javascript">
     $("#emailprefs .btn").click(function() {
-        $.post($(this).parent('#emailprefs').attr('data-url'),{
-            notification_preference : $(this).attr('data-code')
+        $.post($(this).closest('#emailprefs').data('url'),{
+            notification_preference : $(this).data('code')
         });
     });
 </script>
