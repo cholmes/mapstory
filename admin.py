@@ -4,6 +4,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib import admin
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
+from django.contrib.auth.admin import UserAdmin
 
 class ResourceForm(forms.ModelForm):
     text = forms.CharField(widget=forms.Textarea)
@@ -42,6 +43,9 @@ class VideoLinkAdmin(admin.ModelAdmin):
     
 class ContactDetailAdmin(admin.ModelAdmin):
     pass
+
+#@hack the UserAdmin to enable sorting by date_joined
+UserAdmin.list_display += ('date_joined',)
 
 admin.site.register(VideoLink, VideoLinkAdmin)
 admin.site.register(Section, SectionAdmin)
