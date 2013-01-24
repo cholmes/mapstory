@@ -107,6 +107,8 @@ urlpatterns += patterns('mapstory.views',
 
     url(r'^ajax/hitcount/$', update_hit_count_ajax, name='hitcount_update_ajax'),
 
+    url(r"^announcements/", include("announcements.urls")),
+
     # for now, direct-to-template but should be in database
     url(r"^mapstory/thoughts/jonathan-marino", direct_to_template, {"template": "mapstory/thoughts.html",
         "extra_context" : {'html':'mapstory/thoughts/jm.html'}}, name="thoughts-jm"),
