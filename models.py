@@ -189,9 +189,11 @@ class Link(models.Model):
     
 _VIDEO_LOCATION_FRONT_PAGE = 'FP'
 _VIDEO_LOCATION_HOW_TO = 'HT'
+_VIDEO_LOCATION_REFLECTIONS = 'RF'
 _VIDEO_LOCATION_CHOICES = [
     (_VIDEO_LOCATION_FRONT_PAGE,'Front Page'),
-    (_VIDEO_LOCATION_HOW_TO,'How To')
+    (_VIDEO_LOCATION_HOW_TO,'How To'),
+    (_VIDEO_LOCATION_REFLECTIONS,'Reflections')
 ]
     
 class VideoLinkManager(models.Manager):
@@ -204,6 +206,8 @@ class VideoLinkManager(models.Manager):
         return random.choice(videos)
     def how_to_videos(self):
         return VideoLink.objects.filter(publish=True,location=_VIDEO_LOCATION_HOW_TO)
+    def reflections_videos(self):
+        return VideoLink.objects.filter(publish=True,location=_VIDEO_LOCATION_REFLECTIONS)
 
 class VideoLink(Link):
     objects = VideoLinkManager()
