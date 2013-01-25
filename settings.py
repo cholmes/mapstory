@@ -234,6 +234,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django_extensions',
     'announcements',
+    'flatblocks',
     'hitcount',
     'account',
     'kaleo',

@@ -67,6 +67,11 @@ def how_to(req):
         'videos' : models.VideoLink.objects.how_to_videos()
     }))
     
+def reflections(req):
+    return render_to_response('mapstory/reflections.html', RequestContext(req,{
+        'videos' : models.VideoLink.objects.reflections_videos()
+    }))
+    
 def admin_manual(req):
     if not req.user.is_staff:
         return HttpResponse("Not Allowed", status=400)

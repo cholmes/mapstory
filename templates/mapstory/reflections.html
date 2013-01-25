@@ -1,0 +1,14 @@
+{% extends "page_layout.html" %}
+{% load flatblock_tags %}
+{% block main %}
+
+<div id="reflectionspage" class="row span6 offset2">
+    <h2>MapStory Reflections</h2>
+     {% flatblock "reflections.top" %}
+    {% for v in videos %}
+    <h3>{{ v.title }}</h3>
+    <p>{{ v.text }}</p>
+    <iframe class="youtube-player" type="text/html" width="560" height="315"  src="{{ v.href }}" frameborder="0"></iframe>
+    {% endfor %}
+</div>
+{% endblock %}
