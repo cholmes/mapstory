@@ -372,6 +372,10 @@ def user_activity_email_prefs(user):
     ctx = {'user' : user, active: 'active'}
     return loader.render_to_string('mapstory/user_activity_email_prefs.html', ctx)
 
+@register.inclusion_tag('mapstory/_announcements.html', takes_context=True)
+def mapstory_announcements(context):
+    return context
+
 # @todo - make geonode location play better
 if settings.GEONODE_CLIENT_LOCATION.startswith("http"):
     @register.simple_tag

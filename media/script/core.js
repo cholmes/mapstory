@@ -79,7 +79,20 @@ $(function () {
         menu();
         enableMenu();
     }
-    
+    $(".announcement .close").click(function() {
+        var ann = $(this),
+            annid = ann.data('announceid'),
+            frm = $('#dismiss_form-ann-' + annid);
+        $.ajax({
+            type: frm.attr('method'),
+            url: frm.attr('action'),
+            data: frm.serialize(),
+            success: function (data) {
+                $('#ann-' + annid).hide();
+            }
+        });
+        return false;
+    });
     $('.noi').click('click',function(ev) {
         alert('Coming Soon...');
         ev.stopEvent();

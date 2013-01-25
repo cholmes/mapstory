@@ -1,0 +1,19 @@
+{% load announcements_tags %}
+
+{% announcements as announcements_list %}
+{% if announcements_list %}
+<div class="announcements mrg-top">
+    {% for announcement in announcements_list %}
+    <div class="alert alert-info announcement" id="ann-{{ announcement.id }}">
+        {% if announcement.dismiss_url %}
+        <form id="dismiss_form-ann-{{ announcement.id }}" action="{{ announcement.dismiss_url }}" method="POST">
+            {% csrf_token %}
+            <button type="button" class="close" data-dismiss="alert" data-announceid="{{announcement.id}}">&times;</button>
+        </form>
+        {% endif %}
+        <strong><a href = '{% url announcements_detail announcement.id %}'>{{ announcement.title }}</strong></a><br/>
+        {{ announcement.content }}
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
