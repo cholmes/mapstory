@@ -4,6 +4,7 @@
 {% load i18n %}
 {% load mapstory_tags %}
 {% load cache %}
+{% load announcements_tags %}
 
 {% block style_base %}
     <link href="{% static "theme/bootstrap_custom.css" %}" rel="stylesheet" />
@@ -171,6 +172,24 @@
                     </div>
                 </div>
             {% endblock %}
+    {% announcements as announcements_list %}
+    {% if announcements_list %}
+        <div class="announcements">
+            {% for announcement in announcements_list %}
+                <div class="alert announcement" id="ann-{{ announcement.id }}">
+                    {% if announcement.dismiss_url %}
+                        <form id="dismiss_form-ann-{{ announcement.id }}" action="{{ announcement.dismiss_url }}" method="POST">
+                        {% csrf_token %}
+                        <button type="button" class="close" data-dismiss="alert" onclick="dismiss_ann('ann-{{announcement.id}}');">&times;</button>
+                        </form>
+                    {% endif %}
+                    <!--strong><a href = '{% url announcements_detail announcement.id %}'>{{ announcement.title }}</strong></a><br /-->
+                    <strong>{{ announcement.title }}</strong><br />
+                    {{ announcement.content }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
             {% comment %}
             {% block ads %}
                 <div class="row">
@@ -219,6 +238,20 @@
     </div><!-- /#footer -->
 {% endblock %}
 
-{% block extra_body_base %}
+ onclick="{% block extra_body_base %}
+<script type="text/javascript">
+    function dismiss_ann(annid) {
+        var frm = $('#dismiss_form-' + annid);
+            $.ajax({
+                type: frm.attr('method'),
+                url: frm.attr('action'),
+                data: frm.serialize(),
+                success: function (data) {
+                }
+            });
+            $('#' + annid).hide();
+            return false;
+    }
+</script>
 {% block extra_body %}{% endblock %}
 {% endblock %}
