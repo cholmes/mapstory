@@ -69,6 +69,7 @@
             <li rel="search"><a href="{% url new_search %}" class="tab-search {% active_nav_tab request "search" %}">SEARCH MAPSTORY</a></li>
             <li><a href="{% url how_to %}" class="tab-how">HOW TO</a></li>
             <li><a href="http://wiki.mapstory.org/index.php?title=Main_Page" target="_blank">ABOUT</a></li>
+            <li><a href="http://blog.mapstory.org/" class="tab-blog" target="_blank">BLOG</a></li>
             {% if user.is_authenticated %}
                 <li class=""><a class="" id="profileLink" href="{% url profiles_profile_detail user.username %}">{% trans "PROFILE" %}</a></li>
             {% if user.is_staff %}
