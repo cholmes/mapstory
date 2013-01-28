@@ -1,0 +1,19 @@
+{% extends "page_layout.html" %}
+{% block main %}
+
+<div id="flatpage" class="row">
+    {% comment %}
+    <div class="span3 offset1">
+        <div id="toc" style="position:fixed">
+            <h4>Contents:</h4>
+            <ul></ul>
+        </div>
+    </div>
+    {% endcomment %}
+    <div id="sections" class="span6 offset4">
+        <h2>{{ flatpage.title }}</h2>
+        {{ flatpage.content }}
+    </div>
+</div>
+
+{% endblock %}
