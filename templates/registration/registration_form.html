@@ -8,7 +8,7 @@
 {% block extra_body %}
 <script type="text/javascript">
     $(function() {
-       $("li input[type=submit]").parent().prepend('<li><label for="human">I am a human</label><input id="human" name="human" type="checkbox"/>')
+       $("li input[type=submit]").parent().prepend('<li><label for="tos">I agree to the <a href="http://wiki.mapstory.org/index.php?title=Terms_of_Service" target="_blank">Terms of Service</a></label><input id="tos" name="tos" type="checkbox"/>')
     })
 </script>
 {% endblock %}

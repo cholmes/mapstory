@@ -79,8 +79,8 @@ class CheckRegistrationForm(SignupForm):
                 required = False)
 
     def clean(self):
-        if not self.data.get('human',None):
-            raise forms.ValidationError('If you are human, ensure you say so.')
+        if not self.data.get('tos',None):
+            raise forms.ValidationError('You must agree to the Terms of Service.')
         return self.cleaned_data
 
     def clean_not_human(self):
