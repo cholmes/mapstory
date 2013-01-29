@@ -8,6 +8,7 @@ from geonode.maps.models import MapLayer
 from geonode.simplesearch import models as simplesearch
 import mapstory.social_signals # this just needs activating but is not used
 from mapstory.models import UserActivity
+from mapstory.models import ProfileIncomplete
 from mapstory.templatetags import mapstory_tags
 
 from agon_ratings.models import Rating
@@ -146,3 +147,11 @@ def rate(obj, user, rating):
     ct = ContentType.objects.get_for_model(obj)
     return Rating.objects.create(user=user, content_type=ct, object_id=obj.id,
         rating=rating)
+
+
+class ContactDetailTests(TestCase):
+
+    def test_incomplete_profile(self):
+        u = User.objects.create(username='billy')
+        # this will fail if not incomplete, no need for assertions
+        ProfileIncomplete.objects.get(user = u)
