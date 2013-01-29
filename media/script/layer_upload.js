@@ -149,8 +149,12 @@ function init(options) {
     
     function errorHandler(fp, o) {
         var html = '', msgs = Ext.get('form-messages');
-        for (var i = 0; i < o.result.errors.length; i++) {
-            html += '<li>' + o.result.errors[i] + '</li>'
+        if (o.result === false) {
+            html = o.response.responseText;
+        } else {
+            for (var i = 0; i < o.result.errors.length; i++) {
+                html += '<li>' + o.result.errors[i] + '</li>';
+            }
         }
         msgs.query('ul')[0].innerHTML = html;
         msgs.slideIn('t');
