@@ -80,7 +80,7 @@ Other Tips
 
 Styling Your StoryLayer
 =======================
-.. _stlying:
+.. _styling:
 
 When your StoryLayer is uploaded, a style is created for it unless you have
 provided one during upload. A style dictates how a StoryLayer will look when
@@ -94,7 +94,14 @@ One can manage the default style, upload additional styles, or download styles
 for a StoryLayer on the info page under the `Style` tab. If the StoryLayer has
 optional styles, they can be previewed here, too.
 
-You must be the owner of a StoryLayer for this functionality to be available.
+To update an existing style, ensure this option is selected and the name matches
+and existing style.
+
+If a name is not provided, an attempt will be made to extract a name from the
+SLD using the first `Name` underneath a `NamedLayer`. If this cannot be found,
+a name must be provided explicitly.
+
+You must be the owner of a StoryLayer for all style functionality to be available.
 
 
 Editing Styles
@@ -106,6 +113,13 @@ format known as
 `SLD <http://docs.geoserver.org/stable/en/user/styling/sld-introduction.html>`_ .
 This means they can be edited by hand or in other tools, such as
 `QGIS <http://qgis.org/>`_ .
+
+.. tip::
+   :class: alert alert-info
+
+   For adventurous users, editing the SLD by hand may be desirable. To get a
+   template, (or just to see if you're adventurous enough), download an existing
+   SLD and take a look at it.
 
 
 Publishing Your Work

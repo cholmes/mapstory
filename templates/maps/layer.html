@@ -261,7 +261,7 @@
                                 {{ layer.default_style.name|title }}
                                 {% endif %}
                                 </label>
-                                <a target="dlframe" href="{{ GEOSERVER_BASE_URL }}styles/{{ layer.default_style.name }}.sld">SLD</a><br/>
+                                <a target="dlframe" href="{{ GEOSERVER_BASE_URL }}styles/{{ layer.default_style.name }}.sld">Download SLD</a><br/>
                                 {% for style in layer.styles %} 
                                 <input type="radio" name="style" id="{{style.name}}" value="{{style.name}}"/>
                                 <label for="{{style.name}}" class="style-title">
@@ -288,8 +288,8 @@
                             <h4>Upload Style</h4>
                             <form id="upload-style" action="{% url upload_style %}" target="dlframe" method="POST" enctype="multipart/form-data">
                                 <div id="upload-style-msg" class="alert alert-error hide"></div>
-                                <label class="checkbox" for="id_update"><input type="checkbox" id="id_update" name="update"/> Update Existing Style?</label>
-                                <label for="id_name">Name (Optional):</label><input type="text" id="id_name" name="name">
+                                <label title="The name must match an existing style" class="checkbox" for="id_update"><input type="checkbox" id="id_update" name="update"/> Update Existing Style?</label>
+                                <label title="If the name cannot be extracted from the SLD, this must be provided" for="id_name">Name (Optional):</label><input type="text" id="id_name" name="name">
                                 <label for="id_sld">SLD File (.sld):</label><input type="file" id="id_sld" name="sld">
                                 <input type="hidden" name="layerid" value="{{layer.id}}">
                                 <a href="#" class="btn">Upload</a>
