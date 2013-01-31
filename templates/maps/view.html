@@ -66,6 +66,8 @@ var app = new GeoExplorer();
     };
 })()
 
+// monkey patch the default font property for the FontComboBox
+gxp.form.FontComboBox.prototype.defaultFont = 'Arial';
 {% endautoescape %}
 </script>
 
