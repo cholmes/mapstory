@@ -3,7 +3,7 @@
 # updates the current configuration
 import os
 import argparse
-
+import json
 
 # Set the DJANGO_SETTINGS_MODULE environment variable.
 os.environ['DJANGO_SETTINGS_MODULE'] = "mapstory.settings"
@@ -17,6 +17,15 @@ name_mappings = {
 
 
 def rename_names(dry_run, original_name, new_name):
+
+    def fix_layer_params(layer_params):
+        title = layer_params['title']
+        if title == original_name:
+            layer_params['title'] = new_name
+            args = layer_params['args']
+            args[0] = new_name
+        return layer_params
+
     queryset = MapLayer.objects.filter(name=original_name)
     if dry_run:
         print '%s layer(s) with the name %s would have been changed to %s' % (
@@ -29,7 +38,11 @@ def rename_names(dry_run, original_name, new_name):
             queryset.count(),
             original_name,
             new_name)
-        queryset.update(name=new_name)
+        for layer in queryset:
+            layer_params = json.loads(layer.layer_params)
+            layer.name = new_name
+            layer.layer_params = json.dumps(fix_layer_params(layer_params))
+            layer.save()
 
 
 def main(args):
