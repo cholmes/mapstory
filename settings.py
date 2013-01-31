@@ -190,7 +190,7 @@ MAP_BASELAYERS = [{
     "visibility": False,
     "fixed": True,
     "args":[
-      "bluemarble",
+      "Satellite Imagery",
       "http://maps.opengeo.org/geowebcache/service/wms",
       {
         "layers":["bluemarble"],
@@ -207,7 +207,7 @@ MAP_BASELAYERS = [{
     "visibility": False,
     "fixed": True,
     "args":[
-      "Wayne",
+      "Naked Earth",
       "http://maps.opengeo.org/geowebcache/service/wms",
       {
         "layers":["Wayne"],
