@@ -366,6 +366,8 @@ class PublishingStatusMananger(models.Manager):
     def set_status(self, obj, status):
         stat = self.get_or_create_for(obj)
         stat.status = status
+        # verify a valid status
+        stat.clean_fields()
         stat.save()
 
 class PublishingStatus(models.Model):
@@ -377,8 +379,8 @@ class PublishingStatus(models.Model):
     
     objects = PublishingStatusMananger()
     
-    map = models.OneToOneField(Map,related_name='publish',null=True)
-    layer = models.OneToOneField(Layer,related_name='publish',null=True)
+    map = models.OneToOneField(Map,related_name='publish', null=True, blank=True)
+    layer = models.OneToOneField(Layer,related_name='publish', null=True, blank=True)
     status = models.CharField(max_length=8,choices=PUBLISHING_STATUS_CHOICES,default=PUBLISHING_STATUS_PRIVATE)
     
     def check_related(self):
@@ -393,11 +395,13 @@ class PublishingStatus(models.Model):
             for l in self.map.local_layers:
                 if ignore_owner or l.owner == self.map.owner:
                     l.publish.status = self.status
+                    # verify a valid status
                     l.publish.clean_fields()
                     l.publish.save()
 
     def save(self,*args,**kw):
         obj = self.layer or self.map
+        if not obj: raise Exception('invalid publish status, no obj')
         level = obj.LEVEL_READ
         if self.status == PUBLISHING_STATUS_PRIVATE:
             level = obj.LEVEL_NONE
