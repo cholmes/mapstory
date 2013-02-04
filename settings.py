@@ -169,55 +169,55 @@ DEFAULT_LAYER_SOURCE = {
     "restUrl": "/gs/rest"
 }
 
-MAP_BASELAYERS = [{
-    "source": {"ptype": "gx_olsource"},
-    "type":"OpenLayers.Layer",
-    "args":["No background"],
-    "visibility": False,
-    "fixed": True,
-    "group":"background"
-  },{
-    "source": { "ptype":"gx_olsource"},
-    "type":"OpenLayers.Layer.OSM",
-    "args":["OpenStreetMap"],
-    "visibility": True,
-    "fixed": True,
-    "group":"background"
-  },{
-    "source": {"ptype":"gx_olsource"},
-    "type":"OpenLayers.Layer.WMS",
-    "group":"background",
-    "visibility": False,
-    "fixed": True,
-    "args":[
-      "Satellite Imagery",
-      "http://maps.opengeo.org/geowebcache/service/wms",
-      {
-        "layers":["bluemarble"],
-        "format":"image/png",
-        "tiled": True,
-        "tilesOrigin":[-20037508.34,-20037508.34]
-      },
-      {"buffer":0}
-    ]
-  },{
-    "source": {"ptype":"gx_olsource"},
-    "type":"OpenLayers.Layer.WMS",
-    "group":"background",
-    "visibility": False,
-    "fixed": True,
-    "args":[
-      "Naked Earth",
-      "http://maps.opengeo.org/geowebcache/service/wms",
-      {
-        "layers":["Wayne"],
-        "format":"image/png",
-        "tiled": True,
-        "tilesOrigin":[-20037508.34,-20037508.34]
-      },
-      {"buffer":0}
-    ]
-}]
+MAP_BASELAYERS = [
+    {
+        "source": {"ptype": "gx_olsource"},
+        "type":"OpenLayers.Layer",
+        "args":["No background"],
+        "visibility": False,
+        "fixed": True,
+        "group":"background"
+    },
+    {
+        "source": {"ptype":"gx_olsource"},
+        "type":"OpenLayers.Layer.OSM",
+        "args":["OpenStreetMap"],
+        'title': 'This is the title',
+        "visibility": True,
+        "fixed": True,
+        "group":"background"
+    },
+
+    {
+        "source": {"ptype":"gx_olsource"},
+        "type":"OpenLayers.Layer.WMS",
+        "group":"background",
+        "visibility": False,
+        "fixed": True,
+        "args":[
+            "Naked Earth",
+            "http://maps.opengeo.org/geowebcache/service/wms",
+            {
+                "layers":["Wayne"],
+                "format":"image/png",
+                "tiled": True,
+                "tilesOrigin":[-20037508.34, -20037508.34]
+            },
+            {"buffer":0}
+        ]
+    },
+    {
+        'source': {
+            'ptype': 'gxp_mapquestsource',
+            'hidden': True
+        },
+        'name': 'naip',
+        'title': 'Satellite Imagery',
+        'group': 'background',
+        'args': ['Satellite Imagery']
+    },
+
+]
 
 # use new uploader
 USE_UPLOADER=True
@@ -341,4 +341,3 @@ try:
     from local_settings import *
 except ImportError:
     pass
-
