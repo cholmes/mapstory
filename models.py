@@ -438,11 +438,13 @@ def create_publishing_status(instance, sender, **kw):
 def set_publishing_private(**kw):
     instance = kw.get('layer')
     PublishingStatus.objects.set_status(instance, PUBLISHING_STATUS_PRIVATE)
-    
+
+
 def configure_gwc(**kw):
     instance = kw.get('layer')
-    gwc_config.configure_layer(instance.typename)
-        
+    gwc_config.configure_layer(instance, cache_secs=60)
+
+
 def create_hitcount(instance, sender, **kw):
     if kw['created']:
         content_type = ContentType.objects.get_for_model(instance)
