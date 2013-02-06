@@ -298,27 +298,27 @@ class Resource(models.Model):
         
     def get_absolute_url(self):
         return reverse('mapstory_resource',args=[self.slug])
-    
+
+
 class FavoriteManager(models.Manager):
-    
+
     def favorites_for_user(self, user):
         return self.filter(user=user)
-    
+
     def favorite_maps_for_user(self, user):
         content_type = ContentType.objects.get_for_model(Map)
         return self.favorites_for_user(user).filter(content_type=content_type)
-    
+
     def create_favorite(self, content_object, user):
         content_type = ContentType.objects.get_for_model(type(content_object))
-        favorite = Favorite(
+        favorite, _ = self.get_or_create(
             user=user,
             content_type=content_type,
             object_id=content_object.pk,
-            content_object=content_object,
             )
-        favorite.save()
         return favorite
-    
+
+
 class Favorite(models.Model):
     user = models.ForeignKey(User)
     content_type = models.ForeignKey(ContentType)
