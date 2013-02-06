@@ -15,7 +15,7 @@ def suite():
     )
 
 
-@check
+# disabled @check
 def get_capabilities():
     Layer.objects.get_wms()
 
