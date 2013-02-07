@@ -1,4 +1,5 @@
 from django.test import TestCase
+from django.test.client import Client
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 
@@ -7,6 +8,7 @@ from geonode.maps.models import Map
 from geonode.maps.models import MapLayer
 from geonode.simplesearch import models as simplesearch
 import mapstory.social_signals # this just needs activating but is not used
+from mapstory import forms
 from mapstory.models import UserActivity
 from mapstory.models import ProfileIncomplete
 from mapstory.templatetags import mapstory_tags
@@ -151,7 +153,46 @@ def rate(obj, user, rating):
 
 class ContactDetailTests(TestCase):
 
+    c = Client()
+
     def test_incomplete_profile(self):
         u = User.objects.create(username='billy')
         # this will fail if not incomplete, no need for assertions
         ProfileIncomplete.objects.get(user = u)
+
+        # now fill stuff out
+        p = u.get_profile()
+        u.first_name = 'Billy'
+        u.last_name = 'Bob'
+        u.save()
+        p.update_audit()
+        # still incomplete
+        ProfileIncomplete.objects.get(user = u)
+
+        p.blurb = 'I Billy Bob'
+        p.save()
+        p.update_audit()
+        # still incomplete
+        ProfileIncomplete.objects.get(user = u)
+
+        # add avatar
+        a = u.avatar_set.model(user=u)
+        a.save()
+        u.avatar_set.add(a)
+        p.update_audit()
+        # finally
+        self.assertEqual(0, ProfileIncomplete.objects.filter(user = u).count())
+
+
+    def test_profile_form(self):
+        u = User.objects.create(username='billy')
+        form = forms.ProfileForm(data={}, instance = u.get_profile())
+        self.assertTrue(not form.is_valid())
+
+        # first, last, blurb work
+        form = forms.ProfileForm(data={'first_name':'Billy','last_name':'Bob','blurb':'I Billy Bob'}, instance = u.get_profile())
+        self.assertTrue(form.is_valid())
+        form.save()
+        # computed name field
+        self.assertEqual('Billy Bob', u.get_profile().name)
+

@@ -241,6 +241,10 @@ class ContactDetail(Contact):
     expertise = models.CharField(max_length=256, null=True, blank=True)
     links = models.ManyToManyField(Link)
 
+    def clean(self):
+        'override Contact name or organization restriction'
+        pass
+
     def audit(self):
         '''return a list of what is needed to 'complete' the profile'''
         incomplete = []
@@ -253,17 +257,16 @@ class ContactDetail(Contact):
         return incomplete
 
     def _has_avatar(self):
-        cnt = self.user.avatar_set.filter(primary=True).count()
+        cnt = self.user.avatar_set.count()
         if cnt > 0: return True
         md5 = md5_constructor(self.user.email).hexdigest()
         url = "http://en.gravatar.com/%s.json" % md5
-        try:
-            # @todo be nicer if this fails?
-            resp = urllib.urlopen(url)
-            json.loads(resp.read())
-            return True
-        except:
+        # @todo be nicer if this fails?
+        resp = urllib.urlopen(url)
+        obj = json.loads(resp.read())
+        if isinstance(obj, basestring):
             return False
+        return True
 
     def update_audit(self):
         incomplete = self.audit()

@@ -58,10 +58,6 @@ class ProfileForm(forms.ModelForm):
         self.initial['first_name'] = user.first_name
         self.initial['last_name'] = user.last_name
 
-    def _post_clean(self):
-        # defeat annoying ContactDetail validation (either name or organization)
-        pass
-
     def save(self, *args, **kw):
         data = self.cleaned_data
         first_name = data['first_name']
