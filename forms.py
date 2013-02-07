@@ -33,7 +33,8 @@ class StyleUploadForm(forms.Form):
 
 
 class ProfileForm(forms.ModelForm):
-    '''Override the default with our requirements:
+    '''Unified user/contact/contactdetail form.
+    Override the defaults with our requirements:
     hide some fields, make some required, others not
     allow saving some user fields here'''
 
@@ -57,13 +58,25 @@ class ProfileForm(forms.ModelForm):
         self.initial['first_name'] = user.first_name
         self.initial['last_name'] = user.last_name
 
+    def _post_clean(self):
+        # defeat annoying ContactDetail validation (either name or organization)
+        pass
+
     def save(self, *args, **kw):
+        data = self.cleaned_data
+        first_name = data['first_name']
+        last_name = data['last_name']
+        # make the contactdetail.name field match first_name,last_name
+        if all([first_name, last_name]):
+            self.instance.name = '%s %s' % (first_name, last_name)
         super(ProfileForm, self).save(*args, **kw)
+        # now copy first and last name to user
         data = self.cleaned_data
         user = self.instance.user
-        user.first_name = data['first_name']
-        user.last_name = data['last_name']
+        user.first_name = first_name
+        user.last_name = last_name
         user.save(*args, **kw)
+        # and verify profile completeness
         self.instance.update_audit()
 
     class Meta:
