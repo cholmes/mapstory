@@ -145,7 +145,7 @@
         });
 
 {% endautoescape %}
-    var hasThumb = {% if layer.get_thumbnail %}true{% else %}false{% endif %};
+    var hasThumb = {% if layer.has_thumbnail %}true{% else %}false{% endif %};
     var thumbURL = "{% url layer_thumbnail layer.typename %}";
     </script>
 {% if can_change_permissions %}
