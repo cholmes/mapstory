@@ -47,7 +47,9 @@ def _enable_wms_caching(layer, cache_secs, disable=False):
         metadata = _el('metadata')
         dom.append(metadata)
     def set_entry(k, v):
-        entry = metadata.find("entry[@key='%s']" % k)
+        entries = metadata.findall("entry")
+        entries = [ e for e in entries if e.attrib.get('key', None) == k]
+        entry = entries[0] if entries else None
         if v:
             if entry is None:
                 entry = _el('entry', v, key=k)
@@ -139,7 +141,9 @@ def _add_time_parameter(dom):
     if filters is not None:
         if filters.find('regexParameterFilter') is not None:
             return
-
+    if filters is None:
+        filters = _el('parameterFilters')
+        dom.append(filters)
     time_filter = _el('regexParameterFilter')
     time_filter.append(_el('key', 'TIME'))
     time_filter.append(_el('defaultValue'))
