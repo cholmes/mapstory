@@ -11,6 +11,14 @@
 
 {% block extra_head %}
 <link rel="stylesheet" type="text/css" href="{% static "theme/comments.css" %}" media="screen" />
+<style type="text/css">
+div.timeline-highlight-point-decorator {
+    width: 10px;
+}
+#msmap .x-panel-tbar {
+    display: none;
+}
+</style>
 {% include "geonode/app_header.html" %}
 {% include "geonode/geo_header.html" %}
 <script type="text/javascript" src="{% static "script/comments.js" %}"></script>
@@ -18,6 +26,17 @@
 <script type="text/javascript" src="{% static "script/info.js" %}"></script>
 {{ block.super }}
 <script type="text/javascript">
+var headers = {
+    'X-CSRFToken' : Ext.util.Cookies.get('csrftoken')
+};
+Ext.Ajax.defaultHeaders = headers;
+{# MONKEY PATCH #}
+OpenLayers.Request._monkey_issue = OpenLayers.Request.issue;
+OpenLayers.Request.issue = function(config) {
+    config.headers = config.headers || {};
+    config.headers['X-CSRFToken'] = Ext.util.Cookies.get('csrftoken');
+    return this._monkey_issue(config);
+};
 var app;
 Ext.onReady(function() {
 {% autoescape off %}
