@@ -119,6 +119,12 @@ urlpatterns += patterns('mapstory.views',
         "extra_context" : {'html':'mapstory/thoughts/rb.html'}}, name="thoughts-rb"),
     url(r"^mapstory/thoughts/r-siva-kumar", direct_to_template, {"template": "mapstory/thoughts.html",
         "extra_context" : {'html':'mapstory/thoughts/sk.html'}}, name="thoughts-sk"),
+    url(r"^mapstory/thoughts/robert-tomes", direct_to_template, {"template": "mapstory/thoughts.html",
+        "extra_context" : {'html':'mapstory/thoughts/rt.html'}}, name="thoughts-rt"),
+    url(r"^mapstory/thoughts/jamie-gahlon", direct_to_template, {"template": "mapstory/thoughts.html",
+        "extra_context" : {'html':'mapstory/thoughts/jg.html'}}, name="thoughts-jg"),
+    url(r"^mapstory/thoughts/jen-ziemke", direct_to_template, {"template": "mapstory/thoughts.html",
+        "extra_context" : {'html':'mapstory/thoughts/jz.html'}}, name="thoughts-jz"),
 
 )
 

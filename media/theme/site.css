@@ -1029,6 +1029,11 @@ article h3 {
     margin: 10px;
 }
 
+.content p img.thoughts-nosize {
+    float: right;
+    margin: 10px;
+}
+
 /*** story detail ***/
 .story-detail {
   margin-bottom:20px;

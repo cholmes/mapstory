@@ -34,6 +34,11 @@ $(function() {
             }
         });
     });
+
+//    var els = $(".storyteller").sort(function(a, b) {
+//        return parseInt(Math.random() * 10);
+//    });
+//    els.appendTo(els.parent());
     
     adjustSizes();
     
