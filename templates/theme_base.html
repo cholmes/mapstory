@@ -72,6 +72,15 @@
             </div>
         {% endblock %}
 
+        <div id="noscript" class="errmsg-overlay">
+            <h2>It looks like your browser doesn't support javascript.</h2>
+            <h4>Why is this important?</h4>
+            <p>MapStory relies on javascript for map display and animation. Without javascript, there's not much to see here. Sorry.</p>
+        </div>
+        <script type="text/javascript">
+            document.getElementById("noscript").style.display = 'none';
+        </script>
+
         {% block script_base %}
             <script src="{% static "script/jquery-1.7.1.min.js" %}"></script>
             <script src="{% static "bootstrap/js/bootstrap-alert.js" %}"></script>

@@ -121,14 +121,6 @@
     </div><!-- /#crossbar -->
     
     {# browser compat msgs #}
-    <div id="noscript" class="errmsg-overlay">
-        <h2>It looks like your browser doesn't support javascript.</h2>
-        <h4>Why is this important?</h4>
-        <p>MapStory relies on javascript for map display and animation. Without javascript, there's not much to see here. Sorry.</p>
-    </div>
-    <script type="text/javascript">
-        document.getElementById("noscript").style.display = 'none';
-    </script>
     {% if page.old_browser %}
     <script type="text/javascript">
         function iunderstand() {
@@ -208,7 +200,7 @@
 {% endblock %}
 
 {% block footer %}
-    <div id="footer">
+    <div>
       <div class="wrap selfclear">
         <div class="onecol">
           Powered by <a href="http://geonode.org">{% trans "GeoNode" %}</a>

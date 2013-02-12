@@ -88,13 +88,13 @@ section {
 
 .errmsg-overlay {
     display:block; 
-    height:100%; 
     width:100%; 
-    position:fixed; 
+    position:absolute;
     z-index: 10000; 
     padding-top: 2em; 
     background: white; 
     text-align: center;
+    top: 25%;
 }
 
 #donate {
