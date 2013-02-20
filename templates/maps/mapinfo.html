@@ -10,6 +10,9 @@
 
 
 {% block extra_head %}
+<script type="text/javascript">var switchTo5x=true;</script>
+<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+<script type="text/javascript">stLight.options({publisher: "c606f59c-567f-4e5c-99f9-4095c74151c1", doNotHash: false, doNotCopy: false, hashAddressBar: false});</script>
 <link rel="stylesheet" type="text/css" href="{% static "theme/comments.css" %}" media="screen" />
 <style type="text/css">
 div.timeline-highlight-point-decorator {
@@ -155,8 +158,12 @@ var thumbURL = "{% url geonode.maps.views.map_controller map.id %}?thumbnail";
                             </ul>
                         </div>
                         <div class="tab-pane" id="actions3">
-                            <g:plusone size="small"></g:plusone>
-                            <div class="fb-like" data-href="http://{{ request.get_host }}{{ request.get_full_path }}" data-send="false" data-width="50" data-layout="button_count" data-show-faces="false"></div>
+                            <span class='st_facebook_vcount' displayText='Facebook'></span>
+                            <span class='st_twitter_vcount' displayText='Tweet'></span>
+                            <span class='st_linkedin_vcount' displayText='LinkedIn'></span>
+                            <span class='st_googleplus_vcount' displayText='Google +'></span>
+                            <span class='st_pinterest_vcount' displayText='Pinterest'></span>
+                            <span class='st_email_vcount' displayText='Email'></span>
                             <p>Embed this map:</p>
                             <textarea><iframe style="border: none;" height="400" width="600" src="http://{{ request.get_host }}{% url geonode.maps.views.embed map.id %}"></iframe></textarea>
                         </div>
@@ -214,14 +221,8 @@ $(function() {
         path: "{% static "agon_ratings/img/" %}"
     });
 });
-(function() {
-    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
-    po.src = 'https://apis.google.com/js/plusone.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
-})();
 </script>
 <script type="text/javascript" src="{% static "bootstrap/js/bootstrap-modal.js" %}"></script>
 <script type="text/javascript" src="{% static "script/paginate.js" %}"></script>
-{% include "_fb_include.html" %}
 {% map_view_hitcount_tracker request map %}
 {% endblock %}
