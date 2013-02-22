@@ -1,12 +1,22 @@
 {% extends "page_layout.html" %}
 {% block main %}
-
-<div id="howtopage" class="row span6 offset2">
-    <h2>MapStory HowTo</h2>
-    {% for v in videos %}
-    <h3>{{ v.title }}</h3>
-    <p>{{ v.text }}</p>
-    <iframe class="youtube-player" type="text/html" width="560" height="315"  src="{{ v.href }}" frameborder="0"></iframe>
-    {% endfor %}
+<div class="row">
+    <div id = "howtopage" class="span3">
+        <h2>Contents</h2>
+        <ul>
+        {% for v in videos %}
+        <li><a href="#{{v.name}}">{{ v.title }}</a></li>
+        {% endfor %}
+        </ul>
+    </div>
+    <div id="howtopage" class="span6">
+        <h2>MapStory HowTo</h2>
+        {% for v in videos %}
+        <a id="{{ v.name }}">
+        <h3>{{ v.title }}</h3>
+        <p>{{ v.text }}</p></a>
+        <iframe class="youtube-player" type="text/html" width="560" height="315"  src="{{ v.href }}" frameborder="0"></iframe>
+        {% endfor %}
+    </div>
 </div>
 {% endblock %}
