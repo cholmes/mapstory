@@ -1,3 +1,8 @@
+div.x-slider-progress {
+    background-color: #f47a20;
+    height: 3px;
+    width: 0%;
+}
 div.gx-overlay-playback .x-btn-icon .x-btn-large .x-btn-text, .x-btn-noicon .x-btn-large .x-btn-text{
     height: 50px;
 	width: 34px;
