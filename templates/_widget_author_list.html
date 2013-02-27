@@ -1,17 +1,7 @@
 {% load avatar_tags %}
 
 <h2>THINKERS AND THOUGHTS ON MAPSTORYTELLING</h2>
-{% comment %}
-{% for u in users %}
-<div class="storyteller">
-    <a href="{{ u.get_absolute_url }}">
-        {% avatar u %}
-    </a>
-    <h4><a href="{% url about_storyteller u %}">{% firstof u.get_full_name u.username %}</a></h4>
-    <p>{{ u.organization }}</p>
-</div>
-{% endfor %}
-{% endcomment %}
+<div class="scroll-container">
 <div class="storyteller ">
     <a href="{% url thoughts-jz %}">
         <img src="/static/img/jz.jpg">
@@ -74,4 +64,5 @@
         <h4><a href="{% url thoughts-sk %}">Dr. R. Siva Kumar</a></h4>
         <p>Mapping the Stories of a Nation</p>
     </div>
+</div>
 </div>

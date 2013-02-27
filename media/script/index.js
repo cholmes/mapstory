@@ -35,10 +35,21 @@ $(function() {
         });
     });
 
-//    var els = $(".storyteller").sort(function(a, b) {
-//        return parseInt(Math.random() * 10);
-//    });
-//    els.appendTo(els.parent());
+    (function adjustStoryTellers() {
+        //+ Jonas Raoni Soares Silva
+        //@ http://jsfromhell.com/array/shuffle [v1.0]
+        function shuffle(o){ //v1.0
+            for(var j, x, i = o.length; i; j = parseInt(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
+            return o;
+        };
+        var height = 0, els = $(".storyteller");
+        shuffle(els);
+        els.appendTo(els.parent());
+        els.slice(0,3).each(function(i, e) {
+            height += $(e).outerHeight();
+        });
+        els.parent('.scroll-container').height(height);
+    })();
     
     adjustSizes();
     

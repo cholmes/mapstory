@@ -737,7 +737,7 @@ section.hr-tabs .nav-tabs a:hover {
   background:#f47a20;
 }
 
-.author-list {
+.author-list .scroll-container {
     overflow: auto;
 }
 
@@ -921,7 +921,7 @@ h2.icn-storylayers, h2.icn-mapstories, h2.icn-storytellers {
 .storyteller img {
   float:left;
   margin-right: 10px;
-  height: 100px;
+  width: 80px;
   padding: 0 10px 15px 10px;
 }
 .storyteller > div {
