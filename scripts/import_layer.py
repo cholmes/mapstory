@@ -151,6 +151,9 @@ if __name__ == '__main__':
     if len(args) != 1:
         parser.error('please provide a layer extract zip file')
 
+    if not os.path.exists(options.data_dir):
+        parser.error("geoserver data directory %s not found" % options.data_dir)
+    
     conn = psycopg2.connect("dbname='" + settings.DB_DATASTORE_DATABASE + 
                             "' user='" + settings.DB_DATASTORE_USER + 
                             "' password='" + settings.DB_DATASTORE_PASSWORD + 
