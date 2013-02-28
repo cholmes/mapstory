@@ -73,7 +73,7 @@ Ext.onReady(function() {
 {% endautoescape %}
 });
 
-var hasThumb = {% if map.has_thumbnail %}true{% else %}false{% endif %};
+var hasThumb = {{ map.has_thumbnail|lower }};
 var thumbURL = "{% url geonode.maps.views.map_controller map.id %}?thumbnail";
 </script>
 {% if can_change_permissions %}
