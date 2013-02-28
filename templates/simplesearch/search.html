@@ -95,7 +95,7 @@
         <div class="refineSection collapsed">
             <h5>Keywords</h5>
             <ul id="bykeyword" class="searchLinks refineControls">
-                {% for kw,cnt in keywords.items %}
+                {% for kw in keywords %}
                 <li><a href="#{{ kw }}">{{ kw }}</a></li>
                 {% endfor %}
             </ul>
