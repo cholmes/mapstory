@@ -335,6 +335,10 @@ form#quicksearch {
     background: #B9C2AD;
 }
 
+.lighter {
+    color: #909090;
+}
+
 .darkgraybg,
 #header,
 #top-crossbar,
@@ -1196,6 +1200,12 @@ article.abstract .read-more, section.box.storyteller-layer a.read-more {
 
 cite {
   font-weight:bold;
+}
+
+.comments_tree > li {
+    border: 5px solid #F3F2F2;
+    margin-bottom: 1em;
+    padding: .5em;
 }
 
 .comments {

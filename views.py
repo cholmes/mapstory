@@ -15,6 +15,8 @@ from mapstory.forms import StyleUploadForm
 from mapstory.forms import LayerForm
 import account.views
 
+from dialogos.models import Comment
+
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 from django.core.cache import cache
@@ -379,6 +381,15 @@ def by_storyteller_pager(req, user, what):
 def delete_story_comment(req, layer_or_map, layer_or_map_id):
     '''allow a user to delete comments attached to their layer or map'''
     pass
+
+
+def flag_comment(req):
+    ct = ContentType.objects.get_for_model(Comment)
+    return render_to_response("flag/flag_form.html", RequestContext(req, {
+        'object_id' : req.GET['id'],
+        'content_type' : ct.id,
+        'creator_field' : 'author',
+    }))
     
 @login_required
 def topics_api(req, layer_or_map, layer_or_map_id):
