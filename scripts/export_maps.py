@@ -6,6 +6,8 @@ from django.conf import settings
 from geonode.maps.models import Layer
 from geonode.maps.models import Map
 
+from mapstory.models import User
+
 from dialogos.models import Comment
 
 from optparse import OptionParser
@@ -85,10 +87,18 @@ def fetch_map_comments(map):
     else:
         return map_comments
 
+def fetch_author(comment):
+    try:
+        return comment.author
+    except User.DoesNotExist:
+        print 'No user found for comment: %s' % comment
+        return None
+
 maps = filter(None, map(fetch_map, map_ids))
 layers = filter(None, map(fetch_layer, layer_names))
 maplayers = sum([m.layers for m in maps], [])
 map_comments = map(fetch_map_comments, maps)
+authors = filter(None, map(fetch_author, [map_comment for sublist in map_comments for map_comment in sublist]))
 
 def layers_from_map(m):
     layers = []
@@ -162,6 +172,10 @@ JOSNSerializer = serializers.get_serializer("json")
 json_serializer = JOSNSerializer()
 with open(temppath('map_comments.json'), 'w') as f:
     json_serializer.serialize([map_comment for sublist in map_comments for map_comment in sublist], stream=f)
+
+# export the comment authors
+with open(temppath('comment_users.json'), 'w') as f:
+    json_serializer.serialize(authors, stream=f)
 
 # create the uber zip
 zipfilename = args[0]
