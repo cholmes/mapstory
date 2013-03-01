@@ -162,7 +162,7 @@ var thumbURL = "{% url geonode.maps.views.map_controller map.id %}?thumbnail";
                             <textarea><iframe style="border: none;" height="400" width="600" src="http://{{ request.get_host }}{% url geonode.maps.views.embed map.id %}"></iframe></textarea>
                         </div>
                         <div class="tab-pane" id="actions4">
-                            {% comment %} TODO: Say Something here about what flagging is all about {% endcomment %}
+                            Flag this as inappropriate, broken, or otherwise.
                             {% flag map "owner" %}
                         </div>
                         <div class="tab-pane" id="actions5">
