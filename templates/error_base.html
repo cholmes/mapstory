@@ -2,10 +2,12 @@
 <html>
     <head>
         <title>{%block title%}{%endblock%}</title>
+        <link rel="stylesheet" type="text/css" href="/static/theme/site.css" media="screen" />
     </head>
-    <body>
-        <div style="width:80%; margin: 10% auto; text-align: center; color: black;">
+    <body class="darkgraybg">
+        <div style="width:40%; margin: 10% auto; text-align: center; color: white; border: 10px solid #f47a20; padding: 2em;">
             {%block message%}{%endblock%}
+            {%block more%}{%endblock%}
         </div>
     </body>
 </html>
