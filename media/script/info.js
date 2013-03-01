@@ -14,12 +14,14 @@ $(function() {
         });
     });
     $("#topic-dropdown a").click(function(ev) {
+        var topic = $(this);
         ev.preventDefault();
         $.post( topic_url, {
-            'topics' : $(this).attr('href').substring(1)
+            'topics' : topic.attr('href').substring(1)
         },function() {
-            $(".topic-info.alert").fadeOut();  
-        })
+            $(".topic-info.alert").fadeOut();
+            $(".topic.info b").html(topic.html());
+        });
     });
     $("#publish-dropdown a").click(function(ev) {
         var link = $(this);

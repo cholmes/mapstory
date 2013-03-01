@@ -3,7 +3,7 @@ topic, choose from the list below.
 </p>
 {% with topic_object.topic_set.all as topics %}
 {% if topics %}
-<p class="info">
+<p class="topic info">
 This is currently tagged as <b>{{ topics.0.name }}</b>.
 </p>
 {% else %}
