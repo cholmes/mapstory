@@ -389,6 +389,19 @@ def user_activity_email_prefs(user):
 def mapstory_announcements(context):
     return context
 
+@register.simple_tag
+def open_graph_meta(obj):
+    if isinstance(obj, Layer):
+        typename = "StoryLayer"
+    else:
+        typename = "MapStory"
+    return loader.render_to_string('_open_graph_meta.html', {
+        'title' : obj.title,
+        'type' : typename,
+        'url' : obj.get_absolute_url(),
+        'image' : obj.get_thumbnail_url()
+    })
+
 # @todo - make geonode location play better
 if settings.GEONODE_CLIENT_LOCATION.startswith("http"):
     @register.simple_tag
