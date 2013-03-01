@@ -3,6 +3,7 @@
 {% load geonode_auth %}
 {% load mapstory_tags %}
 {% load dialogos_tags %}
+{% load flag_tags %}
 {% load agon_ratings_tags %}
 {% load staticfiles %}
 
@@ -146,7 +147,7 @@
         });
 
 {% endautoescape %}
-    var hasThumb = {% if layer.has_thumbnail %}true{% else %}false{% endif %};
+    var hasThumb = {{ layer.has_thumbnail|lower }};
     var thumbURL = "{% url layer_thumbnail layer.typename %}";
     </script>
 {% if can_change_permissions %}
@@ -204,7 +205,8 @@
                             {% include "maps/_sharethis_links.html" %}
                         </div>
                         <div class="tab-pane" id="actions4">
-                            Flag not implemented yet
+                            {% comment %} TODO: Say Something here about what flagging is all about {% endcomment %}
+                            {% flag layer "owner" %}
                         </div>
                         <div class="tab-pane" id="actions5">
                             {% if user.is_authenticated %}

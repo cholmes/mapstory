@@ -235,6 +235,7 @@ INSTALLED_APPS = (
     'django_extensions',
     'announcements',
     'flatblocks',
+    'flag',
     'hitcount',
     'account',
     'kaleo',

@@ -141,6 +141,11 @@
 {% block body_base %}
     <div id="main">
       <div class="container">
+        {% block messages %}
+        <div id="messages">
+            {% include "_messages.html" %}
+        </div>
+        {% endblock %}
         {% block announcements %}
             {% mapstory_announcements %}
         {% endblock %}

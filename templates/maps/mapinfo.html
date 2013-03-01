@@ -4,6 +4,7 @@
 {% load geonode_auth %}
 {% load mapstory_tags %}
 {% load dialogos_tags %}
+{% load flag_tags %}
 {% load agon_ratings_tags %}
 
 {% block title %}{{map.title}}{% endblock %}
@@ -72,7 +73,7 @@ Ext.onReady(function() {
 {% endautoescape %}
 });
 
-var hasThumb = {% if map.has_thumbnail %}true{% else %}false{% endif %};
+var hasThumb = {{ map.has_thumbnail|lower }};
 var thumbURL = "{% url geonode.maps.views.map_controller map.id %}?thumbnail";
 </script>
 {% if can_change_permissions %}
@@ -161,7 +162,8 @@ var thumbURL = "{% url geonode.maps.views.map_controller map.id %}?thumbnail";
                             <textarea><iframe style="border: none;" height="400" width="600" src="http://{{ request.get_host }}{% url geonode.maps.views.embed map.id %}"></iframe></textarea>
                         </div>
                         <div class="tab-pane" id="actions4">
-                            Flag not implemented yet
+                            {% comment %} TODO: Say Something here about what flagging is all about {% endcomment %}
+                            {% flag map "owner" %}
                         </div>
                         <div class="tab-pane" id="actions5">
                             {% if user.is_authenticated %}
