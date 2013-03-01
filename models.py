@@ -425,8 +425,9 @@ def audit_layer_metadata(layer):
         layer.language,
         layer.supplemental_information,
         layer.data_quality_statement,
-        layer.topic_set.all()
-    ]) and layer.topic_set.count()
+        layer.topic_set.count(),
+        layer.has_thumbnail()
+    ])
 
     
 def user_saved(instance, sender, **kw):
