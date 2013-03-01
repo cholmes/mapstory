@@ -6,6 +6,8 @@ from django.conf import settings
 from geonode.maps.models import Layer
 from geonode.maps.models import Map
 
+from dialogos.models import Comment
+
 from optparse import OptionParser
 import json
 import psycopg2
@@ -61,7 +63,7 @@ with open(options.input_file) as f:
             else:
                 raise ValueError('Unknown input line: %s' % line)
 
-# fetch maps and layers from database
+# fetch maps, layers and map comments from database
 def fetch_map(map_id):
     try:
         return Map.objects.get(pk=map_id)
@@ -76,9 +78,17 @@ def fetch_layer(layer_name):
         print 'No layer found with name: %s' % layer_name
         return None
 
+def fetch_map_comments(map):
+    map_comments = Comment.objects.filter(object_id=map.id)
+    if len(map_comments) == 0:
+        return None
+    else:
+        return map_comments
+
 maps = filter(None, map(fetch_map, map_ids))
 layers = filter(None, map(fetch_layer, layer_names))
 maplayers = sum([m.layers for m in maps], [])
+map_comments = map(fetch_map_comments, maps)
 
 def layers_from_map(m):
     layers = []
@@ -145,6 +155,13 @@ def map_thumb_spec(m):
 map_thumbs = filter(None, map(map_thumb_spec, maps))
 with open(temppath('map_thumb_specs.json'), 'w') as f:
     json.dump(map_thumbs, f)
+
+# export the map comments
+# the comments won't serialize with json. have to use django serializer
+JOSNSerializer = serializers.get_serializer("json")
+json_serializer = JOSNSerializer()
+with open(temppath('map_comments.json'), 'w') as f:
+    json_serializer.serialize([map_comment for sublist in map_comments for map_comment in sublist], stream=f)
 
 # create the uber zip
 zipfilename = args[0]
