@@ -1,0 +1,5 @@
+{{  flag.user.username }} flagged {{ display }}, noting:
+
+{{ flag.comment }}
+
+{{ url }}
