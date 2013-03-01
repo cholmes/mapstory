@@ -49,9 +49,13 @@
 <hr/>
 {% topic_selection layer %}
 <hr/>
+{% if layer.has_thumbnail %}
+<img class="" style="float:right" src="{{ layer.get_thumbnail_url }}">
+{% endif %}
 <p>Generate a thumbnail for this map</p>
 <a id="set_thumbnail" class="btn" href="#thumbnail">{% trans "Set thumbnail" %}</a>
 {% warn_missing_thumb layer %}
+<div class="clearfix"></div>
 <hr/>
 {% publish_status layer %}
 <p id="meta_data_status" style="display:none" class="alert alert-warning mrg-top">
