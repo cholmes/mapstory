@@ -96,6 +96,7 @@ var thumbURL = "{% url geonode.maps.views.map_controller map.id %}?thumbnail";
         <div class="span8">
             <div class="box mrg-btm describe-object">
                 <div class="story-detail">
+                    {% warn_status request map %}
                     <div id="embedded_map"></div>
                     <div class="metrics">
                         {% map_view_hitcount map %}
@@ -142,6 +143,12 @@ var thumbURL = "{% url geonode.maps.views.map_controller map.id %}?thumbnail";
                             <div class="clearfix"></div>
                             <hr/>
                             {% publish_status map %}
+                            <p id="meta_data_status" style="display:none" class="alert alert-warning mrg-top" >
+                            In order to ensure quality for all users, all fields above are mandatory. You will not
+                            be able to "go public" with your MapStory until they are completed. In addition, the
+                            metadata for each layer in the map must be complete.
+                            Thank you for your contribution to the MapStory global data commons.
+                            </p>
                             {% else %}
                             <label>Title:</label>
                             <p>{{ map.title }}</p>
@@ -186,7 +193,6 @@ var thumbURL = "{% url geonode.maps.views.map_controller map.id %}?thumbnail";
                         </div>
                         {% endif %}
                     <cite>Uploaded by {{ map.owner.username }} on {{ map.last_modified|date:"N j Y" }}</cite>
-                    {% warn_status request map %}
                     <article class="abstract"><label>Abstract:</label>{{ map.abstract|escape|urlize|linebreaks|safe }}</article>
                 </div>
                 {% comments_section map %}
