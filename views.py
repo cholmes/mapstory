@@ -283,6 +283,8 @@ def publish_status(req, layer_or_map, layer_or_map_id):
             layers = [obj]
         else:
             layers = obj.local_layers
+            if not models.audit_map_metadata(obj):
+                return HttpResponse('META', status=200)
         for l in layers:
             if not models.audit_layer_metadata(l):
                 return HttpResponse('META', status=200)
