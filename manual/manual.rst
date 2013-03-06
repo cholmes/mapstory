@@ -12,6 +12,8 @@ Introduction
 
 **MapStory** is a collaborative map sharing and publishing platform with a focus on storytelling. Maps are shown with an element of time to create animations to aid in the storytelling.
 
+MapStory empowers all users to discover, play and browse StoryLayers and MapStories published by registered users. Registered users can further contribute by adding their observations about the world in the form of StoryLayers, and to assemble MapStories from any collection of StoryLayers.
+
 A **MapStory** is also the name for those temporal maps. A MapStory can also include one or more StoryLayers, other geospatial layers, and annotations.
 
 A **StoryLayer** is a component of a MapStory that contains geospatial data with an element of time. Like a standard geospatial layer, but containing a timestamp as one of its attributes.
@@ -19,7 +21,6 @@ A **StoryLayer** is a component of a MapStory that contains geospatial data with
 A **StoryTeller** is an author of a MapStory. Anyone who registers for an account on MapStory.org can be a StoryTeller. (See the Registration_ section for more details.)
 
 For more information, please see the `MapStory wiki <http://wiki.mapstory.org>`_.
-
 
 .. _registration:
 
@@ -35,7 +36,18 @@ Before you can create a MapStory, you will need to register for an account:
 * Click **Signup** when finished.
 * A confirmation email will be sent to you which will contain a URL. Navigate to that URL to confirm your registration.
 
-You are now ready to create your own MapStories.
+You are now a StoryTeller and ready to create your own MapStories.
+
+.. _registration.profile:
+
+Profile and search
+------------------
+
+You should fill out your profile now. While this is not mandatory, your account will not appear in any searches until you have filled out at least your Full Name, Blurb, and provided an avatar. An avatar can be generated directly from your email address if that address is registered with `Gravatar <http://gravatar.com>`_.
+
+If you have not filled out your profile, you will see a warning on your profile page.
+
+To fill out your profile, click **Profile** and then **Edit profile information**.
 
 
 .. _5minmap:
@@ -208,6 +220,13 @@ Publishing your content
 When first created, a StoryLayer or MapStory is set to be Private. This means that only you can search for or view it. To change the status, navigate to the **Publishing Status** section on the `Info tab`_. The available options are: **Only visible to me** (default), **Anyone with the link can view**, and **Anyone can search for and view**.
 
 If you are changing the status of a MapStory, any StoryLayers that comprise that MapStory will also have their status changed.
+
+.. _publishing.metadata:
+
+Metadata and publishing
+-----------------------
+
+Proper metadata is an important aspect of any MapStory or StoryLayer, as it gives context to an otherwise visual story and aids in searching. To this end, a layer will not be able to have its publishing status changed from private (and thus show up in searches) until all of the metadata fields are completely filled out. Metadata can be filled out on the `Info tab`_ of that particular resource.
 
 
 .. _storylayer:
