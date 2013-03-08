@@ -53,6 +53,8 @@ def import_maps(gs_data_dir, conn, zipfile,
     map_comment_models = import_models(temppath('comment_users.json'))
     print 'importing map comments'
     map_comment_models = import_models(temppath('map_comments.json'))
+    print 'importing map publishing status'
+    map_comment_models = import_models(temppath('map_publishing_status.json'))
 
     print 'importing map thumb specs'
     with open(temppath('map_thumb_specs.json')) as f:

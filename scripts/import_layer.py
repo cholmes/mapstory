@@ -5,6 +5,8 @@ from django.core import serializers
 
 from geonode.maps.models import Layer
 
+from mapstory.models import PublishingStatus
+
 from optparse import OptionParser
 import json
 import psycopg2
@@ -107,6 +109,18 @@ def import_layer(gs_data_dir, conn, layer_tempdir, layer_name,
                     print 'No thumbnail to update spec for layer: %s' % layer_name
 
     cursor.close()
+    
+    # Load layer status
+    with open(temppath('publishingstatus.json'), 'r') as f:
+            statuses = serializers.deserialize('json', f)
+            for status in statuses:
+                try:
+                    # Is there already a publishing status?
+                    ps = PublishingStatus.objects.get(layer=status.object.layer)
+                    ps.status = status.object.status
+                    ps.save()
+                except PublishingStatus.DoesNotExist:
+                    status.save()
 
 if __name__ == '__main__':
     gs_data_dir = '/var/lib/geoserver/geonode-data/'

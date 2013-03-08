@@ -4,6 +4,8 @@ from django.conf import settings
 
 from geonode.maps.models import Layer
 
+from mapstory.models import PublishingStatus
+
 import json
 import psycopg2
 import sys
@@ -78,6 +80,13 @@ def export_layer(gs_data_dir, conn, tempdir, layer):
     if t:
         with open(temppath('thumb_spec.json'), 'w') as f:
             json.dump(t.thumb_spec, f)
+    
+    try:
+        pubstat = PublishingStatus.objects.get(layer=layer)
+        with open(temppath('publishingstatus.json'), 'w') as f:
+            serializers.serialize('json', [pubstat], stream=f)
+    except PublishingStatus.DoesNotExist:
+        print 'No publishing status found for layer: %s' % layer
 
     cursor.close()
 

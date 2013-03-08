@@ -7,6 +7,7 @@ from geonode.maps.models import Layer
 from geonode.maps.models import Map
 
 from mapstory.models import User
+from mapstory.models import PublishingStatus
 
 from dialogos.models import Comment
 
@@ -94,11 +95,19 @@ def fetch_author(comment):
         print 'No user found for comment: %s' % comment
         return None
 
+def fetch_map_publishingstatus(map):
+    try:
+        return PublishingStatus.objects.get(map=map)
+    except PublishingStatus.DoesNotExist:
+        print 'No publishing status found for map: %s' % map
+        return None
+
 maps = filter(None, map(fetch_map, map_ids))
 layers = filter(None, map(fetch_layer, layer_names))
 maplayers = sum([m.layers for m in maps], [])
 map_comments = map(fetch_map_comments, maps)
 authors = filter(None, map(fetch_author, [map_comment for sublist in map_comments for map_comment in sublist]))
+publishing_statuses = map(fetch_map_publishingstatus, maps)
 
 def layers_from_map(m):
     layers = []
@@ -176,6 +185,10 @@ with open(temppath('map_comments.json'), 'w') as f:
 # export the comment authors
 with open(temppath('comment_users.json'), 'w') as f:
     json_serializer.serialize(authors, stream=f)
+
+# export the maps' publishing_statuses
+with open(temppath('map_publishing_status.json'), 'w') as f:
+    json_serializer.serialize(publishing_statuses, stream=f)
 
 # create the uber zip
 zipfilename = args[0]
