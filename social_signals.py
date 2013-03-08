@@ -2,6 +2,7 @@ from django.db.models.signals import post_save
 from django.db.models.signals import m2m_changed
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
+from django.template import loader
 from geonode.maps.models import Layer
 from geonode.maps.models import Map
 from geonode.maps.models import map_changed_signal
@@ -10,6 +11,7 @@ from mapstory.models import ContactDetail
 from mapstory.models import UserActivity
 from mapstory.templatetags import mapstory_tags
 
+from flag.signals import content_flagged
 from dialogos.models import Comment
 from agon_ratings.models import Rating
 from mapstory.util import user
@@ -153,6 +155,21 @@ def map_handler(sender, what_changed, old, new, **kw):
             if l.owner != sender.owner:
                 l.owner.useractivity.other_actor_actions.add(act)
 
+
+def flag_handler(flagged_instance, flagged_content, **kw):
+    target = flagged_content.content_object
+    get_absolute_url = getattr(target, 'get_absolute_url', None)
+    recps = User.objects.filter(is_staff=True).exclude(email='').exclude(email__isnull=True)
+    link = get_absolute_url() if get_absolute_url else ''
+    message = loader.render_to_string("flag/email.txt", {
+        'flag' : flagged_instance,
+        'url' : link,
+        'display' : '%s[%s]' % (target._meta.object_name, target.id)
+    })
+    for u in recps:
+        u.email_user('mapstory flagged content', message)
+
+
 register_save_handler(ContactDetail, create_verb='joined MapStory', provide_user=False)
 register_save_handler(Layer, create_verb='uploaded')
 register_save_handler(Map)
@@ -162,3 +179,5 @@ post_save.connect(rating_handler, sender=Rating)
 post_save.connect(comment_handler, sender=Comment)
 
 m2m_changed.connect(notify_handler, sender=UserActivity.other_actor_actions.through)
+
+content_flagged.connect(flag_handler)

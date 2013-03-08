@@ -335,6 +335,10 @@ form#quicksearch {
     background: #B9C2AD;
 }
 
+.lighter {
+    color: #909090;
+}
+
 .darkgraybg,
 #header,
 #top-crossbar,
@@ -1196,6 +1200,12 @@ article.abstract .read-more, section.box.storyteller-layer a.read-more {
 
 cite {
   font-weight:bold;
+}
+
+.comments_tree > li {
+    border: 5px solid #F3F2F2;
+    margin-bottom: 1em;
+    padding: .5em;
 }
 
 .comments {
@@ -2150,4 +2160,34 @@ h2.icn-storylayer span, h2.icn-mapstory span {
 .edit-profile form .form textarea {
     width: 80%;
     resize: both;
+}
+
+
+.xtb-text {
+    color: #fff;
+}
+.x-combo-list {
+    color: #fff;
+}
+
+.x-tab-panel-body {
+    background: #1f2730;
+}
+.x-grid3-row-over {
+    background: #000;
+}
+.gxp-export-section {
+    color: #fff;
+}
+
+.x-tip-body {
+    color: #fff !important;
+}
+
+.x-panel-body label {
+    color: #fff;
+}
+
+.timeline-event-label {
+    color: #000;
 }

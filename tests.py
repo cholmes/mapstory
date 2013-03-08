@@ -6,11 +6,14 @@ from django.contrib.contenttypes.models import ContentType
 from geonode.maps.models import Layer
 from geonode.maps.models import Map
 from geonode.maps.models import MapLayer
+from geonode.maps.models import Thumbnail
 from geonode.simplesearch import models as simplesearch
 import mapstory.social_signals # this just needs activating but is not used
 from mapstory import forms
 from mapstory.models import UserActivity
 from mapstory.models import ProfileIncomplete
+from mapstory.models import audit_layer_metadata
+from mapstory.models import Topic
 from mapstory.templatetags import mapstory_tags
 
 from agon_ratings.models import Rating
@@ -22,21 +25,13 @@ from mailer import engine as email_engine
 simplesearch.map_updated = lambda **kw: None
 simplesearch.object_created = lambda **kw: None
 Layer.delete_from_geoserver = lambda self: None
+Layer._populate_from_gs = lambda s: None
+Layer.verify = lambda s: None
+Layer.save_to_geoserver = lambda s: None
 
 class SocialTest(TestCase):
     
     fixtures = ['test_data.json','map_data.json']
-    @classmethod
-    def setUpClass(cls):
-        cls._old_verify = Layer.verify
-        cls._old_save_to_geoserver = Layer.save_to_geoserver
-        Layer.verify = lambda s: None
-        Layer.save_to_geoserver = lambda s: None
-
-    @classmethod
-    def tearDownClass(cls):
-        Layer.verify = cls._old_verify
-        Layer.save_to_geoserver = cls._old_save_to_geoserver
         
     def setUp(self):
         self.bobby = User.objects.get(username='bobby')
@@ -149,6 +144,27 @@ def rate(obj, user, rating):
     ct = ContentType.objects.get_for_model(obj)
     return Rating.objects.create(user=user, content_type=ct, object_id=obj.id,
         rating=rating)
+
+
+class LayerAuditTest(TestCase):
+    fixtures = ['test_data.json','map_data.json']
+
+    def test_audit(self):
+        self.bobby = User.objects.get(username='bobby')
+        t = Topic.objects.create(name='xyz')
+        layer = Layer.objects.create(owner=self.bobby, name='layer1',typename='layer1')
+        self.assertFalse(audit_layer_metadata(layer))
+        atts = ('abstract','title','purpose','language','supplemental_information',
+                'data_quality_statement')
+        for a in atts:
+            setattr(layer, a, 'a')
+            self.assertFalse(audit_layer_metadata(layer))
+        layer.topic_set.add(t)
+        self.assertFalse(audit_layer_metadata(layer))
+        layer.keywords.add('FOOBARq')
+        self.assertFalse(audit_layer_metadata(layer))
+        layer.has_thumbnail = lambda : True
+        self.assertTrue(audit_layer_metadata(layer))
 
 
 class ContactDetailTests(TestCase):

@@ -67,6 +67,7 @@
         margin: 15px 0 5px;
     }
 </style>
+
 {{ block.super }}
 {% endblock %}
 {% block main %}
@@ -175,7 +176,7 @@
                 </select>
                 <span id="format_input" style="visibility: hidden;" title="See sidebar for help">
                     <label for="id_text_attribute_format">Custom Format:</label> {{ time_form.text_attribute_format }}
-                    {% manual_link "time-formats" "View Guide" %}
+                    {% manual_link "prep.time.formats" "View Guide" %}
                 </span>
             </div>
         </div>
@@ -217,7 +218,7 @@
                     </select>
                     <span id="end_format_input" style="visibility: hidden;" title="See sidebar for help">
                         <label for="id_end_text_attribute_format">Custom Format:</label> {{ time_form.end_text_attribute_format }}
-                        {% manual_link "time-formats" "View Guide" %}
+                        {% manual_link "prep.time.formats" "View Guide" %}
                     </span>
                 </div>
             </div>

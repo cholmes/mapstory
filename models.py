@@ -425,10 +425,15 @@ def audit_layer_metadata(layer):
         layer.language,
         layer.supplemental_information,
         layer.data_quality_statement,
-        layer.topic_set.all()
-    ]) and layer.topic_set.count()
+        layer.topic_set.count(),
+        layer.has_thumbnail()
+    ])
 
-    
+
+def audit_map_metadata(mapobj):
+    return all([mapobj.keyword_list(), mapobj.abstract])
+
+
 def user_saved(instance, sender, **kw):
     if kw['created']:
         cd = ContactDetail.objects.create(user = instance)

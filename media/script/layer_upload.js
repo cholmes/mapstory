@@ -27,10 +27,14 @@ function init(options) {
     function check_valid_ext(fname) {
         var idx = fname.lastIndexOf('.'),
             ext = idx > 0 ? fname.substr(idx + 1) : '';
+        ext = ext.toLowerCase();
         switch (ext) {
             case 'shp': 
             case 'csv':
             case 'zip':
+            case 'tif':
+            case 'tiff':
+            case 'geotiff':
                 break
             default:
                 ext = null;
@@ -228,6 +232,10 @@ function init(options) {
             case 'zip':
                 zipMsg.show();
                 break;
+            case 'tif':
+            case 'tiff':
+            case 'geotiff':
+                break;
             default:
                 unknownMsg.show();
         }
@@ -290,7 +298,7 @@ function init(options) {
     
     function isMainFile(name) {
         var ext = getExtension(name);
-        return /^(csv|zip|shp)$/i.test(ext);
+        return /^(csv|zip|shp|tif|tiff|geotiff)$/i.test(ext);
     }
     
     function isShapefileComponent(ext) {

@@ -59,7 +59,7 @@
        {% endif %}
     </p>
     <p>MapStory currently supports the data formats listed below
-        ({% manual_link "upload-support" "tell me more about these formats" %}):
+        ({% manual_link "prep.filetypes" "tell me more about these formats" %}):
     </p>
     <ul class="filetypes">
         <li>ESRI Shapefile (.shp)</li>
@@ -102,7 +102,7 @@
       <p id="zip-msg" class="alert alert-warn">Just a reminder: for MapStory to process a ZIP file, 
           all required files must be in the top-level directory of the ZIP file. MapStory will check
           the data in the ZIP file after it's uploaded and will notify you of any problems then.
-          {% manual_link "upload-zip" "Learn More &#187;" %}
+          {% manual_link "prep.filetypes.archive" "Learn More &#187;" %}
       </p>
       <p id="shp-msg" class="alert alert-warn">You can also drag and drop the the files 
           you’d like to upload to the box above, and they will be automatically populated into the fields below.
@@ -110,7 +110,7 @@
       <p id="csv-msg" class="alert alert-warn">MapStory will automatically look for spatial data 
           in columns titled latitude, lat, longtitude, lon, and long.  You will also be able to pick 
           the columns later if the spatial data are contained in other columns.
-          {% manual_link "upload-csv" "Learn More &#187;" %}
+          {% manual_link "prep.filetypes" "Learn More &#187;" %}
       </p>
       <p id="unknown-msg" class="alert alert-warn">
           Please select a .zip, .shp, or .csv file as the data file.  Other file types can be added after selecting a data file.
@@ -178,7 +178,7 @@ setup({
 </p>
 <p>You can also upload all the required files as a ZIP file.
 </p>
-<p>For more help, see the {% manual_link "uploads" "manual" %}</p>
+<p>For more help, see the {% manual_link "prep" "manual" %}</p>
     
 {% if enough_storage %}
 <!--<h3>{%trans "Permissions"  %}</h3>-->

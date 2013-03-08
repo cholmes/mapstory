@@ -26,7 +26,11 @@
 $(function() {
     var x = $('#contents').remove();
     x.appendTo($("#contents-holder"));
-    
+
+    $("#contents .reference.internal").click(function() {
+        $('#contents-holder .hover').removeClass('hover');
+        $(this).addClass('hover');
+    });
     $("#manual .contents a.reference.external").attr('target','_');
         
     $(".section").hover(function() {
