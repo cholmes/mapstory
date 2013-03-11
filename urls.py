@@ -111,6 +111,7 @@ urlpatterns += patterns('mapstory.views',
 
     url(r"^announcements/", include("announcements.urls")),
     url(r"^flag/", include("flag.urls")),
+    url(r'', include('social_auth.urls')),
 
     # for now, direct-to-template but should be in database
     url(r"^mapstory/thoughts/jonathan-marino/$", direct_to_template, {"template": "mapstory/thoughts.html",

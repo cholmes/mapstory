@@ -17,5 +17,8 @@
         <a href="{% url django.contrib.auth.views.password_reset %}">Forgot Password?</a>
         <button type="submit" class="btn">Sign In</button>
         {# <p>Don't have an account yet? <a href="#">Register now</a></p> #}
+        <br/>Login with <a href="{% url socialauth_begin 'twitter' %}">Twitter</a>
+        <br/>Login with <a href="{% url socialauth_begin 'facebook' %}">Facebook</a>
+        <br/>Login with <a href="{% url socialauth_begin 'google-oauth2' %}">Google</a>
     </form>
 </div>

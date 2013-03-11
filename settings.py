@@ -148,10 +148,29 @@ GEONETWORK_BASE_URL = "http://localhost:8001/geonetwork/"
 # The username and password for a user with write access to GeoNetwork
 GEONETWORK_CREDENTIALS = "admin", "admin"
 
-AUTHENTICATION_BACKENDS = ('geonode.core.auth.GranularBackend',)
+AUTHENTICATION_BACKENDS = (
+    'social_auth.backends.twitter.TwitterBackend',
+    'social_auth.backends.facebook.FacebookBackend',
+    'social_auth.backends.google.GoogleOAuth2Backend',
+    'social_auth.backends.yahoo.YahooBackend',
+    'social_auth.backends.contrib.github.GithubBackend',
+    'geonode.core.auth.GranularBackend',
+)
+
+TWITTER_CONSUMER_KEY = 'replace'
+TWITTER_CONSUMER_SECRET = 'replace'
+FACEBOOK_APP_ID = 'replace'
+FACEBOOK_API_SECRET = 'replace'
+FACEBOOK_EXTENDED_PERMISSIONS = ['email']
+GOOGLE_OAUTH2_CLIENT_ID = 'replace'
+GOOGLE_OAUTH2_CLIENT_SECRET = 'replace'
+
+SOCIAL_AUTH_COMPLETE_URL_NAME  = 'socialauth_complete'
+SOCIAL_AUTH_ASSOCIATE_URL_NAME = 'socialauth_associate_complete'
 
 GOOGLE_API_KEY = "ABQIAAAAkofooZxTfcCv9Wi3zzGTVxTnme5EwnLVtEDGnh-lFVzRJhbdQhQgAhB1eT_2muZtc0dl-ZSWrtzmrw"
-LOGIN_REDIRECT_URL = "/"
+
+LOGIN_REDIRECT_URL = '/'
 
 DEFAULT_LAYERS_OWNER='admin'
 
@@ -254,7 +273,8 @@ INSTALLED_APPS = (
     'geonode',
     'mapstory.watchdog',
     'actstream',
-    'mailer'
+    'mailer',
+    'social_auth',
 )
 
 def get_user_url(u):
