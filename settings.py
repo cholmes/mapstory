@@ -275,7 +275,10 @@ INSTALLED_APPS = (
     'actstream',
     'mailer',
     'social_auth',
+    'provider',
+    'provider.oauth2',   
 )
+
 
 def get_user_url(u):
     from django.contrib.sites.models import Site
