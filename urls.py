@@ -112,6 +112,7 @@ urlpatterns += patterns('mapstory.views',
     url(r"^announcements/", include("announcements.urls")),
     url(r"^flag/", include("flag.urls")),
 
+
     # for now, direct-to-template but should be in database
     url(r"^mapstory/thoughts/jonathan-marino/$", direct_to_template, {"template": "mapstory/thoughts.html",
         "extra_context" : {'html':'mapstory/thoughts/jm.html'}}, name="thoughts-jm"),
@@ -131,6 +132,12 @@ urlpatterns += patterns('mapstory.views',
 )
 
 urlpatterns += proxy_urlpatterns
+
+if settings.ENABLE_SOCIAL_LOGIN:
+    urlpatterns += patterns('',
+        url(r'', include('social_auth.urls')),
+        url(r'^oauth2/', include('provider.oauth2.urls', namespace = 'oauth2')),
+    )
 
 # Extra static file endpoint for development use
 if settings.SERVE_MEDIA:

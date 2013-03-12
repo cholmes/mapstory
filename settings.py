@@ -254,7 +254,7 @@ INSTALLED_APPS = (
     'geonode',
     'mapstory.watchdog',
     'actstream',
-    'mailer'
+    'mailer',
 )
 
 def get_user_url(u):
@@ -338,7 +338,23 @@ ABSOLUTE_URL_OVERRIDES = {
 
 #EMAIL_BACKEND = "mailer.backend.DbBackend"
 
+ENABLE_SOCIAL_LOGIN = False
+
 try:
     from local_settings import *
 except ImportError:
     pass
+
+if ENABLE_SOCIAL_LOGIN:
+    INSTALLED_APPS = INSTALLED_APPS + (
+        'social_auth',
+        'provider',
+        'provider.oauth2',
+    )
+    AUTHENTICATION_BACKENDS = (
+        'social_auth.backends.twitter.TwitterBackend',
+        'social_auth.backends.facebook.FacebookBackend',
+        'social_auth.backends.google.GoogleOAuth2Backend',
+        'social_auth.backends.yahoo.YahooBackend',
+        'social_auth.backends.contrib.github.GithubBackend',
+    ) + AUTHENTICATION_BACKENDS
