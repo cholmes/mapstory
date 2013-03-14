@@ -55,8 +55,12 @@ class ProfileForm(forms.ModelForm):
             self.fields[o] = fields[o]
         self.fields.update(fields)
         user = self.instance.user
+        # displaying the contents of user
         self.initial['first_name'] = user.first_name
         self.initial['last_name'] = user.last_name
+        # display the user email if contact not set, change propogated on save
+        if not self.initial['email']:
+            self.initial['email'] = user.email
 
     def save(self, *args, **kw):
         data = self.cleaned_data
@@ -67,10 +71,11 @@ class ProfileForm(forms.ModelForm):
             self.instance.name = '%s %s' % (first_name, last_name)
         super(ProfileForm, self).save(*args, **kw)
         # now copy first and last name to user
-        data = self.cleaned_data
         user = self.instance.user
         user.first_name = first_name
         user.last_name = last_name
+        # and copy the email in - already saved to contact above
+        user.email = data['email']
         user.save(*args, **kw)
         # and verify profile completeness
         self.instance.update_audit()

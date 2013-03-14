@@ -201,14 +201,28 @@ class ContactDetailTests(TestCase):
 
 
     def test_profile_form(self):
-        u = User.objects.create(username='billy')
-        form = forms.ProfileForm(data={}, instance = u.get_profile())
-        self.assertTrue(not form.is_valid())
+        email = 'billy@bil.ly'
+        u = User.objects.create(username='billy', email=email)
+        form = forms.ProfileForm(instance=u.get_profile())
+        # email carried over from user
+        self.assertEqual(email, form['email'].value())
 
-        # first, last, blurb work
-        form = forms.ProfileForm(data={'first_name':'Billy','last_name':'Bob','blurb':'I Billy Bob'}, instance = u.get_profile())
+        # invalid
+        form = forms.ProfileForm(data={}, instance=u.get_profile())
+        self.assertTrue(not form.is_valid())
+        self.assertEqual(['first_name', 'last_name', 'blurb'], form.errors.keys())
+
+        # first, last, blurb, and email handling all work
+        new_email = 'bill@billy.name'
+        form = forms.ProfileForm(data={'first_name':'Billy',
+                                       'last_name':'Bob',
+                                       'blurb':'I Billy Bob',
+                                       'email':new_email},
+                                 instance=u.get_profile())
         self.assertTrue(form.is_valid())
         form.save()
         # computed name field
         self.assertEqual('Billy Bob', u.get_profile().name)
-
+        # and email applied to both user and profile
+        self.assertEqual(new_email, u.email)
+        self.assertEqual(new_email, u.get_profile().email)
