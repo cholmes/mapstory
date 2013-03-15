@@ -1,0 +1,33 @@
+/** 
+This is a shim to make the ext access theme work with the current
+ext.js theme
+**/
+
+.xtb-text {
+    color: #fff;
+}
+.x-combo-list {
+    color: #fff;
+}
+
+.x-tab-panel-body {
+    background: #1f2730;
+}
+.x-grid3-row-over {
+    background: #000;
+}
+.gxp-export-section {
+    color: #fff;
+}
+
+.x-tip-body {
+    color: #fff !important;
+}
+
+.x-panel-body label {
+    color: #fff;
+}
+
+.timeline-event-label {
+    color: #000;
+}
