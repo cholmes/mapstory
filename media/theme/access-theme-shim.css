@@ -3,6 +3,9 @@ This is a shim to make the ext access theme work with the current
 ext.js theme
 **/
 
+.x-form-invalid {
+    background-color: #15171a !important;
+}
 .xtb-text {
     color: #fff;
 }
