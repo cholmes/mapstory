@@ -1,4 +1,5 @@
 {% extends "fullscreen.html" %}
+{% load staticfiles %}
 {% load i18n %}
 {% load mapstory_tags %}
 
@@ -8,6 +9,7 @@
 {% include "geonode/ext_header.html" %}
 {% include "geonode/app_header.html" %}
 {% include "geonode/geo_header.html" %}
+<link rel="stylesheet" type="text/css" href="{% static "theme/access-theme-shim.css"%}" />
 <link rel="stylesheet" type="text/css" href="{% geonode_static "theme/ux/colorpicker/color-picker.ux.css" %}" />
 <style type="text/css">
     #templates { display: none; }
