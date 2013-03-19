@@ -89,7 +89,7 @@ var thumbURL = "{% url geonode.maps.views.map_controller map.id %}?thumbnail";
             <h2 class="icn-mapstories">{{ map.title }}</h2>
         </div>
         <div class="span4 top-detail-actions">
-            <a href="{% url geonode.maps.views.view map.id %}" target="_">View this MapStory fullscreen</a>
+            <a href="{% url geonode.maps.views.map_controller map.id %}#full">View this MapStory fullscreen</a>
         </div>
     </div>
     <div class="row">
