@@ -573,21 +573,22 @@ def oembed(request):
     pattern = settings.SITEURL.replace('/', '\/') + 'maps\/\d+'
     result = re.match(pattern, url)
     if result is None:
-        return HttpResponse(_("Invalid oEmbed URL"), status=400, mimetype="text/plain")
+        return HttpResponse(("Invalid oEmbed URL"), status=400, mimetype="text/plain")
     else:
         map_id = int(urlparse(url).path.split('/')[2])
         map_obj = get_object_or_404(Map, id=map_id)
         if not request.user.has_perm('maps.view_map', obj=map_obj):
-            return HttpResponse(_("Not Permitted"), status=401, mimetype="text/plain")
+            return HttpResponse(("Not Permitted"), status=401, mimetype="text/plain")
     format = request.GET.get('format', 'json') #Actually ignored for now
     maxwidth = request.GET.get('maxwidth', 600)
     maxheight = request.GET.get('maxheight', 400)
     embed_url = settings.SITEURL[:-1] + map_obj.get_absolute_url() + '/embed'
-    html = "<iframe style='border: none;' height='%d' width='%d' src='%s'></iframe>" % (maxheight, maxwidth, embed_url) 
+    embed_url = re.sub(r'\\', '\\\/', embed_url)
+    html = "<iframe style=\"border: none;\" height=\"%s\" width=\"%s\" src=\"%s\"></iframe>" % (maxheight, maxwidth, embed_url)
     response = {}
-    response['type'] = "rich"
-    response['version'] = 1.0
-    response['title'] = map_obj.title 
+    response['type'] = "video"
+    response['version'] = "1.0"
+    response['title'] = map_obj.title
     response['author_name'] = map_obj.owner.username
     response['author_url'] = settings.SITEURL[:-1] + map_obj.owner.get_absolute_url()
     response['provider_name'] = "MapStory"
@@ -596,10 +597,10 @@ def oembed(request):
     #response['thumbnail_url'] = ""
     #response['thumbnail_width'] = ""
     #response['thumbnail_height'] = ""
-    response['html'] = html
-    response['width'] = maxwidth 
+    response['html'] = html.replace('//', '\/\/')
+    response['width'] = maxwidth
     response['height'] = maxheight
 
-    return HttpResponse(json.dumps(response), mimetype="application/json")
+    return HttpResponse(json.dumps(response, ensure_ascii=False), mimetype="application/json")
 
 signals.pre_delete.connect(_remove_annotation_layer, sender=Map)

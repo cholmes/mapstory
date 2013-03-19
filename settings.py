@@ -255,6 +255,7 @@ INSTALLED_APPS = (
     'mapstory.watchdog',
     'actstream',
     'mailer',
+    'oembed',
 )
 
 def get_user_url(u):
