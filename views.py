@@ -31,11 +31,9 @@ from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
-from django.http import HttpResponseBadRequest
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.template import loader
-from django.template.loader import render_to_string
 from django.contrib.contenttypes.models import ContentType
 from django.views.decorators.cache import cache_page
 
@@ -44,10 +42,6 @@ from datetime import datetime
 import math
 import os
 import random
-import json
-import urllib
-from urlparse import urlparse
-import re
 
 def alerts(req): 
     return render_to_response('mapstory/alerts.html', RequestContext(req))
@@ -563,44 +557,5 @@ def _remove_annotation_layer(sender, instance, **kw):
         Layer.objects.get(name='_map_%s_annotations' % instance.id)
     except Layer.DoesNotExist:
         pass
-
-def oembed(request):
-    url = request.GET.get('url')
-    if url is None:
-        return HttpResponseBadRequest()
-    else:
-        url = urllib.unquote_plus(url)
-    pattern = settings.SITEURL.replace('/', '\/') + 'maps\/\d+'
-    result = re.match(pattern, url)
-    if result is None:
-        return HttpResponse(("Invalid oEmbed URL"), status=400, mimetype="text/plain")
-    else:
-        map_id = int(urlparse(url).path.split('/')[2])
-        map_obj = get_object_or_404(Map, id=map_id)
-        if not request.user.has_perm('maps.view_map', obj=map_obj):
-            return HttpResponse(("Not Permitted"), status=401, mimetype="text/plain")
-    format = request.GET.get('format', 'json') #Actually ignored for now
-    maxwidth = request.GET.get('maxwidth', 600)
-    maxheight = request.GET.get('maxheight', 400)
-    embed_url = settings.SITEURL[:-1] + map_obj.get_absolute_url() + '/embed'
-    embed_url = re.sub(r'\\', '\\\/', embed_url)
-    html = "<iframe style=\"border: none;\" height=\"%s\" width=\"%s\" src=\"%s\"></iframe>" % (maxheight, maxwidth, embed_url)
-    response = {}
-    response['type'] = "video"
-    response['version'] = "1.0"
-    response['title'] = map_obj.title
-    response['author_name'] = map_obj.owner.username
-    response['author_url'] = settings.SITEURL[:-1] + map_obj.owner.get_absolute_url()
-    response['provider_name'] = "MapStory"
-    response['provider_url'] = settings.SITEURL
-    #response['cache_age'] = ""
-    #response['thumbnail_url'] = ""
-    #response['thumbnail_width'] = ""
-    #response['thumbnail_height'] = ""
-    response['html'] = html.replace('//', '\/\/')
-    response['width'] = maxwidth
-    response['height'] = maxheight
-
-    return HttpResponse(json.dumps(response, ensure_ascii=False), mimetype="application/json")
 
 signals.pre_delete.connect(_remove_annotation_layer, sender=Map)
