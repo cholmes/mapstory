@@ -1,8 +1,10 @@
 import random
 import operator
+import os
 import re
 import logging
 import time
+import urlparse
 import urllib
 import json
 
@@ -185,11 +187,43 @@ class Section(models.Model):
     def __unicode__(self):
         return 'Section %s' % self.name
 
-    
+
 class Link(models.Model):
     name = models.CharField(max_length=64)
     href = models.CharField(max_length=256)
     order = models.IntegerField(default=0, blank=True, null=True)
+
+    def is_image(self):
+        ext = os.path.splitext(self.href)[1][1:].lower()
+        return ext in ('gif','jpg','jpeg','png')
+
+    def get_youtube_video(self):
+        prefix = 'https?://(?:w{3}\.)?'
+        pats = (
+            'youtube.com/watch\?v=(\w+)',
+            'youtu.be/(\w+)',
+            'youtube.com/embed/(\w+)',
+        )
+        for p in pats:
+            match = re.match(prefix + p, self.href)
+            if match:
+                return match.group(1)
+
+    def render(self, width=None, height=None):
+        ctx = dict(href=self.href, name=self.name, width=width or 256, height=height or 128)
+        if self.is_image():
+            return '<img width="%(width)s" src="%(href)s" title="%(name)s"></img>' % ctx
+        video = self.get_youtube_video()
+        if video:
+            ctx['video'] = video
+            return ('<iframe class="youtube-player" type="text/html"'
+                    ' width="%(width)s" height="%(height)s" frameborder="0"'
+                    ' src="http://www.youtube.com/embed/%(video)s">'
+                    '</iframe>') % ctx
+        return '<a target="_" href="%(href)s">%(name)s</a>' % ctx
+
+    render.allow_tags = True
+
 
 _VIDEO_LOCATION_FRONT_PAGE = 'FP'
 _VIDEO_LOCATION_HOW_TO = 'HT'
@@ -235,11 +269,11 @@ class UserActivity(models.Model):
 
 class ContactDetail(Contact):
     '''Additional User details'''
-    blurb = models.CharField(max_length=140, null=True)
+    blurb = models.CharField(max_length=140, null=True, blank=True)
     biography = models.CharField(max_length=1024, null=True, blank=True)
     education = models.CharField(max_length=512, null=True, blank=True)
     expertise = models.CharField(max_length=256, null=True, blank=True)
-    links = models.ManyToManyField(Link)
+    links = models.ManyToManyField(Link, blank=True)
 
     def clean(self):
         'override Contact name or organization restriction'
@@ -279,6 +313,14 @@ class ContactDetail(Contact):
         else:
             ProfileIncomplete.objects.filter(user=self.user_id).delete()
 
+    def get_absolute_url(self):
+        if hasattr(self, 'org'):
+            return self.org.get_absolute_url()
+        return reverse('about_storyteller', args=[self.user.username])
+
+    def __unicode__(self):
+        return u"ContactDetail %s (%s)" % (self.user, self.organization)
+
 
 class ProfileIncomplete(models.Model):
     '''Track incomplete user profiles'''
@@ -286,6 +328,55 @@ class ProfileIncomplete(models.Model):
     message = models.TextField()
 
 
+# cannot be called Organization - the organization field is used already in Contact
+class Org(ContactDetail):
+    slug = models.SlugField(max_length=64, blank=True)
+    members = models.ManyToManyField(User, blank=True)
+    ribbon_links = models.ManyToManyField(Link, blank=True)
+    banner_image = models.URLField(null=True, blank=True)
+    
+    def get_absolute_url(self):
+        return reverse('org_page', args=[self.slug])
+    
+    def save(self,*args,**kw):
+        # ensure a user exists but make sure after the contact exists
+        # or our signal will create a ContactDetail for the user
+        if self.user is None:
+            self.user = User.objects.create(username=self.organization)
+            self.id = ContactDetail.objects.filter(user=self.user)[0].id
+        self.name = self.organization
+        slugtext = self.organization.replace('&','and')
+        self.slug = defaultfilters.slugify(slugtext)
+        models.Model.save(self)
+
+    def get_link(self, link_id):
+        try:
+            return self.links.get(id = link_id)
+        except:
+            pass
+        try:
+            return self.ribbon_links.get(id = link_id)
+        except:
+            pass
+        return None
+
+    def ordered_links(self):
+        return self.links.all().order_by('order')
+
+    def ordered_ribbon_links(self):
+        return self.ribbon_links.all().order_by('order')
+
+    def get_absolute_url(self):
+        return reverse('org_page', args=[self.slug])
+
+    def __unicode__(self):
+        return u"Org %s (%s)" % (self.user, self.organization)
+    
+class OrgContent(models.Model):
+    name = models.CharField(max_length=32)
+    text = models.TextField(null=True, blank=True)
+    org = models.ForeignKey(Org)
+    
 class Resource(models.Model):
     name = models.CharField(max_length=64)
     slug = models.SlugField(max_length=64,blank=True)
@@ -436,8 +527,9 @@ def audit_map_metadata(mapobj):
 
 def user_saved(instance, sender, **kw):
     if kw['created']:
-        cd = ContactDetail.objects.create(user = instance)
+        cd, _ = ContactDetail.objects.get_or_create(user = instance)
         cd.update_audit()
+
 
 def create_publishing_status(instance, sender, **kw):
     if kw['created']:

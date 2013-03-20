@@ -22,6 +22,7 @@ from mapstory.views import _related_stories_pager
 from dialogos.templatetags import dialogos_tags
 
 import re
+import os
 
 register = template.Library()
 
@@ -326,6 +327,15 @@ def activity_notifier(user):
         if cnted:
             return '<span title="Recent Activity" class="actnot">(%s)</span>' % cnted
 
+
+@register.simple_tag
+def render_link(link, width=None, height=None):
+    '''Render a 'link' as best as possible. This means either an img element,
+    a youtube embedded viewer, or a default link. Ideally, support oembed.
+    '''
+    return link.render(width, height)
+
+
 @register.simple_tag
 def layer_language_selector(layer):
     s = ("selected='selected' ",)
@@ -345,6 +355,11 @@ def manual_link(target, name):
 def manual_include(path):
     return "<div id='manual'>%s</div>" % render_manual(path)
 
+@register.simple_tag
+def storyteller_tile(user):
+    ctx = dict(user=user, map_cnt=Map.objects.filter(owner=user).count(),
+               layer_cnt=Layer.objects.filter(owner=user).count())
+    return loader.render_to_string('mapstory/_user_tile.html', ctx)
 
 @register.simple_tag
 def profile_incomplete(user, show_link=True):
@@ -369,6 +384,10 @@ def warn_missing_thumb(obj):
     if not obj.get_thumbnail():
         return loader.render_to_string('maps/_warn_thumbnail.html', {})
     return ""
+
+@register.simple_tag
+def user_activity_email_prefs(user):
+    return loader.render_to_string('mapstory/user_activity_email_prefs.html',{'user': user})
 
 @register.simple_tag
 def pagination(pager, url_name, *args):

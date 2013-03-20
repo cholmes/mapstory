@@ -1,0 +1,129 @@
+{% extends "no_bottom_layout.html" %}
+{% load org_tags %}
+{% load mapstory_tags %}
+{% load staticfiles %}
+
+{% block title %}{{ org.name }}{% endblock %}
+
+{% block extra_head %}
+<style type="text/css">
+    .tile img {
+        width: 256px;
+    }
+    .details {
+        float: right;
+    }
+    .details order {
+        display: none;
+    }
+    .selected {
+        background: graytext;
+    }
+    .tile:hover {
+        background: bisque;
+    }
+    #docs li {
+        font-size: small;
+        list-style: circle outside none;
+    }
+    #docs ul {
+        margin-left: 2em;
+    }
+</style>
+{% endblock %}
+
+{% block main %}
+
+{% if link_type == 'links' %}
+<h2><a href="{{ org.get_absolute_url }}">{{ org.name }}</a> Links</h2>
+{% else %}
+<h2><a href="{{ org.get_absolute_url }}">{{ org.name }}</a> Media Links</h2>
+{% endif %}
+
+<div class="box" id="docs">
+    {% if link_type == 'links' %}
+    <p>The links will be displayed on the right side of your organization's page
+    using the provided <em>name</em>.
+    </p>
+    {% else %}
+    <p>The links will be displayed in the media banner of your organization's page.
+    Supported types are:
+    <ul>
+        <li>Images - the URL must end with an image extension (.jpg, .png, .gif)</li>
+        <li>YouTube Video - provide either the embed URL or the URL from the video page.</li>
+    </ul>
+    {% endif %}
+    <p>Links are sorted using the <em>order</em> field.</p>
+    <p>Click on the the link to edit/delete.</p>
+</div>
+
+<div class="box mrg-top mrg-btm">
+{% for l in links %}
+<div class="tile media" id="link-{{l.id}}">
+    <div class="details">
+        <div>Name: <span class="name">{{ l.name }}</span></div>
+        <div>URL: <span class="href">{{ l.href }}</span></div>
+        <div>Order: <span class="order">{{ l.order|default_if_none:'0' }}</span></div>
+    </div>
+    <div class="link">
+    {% render_link l %}
+    </div>
+</div>
+{% endfor %}
+</div>
+
+<div id="linkedit" class="box">
+    {% if error %}
+    <div class="alert alert-error">{{ error }}</div>
+    {% endif %}
+    <form method="POST" action="">
+        <label for="name">Name</label>
+        <input name="name" type="text">
+        <label for="href">URL</label>
+        <input name="href" type="text">
+        <label for="order">Order</label>
+        <input name="order" type="text">
+        <input name="id" type="hidden">
+        <br>
+        <input class="btn" type="submit" value="Add">
+        <button style="display:none" id="delete" class="btn">Delete</button>
+        {% csrf_token %}
+    </form>
+</div>
+
+{% endblock %}
+
+{% block extra_body %}
+<script type="text/javascript">
+$(function() {
+    var form = $("#linkedit form");
+    $("#delete").click(function(ev) {
+        if (! form.find('[name=id]').val()) {
+            ev.preventDefault();
+            return;
+        }
+        if (confirm('Really delete?')) {
+            form.append('<input type="hidden" name="delete" value="delete">');
+            form.submit();
+        }
+    });
+    $(".tile").click(function(ev) {
+        var tile = $(this), selected = tile.hasClass('selected');
+        tile.parent().find('.tile').not(tile).removeClass('selected');
+        if (selected) {
+            form.find('[name=id]').val('');
+            form.find('[type=text]').val('');
+            form.find('[type=submit]').val('Add');
+        } else {
+            form.find('[name=id]').val(tile.attr('id').replace('link-', ''));
+            form.find('[name=name]').val(tile.find('.name').html());
+            form.find('[name=href]').val(tile.find('.href').html());
+            form.find('[name=order]').val(tile.find('.order').html());
+            form.find('[type=submit]').val('Edit');
+        }
+        $("#delete").css('display', selected ? 'none' : 'block');
+        tile.toggleClass('selected');
+    });
+});
+</script>
+{% endblock %}

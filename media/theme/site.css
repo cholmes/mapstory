@@ -1275,6 +1275,7 @@ section.box a.read-more:hover, a.read-more:hover {
 section.box .article-list {
   overflow-y:auto;
   max-height:330px;
+  min-height:330px;
 }
 
 section.box .article-list article {

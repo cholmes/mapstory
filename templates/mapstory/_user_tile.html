@@ -1,0 +1,20 @@
+{% load mapstory_tags %}
+{% load agon_ratings_tags %}
+{% load avatar_tags %}
+
+<div class="tile">
+    <a href="{{ user.get_absolute_url }}" class="avatar">
+        {% avatar user %}
+    </a>
+    <p class="blurb">{{user.contact_set.all.0.contactdetail.blurb|default:""}}</p>
+    <div class="details">
+        <h6><a href="{{ user.get_absolute_url }}">{{user.username}}</a></h6>
+        <p>
+            <a href="{{ user.get_absolute_url }}" rel="author">{{ user|user_name }}</a>
+            <time datetime="{{ user.date_joined|date:"Y-m-d" }}">joined {{ user.date_joined|date:"N j Y" }}</time>
+            <footer>
+                {{ map_cnt }} MapStories, {{ layer_cnt }} StoryLayers
+            </footer>
+        </p>
+    </div>
+</div>

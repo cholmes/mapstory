@@ -128,7 +128,12 @@ urlpatterns += patterns('mapstory.views',
         "extra_context" : {'html':'mapstory/thoughts/jg.html'}}, name="thoughts-jg"),
     url(r"^mapstory/thoughts/jen-ziemke/$", direct_to_template, {"template": "mapstory/thoughts.html",
         "extra_context" : {'html':'mapstory/thoughts/jz.html'}}, name="thoughts-jz"),
-
+    
+    # the catchall
+    url(r'^(?P<org_slug>[-\w]+)/$', 'org_page', name='org_page'),
+    url(r'^(?P<org_slug>[-\w]+)/api$', 'org_page_api', name='org_page_api'),
+    url(r'^(?P<org_slug>[-\w]+)/ribbon$', 'org_links', {'link_type' : 'ribbon_links'}, name='org_ribbon_links'),
+    url(r'^(?P<org_slug>[-\w]+)/links$', 'org_links', name='org_links'),
 )
 
 urlpatterns += proxy_urlpatterns

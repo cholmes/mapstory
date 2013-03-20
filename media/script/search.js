@@ -9,7 +9,7 @@ Ext.onReady(function() {
     "<div class='rating'>{views} Views | {rating} stars <span class='more'>More &#9660;</span></div>"+
     "<div class='actions' id='{_type}-{id}'></div>"+
     "</li>",
-    ownerTemplate = "<li class='tile' id='item{iid}'><img class='thumb {thumbclass}' src='{thumb}'></img>" +
+    ownerTemplate = "<li class='tile' id='item{iid}'><a href='{detail}'><img class='thumb {thumbclass}' src='{thumb}'></img></a>" +
     "<div class='infoBox'><div class='itemTitle'><a href='{detail}'>{title}</a> <span class='org'>{organization}</span></div>" +
     "<div class='itemInfo'>Joined on {last_modified}</div>" +
     "<div class='itemInfo'>{map_cnt} MapStories, {layer_cnt} StoryLayers</div>"+

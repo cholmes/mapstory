@@ -1,0 +1,209 @@
+{% extends "no_bottom_layout.html" %}
+{% load org_tags %}
+{% load mapstory_tags %}
+{% load staticfiles %}
+
+{% block title %}{{ org.name }}{% endblock %}
+
+{% block extra_head %}
+<style type="text/css">
+    .edit-btn {
+        float: right;
+    }
+    .article-list ul {
+        
+    }
+    .article-list ul li {
+        display: inline;
+        float: left;
+        margin: 10px 28px;
+        background: white;
+        width: 256px;
+        height: 200px;
+    }
+    .tile a img {
+        height: 128px;
+        width: 256px;
+    }
+    .avatar img {
+        width: auto !important;
+        height: auto !important;
+    }
+    .blurb {
+        float:right;
+    }
+    #orglinks {
+        min-height: 20em;
+    }
+    #orgcontent {
+        min-height: 20em;
+    }
+    #mediabanner {
+        min-height: 10em;
+    }
+    #orgcontent p {
+        margin-bottom: 1em;
+    }
+    .nav-tabs a {
+        font-size: medium;
+    }
+    .nav {
+        margin-bottom: 0px;
+    }
+    #editpanel {
+        background: gray;
+        position: absolute;
+        z-level: 1000;
+    }
+    #editbuttons {
+        float: right;
+        position: relative;
+        bottom: 2px;
+        right: 2px;
+    }
+    #carousel {
+
+    }
+    #carousel .tile {
+        height: auto;
+        margin-top: 0;
+        border: none;
+    }
+</style>
+{% endblock %}
+
+{% block main %}
+<div id="org-banner" class="box mrg-btm mrg-top">
+    {% edit_widget banner%}
+    <div class="banner_image" data-content="banner_image">
+        <img src="{{ org.banner_image }}" {% if not org.banner_image %}style="display:none"{% endif %}></img>
+        {% if not org.banner_image %}<h2 class="placeholder">Your Banner Image Goes Here</h2>{% endif %}
+    </div>
+</div>
+<div class="row mrg-btm">
+    <div class="span8">
+        <div class="box" id="orgcontent">
+            {% edit_widget content %}
+            <h2>{{ org.name }}</h2>
+            <div data-content="org_content">{{ org_content|default:"Your Content Goes Here"|escape|urlize|linebreaks|safe}}
+            </div>
+        </div>
+    </div>
+    <div class="span4">
+        <div class="box" id="orglinks">
+            <a href="{% url org_links org.slug %}" class='btn btn-small' target="_">Edit</a>
+            
+            <ul data-content="org_links">
+                {% for l in org.links.all %}
+                <li id="org-link-{{ l.pk }}"><a href="{{l.href}}">{{l.name}}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+<div id="mediabanner" class="box mrg-btm">
+    <a href="{% url org_ribbon_links org.slug %}" class='btn btn-small' target="_">Edit</a>
+    
+    <ul id="carousel" data-content="org_ribbon_links">
+        <div class="arrow arrow-left" style="left:15px">&#8826;</div>
+        <div class="arrow arrow-right" style="right:15px">&#8827;</div>
+        {% if org.ribbon_links.count %}
+            {% for l in org.ribbon_links.all %}
+            <li class="tile" id="ribbon-link-{{ l.pk }}">{% render_link l %}</li>
+            {% endfor %}
+        {% endif %}
+    </ul>
+</div>
+
+<div>
+    <div class="tabbable">
+        <ul class="nav nav-tabs fancyfont">
+            <li class="active"><a href="#1" data-toggle="tab">MAPSTORIES</a></li>
+            <li><a href="#2" data-toggle="tab">STORYLAYERS</a></li>
+            <li><a href="#3" data-toggle="tab">STORYTELLERS</a></li>
+            <li><a href="#4" data-toggle="tab">STORYLAYERS USED BY</a></li>
+        </ul>
+        <div class="tab-content box">
+            <div class="tab-pane active" id="1">
+                <div class="article-list">
+                    <ul>
+                        {% for m in maps %}
+                        <li>{% map_info_tile m %}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            <div class="tab-pane" id="2">
+                <div class="article-list">
+                    <ul>
+                        {% for m in layers %}
+                        <li>{% map_info_tile m %}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            <div class="tab-pane" id="3">
+                <div class="article-list">
+                    <ul>
+                        {% for m in members %}
+                        <li>{% storyteller_tile m %}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            <div class="tab-pane" id="4">
+                <div class="article-list">
+                    <ul>
+                        {% for m in using %}
+                        <li>{% map_info_tile m %}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="editpanel" style="display:none;">
+    <div id="editpanel-content">
+        <div id="edit_banner_image">
+            <label>The URL to use for your image : </label><input type="text" width="30" value="{{org.banner_image|default:''}}">
+        </div>
+        <div id="edit_org_content">
+            <label>The content : </label>
+            <textarea style="width:165px;height:130px;resize:both">{{ org_content|default:""}}</textarea>
+        </div>
+        <div id="edit_org_links">
+            {% for l in org.ordered_links %}
+            <div class="link_edit">
+                <input type="hidden" value="{{l.pk}}">
+                <input value="{{l.name}}">
+                <input value="{{l.href}}">
+            </div>
+            {% endfor %}
+        </div>
+        <div id="edit_org_ribbon_links">
+            {% for l in org.ordered_links %}
+            <div class="link_edit">
+                <input type="hidden" value="{{l.pk}}">
+                <input value="{{l.name}}">
+                <input value="{{l.href}}">
+                {% render_link l %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div id="editbuttons">
+        <span id="editmsg"></span>
+        <a href="#cancel" class="btn btn-small">Cancel</a>
+        <a href="#ok" class="btn btn-small">OK</a>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_body %}
+{{ can_edit }}
+{% if can_edit %}
+<script type="text/javascript" src="{% static "script/org_edit.js" %}"></script>
+{% endif %}
+<script type="text/javascript" src="{% static "script/carousel_jquery.js" %}"></script>
+{% endblock %}
