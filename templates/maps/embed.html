@@ -1,1 +1,47 @@
-{% include "maps/view.html" %}
+{% extends "fullscreen.html" %}
+{% load i18n %}
+{% block title %} {% trans "Map Viewer" %} - {{ block.super }} {% endblock %}
+
+{% block head %}
+<style type="text/css">
+#msmap .x-panel-tbar {
+    display: none;
+}
+</style>
+{% include "geonode/ext_header.html" %}
+{% include "geonode/app_header.html" %}
+{% include "geonode/geo_header.html" %}
+
+<script type="text/javascript">
+var app;
+Ext.onReady(function() {
+{% autoescape off %}
+
+    var config = Ext.apply({{config}}, {
+        embed: true
+    });
+
+    app = new mapstory.Viewer(config);
+
+// template markup specific javascript
+(function() {
+    var headers = {
+        'X-CSRFToken' : Ext.util.Cookies.get('csrftoken')
+    };
+    Ext.Ajax.defaultHeaders = headers;
+    {# MONKEY PATCH #}
+    OpenLayers.Request._monkey_issue = OpenLayers.Request.issue;
+    OpenLayers.Request.issue = function(config) {
+        config.headers = config.headers || {};
+        config.headers['X-CSRFToken'] = Ext.util.Cookies.get('csrftoken');
+        return this._monkey_issue(config);
+    };
+})()
+{% endautoescape %}
+});
+</script>
+
+{{ block.super }} 
+{% endblock %}
+{% block body %}
+{% endblock %}
