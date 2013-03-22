@@ -91,7 +91,7 @@
     </div>
     <div class="span4">
         <div class="box" id="orglinks">
-            <a href="{% url org_links org.slug %}" class='btn btn-small' target="_">Edit</a>
+            {% if can_edit %}<a href="{% url org_links org.slug %}" class='btn btn-small' target="_">Edit</a>{% endif %}
             
             <ul data-content="org_links">
                 {% for l in org.links.all %}
@@ -102,7 +102,7 @@
     </div>
 </div>
 <div id="mediabanner" class="box mrg-btm">
-    <a href="{% url org_ribbon_links org.slug %}" class='btn btn-small' target="_">Edit</a>
+    {% if can_edit %}<a href="{% url org_ribbon_links org.slug %}" class='btn btn-small' target="_">Edit</a>{% endif %}
     
     <ul id="carousel" data-content="org_ribbon_links">
         <div class="arrow arrow-left" style="left:15px">&#8826;</div>
@@ -201,7 +201,6 @@
 {% endblock %}
 
 {% block extra_body %}
-{{ can_edit }}
 {% if can_edit %}
 <script type="text/javascript" src="{% static "script/org_edit.js" %}"></script>
 {% endif %}
