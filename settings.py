@@ -339,8 +339,11 @@ ABSOLUTE_URL_OVERRIDES = {
 #EMAIL_BACKEND = "mailer.backend.DbBackend"
 
 def resolve_user_url(u):
-    contact = u.contact_set.all()[0]
-    return contact.contactdetail.get_absolute_url()
+    contacts = u.contact_set.all()
+    if contacts:
+        return contacts[0].contactdetail.get_absolute_url()
+    else:
+        return None
 
 ABSOLUTE_URL_OVERRIDES = {
     'auth.user': resolve_user_url
