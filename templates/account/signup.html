@@ -1,15 +1,41 @@
 {% extends 'page_layout.html' %}
 
 {% block main %}
-
-<form method="post" action=".">
-    {% csrf_token %}
-    <ul class="form">
-    {{ form.as_ul }}
-        <li><input class="btn btn-primary" type="submit" value="Signup" /></li>
-    </ul>
-</form>
+<div class="row content mrg-top mrg-btm">
+    <div class="span8">
+        <div class="box">
+            <form method="post" action=".">
+                {% csrf_token %}
+                    <ul class="form">
+                        {{ form.as_ul }}
+                        <li><input class="btn btn-primary" type="submit" value="Signup" /></li>
+                    </ul>
+            </form>
+        </div>
+    </div>
+    <div class="span4">
+        <div class="box">
+            <h4>Please make a donation.</h4>
+            {% include 'mapstory/_paypal.html' %}
+            <h4 style="margin-top:10px">Where your donation goes</h4>
+            <p><strong>Technology</strong>: Servers, bandwidth, maintenance, development.
+                MapStory is built on open source code and hosted in the cloud,
+                so its growth will be affordable, but will still have costs.
+            </p>
+            <p><strong>People</strong>: MapStory is currently largely a volunteer activity, but its
+                sustainment over time will require full time attention from skilled
+                staff. Your resources will help us develop the appropriate staff
+                capacity.
+            </p>
+            <p>
+                <a href="http://wiki.mapstory.org/index.php?title=Donation">Other ways to give</a>
+            </p>
+        </div>
+    </div>
+</div>
 {% endblock %}
+
+
 
 {% block extra_body %}
 <script type="text/javascript">
