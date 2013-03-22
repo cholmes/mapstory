@@ -1,7 +1,8 @@
 {% load i18n %}
 {% load mapstory_tags %}
 {% load staticfiles %}
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
 
     <title>{% block title %}MapStory{% endblock %}</title>
@@ -9,6 +10,7 @@
     {% block head %}
     <link rel="stylesheet" type="text/css" href="{% static "theme/geonode.css" %}" />
     <link rel="stylesheet" type="text/css" href="{% static "theme/site.css" %}" />
+    <link rel="stylesheet" type="text/css" href="{% static "theme/ext-theme.css" %}" />
     <style type="text/css">
 #header .wrap {
     width: 100%;
