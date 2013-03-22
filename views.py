@@ -540,7 +540,7 @@ def org_page(req, org_slug):
     import random
     org = get_object_or_404(models.Org, slug=org_slug)
     content = org.orgcontent_set.filter(name='main')
-    rmodels = lambda m :random.sample(getattr(m,'objects').all(), 6)
+    rmodels = lambda m :random.sample(getattr(m,'objects').all(), min(6, getattr(m,'objects').count()))
     ctx = dict(org=org, org_content=content[0].text if content else None,
                can_edit=req.user.is_superuser or req.user == org.user,
                layers = rmodels(Layer), maps=rmodels(Map),
