@@ -1,14 +1,24 @@
 {% extends 'page_layout.html' %}
 
 {% block main %}
-
-<form method="post" action=".">
-    {% csrf_token %}
-    <ul class="form">
-    {{ form.as_ul }}
-        <li><input class="btn btn-primary" type="submit" value="Signup" /></li>
-    </ul>
-</form>
+<div class="row mrg-top mrg-btm">
+    <div class="span8">
+        <div class="box">
+            <form method="post" action=".">
+                {% csrf_token %}
+                    <ul class="form">
+                        {{ form.as_ul }}
+                        <li><input class="btn btn-primary" type="submit" value="Signup" /></li>
+                    </ul>
+            </form>
+        </div>
+    </div>
+    <div class="span4">
+        <div class="box">
+            {% include "mapstory/_donate_side.html" %}
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 {% block extra_body %}

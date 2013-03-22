@@ -49,9 +49,7 @@
 <hr/>
 {% topic_selection layer %}
 <hr/>
-{% if layer.has_thumbnail %}
 <img class="thumbnail" style="float:right" src="{{ layer.get_thumbnail_url }}">
-{% endif %}
 <p>Generate a thumbnail for this StoryLayer</p>
 <a id="set_thumbnail" class="btn" href="#thumbnail">{% trans "Set thumbnail" %}</a>
 {% warn_missing_thumb layer %}

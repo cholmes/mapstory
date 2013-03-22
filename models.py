@@ -549,7 +549,13 @@ def create_hitcount(instance, sender, **kw):
     if kw['created']:
         content_type = ContentType.objects.get_for_model(instance)
         HitCount.objects.create(content_type=content_type, object_pk=instance.pk)
-        
+
+
+def delete_hitcount(instance, sender, **kw):
+    content_type = ContentType.objects.get_for_model(instance)
+    HitCount.objects.filter(content_type=content_type, object_pk=instance.pk).delete()
+
+
 def clear_acl_cache(instance, sender, **kw):
     if kw['created'] and instance.owner:
         # this will only handle the owner's cached acls - other users will be
@@ -576,6 +582,10 @@ signals.post_save.connect(create_user_activity, sender=User)
 # make sure any favorites are also deleted
 signals.pre_delete.connect(remove_favorites, sender=Map)
 signals.pre_delete.connect(remove_favorites, sender=Layer)
+
+# and hitcounts
+signals.pre_delete.connect(delete_hitcount, sender=Map)
+signals.pre_delete.connect(delete_hitcount, sender=Layer)
 
 signals.post_save.connect(user_saved, sender=User)
 signals.post_save.connect(create_publishing_status, sender=Map)

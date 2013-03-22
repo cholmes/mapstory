@@ -2,6 +2,7 @@
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.core import serializers
+from django.db import transaction
 
 from geonode.maps.models import Layer
 
@@ -16,9 +17,25 @@ import shutil
 
 from update_thumb_specs import make_thumbnail_updater
 
-def import_layer(gs_data_dir, conn, layer_tempdir, layer_name,
+class ImportException(Exception):
+    pass
+
+def _get_user(**kw):
+    try:
+        return User.objects.get(**kw)
+    except User.DoesNotExist:
+        return None
+
+@transaction.commit_on_success
+def import_layer(gs_data_dir, conn, layer_tempdir, layer_name, owner_name,
                  no_password=False, chown_to=None, do_django_layer_save=True,
                  th_from_string=None, th_to_string=None):
+
+    owner = None
+    if owner_name:
+        owner = _get_user(username=owner_name)
+        if not owner:
+            raise ImportException('specified owner_name "%s" does not exist' % owner_name)
 
     print 'importing layer: %s' % layer_name
     gspath = lambda *p: os.path.join(gs_data_dir, *p)
@@ -74,12 +91,20 @@ def import_layer(gs_data_dir, conn, layer_tempdir, layer_name,
         with open(temppath("model.json")) as fp:
             model_json = fp.read()
             layer = serializers.deserialize("json", model_json).next()
-            owner = User.objects.filter(pk=layer.object.owner_id)
+
             if not owner:
-                layer.object.owner = User.objects.get(pk=1)
+                owner = _get_user(pk=layer.object.owner_id)
+            if not owner:
+                owner = _get_user(username='admin')
+            if not owner:
+                owner = User.objects.filter(is_superuser=True)[0]
+            layer.object.owner = owner
+            print 'Assigning layer to %s' % layer.object.owner
             layer_exists = Layer.objects.filter(typename=layer.object.typename)
+
             if not layer_exists:
                 layer.save()
+                print 'Layer %s saved' % layer_name
             else:
                 print 'Layer %s already exists ... skipping model save' % layer_name
 
@@ -125,7 +150,7 @@ def import_layer(gs_data_dir, conn, layer_tempdir, layer_name,
 if __name__ == '__main__':
     gs_data_dir = '/var/lib/geoserver/geonode-data/'
 
-    parser = OptionParser('usage: %s [options] layer_import_file.zip')
+    parser = OptionParser('usage: %s [options] layer_import_file.zip' % __file__)
     parser.add_option('-d', '--data-dir',
                       dest='data_dir',
                       default=gs_data_dir,
@@ -160,13 +185,18 @@ if __name__ == '__main__':
                       dest='th_to_string',
                       help='Used as the replacement string to use when replacing the thumb_spec',
                       )
+    parser.add_option('-o', '--owner-name',
+                      dest='owner_name',
+                      help='Set the layer owner to a user by this name - must exist',
+                      )
 
     (options, args) = parser.parse_args()
     if len(args) != 1:
         parser.error('please provide a layer extract zip file')
 
     if not os.path.exists(options.data_dir):
-        parser.error("geoserver data directory %s not found" % options.data_dir)
+        parser.error(("geoserver data directory %s not found,"
+                      "please specify one via the -d option") % options.data_dir)
     
     conn = psycopg2.connect("dbname='" + settings.DB_DATASTORE_DATABASE + 
                             "' user='" + settings.DB_DATASTORE_USER + 
@@ -178,12 +208,20 @@ if __name__ == '__main__':
     tempdir = tempfile.mkdtemp()
     layer_name = zipfile[:zipfile.rindex('-extract')]
     os.system('unzip %s -d %s' % (zipfile, tempdir))
+    success = False
+    try:
+        import_layer(options.data_dir, conn, tempdir, layer_name,
+                     options.owner_name, options.no_password, options.chown_to,
+                     options.do_django_layer_save,
+                     options.th_from_string, options.th_to_string)
+        success = True
+    except ImportException, e:
+        print e
+    finally:
+        if success:
+            conn.commit()
+        else:
+            conn.rollback()
+        conn.close()
+        shutil.rmtree(tempdir)
 
-    import_layer(options.data_dir, conn, tempdir, layer_name,
-                 options.no_password, options.chown_to,
-                 options.do_django_layer_save,
-                 options.th_from_string, options.th_to_string)
-
-    shutil.rmtree(tempdir)
-    conn.commit()
-    conn.close()
