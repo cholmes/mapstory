@@ -226,7 +226,6 @@ class Link(models.Model):
             xwidth = "width='256'"
             xheight = "height='128'"
             style = "style='width:256px !important;height:128px !important;'"
-        print style
         ctx = dict(href=self.href, name=self.name, width=xwidth, height=xheight, style=style)
         if self.is_image():
             return '<img %(style)s %(width)s %(height)s src="%(href)s" title="%(name)s"></img>' % ctx
