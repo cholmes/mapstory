@@ -110,7 +110,7 @@
         <div class="arrow arrow-right" style="right:15px">&#8827;</div>
         {% if org.ribbon_links.count %}
             {% for l in org.ribbon_links.all %}
-            <li class="tile" id="ribbon-link-{{ l.pk }}">{% render_link l %}</li>
+            <li class="tile" id="ribbon-link-{{ l.pk }}">{% render_link l height=200 %}</li>
             {% endfor %}
         {% endif %}
     </ul>
