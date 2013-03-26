@@ -14,7 +14,8 @@ logger = logging.getLogger(__name__)
 def _el(n, t=None, **atts):
     '''build an element with t for text and atts for atts'''
     el = Element(n)
-    el.text = str(t)
+    if t:
+        el.text = str(t)
     for k,v in atts.items():
         el.set(k, str(v))
     return el
