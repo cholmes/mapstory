@@ -225,6 +225,10 @@ $(function() {
         path: "{% static "agon_ratings/img/" %}"
     });
 });
+$(function() {
+    $('#id_comment').attr('rows', '5');
+    $('#id_comment').attr('cols', '100');
+});
 </script>
 <script type="text/javascript" src="{% static "bootstrap/js/bootstrap-modal.js" %}"></script>
 <script type="text/javascript" src="{% static "script/paginate.js" %}"></script>
