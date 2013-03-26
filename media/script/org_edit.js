@@ -45,7 +45,7 @@ $(function() {
         var handler = handlers[currentAction], data={};
         msg.html("Submitting");
         handler.data(data);
-        $.post(window.location.pathname + "/api",data,function(resp) {
+        $.post(window.location.pathname + "api",data,function(resp) {
             currentContent.find('.placeholder').hide();
             handler.success(resp);
             panel.hide();
