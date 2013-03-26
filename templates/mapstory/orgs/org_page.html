@@ -85,8 +85,8 @@
         <div class="box" id="orgcontent">
             {% edit_widget content %}
             <h2>{{ org.name }}</h2>
-            <div data-content="org_content">{{ org_content|default:"Your Content Goes Here"|escape|urlize|linebreaks|safe}}
-            </div>
+            <div class="expandable"><p data-content="org_content">{{ org_content|default:"Your Content Goes Here"|escape|urlize|linebreaks|safe}}
+            </p></div>
         </div>
     </div>
     <div class="span4">
@@ -205,4 +205,6 @@
 <script type="text/javascript" src="{% static "script/org_edit.js" %}"></script>
 {% endif %}
 <script type="text/javascript" src="{% static "script/carousel_jquery.js" %}"></script>
+<script type="text/javascript" src="{% static "script/jquery.expander.min.js" %}"></script>
+<script type="text/javascript" src="{% static "script/expander.js" %}"></script>
 {% endblock %}
