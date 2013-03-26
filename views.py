@@ -589,7 +589,7 @@ def org_page_api(req, org_slug):
                 rel = org.ribbon_links
             rel.add(link)
         return HttpResponse(json.dumps({'id': link.id}))
-
+    return HttpResponse("Invalid Request", status=400)
 
 def org_links(req, org_slug, link_type='links'):
     org = get_object_or_404(models.Org, slug=org_slug)
