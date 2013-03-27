@@ -171,7 +171,7 @@ var thumbURL = "{% url geonode.maps.views.map_controller map.id %}?thumbnail";
                             <p>Embed this map:</p>
                             <textarea><iframe style="border: none;" height="400" width="600" src="http://{{ request.get_host }}{% url geonode.maps.views.embed map.id %}"></iframe></textarea>
                         </div>
-                        <div class="tab-pane" id="actions4">
+                        <div class="tab-pane flag" id="actions4">
                             Flag this as inappropriate, broken, or otherwise.
                             {% flag map "owner" %}
                         </div>
