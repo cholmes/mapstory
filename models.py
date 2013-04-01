@@ -285,6 +285,13 @@ class ContactDetail(Contact):
         else:
             ProfileIncomplete.objects.filter(user=self.user_id).delete()
 
+    @property
+    def display_name(self):
+        if self.user.first_name:
+            name = '%s %s' % (self.user.first_name,self.user.last_name)
+        else:
+            name = self.user.username
+        return name
 
 class ProfileIncomplete(models.Model):
     '''Track incomplete user profiles'''
