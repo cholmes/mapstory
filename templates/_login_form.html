@@ -1,3 +1,4 @@
+{% load staticfiles %}
 <div id="login-form-pop">
     <div class="drop-pointer"></div>
     <form action="{% url geonode.views.ajax_login %}" method="POST" class="clearfix">
@@ -18,9 +19,9 @@
         <button type="submit" class="btn">Sign In</button>
         {# <p>Don't have an account yet? <a href="#">Register now</a></p> #}
         {% if ENABLE_SOCIAL_LOGIN %}
-        <br/>Login with <a href="{% url socialauth_begin 'twitter' %}">Twitter</a>
-        <br/>Login with <a href="{% url socialauth_begin 'facebook' %}">Facebook</a>
-        <br/>Login with <a href="{% url socialauth_begin 'google-oauth2' %}">Google</a>
+        <br/><a href="{% url socialauth_begin 'twitter' %}"><img src="{% static 'img/login_tw.png' %}" border=0></a>
+        <br/><a href="{% url socialauth_begin 'facebook' %}"><img src="{% static 'img/login_fb.png' %}" border=0></a>
+        <br/><a href="{% url socialauth_begin 'google-oauth2' %}"><img src="{% static 'img/login_goog.png' %}" border=0></a>
         {% endif %}
     </form>
 </div>
