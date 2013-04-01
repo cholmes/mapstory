@@ -255,7 +255,7 @@ class Link(models.Model):
             return ('<iframe class="youtube-player" type="text/html"'
                     ' %(width)s %(height)s frameborder="0"'
                     ' src="http://www.youtube.com/embed/%(video)s">'
-                    '</iframe>') % cta
+                    '</iframe>') % ctx
 
         twitter = self.get_twitter_link()
         if twitter:
