@@ -95,7 +95,7 @@
             {% if can_edit %}<a href="{% url org_links org.slug %}" class='btn btn-small' target="_">Edit</a>{% endif %}
             <ul data-content="org_links">
                 {% for l in org.links.all %}
-                <li id="org-link-{{ l.pk }}"><a href="{{l.href}}">{{l.name}}</a></li>
+                <li id="org-link-{{ l.pk }}">{% render_link l %}</li>
                 {% endfor %}
             </ul>
         </div>

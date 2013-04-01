@@ -209,6 +209,26 @@ class Link(models.Model):
             if match:
                 return match.group(1)
 
+    def get_twitter_link(self):
+        prefix = 'https?://(?:w{3}\.)?'
+        paths = (
+            'twitter.com/(\w+)',
+        )
+        for p in paths:
+            match = re.match(prefix + p, self.href)
+            if match:
+                return match.group(1)
+    
+    def get_facebook_link(self):
+        prefix = 'https?://(?:w{3}\.)?'
+        paths = (
+            'facebook.com/(\w+)',
+        )
+        for p in paths:
+            match = re.match(prefix + p, self.href)
+            if match:
+                return match.group(1)
+
     def render(self, width=None, height=None):
         if width and height:
             xwidth = "width='%s'" % width
@@ -235,7 +255,16 @@ class Link(models.Model):
             return ('<iframe class="youtube-player" type="text/html"'
                     ' %(width)s %(height)s frameborder="0"'
                     ' src="http://www.youtube.com/embed/%(video)s">'
-                    '</iframe>') % ctx
+                    '</iframe>') % cta
+
+        twitter = self.get_twitter_link()
+        if twitter:
+            return '<a target="_" href="%(href)s"><img src="/static/img/twitter.png" border=0></a>' % ctx
+
+        facebook = self.get_facebook_link()
+        if facebook:
+            return '<a target="_" href="%(href)s"><img src="/static/img/facebook.png" border=0></a>' % ctx
+
         return '<a target="_" href="%(href)s">%(name)s</a>' % ctx
 
     render.allow_tags = True
