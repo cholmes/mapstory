@@ -20,7 +20,7 @@ $(function() {
             'topics' : topic.attr('href').substring(1)
         },function() {
             $(".topic-info.alert").fadeOut();
-            $(".topic.info b").html(topic.html());
+            $(".topic.info b").html(topic.html()).parent().show();
         });
     });
     $("#publish-dropdown a").click(function(ev) {
