@@ -208,10 +208,16 @@ class VideoLinkManager(models.Manager):
         if not videos:
             return None
         return random.choice(videos)
+
+    def _location(self, location):
+        return VideoLink.objects.filter(publish=True, location=location).order_by('order')
+
     def how_to_videos(self):
-        return VideoLink.objects.filter(publish=True,location=_VIDEO_LOCATION_HOW_TO)
+        return self._location(_VIDEO_LOCATION_HOW_TO)
+
     def reflections_videos(self):
-        return VideoLink.objects.filter(publish=True,location=_VIDEO_LOCATION_REFLECTIONS)
+        return self._location(_VIDEO_LOCATION_REFLECTIONS)
+
 
 class VideoLink(Link):
     objects = VideoLinkManager()
