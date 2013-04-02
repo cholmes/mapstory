@@ -186,6 +186,7 @@ class ContactDetailTests(TestCase):
         ProfileIncomplete.objects.get(user = u)
 
         p.blurb = 'I Billy Bob'
+        p.email = 'billy@b.ob'
         p.save()
         p.update_audit()
         # still incomplete
@@ -210,7 +211,7 @@ class ContactDetailTests(TestCase):
         # invalid
         form = forms.ProfileForm(data={}, instance=u.get_profile())
         self.assertTrue(not form.is_valid())
-        self.assertEqual(['first_name', 'last_name', 'blurb'], form.errors.keys())
+        self.assertEqual(['first_name', 'last_name', 'email', 'blurb'], form.errors.keys())
 
         # first, last, blurb, and email handling all work
         new_email = 'bill@billy.name'
