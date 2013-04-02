@@ -399,7 +399,8 @@ def open_graph_meta(obj):
         'title' : obj.title,
         'type' : typename,
         'url' : obj.get_absolute_url(),
-        'image' : obj.get_thumbnail_url()
+        'image' : obj.get_thumbnail_url(),
+        'description' : obj.abstract
     })
 
 # @todo - make geonode location play better
