@@ -325,6 +325,7 @@ def activity_notifier(user):
         cnted = user.useractivity.other_actor_actions.count()
         if cnted:
             return '<span title="Recent Activity" class="actnot">(%s)</span>' % cnted
+    return ''
 
 @register.simple_tag
 def layer_language_selector(layer):
