@@ -1,5 +1,5 @@
 {% extends 'page_layout.html' %}
-
+{% load staticfiles %}
 {% block main %}
 <div class="row mrg-top mrg-btm">
     <div class="span8">
@@ -11,6 +11,11 @@
                         <li><input class="btn btn-primary" type="submit" value="Signup" /></li>
                     </ul>
             </form>
+    {% if ENABLE_SOCIAL_LOGIN %}
+            <a href="{% url socialauth_begin 'twitter' %}"><img src="{% static 'img/login_tw.png' %}" border=0></a>&nbsp;&nbsp;
+            <a href="{% url socialauth_begin 'facebook' %}"><img src="{% static 'img/login_fb.png' %}" border=0></a>&nbsp;&nbsp;
+            <a href="{% url socialauth_begin 'google-oauth2' %}"><img src="{% static 'img/login_goog.png' %}" border=0></a>
+    {% endif %} 
         </div>
     </div>
     <div class="span4">
