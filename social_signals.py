@@ -173,41 +173,27 @@ def flag_handler(flagged_instance, flagged_content, **kw):
     for u in recps:
         u.email_user('mapstory flagged content', message)
 
-def social_extra_values(sender, user, response, details, **kwargs):
-    result = False
-    
-    if "id" in response:
-        from urllib2 import urlopen, HTTPError
-        from django.template.defaultfilters import slugify
-        from apps.account.utils import user_display
-        from django.core.files.base import ContentFile
-        
-        try:
-            url = None
-            if sender == FacebookBackend:
-                url = "http://graph.facebook.com/%s/picture?type=large" \
-                            % response["id"]
-            elif sender == google.GoogleOAuth2Backend and "picture" in response:
-                url = response["picture"]
+def get_user_avatar(backend, details, response, social_user, uid,\
+                    user, *args, **kwargs):
+    url = None
+    if backend.__class__ == FacebookBackend:
+        url = "http://graph.facebook.com/%s/picture?type=large" % response['id']
+ 
+    elif backend.__class__ == TwitterBackend:
+        url = response.get('profile_image_url', '').replace('_normal', '')
 
-            elif sender == TwitterBackend:
-                url = response["profile_image_url"]
+     elif backend.__class__  == google.GoogleOAuth2Backend and "picture" in response:
+        url = response["picture"]
  
-            if url:
-                avatar = urlopen(url)
-                _logger.debug(url)
-                #photo = Photo(author = user, is_avatar = True)
-                #photo.picture.save(slugify(user.username + " social") + '.jpg', 
-                #        ContentFile(avatar.read()))
-            
-                #photo.save()
- 
-        except HTTPError:
-            pass
-        
-        result = True
- 
-    return result
+    if url:
+        avatar = urlopen(url).read()
+        _logger.log(url)
+        #fout = open(filepath, "wb") #filepath is where to save the image
+        #fout.write(avatar)
+        #fout.close()
+        #a = user.avatar_set.model(user=user, avatar=)
+        #a.save()
+        #u.avatar_set.add(a)
 
 register_save_handler(ContactDetail, create_verb='joined MapStory', provide_user=False)
 register_save_handler(Layer, create_verb='uploaded')
@@ -220,4 +206,3 @@ post_save.connect(comment_handler, sender=Comment)
 m2m_changed.connect(notify_handler, sender=UserActivity.other_actor_actions.through)
 
 content_flagged.connect(flag_handler)
-socialauth_registered.connect(social_extra_values, sender=None)

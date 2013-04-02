@@ -338,7 +338,7 @@ ABSOLUTE_URL_OVERRIDES = {
 
 #EMAIL_BACKEND = "mailer.backend.DbBackend"
 
-ENABLE_SOCIAL_LOGIN = False
+ENABLE_SOCIAL_LOGIN = True 
 
 try:
     from local_settings import *
@@ -358,3 +358,13 @@ if ENABLE_SOCIAL_LOGIN:
         'social_auth.backends.yahoo.YahooBackend',
         'social_auth.backends.contrib.github.GithubBackend',
     ) + AUTHENTICATION_BACKENDS
+
+    SOCIAL_AUTH_PIPELINE = (
+        'social_auth.backends.pipeline.social.social_auth_user',
+        'social_auth.backends.pipeline.associate.associate_by_email',
+        'social_auth.backends.pipeline.user.get_username',
+        'social_auth.backends.pipeline.user.create_user',
+        'social_auth.backends.pipeline.social.associate_user',
+        'social_auth.backends.pipeline.user.update_user_details',
+        'social_signals.get_user_avatar', 
+)
