@@ -339,7 +339,7 @@ ABSOLUTE_URL_OVERRIDES = {
 
 #EMAIL_BACKEND = "mailer.backend.DbBackend"
 
-ENABLE_SOCIAL_LOGIN = False
+ENABLE_SOCIAL_LOGIN = False 
 
 try:
     from local_settings import *
@@ -356,6 +356,4 @@ if ENABLE_SOCIAL_LOGIN:
         'social_auth.backends.twitter.TwitterBackend',
         'social_auth.backends.facebook.FacebookBackend',
         'social_auth.backends.google.GoogleOAuth2Backend',
-        'social_auth.backends.yahoo.YahooBackend',
-        'social_auth.backends.contrib.github.GithubBackend',
     ) + AUTHENTICATION_BACKENDS

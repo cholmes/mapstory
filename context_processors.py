@@ -44,7 +44,7 @@ def page(req):
         'enable_analytics' : settings.ENABLE_ANALYTICS,
         'old_browser' : old_browser
     }
-    allow_signup = getattr('settings', 'ACCOUNT_OPEN_SIGNUP', False)
-    enable_social_login = getattr('settings', 'ENABLE_SOCIAL_LOGIN', False)
+    allow_signup = getattr(settings, 'ACCOUNT_OPEN_SIGNUP', False)
+    enable_social_login = getattr(settings, 'ENABLE_SOCIAL_LOGIN', False)
     return {'page':page, 'cache_time':60, 'ACCOUNT_OPEN_SIGNUP': allow_signup,
             'ENABLE_SOCIAL_LOGIN': enable_social_login}
