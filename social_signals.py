@@ -3,6 +3,8 @@ from django.db.models.signals import m2m_changed
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from django.template import loader
+from django.core.files import File
+from django.core.files.temp import NamedTemporaryFile
 from geonode.maps.models import Layer
 from geonode.maps.models import Map
 from geonode.maps.models import map_changed_signal
@@ -17,9 +19,12 @@ from agon_ratings.models import Rating
 from mapstory.util import user
 from mailer import send_html_mail
 from social_auth.backends.facebook import FacebookBackend
+from social_auth.backends.twitter import TwitterBackend
 from social_auth.backends import google
-from social_auth.signals import socialauth_registered
 import datetime
+import urllib2
+from urlparse import urlparse
+import logging
 
 _logger = logging.getLogger('mapstory.social_signals')
 
@@ -182,18 +187,18 @@ def get_user_avatar(backend, details, response, social_user, uid,\
     elif backend.__class__ == TwitterBackend:
         url = response.get('profile_image_url', '').replace('_normal', '')
 
-     elif backend.__class__  == google.GoogleOAuth2Backend and "picture" in response:
+    elif backend.__class__  == google.GoogleOAuth2Backend and "picture" in response:
         url = response["picture"]
  
     if url:
-        avatar = urlopen(url).read()
-        _logger.log(url)
-        #fout = open(filepath, "wb") #filepath is where to save the image
-        #fout.write(avatar)
-        #fout.close()
-        #a = user.avatar_set.model(user=user, avatar=)
-        #a.save()
-        #u.avatar_set.add(a)
+        img_temp = NamedTemporaryFile(delete=True) 
+	img_temp.write(urllib2.urlopen(url).read())
+	img_temp.flush()
+	# Need to check for existing
+	name = urlparse(url).path.split('/')[-1]
+        a = user.avatar_set.model(user=user)
+	a.avatar.save(name, File(img_temp))
+        user.avatar_set.add(a)
 
 register_save_handler(ContactDetail, create_verb='joined MapStory', provide_user=False)
 register_save_handler(Layer, create_verb='uploaded')
