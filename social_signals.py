@@ -183,21 +183,23 @@ def get_user_avatar(backend, details, response, social_user, uid,\
     url = None
     if backend.__class__ == FacebookBackend:
         url = "http://graph.facebook.com/%s/picture?type=large" % response['id']
- 
+
     elif backend.__class__ == TwitterBackend:
         url = response.get('profile_image_url', '').replace('_normal', '')
 
     elif backend.__class__  == google.GoogleOAuth2Backend and "picture" in response:
         url = response["picture"]
- 
+
     if url:
-        img_temp = NamedTemporaryFile(delete=True) 
-	img_temp.write(urllib2.urlopen(url).read())
-	img_temp.flush()
-	# Need to check for existing
-	name = urlparse(url).path.split('/')[-1]
-        a = user.avatar_set.model(user=user)
-	a.avatar.save(name, File(img_temp))
+        name = urlparse(url).path.split('/')[-1]
+        img_temp = NamedTemporaryFile(delete=True)
+        img_temp.write(urllib2.urlopen(url).read())
+        img_temp.flush()
+        try:
+                a = user.avatar_set.get()
+        except:
+                a = user.avatar_set.model(user=user)
+        a.avatar.save(name, File(img_temp))
         user.avatar_set.add(a)
 
 register_save_handler(ContactDetail, create_verb='joined MapStory', provide_user=False)
