@@ -338,7 +338,7 @@ ABSOLUTE_URL_OVERRIDES = {
 
 #EMAIL_BACKEND = "mailer.backend.DbBackend"
 
-ENABLE_SOCIAL_LOGIN = True 
+ENABLE_SOCIAL_LOGIN = False 
 
 try:
     from local_settings import *
