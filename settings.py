@@ -357,3 +357,13 @@ if ENABLE_SOCIAL_LOGIN:
         'social_auth.backends.facebook.FacebookBackend',
         'social_auth.backends.google.GoogleOAuth2Backend',
     ) + AUTHENTICATION_BACKENDS
+
+    SOCIAL_AUTH_PIPELINE = (
+        'social_auth.backends.pipeline.social.social_auth_user',
+        'social_auth.backends.pipeline.associate.associate_by_email',
+        'social_auth.backends.pipeline.user.get_username',
+        'social_auth.backends.pipeline.user.create_user',
+        'social_auth.backends.pipeline.social.associate_user',
+        'social_auth.backends.pipeline.user.update_user_details',
+        'social_signals.get_user_avatar', 
+)
