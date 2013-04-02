@@ -398,9 +398,19 @@ def open_graph_meta(obj):
     return loader.render_to_string('_open_graph_meta.html', {
         'title' : obj.title,
         'type' : typename,
-        'url' : obj.get_absolute_url(),
+        'url' : absolutize(obj.get_absolute_url()),
         'image' : obj.get_thumbnail_url()
     })
+
+@register.simple_tag
+def twitter_card_meta(obj):
+    return loader.render_to_string('_twitter_card_meta.html', {
+        'title' : obj.title,
+        'content' : obj.abstract,
+        'url' : absolutize(obj.get_absolute_url()),
+        'image' : obj.get_thumbnail_url()
+    })
+    
 
 # @todo - make geonode location play better
 if settings.GEONODE_CLIENT_LOCATION.startswith("http"):
