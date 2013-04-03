@@ -42,7 +42,7 @@
 
             {% if user.is_authenticated %}
                 <a id="login-link" href="{% url auth_logout %}">{% trans "Log out" %}</a>
-                <div class="user">{% activity_notifier user %}<a title="About You, The StoryTeller" href="{% url about_storyteller user.username %}">Welcome {{ user.username }}</a></div>
+                <div class="user">{% activity_notifier user %}<a title="About You, The StoryTeller" href="{% url about_storyteller user.username %}">Welcome {% if user.get_profile %}{{ user.get_profile.display_name }}{% else %}{{ user.username }}{% endif %}</a></div>
             {% else %}
                 <a id="login-link" href="#login-form-pop">{% trans "Log in" %}</a>
                 <div class="user">

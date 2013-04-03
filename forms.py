@@ -40,6 +40,7 @@ class ProfileForm(forms.ModelForm):
 
     first_name = forms.CharField()
     last_name = forms.CharField()
+    email = forms.EmailField()
     blurb = forms.CharField(widget=forms.Textarea)
     biography = forms.CharField(widget=forms.Textarea, required=False)
     education = forms.CharField(widget=forms.Textarea, required=False)
@@ -48,7 +49,7 @@ class ProfileForm(forms.ModelForm):
     def __init__(self, *args, **kw):
         super(ProfileForm, self).__init__(*args, **kw)
         # change the order they appear in
-        order = ('first_name', 'last_name', 'blurb')
+        order = ('first_name', 'last_name', 'blurb', 'email')
         fields = self.fields
         self.fields = type(fields)()
         for o in order:
@@ -82,7 +83,7 @@ class ProfileForm(forms.ModelForm):
 
     class Meta:
         model = ContactDetail
-        exclude = ('user','fax','delivery','zipcode','area','links','name')
+        exclude = ('user','fax','delivery','zipcode','area','links','name','voice')
         
 
 class CheckRegistrationForm(SignupForm):
