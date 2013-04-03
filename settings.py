@@ -365,5 +365,5 @@ if ENABLE_SOCIAL_LOGIN:
         'social_auth.backends.pipeline.user.create_user',
         'social_auth.backends.pipeline.social.associate_user',
         'social_auth.backends.pipeline.user.update_user_details',
-        'social_signals.get_user_avatar', 
+        'mapstory.social_signals.get_user_avatar', 
 )
